@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  CheckboxIcon,
-  Flex,
-  Image,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, Flex, Text, VStack } from '@chakra-ui/react'
 
 import { CheckIcon } from '@/generated/icons/MyIcons'
 

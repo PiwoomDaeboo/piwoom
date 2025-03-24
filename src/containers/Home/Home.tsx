@@ -7,6 +7,7 @@ import { Cube1Icon, Cube2Icon, Cube3Icon } from '@/generated/icons/MyIcons'
 import Section1 from './components/Section1'
 import Section3 from './components/Section3'
 import Section4 from './components/Section4'
+import Section5 from './components/Section5'
 
 function Home() {
   const [cubeIndex, setCubeIndex] = useState(0)
@@ -26,7 +27,7 @@ function Home() {
       flexDir={'column'}
       gap={'20px'}
     >
-      <Flex>
+      {/* <Flex>
         <Flex
           flexDir={'column'}
           justifyContent={'center'}
@@ -80,7 +81,7 @@ function Home() {
               >
                 <Cube3Icon />
               </Box>
-              {/* 보이지 않는 공간 유지를 위한 투명 아이콘 */}
+
               <Box visibility="hidden">
                 <Cube1Icon />
               </Box>
@@ -91,10 +92,11 @@ function Home() {
             <Text textStyle="pre-heading-01">@MagiCube</Text>
           </Flex>
         </Flex>
-      </Flex>
+      </Flex> */}
       <Section1 />
       <Section3 />
       <Section4 />
+      <Section5 />
     </Center>
   )
 }
