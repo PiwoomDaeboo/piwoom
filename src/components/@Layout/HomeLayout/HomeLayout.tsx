@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
 import {
+  Container,
   ContainerProps,
+  Flex,
   Grid,
   GridItem,
   GridItemProps,
@@ -32,71 +34,73 @@ const HomeLayout = ({
   containerProps,
   content,
 }: HomeLayoutProps) => {
-  const [isScroll, setIsScroll] = useState(false)
+  // const [isScroll, setIsScroll] = useState(false)
 
-  const handleScroll = useCallback(() => {
-    setIsScroll(window.scrollY > 66)
-  }, [])
+  // const handleScroll = useCallback(() => {
+  //   setIsScroll(window.scrollY > 66)
+  // }, [])
 
-  const scrollConfig: GridItemProps =
-    isScroll ?
-      {
-        top: `-10px`,
-        h: `calc(${LAYOUT.HEADER.HEIGHT} + 10px)`,
-        boxShadow: 'card',
-        pt: '10px',
-        animation: `${bounceAnimation} 0.8s`,
-      }
-    : {
-        top: 0,
-        h: LAYOUT.HEADER.HEIGHT,
-        boxShadow: 'none',
-        pt: '0',
-        animation: 'none',
-      }
+  // const scrollConfig: GridItemProps =
+  //   isScroll ?
+  //     {
+  //       top: `-10px`,
+  //       h: `calc(${LAYOUT.HEADER.HEIGHT} + 10px)`,
+  //       boxShadow: 'card',
+  //       pt: '10px',
+  //       animation: `${bounceAnimation} 0.8s`,
+  //     }
+  //   : {
+  //       top: 0,
+  //       h: LAYOUT.HEADER.HEIGHT,
+  //       boxShadow: 'none',
+  //       pt: '0',
+  //       animation: 'none',
+  //     }
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [handleScroll])
+  // useEffect(() => {
+  //   window.addEventListener('scroll', handleScroll)
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll)
+  //   }
+  // }, [handleScroll])
   return (
-    <Grid
+    <Container
       w={'100%'}
-      minW={'100%'}
       minH={'100vh'}
-      pos={'relative'}
-      gridAutoColumns={'1fr'}
-      gridTemplateRows={`${LAYOUT.HEADER.HEIGHT} 1fr auto`}
-      templateAreas={`"header" "main" "footer"`}
+      // h="100vh" // 명시적으로 100vh로 설정
+      display={'flex'}
+      flexDirection={'column'}
     >
-      <GridItem
-        area={'header'}
+      <Flex
+        // area={'header'}
         as={'header'}
         position="sticky"
         zIndex="sticky"
+        top="0px"
         w={'100%'}
-        display="flex"
+        h="70px"
         justifyContent={'center'}
-        pt={isScroll ? '10px' : '0'}
-        {...scrollConfig}
+        // pt={isScroll ? '10px' : '0'}
+        // {...scrollConfig}
       >
         {header}
-      </GridItem>
-      <GridItem
+      </Flex>
+      <Flex
         as={'main'}
         area={'main'}
         w={'100%'}
-        minW={'100%'}
+        h="100%"
+        display="flex"
+        flexDirection="column"
+        justifyContent={'center'}
+        alignItems={'center'}
+        // flex="1"
+        mt={LAYOUT.HEADER.HEIGHT} // 헤더 높이만큼 margin-top 추가
         {...containerProps}
       >
         {content}
-      </GridItem>
-      <GridItem area={'footer'} as={'footer'} h={'100%'} w={'100%'} py={'30px'}>
-        {footer}
-      </GridItem>
-    </Grid>
+      </Flex>
+    </Container>
   )
 }
 

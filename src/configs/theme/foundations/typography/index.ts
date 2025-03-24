@@ -19,7 +19,9 @@ const declaredNextFontsMock: DeclaredFontsType = {
   heading: '', // for heading component
   roboto_mono: '',
   Pretendard: '',
+  RubikScribble: '',
   'Pretendard Variable': '',
+  'Rubik Regular': '',
 }
 
 const typography = {
