@@ -28,7 +28,7 @@ const config: RootConfig<{
     oneDepth: true,
   },
   'gen:api': {
-    swaggerSchemaUrl: 'https://sales-api-dev.pluuug.com/openapi.json/',
+    swaggerSchemaUrl: 'https://api.magicube.co.kr/openapi.json/',
   },
   'gen:theme': {
     tokenModes: {

@@ -14,6 +14,9 @@ const Input = defineMultiStyleConfig({
       _placeholder: {
         color: 'content.5',
       },
+      _focus: {
+        borderColor: 'border.basic.1',
+      },
     },
     element: {
       pr: '12px',

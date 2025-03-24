@@ -2,7 +2,7 @@ import { Box, Center, Flex, Grid, Image, Text, VStack } from '@chakra-ui/react'
 
 import { MY_IMAGES } from '@/generated/path/images'
 
-function Home() {
+function Section1() {
   return (
     <Grid
       w="100%"
@@ -78,4 +78,4 @@ function Home() {
     </Grid>
   )
 }
-export default Home
+export default Section1

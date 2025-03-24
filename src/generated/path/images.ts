@@ -8,6 +8,13 @@ export const MY_IMAGES = {
   512: { src: '/images/512.png', alt: '512' },
   LOGO: { src: '/images/LOGO.png', alt: 'logo' },
   BELT_IMAGE: { src: '/images/belt_image.png', alt: 'belt-image' },
+  BELT_IMAGE_MO: { src: '/images/belt_image_mo.png', alt: 'belt-image-mo' },
+  BELT_IMAGE_PC: { src: '/images/belt_image_pc.png', alt: 'belt-image-pc' },
+  BELT_IMAGE_TAB: { src: '/images/belt_image_tab.png', alt: 'belt-image-tab' },
+  MAGICUBE_PROCESS: {
+    src: '/images/magicube_process.png',
+    alt: 'magicube-process',
+  },
   MOBILE_FOOTER_IMAGE: {
     src: '/images/mobile_footer_image.png',
     alt: 'mobile-footer-image',

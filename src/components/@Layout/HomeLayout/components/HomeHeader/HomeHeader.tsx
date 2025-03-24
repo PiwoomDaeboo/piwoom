@@ -19,11 +19,16 @@ import { useAuth } from '@/hooks/useAuth'
 import { useLocalStorage } from '@/stores/local/state'
 
 import HomeHeaderDrawer from './components/HomeHeaderDrawer'
+import LoginCodeModal from './components/LoginCodeModal'
 
 const HomeHeader = ({ ...props }: ContainerProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const { isLogin } = useAuth()
-  const resetToken = useLocalStorage((store) => store.reset)
+
+  const {
+    isOpen: isLoginCodeOpen,
+    onClose: onLoginCodeClose,
+    onOpen: onLoginCodeOpen,
+  } = useDisclosure()
 
   return (
     <Container
@@ -32,11 +37,12 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
       h="70px"
       px="0px"
       bg="white"
-      maxW="1400px"
+      maxW="1440px"
       alignItems="center"
       justifyContent="space-between"
       {...props}
     >
+      <LoginCodeModal isOpen={isLoginCodeOpen} onClose={onLoginCodeClose} />
       <Link variant={'unstyled'} href={ROUTES.MAIN}>
         <MagicubeIcon width="45px" height="42px" />
       </Link>
@@ -52,6 +58,7 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
           borderRadius={'full'}
           variant={'solid-primary'}
           display={{ base: 'none', sm: 'block' }}
+          onClick={onLoginCodeOpen}
         >
           <Text textStyle={'pre-heading-05'}>에디터 코드</Text>
         </Button>
