@@ -8,3 +8,12 @@ export const Pretendard = localFont({
     },
   ],
 })
+
+export const RubikScribble = localFont({
+  src: [
+    {
+      path: '../../../public/fonts/rubikscribble/RubikScribbleRegular.ttf',
+      weight: '400',
+    },
+  ],
+})

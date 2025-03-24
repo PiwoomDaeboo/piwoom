@@ -24,7 +24,7 @@ const defineVariant = ({
     ...basic,
     ...basic.otherStyle,
     borderWidth: basic?.borderColor ? '1px' : '0px',
-
+    padding: '7px 20px',
     _hover: {
       ...hover,
       _disabled: {
@@ -48,6 +48,7 @@ const solidPrimary = defineVariant({
     bgColor: 'primary.3',
     color: 'content.8',
   },
+
   hover: { bgColor: 'primary.4' },
   active: { bgColor: 'primary.5' },
   disabled: { color: 'content.5', bgColor: 'background.basic.4' },

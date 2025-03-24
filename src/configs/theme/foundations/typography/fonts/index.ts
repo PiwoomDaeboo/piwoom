@@ -5,6 +5,7 @@ const fonts = {
   heading: nextFonts.Pretendard,
   body: nextFonts.Pretendard,
   'Pretendard Variable': nextFonts.Pretendard,
+  'Rubik Regular': nextFonts.RubikScribble,
 }
 
 export default fonts

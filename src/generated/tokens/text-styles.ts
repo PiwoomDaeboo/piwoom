@@ -123,8 +123,8 @@ export const textStyles = {
     fontWeight: 500,
     fontSize: {
       base: '16px',
-      sm: '16px',
-      md: '16px',
+      sm: '18px',
+      md: '18px',
     },
     lineHeight: 1.6,
     letterSpacing: '-0.02em',

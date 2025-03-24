@@ -6,10 +6,12 @@ import {
   HStack,
   IconButton,
   Spinner,
+  Text,
+  VStack,
 } from '@chakra-ui/react'
 import { useDisclosure } from '@chakra-ui/react'
 
-import { LogoIcon, MenuIcon } from 'generated/icons/MyIcons'
+import { LogoIcon, MagicubeIcon, MenuIcon } from 'generated/icons/MyIcons'
 
 import ClientOnly from '@/components/ClientOnly'
 import { ROUTES } from '@/generated/path/routes'
@@ -25,36 +27,37 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
 
   return (
     <Container
-      display={'flex'}
-      w={'100%'}
-      alignItems={'center'}
+      display="flex"
+      w="100%"
+      h="70px"
+      px="0px"
+      bg="white"
+      maxW="1400px"
+      alignItems="center"
       justifyContent="space-between"
       {...props}
     >
       <Link variant={'unstyled'} href={ROUTES.MAIN}>
-        <LogoIcon boxSize={'74px'} color={'content.1'} />
+        <MagicubeIcon width="45px" height="42px" />
       </Link>
       <HStack spacing="16px">
-        <ClientOnly fallback={<Spinner size={'sm'} />}>
-          {isLogin ?
-            <Button
-              variant={'line'}
-              size={'sm'}
-              onClick={() => resetToken('token')}
-            >
-              Logout
-            </Button>
-          : <Link
-              color={'content.1'}
-              variant={'line'}
-              size={'sm'}
-              href={ROUTES.LOGIN_MAIN}
-            >
-              Login
-            </Link>
-          }
-        </ClientOnly>
-        <IconButton //
+        <Button
+          borderRadius={'full'}
+          variant={'outline-primary'}
+          display={{ base: 'none', sm: 'block' }}
+        >
+          <Text textStyle={'pre-heading-05'}>시안 업로드</Text>
+        </Button>
+        <Button
+          borderRadius={'full'}
+          variant={'solid-primary'}
+          display={{ base: 'none', sm: 'block' }}
+        >
+          <Text textStyle={'pre-heading-05'}>에디터 코드</Text>
+        </Button>
+
+        <IconButton
+          display={{ base: 'block', sm: 'none' }}
           size={'xs'}
           icon={<MenuIcon w="24px" h="24px" color={'content.1'} />}
           onClick={onOpen}
