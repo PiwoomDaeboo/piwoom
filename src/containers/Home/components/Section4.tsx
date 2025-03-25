@@ -1,8 +1,20 @@
-import { Button, Flex, Text, VStack } from '@chakra-ui/react'
+import { Button, Flex, Text, VStack, useDisclosure } from '@chakra-ui/react'
 
+import InquiryModal from '@/components/@Modal/InquiryModal'
+import LoginCodeModal from '@/components/@Modal/LoginCodeModal'
 import { CheckIcon } from '@/generated/icons/MyIcons'
 
 const Section4 = () => {
+  const {
+    isOpen: isLoginCodeOpen,
+    onClose: onLoginCodeClose,
+    onOpen: onLoginCodeOpen,
+  } = useDisclosure()
+  const {
+    isOpen: isInquiryOpen,
+    onClose: onInquiryClose,
+    onOpen: onInquiryOpen,
+  } = useDisclosure()
   return (
     <Flex
       py={{ base: '80px', sm: '140px', md: '180px' }}
@@ -10,6 +22,8 @@ const Section4 = () => {
       alignItems={'center'}
       justifyContent={'center'}
     >
+      <LoginCodeModal isOpen={isLoginCodeOpen} onClose={onLoginCodeClose} />
+      <InquiryModal isOpen={isInquiryOpen} onClose={onInquiryClose} />
       <Text textStyle="pre-heading-01" mb="32px">
         MagiCube와 지금 시작해 보세요!
       </Text>
@@ -72,7 +86,7 @@ const Section4 = () => {
             borderRadius={'full'}
             variant={'solid-primary'}
             w="fit-content"
-            //   onClick={onLoginCodeOpen}
+            onClick={onLoginCodeOpen}
           >
             <Text textStyle={'pre-heading-05'}>에디터 코드</Text>
           </Button>
@@ -125,6 +139,7 @@ const Section4 = () => {
             borderRadius={'full'}
             variant={'outline-primary'}
             width={'fit-content'}
+            onClick={onInquiryOpen}
           >
             <Text textStyle={'pre-heading-05'}>시안 업로드</Text>
           </Button>

@@ -15,7 +15,6 @@ import { formatPhoneNumberKR } from '@toktokhan-dev/react-universal'
 
 import { FormProvider, useWatch } from 'react-hook-form'
 
-import { useUploadFileToS3Mutation } from '@/apis/s3-file-uploader/S3FileUploaderApi.query'
 import ModalBasis from '@/components/@Modal/ModalBasis'
 import InputForm from '@/components/InputForm'
 import { useInquiryCreateMutation } from '@/generated/apis/Inquiry/Inquiry.query'
@@ -58,7 +57,7 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
     register,
     reset,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = methods
   const fileWatchValue = useWatch({ control, name: 'file' })
 
@@ -84,8 +83,8 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
     const { url, fields } = await uploadFileToS3MutateAsync({
       data: {
         fileName: file.name,
-        fileType: 'application',
-        fieldChoice: 'design.Category.thumbnail',
+        fileType: 'image',
+        fieldChoice: 'inquiry.Inquiry.file',
         isDownload: true,
       },
     })
@@ -108,7 +107,7 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
         item: data.item,
         quantity: data.quantity,
         content: data.content,
-        file: data.file,
+        file: data.file.replace('_media/', ''),
       },
     })
   }
