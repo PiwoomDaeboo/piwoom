@@ -9,6 +9,18 @@
  **/
 
 export const textStyles = {
+  'pre-display-00': {
+    fontFamily: 'Pretendard Variable',
+    textDecoration: 'none',
+    fontWeight: 800,
+    fontSize: {
+      base: '64px',
+      sm: '120px',
+      md: '120px',
+    },
+    lineHeight: 1.4,
+    letterSpacing: '-0.01em',
+  },
   'pre-display-01': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
