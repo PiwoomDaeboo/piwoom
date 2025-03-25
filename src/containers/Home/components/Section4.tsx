@@ -24,7 +24,7 @@ const Section4 = () => {
         <Flex
           flexDirection={'column'}
           w={{ base: '100%', md: '50%' }}
-          p="40px"
+          p={{ base: '24px', md: '40px' }}
           borderRadius="20px"
           bg="secondary.1"
         >
@@ -50,7 +50,12 @@ const Section4 = () => {
           >
             <Flex gap="8px" alignItems="flex-start">
               <CheckIcon mt="6px" width="20px" height="20px" />
-              <Text textStyle="pre-body-04" color="content.1" mt="4px">
+              <Text
+                textStyle="pre-body-04"
+                color="content.1"
+                mt="4px"
+                // wordBreak="keep-all"
+              >
                 오직 매지큐브에서만 가능한 800도 식기용 전사인쇄 솔루션에 적합한
                 업종별, 테마별 셀프 디자인 편집이 가능합니다.
               </Text>
@@ -75,7 +80,7 @@ const Section4 = () => {
         <Flex
           flexDirection={'column'}
           w={{ base: '100%', md: '50%' }}
-          p="40px"
+          p={{ base: '24px', md: '40px' }}
           borderRadius="20px"
           bg="background.inverse.2"
         >

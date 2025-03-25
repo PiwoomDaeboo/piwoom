@@ -1,38 +1,16 @@
 import { useMemo, useState } from 'react'
 
-import { Badge, Box, Button, Flex, Grid, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Flex, Grid, Text } from '@chakra-ui/react'
 
 import { useCategoryListQuery } from '@/generated/apis/Category/Category.query'
-import { CheckIcon } from '@/generated/icons/MyIcons'
+import { CaretdownIcon, CheckIcon } from '@/generated/icons/MyIcons'
 
 const Section5 = () => {
-  //   const { data: categoryList } = useCategoryListQuery({})
-  //   const list = useMemo(() => {
-  //     return categoryList?.map((item) => item) || []
-  //   }, [categoryList])
+  const { data: categoryList } = useCategoryListQuery({})
+  const list = useMemo(() => {
+    return categoryList?.map((item) => item) || []
+  }, [categoryList])
   const [selectedCategory, setSelectedCategory] = useState<number>(1)
-  const list = [
-    {
-      id: 1,
-      title: '머그컵',
-    },
-    {
-      id: 2,
-      title: '글래스',
-    },
-    {
-      id: 3,
-      title: '접시',
-    },
-    {
-      id: 4,
-      title: '커피잔',
-    },
-    {
-      id: 5,
-      title: '박스 & 스티커',
-    },
-  ]
 
   const handleCategorySelect = (id: number) => {
     setSelectedCategory(id)
@@ -71,6 +49,7 @@ const Section5 = () => {
             <Button
               key={item.id}
               borderRadius={'full'}
+              size={{ base: 'md', md: 'lg' }}
               variant={isSelected ? 'solid-primary' : 'outline-primary'}
               textStyle={'pre-heading-05'}
               onClick={() => handleCategorySelect(item.id)}
@@ -87,7 +66,7 @@ const Section5 = () => {
           w="100%"
           h="100%"
           templateColumns={{
-            base: 'repeat(2, 1fr)', // 모바일에서는 1열
+            base: 'repeat(2, 1fr)',
             md: 'repeat(3, 1fr)',
           }}
           gap="20px"
@@ -184,6 +163,19 @@ const Section5 = () => {
           </Box>
         </Grid>
       </Flex>
+      <Button
+        borderRadius={'full'}
+        size={{ base: 'md', md: 'lg' }}
+        textStyle={'pre-heading-05'}
+        variant={'outline-primary'}
+        border="1px solid"
+        borderColor="border.basic.1"
+        gap="4px"
+      >
+        <Text>더보기</Text>
+        <CaretdownIcon boxSize="24px" />
+        {/* <ChevronDownIcon /> */}
+      </Button>
     </Flex>
   )
 }

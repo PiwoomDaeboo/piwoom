@@ -34,35 +34,6 @@ const HomeLayout = ({
   containerProps,
   content,
 }: HomeLayoutProps) => {
-  // const [isScroll, setIsScroll] = useState(false)
-
-  // const handleScroll = useCallback(() => {
-  //   setIsScroll(window.scrollY > 66)
-  // }, [])
-
-  // const scrollConfig: GridItemProps =
-  //   isScroll ?
-  //     {
-  //       top: `-10px`,
-  //       h: `calc(${LAYOUT.HEADER.HEIGHT} + 10px)`,
-  //       boxShadow: 'card',
-  //       pt: '10px',
-  //       animation: `${bounceAnimation} 0.8s`,
-  //     }
-  //   : {
-  //       top: 0,
-  //       h: LAYOUT.HEADER.HEIGHT,
-  //       boxShadow: 'none',
-  //       pt: '0',
-  //       animation: 'none',
-  //     }
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', handleScroll)
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll)
-  //   }
-  // }, [handleScroll])
   return (
     <Container
       w={'100%'}
@@ -100,6 +71,7 @@ const HomeLayout = ({
       >
         {content}
       </Flex>
+      {footer}
     </Container>
   )
 }

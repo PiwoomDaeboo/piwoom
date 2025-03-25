@@ -7,6 +7,7 @@ import Select from './multi-parts/select'
 import Switch from './multi-parts/switch'
 import Button from './single/button'
 import Container from './single/container'
+import Text from './single/text'
 import Textarea from './single/textarea'
 
 export const components = {
@@ -22,4 +23,5 @@ export const components = {
   Form,
   FormError,
   FormLabel,
+  Text,
 }
