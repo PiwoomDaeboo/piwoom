@@ -5,21 +5,17 @@ import {
   ContainerProps,
   HStack,
   IconButton,
-  Spinner,
   Text,
-  VStack,
 } from '@chakra-ui/react'
 import { useDisclosure } from '@chakra-ui/react'
 
-import { LogoIcon, MagicubeIcon, MenuIcon } from 'generated/icons/MyIcons'
+import { MagicubeIcon, MenuIcon } from 'generated/icons/MyIcons'
 
-import ClientOnly from '@/components/ClientOnly'
+import InquiryModal from '@/components/@Modal/InquiryModal'
 import { ROUTES } from '@/generated/path/routes'
-import { useAuth } from '@/hooks/useAuth'
-import { useLocalStorage } from '@/stores/local/state'
 
+import LoginCodeModal from '../../../../@Modal/LoginCodeModal'
 import HomeHeaderDrawer from './components/HomeHeaderDrawer'
-import LoginCodeModal from './components/LoginCodeModal'
 
 const HomeHeader = ({ ...props }: ContainerProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
@@ -28,6 +24,11 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
     isOpen: isLoginCodeOpen,
     onClose: onLoginCodeClose,
     onOpen: onLoginCodeOpen,
+  } = useDisclosure()
+  const {
+    isOpen: isInquiryOpen,
+    onClose: onInquiryClose,
+    onOpen: onInquiryOpen,
   } = useDisclosure()
 
   return (
@@ -43,6 +44,7 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
       {...props}
     >
       <LoginCodeModal isOpen={isLoginCodeOpen} onClose={onLoginCodeClose} />
+      <InquiryModal isOpen={isInquiryOpen} onClose={onInquiryClose} />
       <Link variant={'unstyled'} href={ROUTES.MAIN}>
         <MagicubeIcon width="45px" height="42px" />
       </Link>
@@ -51,6 +53,7 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
           borderRadius={'full'}
           variant={'outline-primary'}
           display={{ base: 'none', sm: 'block' }}
+          onClick={onInquiryOpen}
         >
           <Text textStyle={'pre-heading-05'}>시안 업로드</Text>
         </Button>
