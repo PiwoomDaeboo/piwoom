@@ -21,7 +21,7 @@ const InputForm = ({
           {label}
         </Text>
         {isRequired && (
-          <Text textStyle="pre-body-07" color="brand.500">
+          <Text textStyle="pre-body-07" color="accent.red.2">
             *
           </Text>
         )}
