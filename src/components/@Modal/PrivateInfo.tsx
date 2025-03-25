@@ -1,19 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Input,
-  Radio,
-  Text,
-  Textarea,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Text, VStack } from '@chakra-ui/react'
 
 import ModalBasis from '@/components/@Modal/ModalBasis'
-import InputForm from '@/components/InputForm'
 
 interface PrivateInfoModalProps {
   isOpen: boolean

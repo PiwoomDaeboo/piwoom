@@ -1,19 +1,59 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-import { Box, Button, Flex, Grid, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, Grid, Image, Text } from '@chakra-ui/react'
 
+import { GalleryType } from '@/generated/apis/@types/data-contracts'
 import { useCategoryListQuery } from '@/generated/apis/Category/Category.query'
-import { CaretdownIcon, CheckIcon } from '@/generated/icons/MyIcons'
+import { useGalleryListQuery } from '@/generated/apis/Gallery/Gallery.query'
+import { CaretdownIcon, Cube1Icon } from '@/generated/icons/MyIcons'
 
 const Section5 = () => {
+  const [selectedCategory, setSelectedCategory] = useState<number>(1)
+  const [cursor, setCursor] = useState<string>('')
+  const [accumulatedItems, setAccumulatedItems] = useState<GalleryType[]>([]) // 누적 데이터 저장
   const { data: categoryList } = useCategoryListQuery({})
   const list = useMemo(() => {
     return categoryList?.map((item) => item) || []
   }, [categoryList])
-  const [selectedCategory, setSelectedCategory] = useState<number>(1)
+  const { data: galleryList } = useGalleryListQuery({
+    variables: {
+      query: {
+        category_id: selectedCategory,
+        cursor: cursor,
+        page_size: 9,
+      },
+    },
+  })
 
+  useEffect(() => {
+    if (galleryList?.results && cursor === '') {
+      setAccumulatedItems(galleryList.results)
+    }
+  }, [galleryList?.results, cursor])
+
+  // 더보기 버튼 클릭 핸들러
+  const handleLoadMore = () => {
+    if (galleryList?.cursor) {
+      setCursor(galleryList.cursor) // 다음 페이지를 위한 cursor 업데이트
+    }
+  }
+
+  // 새로운 데이터가 도착했을 때 처리
+  useEffect(() => {
+    if (galleryList?.results && cursor !== '') {
+      // 새로운 데이터만 기존 배열에 추가
+      setAccumulatedItems((prev) => [
+        ...prev,
+        ...(galleryList.results as GalleryType[]),
+      ])
+    }
+  }, [cursor, galleryList?.results])
+
+  // 카테고리 변경 시 초기화
   const handleCategorySelect = (id: number) => {
     setSelectedCategory(id)
+    setCursor('') // cursor 초기화
+    setAccumulatedItems([]) // 누적 데이터 초기화
   }
 
   return (
@@ -62,106 +102,43 @@ const Section5 = () => {
         })}
       </Flex>
       <Flex w="100%" h="100%" py="56px">
-        <Grid
-          w="100%"
-          h="100%"
-          templateColumns={{
-            base: 'repeat(2, 1fr)',
-            md: 'repeat(3, 1fr)',
-          }}
-          gap="20px"
-        >
-          <Box
-            borderRadius="10px"
-            bg="red"
+        {accumulatedItems?.length > 0 ?
+          <Grid
             w="100%"
-            minH={{ base: '220px', md: '319px' }}
-            minW="160px"
             h="100%"
+            templateColumns={{
+              base: 'repeat(2, 1fr)',
+              md: 'repeat(3, 1fr)',
+            }}
+            gap="20px"
           >
-            1
-          </Box>
-          <Box
-            borderRadius="10px"
-            bg="red"
+            {accumulatedItems?.map((item) => {
+              return (
+                <Box key={item.id} role="group">
+                  <ImageWithHover
+                    mainImage={item.mainImage}
+                    hoverImage={item.hoverImage}
+                  />
+                </Box>
+              )
+            })}
+          </Grid>
+        : <Flex
             w="100%"
-            minH={{ base: '220px', md: '319px' }}
-            minW="160px"
-            h="100%"
+            h={{ base: '264px', md: '290px' }}
+            bg="background.basic.2"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            gap="8px"
+            flexDirection="column"
           >
-            2
-          </Box>
-          <Box
-            borderRadius="10px"
-            bg="red"
-            w="100%"
-            minH={{ base: '220px', md: '319px' }}
-            minW="160px"
-            h="100%"
-          >
-            3
-          </Box>
-          <Box
-            borderRadius="10px"
-            bg="red"
-            w="100%"
-            minH={{ base: '220px', md: '319px' }}
-            minW="160px"
-            h="100%"
-          >
-            4
-          </Box>
-          <Box
-            borderRadius="10px"
-            bg="red"
-            w="100%"
-            minH={{ base: '220px', md: '319px' }}
-            minW="160px"
-            h="100%"
-          >
-            5
-          </Box>
-          <Box
-            borderRadius="10px"
-            bg="red"
-            w="100%"
-            minH={{ base: '220px', md: '319px' }}
-            minW="160px"
-            h="100%"
-          >
-            6
-          </Box>
-          <Box
-            borderRadius="10px"
-            bg="red"
-            w="100%"
-            minH={{ base: '220px', md: '319px' }}
-            minW="160px"
-            h="100%"
-          >
-            7
-          </Box>
-          <Box
-            borderRadius="10px"
-            bg="red"
-            w="100%"
-            minH={{ base: '220px', md: '319px' }}
-            minW="160px"
-            h="100%"
-          >
-            8
-          </Box>
-          <Box
-            borderRadius="10px"
-            bg="red"
-            w="100%"
-            minH={{ base: '220px', md: '319px' }}
-            minW="160px"
-            h="100%"
-          >
-            9
-          </Box>
-        </Grid>
+            <Cube1Icon boxSize="40px" color="content.5" />
+            <Text textStyle="pre-body-04" color="content.5">
+              등록된 갤러리가 없습니다.
+            </Text>
+          </Flex>
+        }
       </Flex>
       <Button
         borderRadius={'full'}
@@ -171,6 +148,7 @@ const Section5 = () => {
         border="1px solid"
         borderColor="border.basic.1"
         gap="4px"
+        onClick={handleLoadMore}
       >
         <Text>더보기</Text>
         <CaretdownIcon boxSize="24px" />
@@ -181,3 +159,47 @@ const Section5 = () => {
 }
 
 export default Section5
+
+const ImageWithHover = ({
+  mainImage,
+  hoverImage,
+}: {
+  mainImage: string
+  hoverImage: string
+}) => {
+  return (
+    <Box
+      position="relative"
+      width="100%"
+      paddingBottom="100%" // 1:1 비율 유지
+    >
+      <Image
+        position="absolute"
+        top={0}
+        left={0}
+        w="100%"
+        h="100%"
+        borderRadius="10px"
+        objectFit="cover" // 이미지가 영역을 꽉 채우도록
+        src={mainImage}
+        alt={mainImage}
+        transition="opacity 0.3s"
+        _groupHover={{ opacity: 0 }}
+      />
+      <Image
+        position="absolute"
+        top={0}
+        left={0}
+        w="100%"
+        h="100%"
+        borderRadius="10px"
+        objectFit="cover" // 이미지가 영역을 꽉 채우도록
+        src={hoverImage}
+        alt={hoverImage}
+        opacity={0}
+        transition="opacity 0.3s"
+        _groupHover={{ opacity: 1 }}
+      />
+    </Box>
+  )
+}
