@@ -69,6 +69,21 @@ export const ArrowRightIcon = (props: IconProps) => (
   </Icon>
 )
 
+export const CaretdownIcon = (props: IconProps) => (
+  <Icon viewBox="0 0 24 24" fill="none" {...props}>
+    <g id="Icon-CaretDown">
+      <path
+        id="Vector"
+        d="M20 9.00049L12.5 16.5005L5 9.00049"
+        stroke="#39383D"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+  </Icon>
+)
+
 export const CheckIcon = (props: IconProps) => (
   <Icon viewBox="0 0 20 20" fill="none" {...props}>
     <rect width="20" height="20" rx="10" fill="#171717" />
