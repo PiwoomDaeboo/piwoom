@@ -88,7 +88,7 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
         isDownload: true,
       },
     })
-    console.log(fields.key)
+
     setValue('file', fields.key, { shouldDirty: true })
   }
   const handleFileClick = (e: ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +111,6 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
       },
     })
   }
-  console.log(errors)
 
   return (
     <FormProvider {...methods}>

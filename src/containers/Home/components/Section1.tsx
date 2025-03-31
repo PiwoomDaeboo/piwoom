@@ -1,6 +1,4 @@
-import { Box, Center, Flex, Grid, Image, Text, VStack } from '@chakra-ui/react'
-
-import { MY_IMAGES } from '@/generated/path/images'
+import { Flex, Grid, Text, VStack } from '@chakra-ui/react'
 
 function Section1() {
   return (

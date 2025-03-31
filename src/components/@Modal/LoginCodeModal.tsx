@@ -18,8 +18,6 @@ function LoginCodeModal({ isOpen, onClose }: LoginCodeModalProps) {
     onClose()
   }
 
-  useEffect(function clear() {}, [isOpen])
-
   return (
     <ModalBasis
       isOpen={isOpen}

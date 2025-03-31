@@ -29,31 +29,23 @@ const Section5 = () => {
     if (galleryList?.results && cursor === '') {
       setAccumulatedItems(galleryList.results)
     }
-  }, [galleryList?.results, cursor])
+  }, [cursor, galleryList?.results])
 
   // 더보기 버튼 클릭 핸들러
   const handleLoadMore = () => {
-    if (galleryList?.cursor) {
-      setCursor(galleryList.cursor) // 다음 페이지를 위한 cursor 업데이트
+    if (galleryList?.cursor && galleryList.results) {
+      setCursor(galleryList.cursor)
+      setAccumulatedItems((prev) => [
+        ...prev,
+        ...(galleryList?.results as GalleryType[]),
+      ])
     }
   }
 
-  // 새로운 데이터가 도착했을 때 처리
-  useEffect(() => {
-    if (galleryList?.results && cursor !== '') {
-      // 새로운 데이터만 기존 배열에 추가
-      setAccumulatedItems((prev) => [
-        ...prev,
-        ...(galleryList.results as GalleryType[]),
-      ])
-    }
-  }, [cursor, galleryList?.results])
-
-  // 카테고리 변경 시 초기화
   const handleCategorySelect = (id: number) => {
     setSelectedCategory(id)
-    setCursor('') // cursor 초기화
-    setAccumulatedItems([]) // 누적 데이터 초기화
+    setCursor('')
+    setAccumulatedItems([])
   }
 
   return (
