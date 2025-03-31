@@ -1,9 +1,19 @@
 import { useEffect, useState } from 'react'
 
-import { Box, Center, Flex, Grid, Image, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Center,
+  Flex,
+  Grid,
+  Image,
+  SimpleGrid,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 
 import { Cube1Icon, Cube2Icon, Cube3Icon } from '@/generated/icons/MyIcons'
 
+import CustomGrid from './components/CustomGrid'
 import Section1 from './components/Section1'
 import Section3 from './components/Section3'
 import Section4 from './components/Section4'
@@ -151,6 +161,9 @@ function Home() {
           </Flex>
         </Flex>
       </Flex>
+      <Box w="100%" h="100%">
+        <CustomGrid />
+      </Box>
       <Section1 />
       <Section3 />
       <Section4 />
