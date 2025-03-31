@@ -1,4 +1,11 @@
-import { Button, Flex, Text, VStack, useDisclosure } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Flex,
+  Text,
+  VStack,
+  useDisclosure,
+} from '@chakra-ui/react'
 
 import InquiryModal from '@/components/@Modal/InquiryModal'
 import LoginCodeModal from '@/components/@Modal/LoginCodeModal'
@@ -21,18 +28,34 @@ const Section4 = () => {
       flexDirection={'column'}
       alignItems={'center'}
       justifyContent={'center'}
+      px={{ base: '16px', sm: '30px', md: '60px' }}
     >
       <LoginCodeModal isOpen={isLoginCodeOpen} onClose={onLoginCodeClose} />
       <InquiryModal isOpen={isInquiryOpen} onClose={onInquiryClose} />
-      <Text textStyle="pre-heading-01" mb="32px">
+      <Box
+        mb="32px"
+        textAlign={'center'}
+        textStyle="pre-display-03"
+        display={{ base: 'block', md: 'none' }}
+      >
+        MagiCube와
+        <br />
+        지금 시작해 보세요!
+      </Box>
+      <Box
+        mb="28px"
+        textAlign={'center'}
+        textStyle="pre-display-03"
+        display={{ base: 'none', md: 'block' }}
+      >
         MagiCube와 지금 시작해 보세요!
-      </Text>
+      </Box>
       <Flex
         gap="30px"
         w="100%"
         h="100%"
-        alignItems="center"
         justifyContent="center"
+        alignItems="stretch" // 자식 요소들이 컨테이너 높이에 맞춰 늘어나도록
         flexDirection={{ base: 'column', md: 'row' }}
       >
         <Flex
@@ -59,17 +82,13 @@ const Section4 = () => {
             bg="white"
             mt="24px"
             mb="32px"
+            flex="1"
             alignItems="flex-start"
             borderRadius="10px"
           >
             <Flex gap="8px" alignItems="flex-start">
               <CheckIcon mt="6px" width="20px" height="20px" />
-              <Text
-                textStyle="pre-body-04"
-                color="content.1"
-                mt="4px"
-                // wordBreak="keep-all"
-              >
+              <Text textStyle="pre-body-04" color="content.1" mt="4px">
                 오직 매지큐브에서만 가능한 800도 식기용 전사인쇄 솔루션에 적합한
                 업종별, 테마별 셀프 디자인 편집이 가능합니다.
               </Text>
@@ -120,7 +139,12 @@ const Section4 = () => {
           >
             <Flex gap="8px" alignItems="flex-start">
               <CheckIcon mt="6px" width="20px" height="20px" />
-              <Text textStyle="pre-body-04" color="content.1" mt="4px">
+              <Text
+                textStyle="pre-body-04"
+                color="content.1"
+                mt="4px"
+                // wordBreak="normal"
+              >
                 세금계산서 발행용 견적 문의 시, 사업자등록증을 첨부해주시면
                 수량과 상관없이 우선 상담해드립니다. 네이버 톡톡 및 카카오
                 채널로도 언제든지 편하게 문의하세요!
