@@ -22,7 +22,7 @@ export default function HomeFooter({ ...props }: ContainerProps) {
       flexDirection={'column'}
       {...props}
       py="40px"
-      px="0px"
+      px={{ base: '16px', sm: '30px', md: '60px' }}
     >
       <Text textStyle="pre-display-00">LET’S PLAY</Text>
       <Box w="100%" bg="content.1" height="3px" my="12px" />

@@ -1,20 +1,12 @@
 import { useEffect, useState } from 'react'
 
-import {
-  Box,
-  Center,
-  Flex,
-  Grid,
-  Image,
-  SimpleGrid,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Center, Flex, Image, Text } from '@chakra-ui/react'
 
 import { Cube1Icon, Cube2Icon, Cube3Icon } from '@/generated/icons/MyIcons'
+import { MY_IMAGES } from '@/generated/path/images'
 
-import CustomGrid from './components/CustomGrid'
 import Section1 from './components/Section1'
+import Section2 from './components/Section2'
 import Section3 from './components/Section3'
 import Section4 from './components/Section4'
 import Section5 from './components/Section5'
@@ -35,136 +27,91 @@ function Home() {
       h={'100%'}
       borderRadius={'8px'}
       flexDir={'column'}
-      gap={'20px'}
+      // gap={'20px'}
     >
-      {/* <Flex>
-        <Flex
-          flexDir={'column'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          w="100%"
-          h="100%"
+      <Flex
+        flexDir={'column'}
+        justifyContent={'center'}
+        alignItems={'center'}
+        w="100%"
+        h="100%"
+        px={{ base: '16px', sm: '30px', md: '60px' }}
+      >
+        <Text
+          textStyle="rubik-regular"
+          fontSize={{ base: '80px', md: '150px' }}
+          lineHeight="100%"
         >
-          <Text
-            textStyle="rubik-regular"
-            fontSize={{ base: '80px', md: '150px' }}
-            lineHeight="100%"
-          >
-            MAKE IT
-          </Text>
-          <Text
-            textStyle="rubik-regular"
-            fontSize={{ base: '80px', md: '150px' }}
-            lineHeight="100%"
-          >
-            Y
-            <Box
-              position="relative"
-              width="fit-content"
-              height="fit-content"
-              display="inline-block"
-            >
-              <Box
-                position="absolute"
-                top="0"
-                left="0"
-                opacity={cubeIndex === 0 ? 1 : 0}
-                transition="opacity 0.5s ease-in-out"
-              >
-                <Cube1Icon />
-              </Box>
-              <Box
-                position="absolute"
-                top="0"
-                left="0"
-                opacity={cubeIndex === 1 ? 1 : 0}
-                transition="opacity 0.5s ease-in-out"
-              >
-                <Cube2Icon />
-              </Box>
-              <Box
-                position="absolute"
-                top="0"
-                left="0"
-                opacity={cubeIndex === 2 ? 1 : 0}
-                transition="opacity 0.5s ease-in-out"
-              >
-                <Cube3Icon />
-              </Box>
-
-              <Box visibility="hidden">
-                <Cube1Icon />
-              </Box>
-            </Box>
-            URS
-          </Text>
-          <Flex w="100%" justifyContent={'flex-end'}>
-            <Text textStyle="pre-heading-01">@MagiCube</Text>
-          </Flex>
-        </Flex>
-      </Flex> */}
-      <Flex>
-        <Flex
-          flexDir={'column'}
-          justifyContent={'center'}
-          alignItems={'center'}
-          w="100%"
-          h="100%"
+          MAKE IT
+        </Text>
+        <Text
+          textStyle="rubik-regular"
+          fontSize={{ base: '80px', md: '150px' }}
+          lineHeight="100%"
         >
-          <Text
-            textStyle="rubik-regular"
-            fontSize={{ base: '80px', md: '150px' }}
-            lineHeight="100%"
+          Y
+          <Box
+            as="span"
+            display="inline-block"
+            position="relative"
+            width="fit-content"
+            height="fit-content"
+            verticalAlign="middle" // 텍스트 정렬 유지
           >
-            MAKE IT
-          </Text>
-          <Text
-            textStyle="rubik-regular"
-            fontSize={{ base: '80px', md: '150px' }}
-            lineHeight="100%"
-          >
-            Y
-            <Box
-              as="span"
-              display="inline-block"
-              position="relative"
-              width="fit-content"
-              height="fit-content"
-              verticalAlign="middle" // 텍스트 정렬 유지
-            >
-              {[Cube1Icon, Cube2Icon, Cube3Icon].map((Icon, index) => (
-                <Box
-                  key={index}
-                  as="span"
-                  position="absolute"
-                  top="-10px"
-                  left="0"
-                  opacity={cubeIndex === index ? 1 : 0}
-                  display="inline-block"
-                >
-                  <Icon />
-                </Box>
-              ))}
-              {/* 공간 유지를 위한 투명 아이콘 */}
+            {[Cube1Icon, Cube2Icon, Cube3Icon].map((Icon, index) => (
               <Box
-                as="span" // span으로 변경
-                visibility="hidden"
+                key={index}
+                as="span"
+                position="absolute"
+                top="-10px"
+                left="0"
+                opacity={cubeIndex === index ? 1 : 0}
                 display="inline-block"
               >
-                <Cube1Icon />
+                <Icon />
               </Box>
+            ))}
+            {/* 공간 유지를 위한 투명 아이콘 */}
+            <Box
+              as="span" // span으로 변경
+              visibility="hidden"
+              display="inline-block"
+            >
+              <Cube1Icon />
             </Box>
-            URS
-          </Text>
-          <Flex w="100%" justifyContent={'flex-end'}>
-            <Text textStyle="pre-heading-01">@MagiCube</Text>
-          </Flex>
+          </Box>
+          URS
+        </Text>
+        <Flex w="100%" justifyContent={'flex-end'}>
+          <Text textStyle="pre-heading-01">@MagiCube</Text>
         </Flex>
       </Flex>
+
       <Box w="100%" h="100%">
-        <CustomGrid />
+        <Section1 />
       </Box>
-      <Section1 />
+      <Box display={{ base: 'none', sm: 'none', md: 'block' }}>
+        <Image
+          w="100%"
+          src={MY_IMAGES.BELT_IMAGE_PC.src}
+          alt={MY_IMAGES.BELT_IMAGE_PC.alt}
+        />
+      </Box>
+      <Box display={{ base: 'none', sm: 'block', md: 'none' }}>
+        <Image
+          w="100vw"
+          src={MY_IMAGES.BELT_IMAGE_TAB.src}
+          alt={MY_IMAGES.BELT_IMAGE_TAB.alt}
+        />
+      </Box>
+      <Box display={{ base: 'block', sm: 'none', md: 'none' }}>
+        <Image
+          w="100vw"
+          src={MY_IMAGES.BELT_IMAGE_MO.src}
+          alt={MY_IMAGES.BELT_IMAGE_MO.alt}
+        />
+      </Box>
+      <Section2 />
       <Section3 />
       <Section4 />
       <Section5 />

@@ -36,10 +36,11 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
       display="flex"
       w="100%"
       h="70px"
-      px="0px"
+      // px="0px"
       bg="white"
       maxW="1440px"
       alignItems="center"
+      px={{ base: '16px', sm: '30px', md: '60px' }}
       justifyContent="space-between"
       {...props}
     >
