@@ -53,9 +53,9 @@ const ProcessStep: React.FC<ProcessStepProps> = ({
   <Flex
     w="100%"
     gap="24px"
-    flexDir={{ base: 'column', md: 'row' }}
+    flexDir={{ base: 'column', sm: 'row', md: 'row' }}
     justifyContent={{ base: 'flex-start', md: 'center' }}
-    alignItems={{ base: 'flex-start', md: 'center' }}
+    alignItems={{ base: 'flex-start', sm: 'center', md: 'center' }}
     borderRadius="20px"
     p="28px"
     boxShadow="0px 2px 35px 0px rgba(44, 45, 80, 0.12)"
@@ -84,6 +84,7 @@ const Section3 = () => {
       px={{ base: '16px', sm: '30px', md: '60px' }}
       alignItems="center"
       justifyContent="center"
+      bg="background.basic.2"
       flexDirection={{ base: 'column-reverse', md: 'row' }}
     >
       <Flex flexDirection={'column'} w={{ base: '100%', md: '50%' }}>

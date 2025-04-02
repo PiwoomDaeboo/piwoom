@@ -50,7 +50,7 @@ const Section5 = () => {
 
   return (
     <Flex
-      py={{ base: '80px', sm: '140px', md: '180px' }}
+      pb={{ base: '80px', sm: '140px', md: '180px' }}
       px={{ base: '16px', sm: '30px', md: '60px' }}
       flexDirection={'column'}
       alignItems={'center'}
@@ -143,9 +143,8 @@ const Section5 = () => {
         gap="4px"
         onClick={handleLoadMore}
       >
-        <Text>더보기</Text>
+        더보기
         <CaretdownIcon boxSize="24px" />
-        {/* <ChevronDownIcon /> */}
       </Button>
     </Flex>
   )

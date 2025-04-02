@@ -18,12 +18,16 @@ function Section2() {
         borderRadius={'20px'}
         bg="#FAC0F9"
         w="100%"
-        p="40px"
+        p="32px 40px"
       >
         <Text textStyle="rubik-regular" textAlign={'center'}>
           01
         </Text>
-        <VStack alignItems="flex-start" spacing="0px" mt="40px">
+        <VStack
+          alignItems="flex-start"
+          spacing="0px"
+          mt={{ base: '32px', md: '30px' }}
+        >
           <Text textStyle="pre-heading-01">기업을 위한</Text>
           <Text textStyle="pre-heading-01">완벽한 브랜드 굿즈</Text>
           <Text textStyle="pre-heading-01">대량 제작부터!</Text>
@@ -39,12 +43,16 @@ function Section2() {
         borderRadius={'20px'}
         bg="#B693FC"
         w="100%"
-        p="40px"
+        p="32px 40px"
       >
         <Text textStyle="rubik-regular" textAlign={'center'}>
           02
         </Text>
-        <VStack alignItems="flex-start" spacing="0px" mt="40px">
+        <VStack
+          alignItems="flex-start"
+          spacing="0px"
+          mt={{ base: '32px', md: '30px' }}
+        >
           <Text textStyle="pre-heading-01">전문가처럼 쉽고 빠른</Text>
           <Text textStyle="pre-heading-01">맞춤형 셀프 디자인 소량</Text>
           <Text textStyle="pre-heading-01">제작까지!</Text>
@@ -59,12 +67,16 @@ function Section2() {
         borderRadius={'20px'}
         bg="#F5EFD1"
         w="100%"
-        p="40px"
+        p="32px 40px"
       >
         <Text textStyle="rubik-regular" textAlign={'center'}>
           03
         </Text>
-        <VStack alignItems="flex-start" spacing="0px" mt="40px">
+        <VStack
+          alignItems="flex-start"
+          spacing="0px"
+          mt={{ base: '32px', md: '30px' }}
+        >
           <Text textStyle="pre-heading-01">오직 MagiCube에서만!</Text>
           <Text textStyle="pre-heading-01">고품질 800도 열처리 전사</Text>
           <Text textStyle="pre-heading-01">인쇄&원스톱 머그컵 제작 서비스</Text>
