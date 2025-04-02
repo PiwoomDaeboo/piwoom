@@ -67,9 +67,9 @@ const Section4 = () => {
         >
           <Text textStyle="pre-heading-01">
             로고나 시안 없이도{' '}
-            <Text as="span" color="secondary.5">
+            <Box as="span" color="secondary.5">
               직접 디자인
-            </Text>
+            </Box>
             할 수 있나요?
           </Text>
           <Text textStyle="pre-body-01" color="content.1" mt="4px">
@@ -119,9 +119,9 @@ const Section4 = () => {
         >
           <Text textStyle="pre-heading-01" color="content.8">
             주문하기 전이라{' '}
-            <Text as="span" color="secondary.5">
+            <Box as="span" color="secondary.3">
               시안 확인과 견적
-            </Text>
+            </Box>
             이 궁금해요!
           </Text>
           <Text textStyle="pre-body-01" color="content.8" mt="4px">

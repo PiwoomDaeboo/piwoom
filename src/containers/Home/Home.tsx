@@ -32,58 +32,67 @@ function Home() {
           h="100%"
           px={{ base: '16px', sm: '30px', md: '60px' }}
         >
-          <Text
-            textStyle="rubik-regular"
-            fontSize={{ base: '80px', md: '150px' }}
-            lineHeight="100%"
-          >
-            MAKE IT
-          </Text>
-          <Text
-            textStyle="rubik-regular"
-            fontSize={{ base: '80px', md: '150px' }}
-            lineHeight="100%"
-          >
-            Y
-            <Box
-              as="span"
-              display="inline-block"
-              position="relative"
-              width="fit-content"
-              height="fit-content"
-              verticalAlign="middle" // 텍스트 정렬 유지
+          <Box>
+            <Text
+              textStyle="rubik-regular"
+              fontSize={{ base: '80px', sm: '150px', md: '200px' }}
+              lineHeight="100%"
             >
-              {[Cube1Icon, Cube2Icon, Cube3Icon].map((Icon, index) => (
-                <Box
-                  key={index}
-                  as="span"
-                  position="absolute"
-                  top="-10px"
-                  left="0"
-                  opacity={cubeIndex === index ? 1 : 0}
-                  display="inline-block"
-                >
-                  <Icon />
-                </Box>
-              ))}
-              {/* 공간 유지를 위한 투명 아이콘 */}
-              <Box
-                as="span" // span으로 변경
-                visibility="hidden"
-                display="inline-block"
+              MAKE IT
+            </Text>
+            <Box position="relative">
+              <Text
+                textAlign="center"
+                textStyle="rubik-regular"
+                fontSize={{ base: '80px', sm: '150px', md: '200px' }}
+                lineHeight="100%"
               >
-                <Cube1Icon />
-              </Box>
+                Y
+                <Box
+                  display="inline-block"
+                  position="relative"
+                  width="fit-content"
+                  height="fit-content"
+                  verticalAlign="middle"
+                >
+                  {[Cube1Icon, Cube2Icon, Cube3Icon].map((Icon, index) => (
+                    <Box
+                      key={index}
+                      position="absolute"
+                      top="-10px"
+                      left="0"
+                      opacity={cubeIndex === index ? 1 : 0}
+                      display="inline-block"
+                    >
+                      <Icon />
+                    </Box>
+                  ))}
+                  <Box visibility="hidden" display="inline-block">
+                    <Cube1Icon />
+                  </Box>
+                </Box>
+                URS
+              </Text>
+              <Flex w="100%" justifyContent={'flex-end'}>
+                <Text
+                  display={{ base: 'none', sm: 'block', md: 'block' }}
+                  textStyle="pre-heading-02"
+                >
+                  @MagiCube
+                </Text>
+                <Text
+                  display={{ base: 'block', sm: 'none', md: 'none' }}
+                  textStyle="pre-heading-04"
+                >
+                  @MagiCube
+                </Text>
+              </Flex>
             </Box>
-            URS
-          </Text>
-          <Flex w="100%" justifyContent={'flex-end'}>
-            <Text textStyle="pre-heading-01">@MagiCube</Text>
-          </Flex>
+          </Box>
+          <Box w="100%" h="100%">
+            <Section1 />
+          </Box>
         </Flex>
-        <Box w="100%" h="100%">
-          <Section1 />
-        </Box>
       </Container>
       <Box
         position="relative"
@@ -91,9 +100,9 @@ function Home() {
         left="50%"
         right="50%"
         ml="-51vw"
-        mr="-50vw"
+        mr="-51vw"
       >
-        <Box maxW="1920px" mx="auto">
+        <Box maxW="100%" mx="auto">
           <Box display={{ base: 'none', sm: 'none', md: 'block' }}>
             <Image
               w="100%"
