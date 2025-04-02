@@ -93,7 +93,7 @@ function Home() {
         ml="-50vw"
         mr="-50vw"
       >
-        <Box maxW="100vw" mx="auto">
+        <Box maxW="1920px" mx="auto">
           <Box display={{ base: 'none', sm: 'none', md: 'block' }}>
             <Image
               w="100%"
