@@ -90,7 +90,7 @@ function Home() {
         w="100vw"
         left="50%"
         right="50%"
-        ml="-50vw"
+        ml="-51vw"
         mr="-50vw"
       >
         <Box maxW="1920px" mx="auto">
