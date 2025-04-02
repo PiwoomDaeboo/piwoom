@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
 import {
+  Box,
   Container,
   ContainerProps,
   Flex,
@@ -35,7 +36,7 @@ const HomeLayout = ({
   content,
 }: HomeLayoutProps) => {
   return (
-    <Container
+    <Box
       w={'100%'}
       minH={'100vh'}
       // h="100vh" // 명시적으로 100vh로 설정
@@ -72,7 +73,7 @@ const HomeLayout = ({
         {content}
       </Flex>
       {footer}
-    </Container>
+    </Box>
   )
 }
 
