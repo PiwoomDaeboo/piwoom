@@ -67,13 +67,13 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
         onClose()
         reset()
       },
-      onError: () => {
-        toast({
-          title: '문의 전송에 실패했습니다.',
-          description: '다시 시도해주세요.',
-          status: 'error',
-        })
-      },
+      // onError: () => {
+      //   toast({
+      //     title: '문의 전송에 실패했습니다.',
+      //     description: '다시 시도해주세요.',
+      //     status: 'error',
+      //   })
+      // },
     },
   })
 
@@ -117,9 +117,9 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
       <ModalBasis
         isOpen={isOpen}
         onClose={handleClose}
-        size={'lg'}
+        size={{ base: 'full', md: 'lg' }}
         body={
-          <Box overflowY="scroll" maxH="600px">
+          <Box overflowY="scroll" maxH={{ base: '80vh', md: '600px' }} pr="4px">
             <form
               id="inquiry-form"
               onSubmit={handleSubmit((data) => {
@@ -276,6 +276,3 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
   )
 }
 export default InquiryModal
-function toast(arg0: { title: string; description: string; status: string }) {
-  throw new Error('Function not implemented.')
-}

@@ -11,6 +11,10 @@ export const MY_IMAGES = {
   BELT_IMAGE_MO: { src: '/images/belt_image_mo.png', alt: 'belt-image-mo' },
   BELT_IMAGE_PC: { src: '/images/belt_image_pc.png', alt: 'belt-image-pc' },
   BELT_IMAGE_TAB: { src: '/images/belt_image_tab.png', alt: 'belt-image-tab' },
+  IMG_02: { src: '/images/img02.png', alt: 'img-02' },
+  IMG_04: { src: '/images/img04.png', alt: 'img-04' },
+  IMG_06: { src: '/images/img06.png', alt: 'img-06' },
+  IMG_07: { src: '/images/img07.png', alt: 'img-07' },
   MAGICUBE_PROCESS: {
     src: '/images/magicube_process.png',
     alt: 'magicube-process',

@@ -4,6 +4,7 @@ import { Box, Button, Flex, Input, Text } from '@chakra-ui/react'
 
 import ModalBasis from '@/components/@Modal/ModalBasis'
 import InputForm from '@/components/InputForm'
+import { useOrderRetrieveQuery } from '@/generated/apis/Order/Order.query'
 
 interface LoginCodeModalProps {
   isOpen: boolean
@@ -11,11 +12,52 @@ interface LoginCodeModalProps {
 }
 
 function LoginCodeModal({ isOpen, onClose }: LoginCodeModalProps) {
+  const [code, setCode] = useState('')
+  const [shouldQuery, setShouldQuery] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const {
+    data,
+    isLoading,
+    error: queryError,
+  } = useOrderRetrieveQuery({
+    variables: {
+      code: code,
+    },
+    options: {
+      enabled: shouldQuery && !!code,
+    },
+  })
+
+  useEffect(() => {
+    if (shouldQuery) {
+      if (data && !queryError) {
+        // 성공적으로 데이터를 가져왔을 때
+        handleNext()
+      } else if (queryError) {
+        // 쿼리 에러가 발생했을 때
+        setError('유효하지 않은 코드입니다. 다시 확인해주세요.')
+        setShouldQuery(false) // 쿼리 상태 초기화
+      }
+    }
+  }, [data, queryError, shouldQuery])
+
   const handleNext = () => {
     onClose()
+    window.open(`https://editor.magicube.co.kr/order/${code}/editor/`, '_blank')
+    // MC149615
   }
+
+  const handleConfirm = () => {
+    if (code) {
+      setError(null) // 에러 초기화
+      setShouldQuery(true) // 쿼리 실행
+    }
+  }
+
   const handleClose = () => {
     onClose()
+    setCode('')
   }
 
   return (
@@ -53,10 +95,15 @@ function LoginCodeModal({ isOpen, onClose }: LoginCodeModalProps) {
             <InputForm label="" isRequired={false}>
               <Input
                 placeholder="에디터 코드"
-                // value={optionName}
-                // onChange={handleOptionNameChange}
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
               />
             </InputForm>
+            {error && (
+              <Text color="red.500" fontSize="sm" mt="2">
+                {error}
+              </Text>
+            )}
           </Box>
         </Box>
       }
@@ -76,7 +123,8 @@ function LoginCodeModal({ isOpen, onClose }: LoginCodeModalProps) {
             borderRadius={'full'}
             w="100%"
             variant={'solid-primary'}
-            onClick={handleNext}
+            onClick={handleConfirm}
+            isLoading={isLoading}
           >
             확인
           </Button>
@@ -85,4 +133,5 @@ function LoginCodeModal({ isOpen, onClose }: LoginCodeModalProps) {
     ></ModalBasis>
   )
 }
+
 export default LoginCodeModal
