@@ -58,6 +58,7 @@ function LoginCodeModal({ isOpen, onClose }: LoginCodeModalProps) {
   const handleClose = () => {
     onClose()
     setCode('')
+    setError(null)
   }
 
   return (

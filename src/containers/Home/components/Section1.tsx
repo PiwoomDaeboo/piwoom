@@ -14,6 +14,7 @@ const Section1 = () => {
     >
       <Flex w="100%" h="100%" gap={{ base: '10px', md: '30px' }}>
         <VStack
+          flex="1"
           // maxW="320px"
           gap={{ base: '10px', md: '30px' }}
           mt={{ base: '40px', sm: '60px', md: '100px' }}
@@ -39,7 +40,7 @@ const Section1 = () => {
             bgPosition="center"
           />
         </VStack>
-        <VStack gap={{ base: '10px', md: '30px' }} w="100%" h="100%">
+        <VStack flex="2" gap={{ base: '10px', md: '30px' }} w="100%" h="100%">
           <Box
             w="100%"
             h="100%"
@@ -72,6 +73,7 @@ const Section1 = () => {
         </VStack>
         <VStack
           w="100%"
+          flex="1"
           // maxW="320px"
           gap={{ base: '10px', md: '30px' }}
           mt={{ base: '40px', sm: '60px', md: '100px' }}
@@ -79,6 +81,7 @@ const Section1 = () => {
         >
           <Box
             w="100%"
+            flex="1"
             h={{ base: '150px', sm: '250px', md: '370px' }}
             borderRadius="10px"
             bgImage={'/images/img03.gif'}
@@ -88,6 +91,7 @@ const Section1 = () => {
           />
           <Box
             w="100%"
+            flex="1"
             h={{ base: '100px', sm: '180px', md: '260px' }}
             borderRadius="10px"
             bgImage={'/images/img07.png'}
