@@ -8,7 +8,7 @@ function Section2() {
       px={{ base: '16px', sm: '30px', md: '60px' }}
       // h="100%"
       templateColumns={{
-        base: 'repeat(1, 1fr)', // 모바일에서는 1열
+        base: 'repeat(1, 1fr)',
         md: 'repeat(3, 1fr)',
       }}
       gap="30px"

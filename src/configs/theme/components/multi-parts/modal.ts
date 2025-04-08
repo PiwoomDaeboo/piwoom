@@ -7,7 +7,7 @@ const { definePartsStyle, defineMultiStyleConfig } =
 const baseStyle = definePartsStyle({
   dialogContainer: {
     alignItems: 'center',
-    px: '16px',
+    // px: '16px',
   },
 })
 

@@ -60,11 +60,11 @@ const Section5 = () => {
       <Text textStyle="pre-display-03" mb="32px">
         MagiCube 갤러리
       </Text>
-      <Flex
+      {/* <Flex
         gap="12px"
-        overflowX="auto"
+        overflowX="scroll"
         pb="10px"
-        w="100%"
+        minW="375px"
         justifyContent={{ base: 'flex-start', md: 'center' }}
         sx={{
           '&::-webkit-scrollbar': { display: 'none' },
@@ -72,28 +72,30 @@ const Section5 = () => {
           msOverflowStyle: 'none',
           scrollBehavior: 'smooth',
           scrollSnapType: 'x mandatory',
-          minWidth: '100%',
         }}
       >
-        {list?.map((item) => {
-          const isSelected = selectedCategory === item.id
+        <Box>
+          {list?.map((item) => {
+            const isSelected = selectedCategory === item.id
 
-          return (
-            <Button
-              key={item.id}
-              borderRadius={'full'}
-              size={{ base: 'md', md: 'lg' }}
-              variant={isSelected ? 'solid-primary' : 'outline-primary'}
-              textStyle={'pre-heading-05'}
-              onClick={() => handleCategorySelect(item.id)}
-              flexShrink={0}
-              minW="auto"
-            >
-              {item.title}
-            </Button>
-          )
-        })}
-      </Flex>
+            return (
+              <Button
+                key={item.id}
+                borderRadius={'full'}
+                size={{ base: 'md', md: 'lg' }}
+                variant={isSelected ? 'solid-primary' : 'outline-primary'}
+                textStyle={'pre-heading-05'}
+                onClick={() => handleCategorySelect(item.id)}
+                flexShrink={0}
+                minW="auto"
+                scrollSnapAlign="start"
+              >
+                {item.title}
+              </Button>
+            )
+          })}
+        </Box>
+      </Flex> */}
       <Flex w="100%" h="100%" py="56px">
         {accumulatedItems?.length > 0 ?
           <Grid
