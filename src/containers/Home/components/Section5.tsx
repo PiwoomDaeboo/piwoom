@@ -60,42 +60,40 @@ const Section5 = () => {
       <Text textStyle="pre-display-03" mb="32px">
         MagiCube 갤러리
       </Text>
-      {/* <Flex
-        gap="12px"
+
+      <Flex
         overflowX="scroll"
+        gap="12px"
         pb="10px"
-        minW="375px"
+        maxW={{ base: '340px', sm: '100%' }}
         justifyContent={{ base: 'flex-start', md: 'center' }}
-        sx={{
-          '&::-webkit-scrollbar': { display: 'none' },
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-          scrollBehavior: 'smooth',
-          scrollSnapType: 'x mandatory',
+        css={{
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+          '-ms-overflow-style': 'none',
+          'scrollbar-width': 'none',
         }}
       >
-        <Box>
-          {list?.map((item) => {
-            const isSelected = selectedCategory === item.id
+        {list?.map((item) => {
+          const isSelected = selectedCategory === item.id
+          return (
+            <Button
+              key={item.id}
+              borderRadius={'full'}
+              size={{ base: 'md', md: 'lg' }}
+              variant={isSelected ? 'solid-primary' : 'outline-primary'}
+              textStyle={'pre-heading-05'}
+              onClick={() => handleCategorySelect(item.id)}
+              scrollSnapAlign="start"
+              flexShrink={0}
+            >
+              {item.title}
+            </Button>
+          )
+        })}
+      </Flex>
 
-            return (
-              <Button
-                key={item.id}
-                borderRadius={'full'}
-                size={{ base: 'md', md: 'lg' }}
-                variant={isSelected ? 'solid-primary' : 'outline-primary'}
-                textStyle={'pre-heading-05'}
-                onClick={() => handleCategorySelect(item.id)}
-                flexShrink={0}
-                minW="auto"
-                scrollSnapAlign="start"
-              >
-                {item.title}
-              </Button>
-            )
-          })}
-        </Box>
-      </Flex> */}
       <Flex w="100%" h="100%" py="56px">
         {accumulatedItems?.length > 0 ?
           <Grid

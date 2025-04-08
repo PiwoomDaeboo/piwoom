@@ -7,9 +7,9 @@ const Section1 = () => {
     <Flex
       w="100%"
       justifyContent="center"
-      h={{ base: '400px', sm: '600px', md: '765px' }} // 모바일 높이 조정
-      pt={{ base: '60px', sm: '60px', md: '80px' }} // 패딩 반응형 조정
-      pb={{ base: '0px', sm: '80px', md: '140px' }} // 패딩 반응형 조정
+      h={{ base: '400px', sm: '600px', md: '765px' }}
+      pt={{ base: '60px', sm: '60px', md: '80px' }}
+      pb={{ base: '0px', sm: '80px', md: '140px' }}
       px={{ base: '0px', sm: '0px', md: '0px' }}
     >
       <Flex w="100%" h="100%" gap={{ base: '10px', md: '30px' }}>
