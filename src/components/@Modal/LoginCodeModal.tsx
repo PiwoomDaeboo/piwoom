@@ -26,6 +26,7 @@ function LoginCodeModal({ isOpen, onClose }: LoginCodeModalProps) {
     },
     options: {
       enabled: shouldQuery && !!code,
+      retry: 0,
     },
   })
 
