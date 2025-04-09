@@ -3,6 +3,7 @@ import {
   Button,
   Container,
   ContainerProps,
+  Flex,
   HStack,
   IconButton,
   Text,
@@ -32,13 +33,10 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
   } = useDisclosure()
 
   return (
-    <Container
-      display="flex"
+    <Flex
       w="100%"
       h="70px"
-      // px="0px"
       bg="white"
-      maxW="1440px"
       alignItems="center"
       px={{ base: '16px', sm: '30px', md: '60px' }}
       justifyContent="space-between"
@@ -79,7 +77,7 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
       </HStack>
 
       <HomeHeaderDrawer isOpen={isOpen} onClose={onClose} />
-    </Container>
+    </Flex>
   )
 }
 
