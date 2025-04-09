@@ -32,7 +32,6 @@ const Section1 = () => {
           <Box
             w="100%"
             h="100%"
-            // h={{ base: '100px', sm: '180px', md: '260px' }}
             borderRadius="10px"
             bgImage={'/images/img04.png'}
             bgSize="contain"
@@ -54,7 +53,7 @@ const Section1 = () => {
           <Flex gap={{ base: '10px', md: '30px' }} w="100%" h="70%">
             <Box
               w="100%"
-              h={{ base: '30px', sm: '80%', md: '200px' }}
+              h={{ base: '80px', sm: '80%', md: '200px' }}
               bgImage={'/images/img05.gif'}
               bgSize="contain"
               bgRepeat="no-repeat"
@@ -62,7 +61,7 @@ const Section1 = () => {
             />
             <Box
               w="100%"
-              h={{ base: '80px', sm: '100%', md: '100%' }}
+              h={{ base: '100px', sm: '100%', md: '100%' }}
               borderRadius="10px"
               bgImage={'/images/img06.png'}
               bgSize="contain"
@@ -74,26 +73,24 @@ const Section1 = () => {
         <VStack
           w="100%"
           flex="1"
-          // maxW="320px"
-          gap={{ base: '10px', md: '30px' }}
-          mt={{ base: '40px', sm: '60px', md: '100px' }}
+          gap={{ base: '0px', md: '30px' }}
+          mt={{ base: '20px', sm: '60px', md: '100px' }}
           alignItems="flex-start"
         >
           <Box
             w="100%"
             flex="1"
-            h={{ base: '150px', sm: '250px', md: '370px' }}
+            h={{ base: '100px', sm: '250px', md: '370px' }}
             borderRadius="10px"
             bgImage={'/images/img03.gif'}
-            bgSize={{ base: 'contain', sm: 'contain', md: 'contain' }}
+            bgSize="contain"
             bgRepeat="no-repeat"
             bgPosition="center"
           />
           <Box
             w="100%"
             flex="1"
-            h={{ base: '100px', sm: '180px', md: '260px' }}
-            borderRadius="10px"
+            h={{ base: '80px', sm: '180px', md: '260px' }}
             bgImage={'/images/img07.png'}
             bgSize="contain"
             bgRepeat="no-repeat"
