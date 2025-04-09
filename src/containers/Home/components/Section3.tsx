@@ -110,16 +110,20 @@ const Section3 = () => {
         flexDirection={'column'}
         w={{ base: '100%', md: '50%' }}
         alignItems="center"
+        justifyContent="center"
       >
         <Text
           mb="32px"
           textStyle="pre-heading-01"
-          display={{ base: 'block', md: 'none' }}
+          display={{ base: 'block', sm: 'none' }}
         >
           어떻게 진행되나요?
         </Text>
         <Image
+          width="100%"
+          height="100%"
           src={MY_IMAGES.MAGICUBE_PROCESS.src}
+          objectFit="cover"
           alt={MY_IMAGES.MAGICUBE_PROCESS.alt}
         />
       </Flex>
