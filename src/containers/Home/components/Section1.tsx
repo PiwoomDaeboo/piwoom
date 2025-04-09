@@ -51,7 +51,7 @@ const Section1 = () => {
             bgRepeat="no-repeat"
             bgPosition="center"
           />
-          <Flex gap={{ base: '10px', md: '30px' }} w="100%" h="40%">
+          <Flex gap={{ base: '10px', md: '30px' }} w="100%" h="70%">
             <Box
               w="100%"
               h={{ base: '30px', sm: '80%', md: '200px' }}
@@ -85,7 +85,7 @@ const Section1 = () => {
             h={{ base: '150px', sm: '250px', md: '370px' }}
             borderRadius="10px"
             bgImage={'/images/img03.gif'}
-            bgSize="contain"
+            bgSize={{ base: 'contain', sm: 'contain', md: 'contain' }}
             bgRepeat="no-repeat"
             bgPosition="center"
           />

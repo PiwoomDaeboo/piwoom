@@ -1,8 +1,22 @@
 import { useEffect, useState } from 'react'
 
-import { Box, Center, Container, Flex, Image, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Center,
+  Container,
+  Flex,
+  Image,
+  Text,
+} from '@chakra-ui/react'
 
-import { Cube1Icon, Cube2Icon, Cube3Icon } from '@/generated/icons/MyIcons'
+import {
+  Cube1Icon,
+  Cube2Icon,
+  Cube3Icon,
+  KakaoChannelIcon,
+  NaverShoppingIcon,
+} from '@/generated/icons/MyIcons'
 import { MY_IMAGES } from '@/generated/path/images'
 
 import Section1 from './components/Section1'
@@ -23,6 +37,37 @@ function Home() {
   }, [])
   return (
     <Box>
+      <Flex
+        position={'fixed'}
+        bottom={'50px'}
+        right={'30px'}
+        flexDirection="column"
+        gap="20px"
+        zIndex={'sticky'}
+      >
+        <Button
+          as="a"
+          href="https://smartstore.naver.com/clabo/products/5274704668"
+          target="_blank"
+          variant={'unstyled'}
+        >
+          <NaverShoppingIcon
+            width={{ base: '44px', sm: '50px' }}
+            height={{ base: '44px', sm: '50px' }}
+          />
+        </Button>
+        <Button
+          as="a"
+          href="https://www.naver.com"
+          target="_blank"
+          variant={'unstyled'}
+        >
+          <KakaoChannelIcon
+            width={{ base: '44px', sm: '50px' }}
+            height={{ base: '44px', sm: '50px' }}
+          />
+        </Button>
+      </Flex>
       <Container w="100%" h={'100%'} borderRadius={'8px'} flexDir={'column'}>
         <Flex
           flexDir={'column'}
@@ -89,11 +134,11 @@ function Home() {
               </Flex>
             </Box>
           </Box>
-          <Box w="100%" h="100%">
-            <Section1 />
-          </Box>
         </Flex>
       </Container>
+      <Box w="100%" h="100%" px={{ base: '0px', sm: '0px', md: '60px' }}>
+        <Section1 />
+      </Box>
       <Box
         position="relative"
         w="100vw"
