@@ -39,7 +39,7 @@ const processSteps: ProcessStepItem[] = [
   },
   {
     icon: Process3Icon,
-    title: '3. 이미지 작업 완료',
+    title: '3. 디자인 작업 완료',
     description:
       '디자인을 제출하시면, 전문 디자이너가 마무리 작업을 진행한 후 제품 제작이 시작됩니다.',
   },
@@ -115,7 +115,7 @@ const Section3 = () => {
         <Text
           mb="32px"
           textStyle="pre-heading-01"
-          display={{ base: 'block', sm: 'none' }}
+          display={{ base: 'block', md: 'none' }}
         >
           어떻게 진행되나요?
         </Text>

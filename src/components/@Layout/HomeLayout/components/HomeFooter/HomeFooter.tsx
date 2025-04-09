@@ -15,10 +15,9 @@ import { ROUTES } from '@/generated/path/routes'
 
 export default function HomeFooter({ ...props }: ContainerProps) {
   return (
-    <Container
+    <Flex
       w={'100%'}
       variant={'base'}
-      display={'flex'}
       flexDirection={'column'}
       {...props}
       py="40px"
@@ -56,6 +55,6 @@ export default function HomeFooter({ ...props }: ContainerProps) {
           </Text>
         </VStack>
       </Flex>
-    </Container>
+    </Flex>
   )
 }
