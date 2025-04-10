@@ -57,44 +57,45 @@ const Section5 = () => {
       justifyContent={'center'}
       w="100%"
     >
-      <Text textStyle="pre-display-03" mb="32px">
+      <Text textStyle="pre-display-03" mb={{ base: '16px', sm: '32px' }}>
         MagiCube 갤러리
       </Text>
-
-      <Flex
-        overflowX="scroll"
-        gap="12px"
-        pb="10px"
-        maxW={{ base: '340px', sm: '100%' }}
-        justifyContent={{ base: 'flex-start', md: 'center' }}
-        css={{
-          '&::-webkit-scrollbar': {
-            display: 'none',
-          },
-          '-ms-overflow-style': 'none',
-          'scrollbar-width': 'none',
-        }}
-      >
-        {list?.map((item) => {
-          const isSelected = selectedCategory === item.id
-          return (
-            <Button
-              key={item.id}
-              borderRadius={'full'}
-              size={{ base: 'md', md: 'lg' }}
-              variant={isSelected ? 'solid-primary' : 'outline-primary'}
-              textStyle={'pre-heading-05'}
-              onClick={() => handleCategorySelect(item.id)}
-              scrollSnapAlign="start"
-              flexShrink={0}
-            >
-              {item.title}
-            </Button>
-          )
-        })}
-      </Flex>
-
-      <Flex w="100%" h="100%" py="56px">
+      <Box w="100%">
+        <Flex
+          overflowX="scroll"
+          gap="12px"
+          pb="10px"
+          minW="343px"
+          // maxW={{ base: '343px', sm: '100%' }}
+          justifyContent={{ base: 'flex-start', md: 'center' }}
+          css={{
+            '&::-webkit-scrollbar': {
+              display: 'none',
+            },
+            '-ms-overflow-style': 'none',
+            'scrollbar-width': 'none',
+          }}
+        >
+          {list?.map((item) => {
+            const isSelected = selectedCategory === item.id
+            return (
+              <Button
+                key={item.id}
+                borderRadius={'full'}
+                size={{ base: 'md', md: 'lg' }}
+                variant={isSelected ? 'solid-primary' : 'outline-primary'}
+                textStyle={'pre-heading-05'}
+                onClick={() => handleCategorySelect(item.id)}
+                scrollSnapAlign="start"
+                flexShrink={0}
+              >
+                {item.title}
+              </Button>
+            )
+          })}
+        </Flex>
+      </Box>
+      <Flex w="100%" h="100%" pt={{ base: '32px', sm: '56px' }} pb="40px">
         {accumulatedItems?.length > 0 ?
           <Grid
             w="100%"
@@ -133,19 +134,21 @@ const Section5 = () => {
           </Flex>
         }
       </Flex>
-      <Button
-        borderRadius={'full'}
-        size={{ base: 'md', md: 'lg' }}
-        textStyle={'pre-heading-05'}
-        variant={'outline-primary'}
-        border="1px solid"
-        borderColor="border.basic.1"
-        gap="4px"
-        onClick={handleLoadMore}
-      >
-        더보기
-        <CaretdownIcon boxSize="24px" />
-      </Button>
+      {galleryList?.cursor && (
+        <Button
+          borderRadius={'full'}
+          size={{ base: 'md', md: 'lg' }}
+          textStyle={'pre-heading-05'}
+          variant={'outline-primary'}
+          border="1px solid"
+          borderColor="border.basic.1"
+          gap="4px"
+          onClick={handleLoadMore}
+        >
+          더보기
+          <CaretdownIcon boxSize="24px" />
+        </Button>
+      )}
     </Flex>
   )
 }
