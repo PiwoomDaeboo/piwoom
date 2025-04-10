@@ -36,7 +36,7 @@ function Home() {
     return () => clearInterval(interval)
   }, [])
   return (
-    <Box>
+    <Box w="100%">
       <Flex
         position={'fixed'}
         bottom={'50px'}
@@ -58,7 +58,7 @@ function Home() {
         </Button>
         <Button
           as="a"
-          href="https://www.naver.com"
+          href="http://pf.kakao.com/_WRJXn/chat"
           target="_blank"
           variant={'unstyled'}
         >
@@ -82,6 +82,10 @@ function Home() {
               textStyle="rubik-regular"
               fontSize={{ base: '80px', sm: '150px', md: '200px' }}
               lineHeight="100%"
+              sx={{
+                WebkitTextStrokeWidth: '2px',
+                WebkitTextStrokeColor: '#000',
+              }}
             >
               MAKE IT
             </Text>
@@ -91,6 +95,10 @@ function Home() {
                 textStyle="rubik-regular"
                 fontSize={{ base: '80px', sm: '150px', md: '200px' }}
                 lineHeight="100%"
+                sx={{
+                  WebkitTextStrokeWidth: '2px',
+                  WebkitTextStrokeColor: '#000',
+                }}
               >
                 Y
                 <Box
@@ -139,41 +147,35 @@ function Home() {
       <Box w="100%" h="100%" px={{ base: '0px', sm: '0px', md: '60px' }}>
         <Section1 />
       </Box>
-      <Box
-        position="relative"
-        w="100vw"
-        left="50%"
-        right="50%"
-        ml="-51vw"
-        mr="-51vw"
-      >
-        <Box maxW="100%" mx="auto">
-          <Box display={{ base: 'none', sm: 'none', md: 'block' }}>
-            <Image
-              w="100%"
-              src={MY_IMAGES.BELT_IMAGE_PC.src}
-              alt={MY_IMAGES.BELT_IMAGE_PC.alt}
-            />
-          </Box>
-          <Box display={{ base: 'none', sm: 'block', md: 'none' }}>
-            <Image
-              w="100%"
-              src={MY_IMAGES.BELT_IMAGE_TAB.src}
-              alt={MY_IMAGES.BELT_IMAGE_TAB.alt}
-            />
-          </Box>
-          <Box display={{ base: 'block', sm: 'none', md: 'none' }}>
-            <Image
-              w="100%"
-              src={MY_IMAGES.BELT_IMAGE_MO.src}
-              alt={MY_IMAGES.BELT_IMAGE_MO.alt}
-            />
-          </Box>
+
+      <Box maxW="100%" mx="auto">
+        <Box display={{ base: 'none', sm: 'none', md: 'block' }}>
+          <Image
+            w="100%"
+            src={MY_IMAGES.BELT_IMAGE_PC.src}
+            alt={MY_IMAGES.BELT_IMAGE_PC.alt}
+          />
+        </Box>
+        <Box display={{ base: 'none', sm: 'block', md: 'none' }}>
+          <Image
+            w="100%"
+            src={MY_IMAGES.BELT_IMAGE_TAB.src}
+            alt={MY_IMAGES.BELT_IMAGE_TAB.alt}
+          />
+        </Box>
+        <Box display={{ base: 'block', sm: 'none', md: 'none' }}>
+          <Image
+            w="100%"
+            src={MY_IMAGES.BELT_IMAGE_MO.src}
+            alt={MY_IMAGES.BELT_IMAGE_MO.alt}
+          />
         </Box>
       </Box>
       <Container w="100%" h="100%">
         <Section2 />
-        <Section3 />
+      </Container>
+      <Section3 />
+      <Container w="100%" h="100%">
         <Section4 />
         <Section5 />
       </Container>

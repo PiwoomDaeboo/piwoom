@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 
-import { Box, Flex, VStack } from '@chakra-ui/react'
+import { AspectRatio, Box, Flex, VStack } from '@chakra-ui/react'
 
 const Section1 = () => {
   return (
@@ -8,11 +8,19 @@ const Section1 = () => {
       w="100%"
       justifyContent="center"
       h={{ base: '400px', sm: '600px', md: '765px' }}
-      pt={{ base: '60px', sm: '60px', md: '80px' }}
-      pb={{ base: '0px', sm: '80px', md: '140px' }}
+      mt={{ base: '60px', sm: '60px', md: '80px' }}
+      mb={{ base: '0px', sm: '80px', md: '140px' }}
       px={{ base: '0px', sm: '0px', md: '0px' }}
     >
-      <Flex w="100%" h="100%" gap={{ base: '10px', md: '30px' }}>
+      <Box w="100%" h="100%" maxW="1320px">
+        <AspectRatio ratio={16 / 9}>
+          <video src="/videos/mainTop.mp4" autoPlay muted loop />
+        </AspectRatio>
+      </Box>
+      {/* </AspectRatio>
+      </Box> */}
+
+      {/* <Flex w="100%" h="100%" gap={{ base: '10px', md: '30px' }}>
         <VStack
           flex="1"
           // maxW="320px"
@@ -97,7 +105,7 @@ const Section1 = () => {
             bgPosition="center"
           />
         </VStack>
-      </Flex>
+      </Flex> */}
     </Flex>
   )
 }

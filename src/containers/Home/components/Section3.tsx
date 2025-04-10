@@ -29,7 +29,7 @@ const processSteps: ProcessStepItem[] = [
     icon: Process1Icon,
     title: '1. 카카오톡 상담하기',
     description:
-      '우측 하단의 카카오톡 버튼을 클릭해 상담을 요청하세요.상담 후 에디터 코드를 보내드립니다.',
+      '우측 하단의 카카오톡 버튼을 클릭해 상담을 요청하세요. 상담 후 에디터 코드를 보내드립니다.',
   },
   {
     icon: Process2Icon,
@@ -76,56 +76,60 @@ const ProcessStep: React.FC<ProcessStepProps> = ({
 const Section3 = () => {
   return (
     <Flex
-      gap="55px"
       w="100%"
-      h="100%"
-      // py="80px"
-      py={{ base: '48px', sm: '64px', md: '80px' }}
-      px={{ base: '16px', sm: '30px', md: '60px' }}
-      alignItems="center"
       justifyContent="center"
       bg="background.basic.2"
-      flexDirection={{ base: 'column-reverse', md: 'row' }}
+      py={{ base: '48px', sm: '64px', md: '80px' }}
+      px={{ base: '16px', sm: '30px', md: '60px' }}
     >
-      <Flex flexDirection={'column'} w={{ base: '100%', md: '50%' }}>
-        <Text
-          mb="32px"
-          textStyle="pre-heading-01"
-          display={{ base: 'none', md: 'block' }}
-        >
-          어떻게 진행되나요?
-        </Text>
-        <VStack gap="24px" w="100%">
-          {processSteps.map((step, index) => (
-            <ProcessStep
-              key={index}
-              icon={step.icon}
-              title={step.title}
-              description={step.description}
-            />
-          ))}
-        </VStack>
-      </Flex>
       <Flex
-        flexDirection={'column'}
-        w={{ base: '100%', md: '50%' }}
+        w="100%"
+        maxW="1440px"
+        gap="55px"
         alignItems="center"
         justifyContent="center"
+        flexDirection={{ base: 'column-reverse', md: 'row' }}
       >
-        <Text
-          mb="32px"
-          textStyle="pre-heading-01"
-          display={{ base: 'block', md: 'none' }}
+        <Flex flexDirection={'column'} w={{ base: '100%', md: '50%' }}>
+          <Text
+            mb="32px"
+            textStyle="pre-display-03"
+            display={{ base: 'none', md: 'block' }}
+          >
+            어떻게 진행되나요?
+          </Text>
+          <VStack gap="24px" w="100%">
+            {processSteps.map((step, index) => (
+              <ProcessStep
+                key={index}
+                icon={step.icon}
+                title={step.title}
+                description={step.description}
+              />
+            ))}
+          </VStack>
+        </Flex>
+        <Flex
+          flexDirection={'column'}
+          w={{ base: '100%', md: '50%' }}
+          alignItems="center"
+          justifyContent="center"
         >
-          어떻게 진행되나요?
-        </Text>
-        <Image
-          width="100%"
-          height="100%"
-          src={MY_IMAGES.MAGICUBE_PROCESS.src}
-          objectFit="cover"
-          alt={MY_IMAGES.MAGICUBE_PROCESS.alt}
-        />
+          <Text
+            mb={{ base: '28px', sm: '32px' }}
+            textStyle="pre-heading-01"
+            display={{ base: 'block', md: 'none' }}
+          >
+            어떻게 진행되나요?
+          </Text>
+          <Image
+            width="100%"
+            height="100%"
+            src={MY_IMAGES.MAGICUBE_PROCESS.src}
+            objectFit="cover"
+            alt={MY_IMAGES.MAGICUBE_PROCESS.alt}
+          />
+        </Flex>
       </Flex>
     </Flex>
   )

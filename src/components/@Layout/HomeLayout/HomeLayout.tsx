@@ -67,7 +67,7 @@ const HomeLayout = ({
         justifyContent={'center'}
         alignItems={'center'}
         // flex="1"
-        mt={LAYOUT.HEADER.HEIGHT} // 헤더 높이만큼 margin-top 추가
+        mt={{ base: '30px', sm: '80px', md: '80px' }} // 헤더 높이만큼 margin-top 추가
         {...containerProps}
       >
         {content}
