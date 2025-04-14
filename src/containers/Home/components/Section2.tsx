@@ -16,7 +16,7 @@ function Section2() {
       <Flex
         flexDirection="column"
         borderRadius={'20px'}
-        bg="#FAC0F9"
+        bg="#F2C3C2"
         w="100%"
         p="32px 40px"
       >
@@ -41,7 +41,7 @@ function Section2() {
       <Flex
         flexDirection="column"
         borderRadius={'20px'}
-        bg="#B693FC"
+        bg="#F5EFD1"
         w="100%"
         p="32px 40px"
       >
@@ -65,7 +65,7 @@ function Section2() {
       <Flex
         flexDirection="column"
         borderRadius={'20px'}
-        bg="#F5EFD1"
+        bg="#A9E0D5"
         w="100%"
         p="32px 40px"
       >
