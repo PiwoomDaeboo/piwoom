@@ -27,6 +27,9 @@ function LoginCodeModal({ isOpen, onClose }: LoginCodeModalProps) {
     options: {
       enabled: shouldQuery && !!code,
       retry: 0,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
     },
   })
 
@@ -46,6 +49,8 @@ function LoginCodeModal({ isOpen, onClose }: LoginCodeModalProps) {
   const handleNext = () => {
     onClose()
     window.open(`https://editor.magicube.co.kr/order/${code}/editor/`, '_blank')
+    setCode('')
+    setError(null)
     // MC149615
   }
 
