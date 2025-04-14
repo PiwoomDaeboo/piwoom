@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef, useState } from 'react'
+import React, { ChangeEvent, useCallback, useRef, useState } from 'react'
 
 import {
   Box,
@@ -38,18 +38,6 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
     onOpen: onPrivateInfoOpen,
     onClose: onPrivateInfoClose,
   } = useDisclosure()
-
-  const handleManagerPhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target
-    const v = formatPhoneNumberKR(value)
-    setValue('phone', v)
-  }
-
-  const handleClose = () => {
-    onClose()
-    reset()
-  }
-
   const methods = useInquiryModalForm()
   const {
     control,
@@ -57,8 +45,24 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
     register,
     reset,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = methods
+
+  const handleManagerPhoneChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target
+      const v = formatPhoneNumberKR(value)
+
+      setValue('phone', v)
+    },
+    [],
+  )
+
+  const handleClose = () => {
+    onClose()
+    reset()
+  }
+
   const fileWatchValue = useWatch({ control, name: 'file' })
 
   const { mutateAsync: createInquiryMutateAsync } = useInquiryCreateMutation({
@@ -79,38 +83,47 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
 
   const { mutateAsync: uploadFileToS3MutateAsync } =
     usePresignedUrlCreateMutation({})
-  const handleFileUpload = async (file: File) => {
-    const { url, fields } = await uploadFileToS3MutateAsync({
-      data: {
-        fileName: file.name,
-        fileType: 'image',
-        fieldChoice: 'inquiry.Inquiry.file',
-        isDownload: true,
-      },
-    })
+  const handleFileUpload = useCallback(
+    async (file: File) => {
+      const { url, fields } = await uploadFileToS3MutateAsync({
+        data: {
+          fileName: file.name,
+          fileType: 'image',
+          fieldChoice: 'inquiry.Inquiry.file',
+          isDownload: true,
+        },
+      })
 
-    setValue('file', fields.key, { shouldDirty: true })
-  }
-  const handleFileClick = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      handleFileUpload(file)
-    }
-  }
+      setValue('file', fields.key, { shouldDirty: true })
+    },
+    [uploadFileToS3MutateAsync, setValue],
+  )
+  const handleFileClick = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0]
+      if (file) {
+        handleFileUpload(file)
+      }
+    },
+    [handleFileUpload],
+  )
 
-  const onSubmit = (data: InquiryModalDataType) => {
-    createInquiryMutateAsync({
-      data: {
-        name: data.name,
-        phone: data.phone.replace(/-/g, ''),
-        email: data.email,
-        item: data.item,
-        quantity: data.quantity,
-        content: data.content,
-        file: data.file.replace('_media/', ''),
-      },
-    })
-  }
+  const onSubmit = useCallback(
+    (data: InquiryModalDataType) => {
+      createInquiryMutateAsync({
+        data: {
+          name: data.name,
+          phone: data.phone.replace(/-/g, ''),
+          email: data.email,
+          item: data.item,
+          quantity: data.quantity,
+          content: data.content,
+          file: data.file.replace('_media/', ''),
+        },
+      })
+    },
+    [createInquiryMutateAsync],
+  )
 
   return (
     <FormProvider {...methods}>
@@ -161,11 +174,11 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
                       onChange: handleManagerPhoneChange,
                     })}
                   />
-                  {errors.phone && (
+                  {/* {errors.phone && (
                     <Text color="accent.red.2" fontSize="sm">
                       {errors.phone.message}
                     </Text>
-                  )}
+                  )} */}
                 </InputForm>
                 <InputForm label="이메일" isRequired={true}>
                   <Input
@@ -193,6 +206,7 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
                   </InputForm>
                   <InputForm label="수량" isRequired={true}>
                     <Input
+                      type="number"
                       placeholder="수량을 입력해 주세요"
                       {...register('quantity')}
                     />
@@ -266,7 +280,7 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
             variant={'solid-primary'}
             type="submit"
             form="inquiry-form"
-            // isDisabled={isAgree || !isValid}
+            isDisabled={!isAgree || !isValid}
           >
             제출하기
           </Button>

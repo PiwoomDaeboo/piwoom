@@ -23,6 +23,11 @@ const Section5 = () => {
         page_size: 9,
       },
     },
+    options: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+    },
   })
 
   useEffect(() => {

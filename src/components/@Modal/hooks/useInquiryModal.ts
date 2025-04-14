@@ -29,7 +29,7 @@ export const InquiryModalFormSchema = yup.object().shape({
       'phone',
       '휴대폰 번호는 010-1234-5678 형식이어야 합니다.',
       (value) => {
-        return regex.phone.test(value)
+        return /^010-\d{4}-\d{4}$/.test(value) // Updated regex to match the specific format
       },
     ),
   email: yup
