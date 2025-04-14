@@ -17,8 +17,6 @@ const Section1 = () => {
           <video src="/videos/mainTop.mp4" autoPlay muted loop />
         </AspectRatio>
       </Box>
-      {/* </AspectRatio>
-      </Box> */}
 
       {/* <Flex w="100%" h="100%" gap={{ base: '10px', md: '30px' }}>
         <VStack
