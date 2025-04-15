@@ -26,10 +26,6 @@ function LoginCodeModal({ isOpen, onClose }: LoginCodeModalProps) {
     },
     options: {
       enabled: shouldQuery && !!code,
-      retry: 0,
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
     },
   })
 
