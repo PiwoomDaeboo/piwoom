@@ -23,16 +23,15 @@ const Section5 = () => {
         page_size: 9,
       },
     },
-    options: {
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-    },
   })
 
   useEffect(() => {
-    if (galleryList?.results && cursor === '') {
-      setAccumulatedItems(galleryList.results)
+    if (galleryList?.results) {
+      if (!cursor) {
+        setAccumulatedItems(galleryList.results)
+      } else {
+        setAccumulatedItems((prev) => [...prev, ...(galleryList.results || [])])
+      }
     }
   }, [cursor, galleryList?.results])
 
@@ -40,10 +39,6 @@ const Section5 = () => {
   const handleLoadMore = () => {
     if (galleryList?.cursor && galleryList.results) {
       setCursor(galleryList.cursor)
-      setAccumulatedItems((prev) => [
-        ...prev,
-        ...(galleryList?.results as GalleryType[]),
-      ])
     }
   }
 
