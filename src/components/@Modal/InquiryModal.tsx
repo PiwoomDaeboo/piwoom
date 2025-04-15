@@ -133,7 +133,6 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
             <form
               id="inquiry-form"
               onSubmit={handleSubmit((data) => {
-                console.log('Form submitted:', data)
                 onSubmit(data)
               })}
             >
