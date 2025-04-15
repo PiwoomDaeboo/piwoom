@@ -77,8 +77,21 @@ function Home() {
           h="100%"
           px={{ base: '16px', sm: '30px', md: '60px' }}
         >
-          <Box>
+          <Text
+            textStyle="rubik-regular"
+            fontSize={{ base: '80px', sm: '150px', md: '200px' }}
+            lineHeight="100%"
+            sx={{
+              WebkitTextStrokeWidth: '2px',
+              WebkitTextStrokeColor: '#000',
+            }}
+            as="span"
+          >
+            MAKE IT
+          </Text>
+          <Box position="relative">
             <Text
+              textAlign="center"
               textStyle="rubik-regular"
               fontSize={{ base: '80px', sm: '150px', md: '200px' }}
               lineHeight="100%"
@@ -86,12 +99,35 @@ function Home() {
                 WebkitTextStrokeWidth: '2px',
                 WebkitTextStrokeColor: '#000',
               }}
+              as="span"
             >
-              MAKE IT
-            </Text>
-            <Box position="relative">
+              Y
+              <Box
+                as="span"
+                display="inline-block"
+                position="relative"
+                width="fit-content"
+                height="fit-content"
+                verticalAlign="middle"
+              >
+                {[Cube1Icon, Cube2Icon, Cube3Icon].map((Icon, index) => (
+                  <Box
+                    key={index}
+                    position="absolute"
+                    top="-10px"
+                    left="0"
+                    opacity={cubeIndex === index ? 1 : 0}
+                    display="inline-block"
+                  >
+                    <Icon />
+                  </Box>
+                ))}
+                <Box visibility="hidden" display="inline-block">
+                  <Cube1Icon />
+                </Box>
+              </Box>
               <Text
-                textAlign="center"
+                as="span"
                 textStyle="rubik-regular"
                 fontSize={{ base: '80px', sm: '150px', md: '200px' }}
                 lineHeight="100%"
@@ -100,47 +136,23 @@ function Home() {
                   WebkitTextStrokeColor: '#000',
                 }}
               >
-                Y
-                <Box
-                  display="inline-block"
-                  position="relative"
-                  width="fit-content"
-                  height="fit-content"
-                  verticalAlign="middle"
-                >
-                  {[Cube1Icon, Cube2Icon, Cube3Icon].map((Icon, index) => (
-                    <Box
-                      key={index}
-                      position="absolute"
-                      top="-10px"
-                      left="0"
-                      opacity={cubeIndex === index ? 1 : 0}
-                      display="inline-block"
-                    >
-                      <Icon />
-                    </Box>
-                  ))}
-                  <Box visibility="hidden" display="inline-block">
-                    <Cube1Icon />
-                  </Box>
-                </Box>
                 URS
               </Text>
-              <Flex w="100%" justifyContent={'flex-end'}>
-                <Text
-                  display={{ base: 'none', sm: 'block', md: 'block' }}
-                  textStyle="pre-heading-02"
-                >
-                  @MagiCube
-                </Text>
-                <Text
-                  display={{ base: 'block', sm: 'none', md: 'none' }}
-                  textStyle="pre-heading-04"
-                >
-                  @MagiCube
-                </Text>
-              </Flex>
-            </Box>
+            </Text>
+            <Flex w="100%" justifyContent={'flex-end'}>
+              <Text
+                display={{ base: 'none', sm: 'block', md: 'block' }}
+                textStyle="pre-heading-02"
+              >
+                @MagiCube
+              </Text>
+              <Text
+                display={{ base: 'block', sm: 'none', md: 'none' }}
+                textStyle="pre-heading-04"
+              >
+                @MagiCube
+              </Text>
+            </Flex>
           </Box>
         </Flex>
       </Container>
@@ -175,6 +187,7 @@ function Home() {
         <Section2 />
       </Container>
       <Section3 />
+
       <Container w="100%" h="100%">
         <Section4 />
         <Section5 />
