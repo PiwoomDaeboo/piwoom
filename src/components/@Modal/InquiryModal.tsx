@@ -127,7 +127,7 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
       <ModalBasis
         isOpen={isOpen}
         onClose={handleClose}
-        size={{ base: 'full', md: 'lg' }}
+        size={{ base: 'full', md: 'md' }}
         body={
           <Box overflowY="scroll" maxH={{ base: '80vh', md: '600px' }} pr="4px">
             <form
