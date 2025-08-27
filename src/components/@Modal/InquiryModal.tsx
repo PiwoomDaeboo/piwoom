@@ -89,8 +89,7 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
     usePresignedUrlCreateMutation({})
   const handleFileUpload = useCallback(
     async (file: File) => {
-      const { fields } = await uploadFile(file)
-      setValue('file', fields.key, { shouldDirty: true })
+      // setValue('file', fields.key, { shouldDirty: true })
     },
     [uploadFileToS3MutateAsync, setValue],
   )

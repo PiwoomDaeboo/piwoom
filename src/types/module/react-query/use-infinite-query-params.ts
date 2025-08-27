@@ -14,7 +14,7 @@ export type UseInfiniteQueryParams<
   Variables = Parameter<T>,
 > = {
   options?: Omit<
-    UseInfiniteQueryOptions<Data, Error, Data, Data, any>,
+    UseInfiniteQueryOptions<Data, Error, Data, any>,
     'queryKey' | 'queryFn'
   >
 } & WrapVariables<Variables>

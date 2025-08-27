@@ -9,43 +9,31 @@
  **/
 
 export const textStyles = {
-  'pre-display-00': {
+  'pre-display-1': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
-    fontWeight: 800,
-    fontSize: {
-      base: '64px',
-      sm: '120px',
-      md: '120px',
-    },
-    lineHeight: 1.4,
-    letterSpacing: '-0.01em',
-  },
-  'pre-display-01': {
-    fontFamily: 'Pretendard Variable',
-    textDecoration: 'none',
-    fontWeight: 800,
+    fontWeight: 700,
     fontSize: {
       base: '48px',
-      sm: '72px',
+      sm: '64px',
       md: '80px',
     },
-    lineHeight: 1.4,
+    lineHeight: 1.3,
     letterSpacing: '-0.01em',
   },
-  'pre-display-02': {
+  'pre-display-2': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
     fontWeight: 700,
     fontSize: {
       base: '40px',
-      sm: '56px',
+      sm: '48px',
       md: '64px',
     },
-    lineHeight: 1.4,
+    lineHeight: 1.3,
     letterSpacing: '-0.01em',
   },
-  'pre-display-03': {
+  'pre-display-3': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
     fontWeight: 700,
@@ -54,46 +42,106 @@ export const textStyles = {
       sm: '40px',
       md: '48px',
     },
-    lineHeight: 1.5,
+    lineHeight: 1.3,
     letterSpacing: '-0.01em',
   },
-  'pre-heading-01': {
+  'pre-display-4': {
+    fontFamily: 'Pretendard Variable',
+    textDecoration: 'none',
+    fontWeight: 700,
+    fontSize: {
+      base: '28px',
+      sm: '36px',
+      md: '40px',
+    },
+    lineHeight: 1.4,
+    letterSpacing: '-0.01em',
+  },
+  'pre-heading-1': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
     fontWeight: 700,
     fontSize: {
       base: '24px',
-      sm: '28px',
+      sm: '24px',
       md: '32px',
     },
-    lineHeight: 1.5,
+    lineHeight: 1.4,
     letterSpacing: '-0.01em',
   },
-  'pre-heading-02': {
+  'pre-heading-2': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
     fontWeight: 700,
     fontSize: {
       base: '20px',
-      sm: '24px',
+      sm: '20px',
       md: '24px',
     },
-    lineHeight: 1.5,
+    lineHeight: 1.4,
     letterSpacing: '-0.01em',
   },
-  'pre-heading-03': {
+  'pre-heading-3': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
-    fontWeight: 600,
+    fontWeight: 700,
     fontSize: {
       base: '18px',
-      sm: '20px',
+      sm: '18px',
       md: '20px',
     },
-    lineHeight: 1.5,
+    lineHeight: 1.4,
     letterSpacing: '-0.01em',
   },
-  'pre-heading-04': {
+  'pre-heading-4': {
+    fontFamily: 'Pretendard Variable',
+    textDecoration: 'none',
+    fontWeight: 700,
+    fontSize: {
+      base: '16px',
+      sm: '18px',
+      md: '18px',
+    },
+    lineHeight: 1.4,
+    letterSpacing: '-0.01em',
+  },
+  'pre-heading-5': {
+    fontFamily: 'Pretendard Variable',
+    textDecoration: 'none',
+    fontWeight: 700,
+    fontSize: {
+      base: '16px',
+      sm: '16px',
+      md: '16px',
+    },
+    lineHeight: 1.4,
+    letterSpacing: '-0.01em',
+  },
+  'pre-body-1': {
+    fontFamily: 'Pretendard Variable',
+    textDecoration: 'none',
+    fontWeight: 600,
+    fontSize: {
+      base: '20px',
+      sm: '20px',
+      md: '24px',
+    },
+    lineHeight: 1.6,
+    letterSpacing: '-0.02em',
+  },
+  'pre-body-2': {
+    fontFamily: 'Pretendard Variable',
+    textDecoration: 'none',
+    fontWeight: 400,
+    fontSize: {
+      base: '20px',
+      sm: '20px',
+      md: '24px',
+    },
+    lineHeight: 1.6,
+    letterSpacing: '-0.02em',
+  },
+  'pre-body-3': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
     fontWeight: 600,
@@ -102,10 +150,22 @@ export const textStyles = {
       sm: '18px',
       md: '18px',
     },
-    lineHeight: 1.5,
-    letterSpacing: '-0.01em',
+    lineHeight: 1.6,
+    letterSpacing: '-0.02em',
   },
-  'pre-heading-05': {
+  'pre-body-4': {
+    fontFamily: 'Pretendard Variable',
+    textDecoration: 'none',
+    fontWeight: 400,
+    fontSize: {
+      base: '16px',
+      sm: '18px',
+      md: '18px',
+    },
+    lineHeight: 1.6,
+    letterSpacing: '-0.02em',
+  },
+  'pre-body-5': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
     fontWeight: 600,
@@ -115,36 +175,12 @@ export const textStyles = {
       md: '16px',
     },
     lineHeight: 1.6,
-    letterSpacing: '-0.01em',
-  },
-  'pre-body-01': {
-    fontFamily: 'Pretendard Variable',
-    textDecoration: 'none',
-    fontWeight: 600,
-    fontSize: {
-      base: '16px',
-      sm: '18px',
-      md: '18px',
-    },
-    lineHeight: 1.6,
     letterSpacing: '-0.02em',
   },
-  'pre-body-02': {
+  'pre-body-6': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
-    fontWeight: 500,
-    fontSize: {
-      base: '16px',
-      sm: '18px',
-      md: '18px',
-    },
-    lineHeight: 1.6,
-    letterSpacing: '-0.02em',
-  },
-  'pre-body-03': {
-    fontFamily: 'Pretendard Variable',
-    textDecoration: 'none',
-    fontWeight: 600,
+    fontWeight: 400,
     fontSize: {
       base: '16px',
       sm: '16px',
@@ -153,19 +189,7 @@ export const textStyles = {
     lineHeight: 1.6,
     letterSpacing: '-0.02em',
   },
-  'pre-body-04': {
-    fontFamily: 'Pretendard Variable',
-    textDecoration: 'none',
-    fontWeight: 500,
-    fontSize: {
-      base: '16px',
-      sm: '16px',
-      md: '16px',
-    },
-    lineHeight: 1.6,
-    letterSpacing: '-0.02em',
-  },
-  'pre-body-05': {
+  'pre-body-7': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
     fontWeight: 600,
@@ -177,10 +201,10 @@ export const textStyles = {
     lineHeight: 1.6,
     letterSpacing: '-0.02em',
   },
-  'pre-body-06': {
+  'pre-body-68': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
-    fontWeight: 500,
+    fontWeight: 400,
     fontSize: {
       base: '14px',
       sm: '14px',
@@ -189,7 +213,7 @@ export const textStyles = {
     lineHeight: 1.6,
     letterSpacing: '-0.02em',
   },
-  'pre-caption-01': {
+  'pre-caption-1': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
     fontWeight: 600,
@@ -201,7 +225,7 @@ export const textStyles = {
     lineHeight: 1.6,
     letterSpacing: '-0.02em',
   },
-  'pre-caption-02': {
+  'pre-caption-2': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
     fontWeight: 400,
@@ -213,7 +237,7 @@ export const textStyles = {
     lineHeight: 1.6,
     letterSpacing: '-0.02em',
   },
-  'pre-caption-03': {
+  'pre-caption-3': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
     fontWeight: 600,
@@ -225,7 +249,7 @@ export const textStyles = {
     lineHeight: 1.6,
     letterSpacing: '-0.02em',
   },
-  'pre-caption-04': {
+  'pre-caption-4': {
     fontFamily: 'Pretendard Variable',
     textDecoration: 'none',
     fontWeight: 400,

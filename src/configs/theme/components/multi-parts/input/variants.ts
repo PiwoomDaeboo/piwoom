@@ -4,7 +4,7 @@ import { textStyles } from '@/generated/tokens/text-styles'
 
 const outline = defineStyle({
   field: {
-    ...textStyles['pre-body-04'],
+    ...textStyles['pre-body-4'],
     height: '48px',
     borderWidth: '1px',
     borderColor: 'border.basic.1',
@@ -42,7 +42,7 @@ const outline = defineStyle({
 
 const solid = defineStyle({
   field: {
-    ...textStyles['pre-body-04'],
+    ...textStyles['pre-body-4'],
     height: '48px',
     border: 'none',
     borderRadius: '10px',
@@ -79,7 +79,7 @@ const underlined = defineStyle({
   field: {
     p: 0,
     py: '12px',
-    ...textStyles['pre-body-04'],
+    ...textStyles['pre-body-4'],
     height: '48px',
     borderBottomWidth: '1px',
     borderColor: 'border.basic.2',

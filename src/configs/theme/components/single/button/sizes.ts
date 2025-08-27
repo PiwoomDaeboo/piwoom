@@ -17,7 +17,7 @@ export const sizes = {
     return {
       p: `${py} ${pr} ${py} ${pl}`,
       borderRadius: 'full',
-      ...textStyles['pre-heading-05'],
+      ...textStyles['pre-heading-5'],
     }
   }),
   md: defineStyle((props) => {
@@ -28,7 +28,7 @@ export const sizes = {
     return {
       p: `${py} ${pr} ${py} ${pl}`,
       borderRadius: 'full',
-      ...textStyles['pre-heading-05'],
+      ...textStyles['pre-heading-5'],
     }
   }),
   sm: defineStyle((props) => {
@@ -39,7 +39,7 @@ export const sizes = {
     return {
       p: `${py} ${pr} ${py} ${pl}`,
       borderRadius: 'full',
-      ...textStyles['pre-body-05'],
+      ...textStyles['pre-body-5'],
     }
   }),
 }
