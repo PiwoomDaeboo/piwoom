@@ -24,7 +24,6 @@ import InputForm from '@/components/InputForm'
 import { useInquiryCreateMutation } from '@/generated/apis/Inquiry/Inquiry.query'
 import { usePresignedUrlCreateMutation } from '@/generated/apis/PresignedUrl/PresignedUrl.query'
 
-import PrivateInfoModal from './PrivateInfo'
 import useInquiryModalForm, {
   InquiryModalDataType,
 } from './hooks/useInquiryModal'
@@ -89,8 +88,7 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
     usePresignedUrlCreateMutation({})
   const handleFileUpload = useCallback(
     async (file: File) => {
-      const { fields } = await uploadFile(file)
-      setValue('file', fields.key, { shouldDirty: true })
+      // setValue('file', fields.key, { shouldDirty: true })
     },
     [uploadFileToS3MutateAsync, setValue],
   )
@@ -136,10 +134,6 @@ function InquiryModal({ isOpen, onClose }: InquiryModalProps) {
                 onSubmit(data)
               })}
             >
-              <PrivateInfoModal
-                isOpen={isPrivateInfoOpen}
-                onClose={onPrivateInfoClose}
-              />
               <Box
                 borderBottom={'1px solid'}
                 borderColor="border.basic.2"

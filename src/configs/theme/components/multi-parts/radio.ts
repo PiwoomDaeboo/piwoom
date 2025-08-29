@@ -62,12 +62,12 @@ const sizes = {
   sm: definePartsStyle({
     container: { gap: '6px' },
     control: { boxSize: '16px', m: '2px' },
-    label: { ...textStyles['pre-body-06'] },
+    label: { ...textStyles['pre-body-6'] },
   }),
   md: definePartsStyle({
     container: { gap: '6px' },
     control: { boxSize: '20px', m: '2px' },
-    label: { ...textStyles['pre-body-04'] },
+    label: { ...textStyles['pre-body-4'] },
   }),
 }
 

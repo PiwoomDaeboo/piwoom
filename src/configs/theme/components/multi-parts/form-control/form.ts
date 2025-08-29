@@ -9,7 +9,7 @@ export const form = defineMultiStyleConfig({
   baseStyle: {
     container: {},
     helperText: {
-      ...textStyles['pre-caption-02'],
+      ...textStyles['pre-caption-2'],
       color: 'content.4',
       mt: '8px',
     },

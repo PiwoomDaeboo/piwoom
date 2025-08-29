@@ -9,7 +9,7 @@ export const formError = defineMultiStyleConfig({
   baseStyle: {
     icon: {},
     text: {
-      ...textStyles['pre-caption-02'],
+      ...textStyles['pre-caption-2'],
       color: 'accent.red.2',
       mt: '8px',
     },

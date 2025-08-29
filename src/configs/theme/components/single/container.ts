@@ -2,13 +2,11 @@ import { defineStyle, defineStyleConfig } from '@chakra-ui/react'
 
 const baseStyle = defineStyle({
   w: '100%',
-  maxW: '1440px',
-  px: '0px',
-  // px: {
-  //   base: '16px',
-  //   sm: '30px',
-  //   md: '60px',
-  // },
+  maxW: {
+    base: '100%',
+    sm: '768px',
+    md: '1280px',
+  },
 })
 
 const variants = defineStyle({})

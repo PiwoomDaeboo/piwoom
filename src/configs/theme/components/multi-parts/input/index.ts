@@ -21,7 +21,7 @@ const Input = defineMultiStyleConfig({
     element: {
       pr: '12px',
       color: 'content.2',
-      ...textStyles['pre-body-06'],
+      ...textStyles['pre-body-6'],
       _disabled: {
         color: 'content.6',
       },

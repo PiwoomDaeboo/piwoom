@@ -34,7 +34,7 @@ export type InfiniteQueryHookParams<
 > = {
   options?: Partial<
     Omit<
-      UseInfiniteQueryOptions<OriginData, Error, TData, OriginData, any, any>,
+      UseInfiniteQueryOptions<OriginData, Error, TData, any, any>,
       'queryKey' | 'queryFn'
     >
   >

@@ -4,7 +4,7 @@ import { textStyles } from '@/generated/tokens/text-styles'
 
 export const formLabel = defineStyleConfig({
   baseStyle: {
-    ...textStyles['pre-body-05'],
+    ...textStyles['pre-body-5'],
     color: 'content.3',
   },
   variants: {

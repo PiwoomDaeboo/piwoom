@@ -6,7 +6,7 @@ import { variants } from './variants'
 const baseStyle = defineStyle({
   outline: 'none',
   transition: 'all 0.2s ease-in-out',
-
+  borderRadius: '10px',
   transitionProperty: 'common',
   transitionDuration: 'normal',
 
@@ -36,7 +36,6 @@ const Button = defineStyleConfig({
   defaultProps: {
     variant: 'solid-primary',
     size: 'md',
-    colorScheme: 'primary.3',
   },
 })
 

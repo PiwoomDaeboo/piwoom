@@ -36,15 +36,8 @@ const HomeLayout = ({
   content,
 }: HomeLayoutProps) => {
   return (
-    <Box
-      w={'100%'}
-      minH={'100vh'}
-      // h="100vh" // 명시적으로 100vh로 설정
-      display={'flex'}
-      flexDirection={'column'}
-    >
+    <Box w={'100%'} minH={'100vh'} display={'flex'} flexDirection={'column'}>
       <Flex
-        // area={'header'}
         as={'header'}
         position="sticky"
         zIndex="sticky"
@@ -52,8 +45,6 @@ const HomeLayout = ({
         w={'100%'}
         h="70px"
         justifyContent={'center'}
-        // pt={isScroll ? '10px' : '0'}
-        // {...scrollConfig}
       >
         {header}
       </Flex>
@@ -66,8 +57,7 @@ const HomeLayout = ({
         flexDirection="column"
         justifyContent={'center'}
         alignItems={'center'}
-        // flex="1"
-        mt={{ base: '30px', sm: '80px', md: '80px' }} // 헤더 높이만큼 margin-top 추가
+        mt={{ base: '30px', sm: '80px', md: '80px' }}
         {...containerProps}
       >
         {content}
