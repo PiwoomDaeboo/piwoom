@@ -4,12 +4,12 @@ import { Box, Text, VStack } from '@chakra-ui/react'
 
 import ModalBasis from '@/components/@Modal/ModalBasis'
 
-interface PrivateInfoModalProps {
+interface LoanChecklistModalProps {
   isOpen: boolean
   onClose: () => void
 }
 
-function PrivateInfoModal({ isOpen, onClose }: PrivateInfoModalProps) {
+function LoanChecklistModal({ isOpen, onClose }: LoanChecklistModalProps) {
   const handleClose = () => {
     onClose()
   }
@@ -103,4 +103,4 @@ function PrivateInfoModal({ isOpen, onClose }: PrivateInfoModalProps) {
     ></ModalBasis>
   )
 }
-export default PrivateInfoModal
+export default LoanChecklistModal

@@ -3,14 +3,9 @@ import { defineStyle, defineStyleConfig } from '@chakra-ui/react'
 const baseStyle = defineStyle({
   w: '100%',
   maxW: {
-    base: '360px',
+    base: '100%',
     sm: '768px',
     md: '1280px',
-  },
-  px: {
-    base: '20px',
-    sm: '40px',
-    md: '260px',
   },
 })
 
