@@ -9,6 +9,10 @@ export const MY_IMAGES = {
   BELT_IMAGE_PC: { src: '/images/belt_image_pc.png', alt: 'belt-image-pc' },
   BELT_IMAGE_TAB: { src: '/images/belt_image_tab.png', alt: 'belt-image-tab' },
   CHECKLIST: { src: '/images/checklist.png', alt: 'checklist' },
+  CONSULTING_IMAGE: {
+    src: '/images/consulting_image.png',
+    alt: 'consulting-image',
+  },
   IMG_02: { src: '/images/img02.png', alt: 'img-02' },
   IMG_04: { src: '/images/img04.png', alt: 'img-04' },
   IMG_06: { src: '/images/img06.png', alt: 'img-06' },
@@ -18,6 +22,9 @@ export const MY_IMAGES = {
     src: '/images/magicube_process.png',
     alt: 'magicube-process',
   },
+  MAIN_IMAGE_MO: { src: '/images/mainImage_mo.png', alt: 'main-image-mo' },
+  MAIN_IMAGE_PC: { src: '/images/mainImage_pc.png', alt: 'main-image-pc' },
+  MAIN_IMAGE_TAB: { src: '/images/mainImage_tab.png', alt: 'main-image-tab' },
   MOBILE_FOOTER_IMAGE: {
     src: '/images/mobile_footer_image.png',
     alt: 'mobile-footer-image',

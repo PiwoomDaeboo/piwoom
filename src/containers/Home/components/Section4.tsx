@@ -1,175 +1,62 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Text,
-  VStack,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Button, Container, Flex, Text, VStack } from '@chakra-ui/react'
 
-import InquiryModal from '@/components/@Modal/InquiryModal'
-import LoginCodeModal from '@/components/@Modal/LoginCodeModal'
-import { CheckIcon } from '@/generated/icons/MyIcons'
+import { MY_IMAGES } from '@/generated/path/images'
 
 const Section4 = () => {
-  const {
-    isOpen: isLoginCodeOpen,
-    onClose: onLoginCodeClose,
-    onOpen: onLoginCodeOpen,
-  } = useDisclosure()
-  const {
-    isOpen: isInquiryOpen,
-    onClose: onInquiryClose,
-    onOpen: onInquiryOpen,
-  } = useDisclosure()
   return (
-    <Flex
-      py={{ base: '80px', sm: '140px', md: '180px' }}
-      flexDirection={'column'}
-      alignItems={'center'}
-      justifyContent={'center'}
-      px={{ base: '16px', sm: '30px', md: '60px' }}
-    >
-      <LoginCodeModal isOpen={isLoginCodeOpen} onClose={onLoginCodeClose} />
-      <InquiryModal isOpen={isInquiryOpen} onClose={onInquiryClose} />
-      <Box
-        mb="32px"
-        textAlign={'center'}
-        textStyle="pre-display-03"
-        display={{ base: 'block', md: 'none' }}
-      >
-        MagiCube와
-        <br />
-        지금 시작해 보세요!
-      </Box>
-      <Box
-        mb="28px"
-        textAlign={'center'}
-        textStyle="pre-display-03"
+    <>
+      <Container
         display={{ base: 'none', md: 'block' }}
+        pb={{ base: '56px', sm: '64px' }}
       >
-        MagiCube와 지금 시작해 보세요!
-      </Box>
+        <Flex
+          py={'56px'}
+          bgImage={MY_IMAGES.CONSULTING_IMAGE.src}
+          bgSize={'cover'}
+          borderRadius={'20px'}
+          px={'80px'}
+        >
+          <VStack alignItems={'flex-start'}>
+            <Text textStyle={'pre-heading-1'}>
+              법인 대출 혹은 사업자 대출이 필요한 경우
+            </Text>
+            <Text textStyle={'pre-body-3'}>
+              성장 기회를 포착하셨나요? 지금 바로 상담을 신청해보세요.
+            </Text>
+            <Button
+              mt={'24px'}
+              variant={'black-primary'}
+              minW={'180px'}
+              minH={'48px'}
+            >
+              상담하기
+            </Button>
+          </VStack>
+        </Flex>
+      </Container>
       <Flex
-        gap="30px"
-        w="100%"
-        h="100%"
-        justifyContent="center"
-        alignItems="stretch" // 자식 요소들이 컨테이너 높이에 맞춰 늘어나도록
-        flexDirection={{ base: 'column', md: 'row' }}
+        mb={'56px'}
+        w={'100%'}
+        display={{ base: 'flex', md: 'none' }}
+        bgImage={MY_IMAGES.CONSULTING_IMAGE.src}
+        bgSize={'cover'}
+        py={'56px'}
       >
-        <Flex
-          flexDirection={'column'}
-          w={{ base: '100%', md: '50%' }}
-          p={{ base: '24px', md: '40px' }}
-          borderRadius="20px"
-          bg="secondary.1"
-        >
-          <Text textStyle="pre-heading-01">
-            로고나 시안 없이도{' '}
-            <Box as="span" color="secondary.5">
-              직접 디자인
-            </Box>
-            할 수 있나요?
-          </Text>
-          <Text textStyle="pre-body-01" color="content.1" mt="4px">
-            누구나 쉽게 디자인할 수 있는 MagiCube만의 셀프디자인 툴을
-            경험해보세요!
-          </Text>
-          <VStack
-            spacing="16px"
-            p="16px 20px"
-            bg="white"
-            mt="24px"
-            mb="32px"
-            flex="1"
-            alignItems="flex-start"
-            borderRadius="10px"
-          >
-            <Flex gap="8px" alignItems="flex-start">
-              <CheckIcon mt="6px" width="20px" height="20px" />
-              <Text textStyle="pre-body-04" color="content.1" mt="4px">
-                오직 매지큐브에서만 가능한 800도 식기용 전사인쇄 솔루션에 적합한
-                업종별, 테마별 셀프 디자인 편집이 가능합니다.
-              </Text>
-            </Flex>
-            <Flex gap="8px" alignItems="flex-start">
-              <CheckIcon mt="6px" width="20px" height="20px" />
-              <Text textStyle="pre-body-04" color="content.1" mt="4px">
-                주문 확인 후 전달받은 에디터 코드를 입력해 주세요. 입력이
-                완료되면 에디터로 이동됩니다!
-              </Text>
-            </Flex>
+        <Container>
+          <VStack alignItems={'flex-start'}>
+            <Text textStyle={'pre-heading-1'}>
+              법인 대출 혹은 사업자 대출이 필요한 경우
+            </Text>
+            <Text textStyle={'pre-body-3'}>
+              성장 기회를 포착하셨나요? 지금 바로 상담을 신청해보세요.
+            </Text>
+            <Button variant={'black-primary'} minW={'180px'} minH={'48px'}>
+              상담하기
+            </Button>
           </VStack>
-          <Button
-            borderRadius={'full'}
-            variant={'solid-primary'}
-            w="fit-content"
-            onClick={onLoginCodeOpen}
-          >
-            <Text textStyle={'pre-heading-05'}>에디터 코드</Text>
-          </Button>
-        </Flex>
-        <Flex
-          flexDirection={'column'}
-          w={{ base: '100%', md: '50%' }}
-          p={{ base: '24px', md: '40px' }}
-          borderRadius="20px"
-          bg="background.inverse.2"
-        >
-          <Text textStyle="pre-heading-01" color="content.8">
-            주문하기 전이라{' '}
-            <Box as="span" color="secondary.3">
-              시안 확인과 견적
-            </Box>
-            이 궁금해요!
-          </Text>
-          <Text textStyle="pre-body-01" color="content.8" mt="4px">
-            20개 소량부터 1000개 이상 대량견적이 궁금하다면 시안파일을
-            업로드해주세요!
-          </Text>
-          <VStack
-            spacing="16px"
-            p="16px 20px"
-            bg="white"
-            mt="24px"
-            mb="32px"
-            alignItems="flex-start"
-            borderRadius="10px"
-          >
-            <Flex gap="8px" alignItems="flex-start">
-              <CheckIcon mt="6px" width="20px" height="20px" />
-              <Text
-                textStyle="pre-body-04"
-                color="content.1"
-                mt="4px"
-                // wordBreak="normal"
-              >
-                세금계산서 발행용 견적 문의 시, 사업자등록증을 첨부해주시면
-                수량과 상관없이 우선 상담해드립니다. 네이버 톡톡 및 카카오
-                채널로도 언제든지 편하게 문의하세요!
-              </Text>
-            </Flex>
-            <Flex w="100%" gap="8px" alignItems="flex-start">
-              <CheckIcon mt="6px" width="20px" height="20px" />
-              <Text textStyle="pre-body-04" color="content.1" mt="4px">
-                시안파일을 업로드해주시면 담당자 확인 후 연락드립니다.
-                <br />
-                (jpg. png. pdf. ai. svg 파일 업로드)
-              </Text>
-            </Flex>
-          </VStack>
-          <Button
-            borderRadius={'full'}
-            variant={'outline-primary'}
-            width={'fit-content'}
-            onClick={onInquiryOpen}
-          >
-            <Text textStyle={'pre-heading-05'}>시안 업로드</Text>
-          </Button>
-        </Flex>
+        </Container>
       </Flex>
-    </Flex>
+    </>
   )
 }
 

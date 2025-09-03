@@ -1,136 +1,149 @@
-import { Box, Center, Flex, Grid, Image, Text, VStack } from '@chakra-ui/react'
-
 import {
-  Process1Icon,
-  Process2Icon,
-  Process3Icon,
+  Box,
+  Container,
+  Flex,
+  Grid,
+  HStack,
+  SimpleGrid,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
+
+import Card from '@/components/Card'
+import {
+  LeafIcon,
+  Sectionicon1Icon,
+  Sectionicon2Icon,
+  Sectionicon3Icon,
+  Sectionicon4Icon,
+  Sectionicon5Icon,
+  Sectionicon6Icon,
+  Sectionicon7Icon,
 } from '@/generated/icons/MyIcons'
-import { MY_IMAGES } from '@/generated/path/images'
 
-type IconComponent = React.ComponentType<{
-  width?: any
-  height?: any
-}>
-
-interface ProcessStepItem {
-  icon: IconComponent
-  title: string
-  description: string
-}
-
-interface ProcessStepProps {
-  icon: IconComponent
-  title: string
-  description: string
-}
-
-const processSteps: ProcessStepItem[] = [
+const sectionData = [
   {
-    icon: Process1Icon,
-    title: '1. 카카오톡 상담하기',
-    description:
-      '우측 하단의 카카오톡 버튼을 클릭해 상담을 요청하세요. 상담 후 에디터 코드를 보내드립니다.',
+    icon: Sectionicon1Icon,
+    description1: '불필요한 상담과 서류 제출 없는',
+    description2: '비대면 계약을 원하시는 분',
   },
   {
-    icon: Process2Icon,
-    title: '2. 에디터 툴 작업하기',
-    description:
-      '전달받은 코드를 통해 에디터 툴에 접속하셨다면, 텍스트와 이미지를 자유롭게 활용해 원하는 디자인을 만들어 보세요!',
+    icon: Sectionicon2Icon,
+    description1: '상환 능력은 충분하지만',
+    description2: '일시적으로 자금이 부족한 분',
   },
   {
-    icon: Process3Icon,
-    title: '3. 디자인 작업 완료',
-    description:
-      '디자인을 제출하시면, 전문 디자이너가 마무리 작업을 진행한 후 제품 제작이 시작됩니다.',
+    icon: Sectionicon3Icon,
+    description1: '안정적인 소득 성장 전망에도',
+    description2: '​은행 대출이 충분하지 않은 분',
+  },
+  {
+    icon: Sectionicon4Icon,
+    description1: '매출은 빠르게 늘어나지만',
+    description2: '운전 자금이 부족한 분',
+  },
+  {
+    icon: Sectionicon5Icon,
+    description1: '신속하고 편리한 한도 확인으로​',
+    description2: ' ​눈 앞의 기회를 붙잡고 싶은 분',
+  },
+  {
+    icon: Sectionicon6Icon,
+    description1: '소액 대출이 필요하지만',
+    description2: '신용점수를 관리하고 싶은 분',
+  },
+  {
+    icon: Sectionicon7Icon,
+    description1: '정식 등록 대부업체로부터',
+    description2: '안전한 대출을 받고 싶은 분',
   },
 ]
 
-const ProcessStep: React.FC<ProcessStepProps> = ({
-  icon: Icon,
-  title,
-  description,
-}) => (
-  <Flex
-    w="100%"
-    gap="24px"
-    flexDir={{ base: 'column', sm: 'row', md: 'row' }}
-    justifyContent={{ base: 'flex-start', md: 'center' }}
-    alignItems={{ base: 'flex-start', sm: 'center', md: 'center' }}
-    borderRadius="20px"
-    p="28px"
-    boxShadow="0px 2px 35px 0px rgba(44, 45, 80, 0.12)"
-  >
-    <Icon
-      width={{ base: '60px', md: '80px' }}
-      height={{ base: '60px', md: '80px' }}
-    />
-    <Box>
-      <Text textStyle="pre-heading-02">{title}</Text>
-      <Text textStyle="pre-body-02" color="content.1" mt="8px">
-        {description}
-      </Text>
-    </Box>
-  </Flex>
-)
-
-const Section3 = () => {
+function Section3() {
   return (
     <Flex
-      w="100%"
-      justifyContent="center"
-      bg="background.basic.2"
-      py={{ base: '48px', sm: '64px', md: '80px' }}
-      px={{ base: '16px', sm: '30px', md: '60px' }}
+      w={'100%'}
+      justifyContent={'center'}
+      alignItems={'center'}
+      flexDir={'column'}
+      py={{ base: '16px', sm: '40px', md: '160px' }}
     >
       <Flex
-        w="100%"
-        maxW="1440px"
-        gap="55px"
-        alignItems="center"
-        justifyContent="center"
-        flexDirection={{ base: 'column-reverse', md: 'row' }}
+        flexDir={{ base: 'column', sm: 'row' }}
+        alignItems={'center'}
+        px={'16px'}
       >
-        <Flex flexDirection={'column'} w={{ base: '100%', md: '50%' }}>
-          <Text
-            mb="32px"
-            textStyle="pre-display-03"
-            display={{ base: 'none', md: 'block' }}
-          >
-            어떻게 진행되나요?
-          </Text>
-          <VStack gap="24px" w="100%">
-            {processSteps.map((step, index) => (
-              <ProcessStep
-                key={index}
-                icon={step.icon}
-                title={step.title}
-                description={step.description}
-              />
-            ))}
-          </VStack>
-        </Flex>
-        <Flex
-          flexDirection={'column'}
-          w={{ base: '100%', md: '50%' }}
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Text
-            mb={{ base: '28px', sm: '32px' }}
-            textStyle="pre-heading-01"
-            display={{ base: 'block', md: 'none' }}
-          >
-            어떻게 진행되나요?
-          </Text>
-          <Image
-            width="100%"
-            height="100%"
-            src={MY_IMAGES.MAGICUBE_PROCESS.src}
-            objectFit="cover"
-            alt={MY_IMAGES.MAGICUBE_PROCESS.alt}
-          />
-        </Flex>
+        <Text textStyle={'pre-display-4'} textAlign={'center'}>
+          피움의 대출, 이런 분들께
+          <Box as={'br'} display={{ base: 'block', sm: 'none' }} /> 도움이 될
+          거예요 <LeafIcon boxSize={'24px'} />
+        </Text>
       </Flex>
+
+      <Box w="100%" overflow="hidden" py={'45px'} position="relative">
+        <Box
+          display="flex"
+          gap={'32px'}
+          animation={{
+            base: 'scrollLeft 5s linear infinite',
+            md: 'scrollLeft 30s linear infinite',
+          }}
+          sx={{
+            '@keyframes scrollLeft': {
+              '0%': {
+                transform: 'translateX(0)',
+              },
+              '100%': {
+                transform: 'translateX(-50%)',
+              },
+            },
+          }}
+        >
+          {sectionData.map((data, index) => (
+            <Flex
+              minH={'230px'}
+              minW={'280px'}
+              p={'32px 28px'}
+              bg={'grey.0'}
+              borderRadius={'20px'}
+              boxShadow={'0 8px 50px 0 rgba(0, 46, 114, 0.10)'}
+              key={`original-${index}`}
+              flexDir={'column'}
+              alignItems={'flex-start'}
+              justifyContent={'space-between'}
+              flexShrink={0}
+            >
+              <data.icon boxSize={'70px'} />
+              <VStack alignItems={'flex-start'}>
+                <Text textStyle={'pre-body-4'}>{data.description1}</Text>
+                <Text textStyle={'pre-body-3'}>{data.description2}</Text>
+              </VStack>
+            </Flex>
+          ))}
+
+          {sectionData.map((data, index) => (
+            <Flex
+              minH={'230px'}
+              minW={'280px'}
+              p={'32px 28px'}
+              bg={'grey.0'}
+              borderRadius={'20px'}
+              boxShadow={'0 8px 50px 0 rgba(0, 46, 114, 0.10)'}
+              key={`duplicate-${index}`}
+              flexDir={'column'}
+              alignItems={'flex-start'}
+              justifyContent={'space-between'}
+              flexShrink={0}
+            >
+              <data.icon boxSize={'70px'} />
+              <VStack alignItems={'flex-start'}>
+                <Text textStyle={'pre-body-4'}>{data.description1}</Text>
+                <Text textStyle={'pre-body-3'}>{data.description2}</Text>
+              </VStack>
+            </Flex>
+          ))}
+        </Box>
+      </Box>
     </Flex>
   )
 }

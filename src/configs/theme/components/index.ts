@@ -5,6 +5,7 @@ import Modal from './multi-parts/modal'
 import Radio from './multi-parts/radio'
 import Select from './multi-parts/select'
 import Switch from './multi-parts/switch'
+import Badge from './single/badge'
 import Button from './single/button'
 import Container from './single/container'
 import Text from './single/text'
@@ -22,6 +23,7 @@ export const components = {
   Select,
   Form,
   FormError,
+  Badge,
   FormLabel,
   Text,
 }

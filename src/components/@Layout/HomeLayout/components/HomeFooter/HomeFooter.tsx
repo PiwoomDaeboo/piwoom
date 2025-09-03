@@ -1,60 +1,45 @@
-import { Link } from '@chakra-ui/next-js'
 import {
   Box,
   Container,
   ContainerProps,
-  Divider,
   Flex,
-  HStack,
   Text,
   VStack,
 } from '@chakra-ui/react'
 
-import { LogoIcon, MagicubeIcon } from '@/generated/icons/MyIcons'
-import { ROUTES } from '@/generated/path/routes'
+import { LogoIcon } from '@/generated/icons/MyIcons'
 
 export default function HomeFooter({ ...props }: ContainerProps) {
   return (
     <Flex
+      bg={'grey.8'}
       w={'100%'}
       variant={'base'}
       flexDirection={'column'}
       {...props}
-      py="40px"
-      px={{ base: '16px', sm: '30px', md: '60px' }}
+      pt={'40px'}
     >
-      <Text textStyle="pre-display-00">LET’S PLAY</Text>
-      <Box w="100%" bg="content.1" height="3px" my="12px" />
-      <Text textStyle={'pre-heading-01'}>Doodle & Create</Text>
-      <Text textStyle={'pre-heading-01'}>“Your magicube comes to life!”</Text>
-      <Flex
-        mt="40px"
-        gap={{ base: '32px', md: '80px' }}
-        alignItems="flex-start"
-        flexDirection={{ base: 'column', md: 'row' }}
-      >
-        <MagicubeIcon width="126px" height="118px" />
-        <VStack gap="6px">
-          <Text textStyle="pre-body-01">
-            매지큐브 / 셀프 디자인 P.O.D 솔루션{' '}
-          </Text>
-          <Text textStyle="pre-body-04">Email : create@magicube.co.kr</Text>
-        </VStack>
-        <VStack alignItems="flex-start" gap="0px">
-          <Text mb="6px" textStyle="pre-body-01">
-            바림 크래프트 디자인랩{' '}
-          </Text>
-          <HStack gap="12px">
-            <Text textStyle="pre-body-04">대표 : 주영은</Text>
-            <Text textStyle="pre-body-04">고객센터 Tel. : 070-8232-4362</Text>
-          </HStack>
-          <Text textStyle="pre-body-04">사업자 등록 번호 : 341-77-00072</Text>
-          <Text textStyle="pre-body-04">
-            통신판매업 신고 : 제 2024-수원영통- 1888호 경기도 수원시 영통구
-            법조로 38, 102-505
-          </Text>
-        </VStack>
-      </Flex>
+      <Container>
+        <LogoIcon w={'160px'} h={'32px'} />
+        <Flex w={'100%'} alignItems={'center'} mt={'35px'}>
+          <VStack alignItems="flex-start" color={'grey.2'} w={'50%'}>
+            <Text textStyle="pre-body-6">대표이사 : 장윤석</Text>
+            <Text textStyle="pre-body-6">대표번호 : 000-000-0000</Text>
+            <Text textStyle="pre-body-6">E-mail : webmaster@piwoom.com</Text>
+            <Text textStyle="pre-body-6">등록기관 : 금융감독원(1332)</Text>
+          </VStack>
+          <VStack alignItems="flex-start" color={'grey.2'} w={'50%'}>
+            <Text textStyle="pre-body-6">본점</Text>
+            <Text textStyle="pre-body-6">
+              주소 : 서울특별시 중구 소공로 109 3층(소공동, 소공동 한화빌딩)
+            </Text>
+            <Text textStyle="pre-body-6">사업자번호 : 213-81-03413</Text>
+          </VStack>
+        </Flex>
+        <Text mt={'48px'} py={'20px'} color={'grey.5'}>
+          Copyright(C) 2023 PIWOOM. ALL RIGHTS RESERVED.
+        </Text>
+      </Container>
     </Flex>
   )
 }
