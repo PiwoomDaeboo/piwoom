@@ -2,8 +2,9 @@ import { DefaultSeo } from 'next-seo'
 
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-import { TokGuideDrawer } from '@/components/@Drawer/TokGuideDrawer/TokGuideDrawer'
-import { OpenBtn } from '@/components/OpenBtn'
+import 'slick-carousel/slick/slick-theme.css'
+import 'slick-carousel/slick/slick.css'
+
 import { config as SEO } from '@/configs/seo/config'
 import withAppProvider from '@/hocs/withAppProvider'
 

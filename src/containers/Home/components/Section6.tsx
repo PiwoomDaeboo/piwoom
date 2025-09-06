@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react'
 
 import { Box, Container, Flex, HStack, Text, VStack } from '@chakra-ui/react'
 
+import Slider from 'react-slick'
+
 import {
   Slider1Icon,
   Slider2Icon,
   Slider3Icon,
 } from '@/generated/icons/MyIcons'
 
-// 슬라이더 데이터
 const sliderData = [
   {
     id: 1,
@@ -16,7 +17,7 @@ const sliderData = [
     subtitle: '급할수록 조심! 급할수록 안전한 금융을 선택하세요.',
     contact: '1332',
     bgColor: '#F6E6EA',
-    icon: <Slider1Icon boxSize={'60px'} />,
+    icon: <Slider1Icon boxSize={'240px'} />,
   },
   {
     id: 2,
@@ -25,7 +26,7 @@ const sliderData = [
     contact: '',
     bgColor: '#E4E2FF',
     textColor: 'grey.800',
-    icon: <Slider2Icon boxSize={'60px'} />,
+    icon: <Slider2Icon boxSize={'240px'} />,
   },
   {
     id: 3,
@@ -34,36 +35,33 @@ const sliderData = [
     contact: '',
     bgColor: '#F9F2E2',
     textColor: 'grey.800',
-    icon: <Slider3Icon boxSize={'60px'} />,
+    icon: <Slider3Icon boxSize={'240px'} />,
   },
 ]
 
 const SliderItem = ({ item }: { item: any }) => (
-  <Box w="100%" h="200px" bg={item.bgColor} borderRadius="20px" p="32px">
+  <Box
+    w="100%"
+    h="200px"
+    bg={item.bgColor}
+    borderRadius="20px"
+    p="32px"
+    flexShrink={0}
+    minW="0"
+    position="relative"
+  >
     <Flex w="100%" h="100%" justifyContent="space-between" alignItems="center">
-      <VStack alignItems="flex-start" spacing="16px" flex="1" maxW="65%">
-        <Text
-          fontSize={{ base: '18px', md: '24px' }}
-          fontWeight="bold"
-          color={item.textColor || 'grey.800'}
-          lineHeight="1.3"
-        >
+      <VStack alignItems="flex-start" spacing="16px">
+        <Text textStyle={'pre-heading-1'} color={'grey.9'}>
           {item.title}
         </Text>
-        <Text
-          fontSize={{ base: '14px', md: '16px' }}
-          color={item.textColor || 'grey.800'}
-          opacity="0.8"
-        >
+        <Text textStyle={'pre-body-4'} color={'grey.8'}>
           {item.subtitle}
         </Text>
       </VStack>
 
       {/* 우측 아이콘 영역 */}
       <Box
-        flexShrink={0}
-        w="80px"
-        h="80px"
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -76,48 +74,60 @@ const SliderItem = ({ item }: { item: any }) => (
   </Box>
 )
 
-// 도트 인디케이터 컴포넌트
-const DotIndicator = ({
-  total,
-  current,
-  onDotClick,
-}: {
-  total: number
-  current: number
-  onDotClick: (index: number) => void
-}) => (
-  <HStack spacing="8px" justifyContent="center" mt="20px">
-    {Array.from({ length: total }).map((_, index) => (
-      <Box
-        key={index}
-        w="8px"
-        h="8px"
-        borderRadius="50%"
-        bg={current === index ? 'primary.4' : 'grey.4'}
-        cursor="pointer"
-        transition="all 0.3s ease"
-        onClick={() => onDotClick(index)}
-        _hover={{ bg: 'primary.3' }}
-      />
-    ))}
-  </HStack>
-)
-
 function Section6() {
   const [currentSlide, setCurrentSlide] = useState(0)
 
-  // 자동 슬라이드 전환
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % sliderData.length)
-    }, 4000)
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    adaptiveHeight: false,
 
-    return () => clearInterval(timer)
-  }, [])
-
-  // 도트 클릭 시 해당 슬라이드로 이동
-  const handleDotClick = (index: number) => {
-    setCurrentSlide(index)
+    variableWidth: false,
+    beforeChange: (oldIndex: number, newIndex: number) => {
+      setCurrentSlide(newIndex)
+    },
+    appendDots: (dots: any) => (
+      <Box
+        position="absolute"
+        bottom="20px"
+        left="50%"
+        transform="translateX(-50%)"
+        w="100%"
+      >
+        <Box
+          as="ul"
+          display="flex"
+          gap="8px"
+          justifyContent="center"
+          listStyleType="none"
+          m="0"
+          p="0"
+          sx={{
+            '& li': {
+              listStyle: 'none',
+              margin: '0',
+              padding: '0',
+              display: 'inline-block',
+            },
+          }}
+        >
+          {dots}
+        </Box>
+      </Box>
+    ),
+    customPaging: (i: number) => (
+      <Box
+        w="6px"
+        h="6px"
+        borderRadius="99%"
+        bg={i === currentSlide ? '#003686' : 'rgba(255, 255, 255, 0.5)'}
+        cursor="pointer"
+        transition="all 0.3s"
+      />
+    ),
   }
 
   return (
@@ -128,35 +138,17 @@ function Section6() {
       flexDir="column"
       py={{ base: '16px', sm: '40px', md: '96px' }}
     >
-      <Container maxW="1200px">
+      <Container>
         <VStack spacing="0" w="100%">
-          {/* 슬라이더 컨테이너 */}
-          <Box
-            w="100%"
-            borderRadius="20px"
-            overflow="hidden"
-            position="relative"
-          >
-            <Box
-              display="flex"
-              transform={`translateX(-${currentSlide * 100}%)`}
-              transition="transform 0.6s ease-in-out"
-              w={`${sliderData.length * 100}%`}
-            >
+          <Box w="100%" overflow="hidden" position="relative">
+            <Slider {...settings}>
               {sliderData.map((item) => (
                 <Box key={item.id} w="100%" flexShrink={0}>
                   <SliderItem item={item} />
                 </Box>
               ))}
-            </Box>
+            </Slider>
           </Box>
-
-          {/* 도트 인디케이터 */}
-          <DotIndicator
-            total={sliderData.length}
-            current={currentSlide}
-            onDotClick={handleDotClick}
-          />
         </VStack>
       </Container>
     </Flex>

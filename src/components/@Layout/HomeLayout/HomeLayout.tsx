@@ -39,8 +39,8 @@ const HomeLayout = ({
     <Box w={'100%'} minH={'100vh'} display={'flex'} flexDirection={'column'}>
       <Flex
         as={'header'}
-        position="sticky"
-        zIndex="sticky"
+        // position="sticky"
+        // zIndex="sticky"
         top="0px"
         w={'100%'}
         justifyContent={'center'}

@@ -17,10 +17,16 @@ const Section0 = () => {
       >
         <Container>
           <VStack alignItems={'flex-start'}>
-            <Text textStyle={'pre-display-3'} color={'grey.0'}>
+            <Text
+              textStyle={{ base: 'pre-display-4', md: 'pre-display-3' }}
+              color={'grey.0'}
+            >
               소중한 순간들이
             </Text>
-            <Text textStyle={'pre-display-3'} color={'grey.0'}>
+            <Text
+              textStyle={{ base: 'pre-display-4', md: 'pre-display-3' }}
+              color={'grey.0'}
+            >
               더 크게 피어날 수 있도록
             </Text>
             <Button

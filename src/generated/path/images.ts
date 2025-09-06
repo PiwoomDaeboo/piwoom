@@ -8,7 +8,16 @@ export const MY_IMAGES = {
   BELT_IMAGE_MO: { src: '/images/belt_image_mo.png', alt: 'belt-image-mo' },
   BELT_IMAGE_PC: { src: '/images/belt_image_pc.png', alt: 'belt-image-pc' },
   BELT_IMAGE_TAB: { src: '/images/belt_image_tab.png', alt: 'belt-image-tab' },
+  CEO: { src: '/images/ceo.png', alt: 'ceo' },
   CHECKLIST: { src: '/images/checklist.png', alt: 'checklist' },
+  COMPANYSECTION_1: {
+    src: '/images/companysection1.png',
+    alt: 'companysection-1',
+  },
+  COMPANYSECTION_2: {
+    src: '/images/companysection2.png',
+    alt: 'companysection-2',
+  },
   CONSULTING_IMAGE: {
     src: '/images/consulting_image.png',
     alt: 'consulting-image',
@@ -18,6 +27,13 @@ export const MY_IMAGES = {
   IMG_06: { src: '/images/img06.png', alt: 'img-06' },
   IMG_07: { src: '/images/img07.png', alt: 'img-07' },
   INTRO: { src: '/images/intro.png', alt: 'intro' },
+  INTROIMAGE_1: { src: '/images/introimage1.png', alt: 'introimage-1' },
+  INTROIMAGE_2: { src: '/images/introimage2.png', alt: 'introimage-2' },
+  INTROIMAGE_3: { src: '/images/introimage3.png', alt: 'introimage-3' },
+  INTROIMAGE_4: { src: '/images/introimage4.png', alt: 'introimage-4' },
+  INTROIMAGE_5: { src: '/images/introimage5.png', alt: 'introimage-5' },
+  INTROIMAGE_6: { src: '/images/introimage6.png', alt: 'introimage-6' },
+  INTROIMAGE_7: { src: '/images/introimage7.png', alt: 'introimage-7' },
   MAGICUBE_PROCESS: {
     src: '/images/magicube_process.png',
     alt: 'magicube-process',
