@@ -43,7 +43,6 @@ const HomeLayout = ({
         zIndex="sticky"
         top="0px"
         w={'100%'}
-        h="70px"
         justifyContent={'center'}
       >
         {header}
@@ -57,7 +56,6 @@ const HomeLayout = ({
         flexDirection="column"
         justifyContent={'center'}
         alignItems={'center'}
-        mt={{ base: '30px', sm: '80px', md: '80px' }}
         {...containerProps}
       >
         {content}
