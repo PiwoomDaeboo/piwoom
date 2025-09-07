@@ -1,109 +1,189 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
-import { AspectRatio, Box, Flex, VStack } from '@chakra-ui/react'
+import {
+  Badge,
+  Box,
+  Container,
+  Flex,
+  HStack,
+  SimpleGrid,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
+
+import Card from '@/components/Card'
+import {
+  CaretRightIcon,
+  Loan1Icon,
+  Loan2Icon,
+  Loan3Icon,
+} from '@/generated/icons/MyIcons'
 
 const Section1 = () => {
-  return (
-    <Flex
-      w="100%"
-      justifyContent="center"
-      h={{ base: '400px', sm: '600px', md: '765px' }}
-      mt={{ base: '60px', sm: '60px', md: '80px' }}
-      mb={{ base: '0px', sm: '80px', md: '140px' }}
-      px={{ base: '0px', sm: '0px', md: '0px' }}
-    >
-      <Box w="100%" h="100%" maxW="1320px">
-        <AspectRatio ratio={16 / 9}>
-          <video src="/videos/mainTop.mp4" autoPlay muted loop />
-        </AspectRatio>
-      </Box>
+  const [hoverStates, setHoverStates] = useState([false, false, false])
 
-      {/* <Flex w="100%" h="100%" gap={{ base: '10px', md: '30px' }}>
-        <VStack
-          flex="1"
-          // maxW="320px"
-          gap={{ base: '10px', md: '30px' }}
-          mt={{ base: '40px', sm: '60px', md: '100px' }}
-          w="100%"
-          alignItems="flex-end"
+  const cardData = [
+    {
+      icon: Loan1Icon,
+      title: '월급 대출',
+      description: '월급 직장인을 위한',
+      badges: ['#최대 6개월치 월급', '#최저 월 1% ~', '#최대 1500만원 까지'],
+    },
+    {
+      icon: Loan2Icon,
+      title: '신용 대출',
+      description: '피움 자체 신용도 평가 시스템으로',
+      badges: ['#DSR 미적용', '#신용점수 영향X', '#서류 제출X'],
+    },
+    {
+      icon: Loan3Icon,
+      title: '부동산 담보대출',
+      description: '중/후순위 대출',
+      badges: ['#아파트', '##LTV 최대 90%까지', '#6억원 초과 대출 가능'],
+    },
+  ]
+
+  const handleMouseEnter = (index: number) => {
+    setHoverStates((prev) => {
+      const newStates = [...prev]
+      newStates[index] = true
+      return newStates
+    })
+  }
+
+  const handleMouseLeave = (index: number) => {
+    setHoverStates((prev) => {
+      const newStates = [...prev]
+      newStates[index] = false
+      return newStates
+    })
+  }
+
+  return (
+    <Flex w="100%" justifyContent="center" py={'80px'}>
+      <Container>
+        <SimpleGrid
+          display={{ base: 'none', md: 'grid' }}
+          columns={3}
+          gap={'36px'}
         >
-          <Box
-            w="80%"
-            h={{ base: '150px', sm: '250px', md: '370px' }}
-            bgImage={'/images/img01.gif'}
-            bgSize="contain"
-            bgRepeat="no-repeat"
-            bgPosition="center"
-          />
-          <Box
-            w="100%"
-            h="100%"
-            borderRadius="10px"
-            bgImage={'/images/img04.png'}
-            bgSize="contain"
-            bgRepeat="no-repeat"
-            bgPosition="center"
-          />
-        </VStack>
-        <VStack flex="2" gap={{ base: '10px', md: '30px' }} w="100%" h="100%">
-          <Box
-            w="100%"
-            h="100%"
-            maxH="405px"
-            borderRadius="10px"
-            bgImage={'/images/img02.png'}
-            bgSize="contain"
-            bgRepeat="no-repeat"
-            bgPosition="center"
-          />
-          <Flex gap={{ base: '10px', md: '30px' }} w="100%" h="70%">
-            <Box
-              w="100%"
-              h={{ base: '80px', sm: '80%', md: '200px' }}
-              bgImage={'/images/img05.gif'}
-              bgSize="contain"
-              bgRepeat="no-repeat"
-              bgPosition="center"
-            />
-            <Box
-              w="100%"
-              h={{ base: '100px', sm: '100%', md: '100%' }}
-              borderRadius="10px"
-              bgImage={'/images/img06.png'}
-              bgSize="contain"
-              bgRepeat="no-repeat"
-              bgPosition="center"
-            />
-          </Flex>
-        </VStack>
-        <VStack
-          w="100%"
-          flex="1"
-          gap={{ base: '0px', md: '30px' }}
-          mt={{ base: '20px', sm: '60px', md: '100px' }}
-          alignItems="flex-start"
+          {cardData.map((card, index) => {
+            const IconComponent = card.icon
+            return (
+              <Card
+                key={index}
+                flexDir={'column'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={() => handleMouseLeave(index)}
+                bg={hoverStates[index] ? 'primary.2' : 'grey.0'}
+              >
+                <Flex
+                  w={'149px'}
+                  h={'149px'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                >
+                  <IconComponent
+                    boxSize={hoverStates[index] ? '149px' : '139px'}
+                  />
+                </Flex>
+                <HStack mt={'16px'}>
+                  <Text textStyle={'pre-heading-1'} color={'grey.10'}>
+                    {card.title}
+                  </Text>
+                  <Flex
+                    bg={'primary.4'}
+                    borderRadius={'99px'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    w={'32px'}
+                    h={'32px'}
+                  >
+                    <CaretRightIcon boxSize={'18px'} color={'white'} />
+                  </Flex>
+                </HStack>
+                <Text my={'16px'} textStyle={'pre-body-6'} color={'grey.8'}>
+                  {card.description}
+                </Text>
+                <Flex
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  w={'100%'}
+                  flexWrap={'wrap'}
+                  gap={'8px'}
+                >
+                  {card.badges.map((badge, badgeIndex) => (
+                    <Badge key={badgeIndex} variant={'subtle_primary'}>
+                      {badge}
+                    </Badge>
+                  ))}
+                </Flex>
+              </Card>
+            )
+          })}
+        </SimpleGrid>
+        <SimpleGrid
+          display={{ base: 'grid', md: 'none' }}
+          columns={{ base: 1, sm: 3 }}
+          gap={'36px'}
         >
-          <Box
-            w="100%"
-            flex="1"
-            h={{ base: '100px', sm: '250px', md: '370px' }}
-            borderRadius="10px"
-            bgImage={'/images/img03.gif'}
-            bgSize="contain"
-            bgRepeat="no-repeat"
-            bgPosition="center"
-          />
-          <Box
-            w="100%"
-            flex="1"
-            h={{ base: '80px', sm: '180px', md: '260px' }}
-            bgImage={'/images/img07.png'}
-            bgSize="contain"
-            bgRepeat="no-repeat"
-            bgPosition="center"
-          />
-        </VStack>
-      </Flex> */}
+          {cardData.map((card, index) => {
+            return (
+              <Card
+                key={index}
+                flexDir={'column'}
+                justifyContent={'space-between'}
+                alignItems={'stretch'}
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={() => handleMouseLeave(index)}
+                bg={hoverStates[index] ? 'primary.2' : 'grey.0'}
+              >
+                <HStack
+                  justifyContent={'space-between'}
+                  alignItems={'flex-start'}
+                >
+                  <VStack alignItems={'flex-start'}>
+                    <Text textStyle={'pre-heading-2'} color={'grey.10'}>
+                      {card.title}
+                    </Text>
+                    <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                      {card.description}
+                    </Text>
+                  </VStack>
+                  <Flex
+                    bg={'primary.4'}
+                    borderRadius={'99px'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    w={'32px'}
+                    h={'32px'}
+                    minW={'32px'}
+                  >
+                    <CaretRightIcon boxSize={'18px'} color={'white'} />
+                  </Flex>
+                </HStack>
+
+                <Flex
+                  display={{ base: 'none', sm: 'flex' }}
+                  justifyContent={'flex-start'}
+                  alignItems={'center'}
+                  w={'100%'}
+                  flexWrap={'wrap'}
+                  gap={'8px'}
+                >
+                  {card.badges.map((badge, badgeIndex) => (
+                    <Badge key={badgeIndex} variant={'subtle_primary'}>
+                      {badge}
+                    </Badge>
+                  ))}
+                </Flex>
+              </Card>
+            )
+          })}
+        </SimpleGrid>
+      </Container>
     </Flex>
   )
 }

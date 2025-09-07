@@ -37,8 +37,8 @@ const ModalBasis = ({
   ...props
 }: ModalBasisProps) => {
   return (
-    <Modal isCentered {...props}>
-      <ModalOverlay />
+    <Modal isCentered motionPreset="slideInBottom" {...props}>
+      <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(4px)" />
       <ModalContent>
         {visibleCloseButton && <ModalCloseButton />}
         <ModalHeader

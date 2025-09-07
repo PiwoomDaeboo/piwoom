@@ -1,6 +1,6 @@
-import { Link } from '@chakra-ui/next-js'
 import {
   Box,
+  Button,
   Container,
   ContainerProps,
   Divider,
@@ -10,51 +10,73 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
-import { LogoIcon, MagicubeIcon } from '@/generated/icons/MyIcons'
-import { ROUTES } from '@/generated/path/routes'
+import { LogoIcon } from '@/generated/icons/MyIcons'
 
 export default function HomeFooter({ ...props }: ContainerProps) {
   return (
     <Flex
+      bg={'grey.8'}
       w={'100%'}
       variant={'base'}
       flexDirection={'column'}
       {...props}
-      py="40px"
-      px={{ base: '16px', sm: '30px', md: '60px' }}
+      pt={'40px'}
     >
-      <Text textStyle="pre-display-00">LET’S PLAY</Text>
-      <Box w="100%" bg="content.1" height="3px" my="12px" />
-      <Text textStyle={'pre-heading-01'}>Doodle & Create</Text>
-      <Text textStyle={'pre-heading-01'}>“Your magicube comes to life!”</Text>
-      <Flex
-        mt="40px"
-        gap={{ base: '32px', md: '80px' }}
-        alignItems="flex-start"
-        flexDirection={{ base: 'column', md: 'row' }}
-      >
-        <MagicubeIcon width="126px" height="118px" />
-        <VStack gap="6px">
-          <Text textStyle="pre-body-01">
-            매지큐브 / 셀프 디자인 P.O.D 솔루션{' '}
-          </Text>
-          <Text textStyle="pre-body-04">Email : create@magicube.co.kr</Text>
-        </VStack>
-        <VStack alignItems="flex-start" gap="0px">
-          <Text mb="6px" textStyle="pre-body-01">
-            바림 크래프트 디자인랩{' '}
-          </Text>
-          <HStack gap="12px">
-            <Text textStyle="pre-body-04">대표 : 주영은</Text>
-            <Text textStyle="pre-body-04">고객센터 Tel. : 070-8232-4362</Text>
+      <Container>
+        <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <LogoIcon w={'160px'} h={'32px'} />
+
+          <HStack alignItems="center" display={{ base: 'none', md: 'flex' }}>
+            <Button variant={'none'}>
+              <Text textStyle="pre-body-5" color={'grey.0'}>
+                개인정보처리방침
+              </Text>
+            </Button>
+            <Button variant={'none'}>
+              <Text textStyle="pre-body-5" color={'grey.0'}>
+                약관
+              </Text>
+            </Button>
           </HStack>
-          <Text textStyle="pre-body-04">사업자 등록 번호 : 341-77-00072</Text>
-          <Text textStyle="pre-body-04">
-            통신판매업 신고 : 제 2024-수원영통- 1888호 경기도 수원시 영통구
-            법조로 38, 102-505
+        </Flex>
+        <Flex w={'100%'} mt={'35px'}>
+          <VStack alignItems="flex-start" color={'grey.2'}>
+            <Flex
+              flexDir={{ base: 'column', md: 'row' }}
+              alignItems="flex-start"
+              gap={{ base: '4px', md: '10px' }}
+            >
+              <Text textStyle="pre-body-6">대표이사 : 장윤석</Text>
+              <Divider orientation="vertical" bg={'grey.2'} />
+              <Text textStyle="pre-body-6">대표번호 : 055-266-2686</Text>
+              <Divider orientation="vertical" bg={'grey.2'} />
+              <Text textStyle="pre-body-6">E-mail : official@piwoom.com</Text>
+            </Flex>
+            <Text>
+              등록기관: 창원시 의창구청 경제교통과 생활경제팀(055-212-4414)
+            </Text>
+            <VStack mt={'28px'} alignItems="flex-start" color={'grey.2'}>
+              <Text textStyle="pre-body-6">본점</Text>
+              <Text textStyle="pre-body-6">
+                주소 : 경상남도 창원시 의창구 용지로293번길 28, 304호
+              </Text>
+              <Text textStyle="pre-body-6">사업자번호 : 774-81-02942</Text>
+            </VStack>
+          </VStack>
+        </Flex>
+      </Container>
+      <Box
+        mt={'48px'}
+        py={'20px'}
+        borderTop={'1px solid'}
+        borderColor={'grey.600'}
+      >
+        <Container>
+          <Text color={'grey.5'}>
+            Copyright(C) 2023 PIWOOM. ALL RIGHTS RESERVED.
           </Text>
-        </VStack>
-      </Flex>
+        </Container>
+      </Box>
     </Flex>
   )
 }

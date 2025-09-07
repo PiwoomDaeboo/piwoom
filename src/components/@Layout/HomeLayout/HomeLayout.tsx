@@ -9,9 +9,11 @@ import {
   GridItem,
   GridItemProps,
   keyframes,
+  useDisclosure,
 } from '@chakra-ui/react'
 
 import { LAYOUT } from '@/constants/layout'
+import Terms from '@/containers/Terms'
 
 import HomeFooter from './components/HomeFooter'
 import HomeHeader from './components/HomeHeader'
@@ -22,31 +24,33 @@ interface HomeLayoutProps {
   content?: JSX.Element
   containerProps?: ContainerProps
 }
-const bounceAnimation = keyframes`
-  0% {  transform: translateY(-100px); }
-  60% {  transform: translateY(10px); }
-  80% {  transform: translateY(-5px); }
-  100% {  transform: translateY(0px); }
-`
+
 const HomeLayout = ({
-  //
-  header = <HomeHeader />,
+  header,
   footer = <HomeFooter />,
   containerProps,
   content,
 }: HomeLayoutProps) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const defaultHeader = (
+    <HomeHeader
+      isDrawerOpen={isOpen}
+      onDrawerOpen={onOpen}
+      onDrawerClose={onClose}
+    />
+  )
   return (
     <Box w={'100%'} minH={'100vh'} display={'flex'} flexDirection={'column'}>
       <Flex
         as={'header'}
-        position="sticky"
-        zIndex="sticky"
+        // position="sticky"
+        // zIndex="sticky"
         top="0px"
         w={'100%'}
-        h="70px"
         justifyContent={'center'}
       >
-        {header}
+        {header || defaultHeader}
       </Flex>
       <Flex
         as={'main'}
@@ -57,10 +61,10 @@ const HomeLayout = ({
         flexDirection="column"
         justifyContent={'center'}
         alignItems={'center'}
-        mt={{ base: '30px', sm: '80px', md: '80px' }}
         {...containerProps}
       >
         {content}
+        <Terms />
       </Flex>
       {footer}
     </Box>

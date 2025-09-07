@@ -1,5 +1,7 @@
 import { ChakraProps } from '@chakra-ui/react'
 
+import { textStyles } from '@/generated/tokens/text-styles'
+
 interface ButtonAnatomyProps {
   color: ChakraProps['color']
   bgColor: ChakraProps['color']
@@ -57,9 +59,9 @@ const solidPrimary = defineVariant({
 
 const outlinePrimary = defineVariant({
   basic: {
-    color: 'primary.3',
-    bgColor: 'background.basic.1',
-    borderColor: 'primary.3',
+    color: 'grey.8',
+    bgColor: 'grey.0',
+    borderColor: 'grey.3',
   },
   hover: { bgColor: 'primary.1' },
   active: { bgColor: 'primary.2' },
@@ -72,9 +74,9 @@ const outlinePrimary = defineVariant({
 
 const outlineSecondary = defineVariant({
   basic: {
-    color: 'primary.3',
-    bgColor: 'background.basic.1',
-    borderColor: 'border.basic.2',
+    color: 'grey.8',
+    bgColor: 'grey.8',
+    borderColor: 'grey.3',
   },
   hover: { bgColor: 'background.basic.3' },
   active: { bgColor: 'background.basic.4' },
@@ -85,14 +87,14 @@ const outlineSecondary = defineVariant({
   },
 })
 
-const outlineTertiary = defineVariant({
+const blackPrimary = defineVariant({
   basic: {
-    color: 'content.2',
-    bgColor: 'background.basic.1',
+    color: 'grey.0',
+    bgColor: 'grey.10',
     borderColor: 'border.basic.2',
   },
-  hover: { bgColor: 'background.basic.3' },
-  active: { bgColor: 'background.basic.4' },
+  hover: { bgColor: 'grey.10' },
+  active: { bgColor: 'grey.10' },
   disabled: {
     color: 'content.6',
     borderColor: 'border.basic.2',
@@ -130,7 +132,7 @@ export const variants = {
   'solid-primary': solidPrimary,
   'outline-primary': outlinePrimary,
   'outline-secondary': outlineSecondary,
-  'outline-tertiary': outlineTertiary,
+  'black-primary': blackPrimary,
   'text-primary': textPrimary,
   'text-secondary': textSecondary,
 }

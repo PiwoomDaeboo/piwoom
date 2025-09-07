@@ -1,52 +1,24 @@
-import { useEffect, useState } from 'react'
-
-import {
-  Box,
-  Button,
-  Center,
-  Container,
-  Flex,
-  Image,
-  SimpleGrid,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
-
 import Terms from '../Terms'
-
-// 공통 스타일 정의
-const listItemStyles = {
-  textStyle: 'pre-heading-4',
-  mb: '6px',
-  position: 'relative' as const,
-  pl: '20px',
-  _before: {
-    content: '"·"',
-    position: 'absolute' as const,
-    left: '0',
-    top: '0',
-  },
-}
-
-const ListItem = ({
-  children,
-  color = 'grey.8',
-}: {
-  children: React.ReactNode
-  color?: string
-}) => (
-  <Box as="li" color={color} {...listItemStyles}>
-    {children}
-  </Box>
-)
-
-const List = ({ children }: { children: React.ReactNode }) => (
-  <Box as="ul" listStyleType="none" m={0} p={0} w="100%">
-    {children}
-  </Box>
-)
+import Section0 from './components/Section0'
+import Section1 from './components/Section1'
+import Section2 from './components/Section2'
+import Section3 from './components/Section3'
+import Section4 from './components/Section4'
+import Section5 from './components/Section5'
+import Section6 from './components/Section6'
 
 function Home() {
-  return <Terms />
+  return (
+    <>
+      {/* <Section0 />
+      <Section1 />
+      <Section2 />
+      <Section3 />
+      <Section4 />
+      <Section5 />
+      <Section6 /> */}
+      {/* <Terms /> */}
+    </>
+  )
 }
 export default Home
