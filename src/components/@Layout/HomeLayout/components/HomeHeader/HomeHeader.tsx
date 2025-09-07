@@ -81,10 +81,32 @@ const HomeHeader = ({
         display={isDrawerOpen ? 'none' : 'flex'}
       >
         <Container>
-          <Text textStyle={'pre-heading-2'} color={'grey.0'}>
-            피움대부 주식회사 2023-창원의창-0003[대부업]
-            2023-창원의창-0004[대부중개업]
-          </Text>
+          <HStack justifyContent={{ base: 'space-between', md: 'flex-start' }}>
+            <Text
+              textStyle={{
+                base: 'pre-heading-5',
+                sm: 'pre-heading-4',
+                md: 'pre-heading-2',
+              }}
+              color={'grey.0'}
+            >
+              피움대부 주식회사
+            </Text>
+            <Flex flexDir={{ base: 'column', md: 'row' }}>
+              <Text
+                textStyle={{ base: 'pre-body-7', md: 'pre-heading-2' }}
+                color={'grey.0'}
+              >
+                2023-창원의창-0003[대부업]
+              </Text>
+              <Text
+                textStyle={{ base: 'pre-body-7', md: 'pre-heading-2' }}
+                color={'grey.0'}
+              >
+                2023-창원의창-0004[대부중개업]
+              </Text>
+            </Flex>
+          </HStack>
         </Container>
       </Flex>
       <Container>

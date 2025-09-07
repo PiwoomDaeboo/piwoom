@@ -11,6 +11,6 @@ export const MENU_ITEMS = [
     ],
   },
   { label: '나의 대출조회', href: '/my-loan' },
-  { label: '고객센터', href: '/customer-service' },
-  { label: '회사 소개', href: '/about' },
+  { label: '고객센터', href: '/notice' },
+  { label: '회사 소개', href: '/company' },
 ]

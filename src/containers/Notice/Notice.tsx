@@ -8,11 +8,15 @@ import {
   Flex,
   HStack,
   Input,
+  InputGroup,
+  InputLeftElement,
   Text,
   VStack,
 } from '@chakra-ui/react'
 
+import NonData from '@/components/NonData'
 import { Pagination } from '@/components/pagination'
+import { MagnifyingGlassIcon } from '@/generated/icons/MyIcons'
 
 // 공지사항 데이터 타입 정의
 interface NoticeItem {
@@ -186,9 +190,15 @@ function Notice() {
       </Flex>
       <Container>
         <Flex py={'32px'} flexDir={'column'}>
-          <Flex justifyContent={'flex-end'} mb={'20px'}>
-            <Input placeholder="검색어를 입력해 주세요." w={'240px'} />
+          <Flex justifyContent={{ base: 'center', sm: 'flex-end' }} mb={'20px'}>
+            <InputGroup w={{ base: '100%', sm: '240px' }}>
+              <InputLeftElement pointerEvents="none" pl={'12px'}>
+                <MagnifyingGlassIcon color="grey.8" boxSize={'20px'} />
+              </InputLeftElement>
+              <Input placeholder="검색어를 입력해 주세요." pl={'48px'} />
+            </InputGroup>
           </Flex>
+          {/* <NonData /> */}
 
           {/* 공지사항 목록 렌더링 */}
           {displayData.map((item, index) => (

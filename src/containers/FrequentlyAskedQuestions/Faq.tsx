@@ -125,8 +125,8 @@ function Faq() {
       </Flex>
       <Container>
         <Flex py={'32px'} flexDir={'column'}>
-          <Flex justifyContent={'flex-end'} mb={'20px'}>
-            <InputGroup w={'240px'}>
+          <Flex justifyContent={{ base: 'center', sm: 'flex-end' }} mb={'20px'}>
+            <InputGroup w={{ base: '100%', sm: '240px' }}>
               <InputLeftElement pointerEvents="none" pl={'12px'}>
                 <MagnifyingGlassIcon color="grey.8" boxSize={'20px'} />
               </InputLeftElement>

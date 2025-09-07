@@ -1,8 +1,11 @@
 import {
   Box,
+  Button,
   Container,
   ContainerProps,
+  Divider,
   Flex,
+  HStack,
   Text,
   VStack,
 } from '@chakra-ui/react'
@@ -20,26 +23,60 @@ export default function HomeFooter({ ...props }: ContainerProps) {
       pt={'40px'}
     >
       <Container>
-        <LogoIcon w={'160px'} h={'32px'} />
-        <Flex w={'100%'} alignItems={'center'} mt={'35px'}>
-          <VStack alignItems="flex-start" color={'grey.2'} w={'50%'}>
-            <Text textStyle="pre-body-6">대표이사 : 장윤석</Text>
-            <Text textStyle="pre-body-6">대표번호 : 000-000-0000</Text>
-            <Text textStyle="pre-body-6">E-mail : webmaster@piwoom.com</Text>
-            <Text textStyle="pre-body-6">등록기관 : 금융감독원(1332)</Text>
-          </VStack>
-          <VStack alignItems="flex-start" color={'grey.2'} w={'50%'}>
-            <Text textStyle="pre-body-6">본점</Text>
-            <Text textStyle="pre-body-6">
-              주소 : 서울특별시 중구 소공로 109 3층(소공동, 소공동 한화빌딩)
+        <Flex alignItems={'center'} justifyContent={'space-between'}>
+          <LogoIcon w={'160px'} h={'32px'} />
+
+          <HStack alignItems="center" display={{ base: 'none', md: 'flex' }}>
+            <Button variant={'none'}>
+              <Text textStyle="pre-body-5" color={'grey.0'}>
+                개인정보처리방침
+              </Text>
+            </Button>
+            <Button variant={'none'}>
+              <Text textStyle="pre-body-5" color={'grey.0'}>
+                약관
+              </Text>
+            </Button>
+          </HStack>
+        </Flex>
+        <Flex w={'100%'} mt={'35px'}>
+          <VStack alignItems="flex-start" color={'grey.2'}>
+            <Flex
+              flexDir={{ base: 'column', md: 'row' }}
+              alignItems="flex-start"
+              gap={{ base: '4px', md: '10px' }}
+            >
+              <Text textStyle="pre-body-6">대표이사 : 장윤석</Text>
+              <Divider orientation="vertical" bg={'grey.2'} />
+              <Text textStyle="pre-body-6">대표번호 : 055-266-2686</Text>
+              <Divider orientation="vertical" bg={'grey.2'} />
+              <Text textStyle="pre-body-6">E-mail : official@piwoom.com</Text>
+            </Flex>
+            <Text>
+              등록기관: 창원시 의창구청 경제교통과 생활경제팀(055-212-4414)
             </Text>
-            <Text textStyle="pre-body-6">사업자번호 : 213-81-03413</Text>
+            <VStack mt={'28px'} alignItems="flex-start" color={'grey.2'}>
+              <Text textStyle="pre-body-6">본점</Text>
+              <Text textStyle="pre-body-6">
+                주소 : 경상남도 창원시 의창구 용지로293번길 28, 304호
+              </Text>
+              <Text textStyle="pre-body-6">사업자번호 : 774-81-02942</Text>
+            </VStack>
           </VStack>
         </Flex>
-        <Text mt={'48px'} py={'20px'} color={'grey.5'}>
-          Copyright(C) 2023 PIWOOM. ALL RIGHTS RESERVED.
-        </Text>
       </Container>
+      <Box
+        mt={'48px'}
+        py={'20px'}
+        borderTop={'1px solid'}
+        borderColor={'grey.600'}
+      >
+        <Container>
+          <Text color={'grey.5'}>
+            Copyright(C) 2023 PIWOOM. ALL RIGHTS RESERVED.
+          </Text>
+        </Container>
+      </Box>
     </Flex>
   )
 }

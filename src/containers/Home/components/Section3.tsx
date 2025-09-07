@@ -66,7 +66,7 @@ function Section3() {
       justifyContent={'center'}
       alignItems={'center'}
       flexDir={'column'}
-      py={{ base: '16px', sm: '40px', md: '160px' }}
+      py={{ base: '64px', sm: '96px', md: '160px' }}
     >
       <Flex
         flexDir={{ base: 'column', sm: 'row' }}
