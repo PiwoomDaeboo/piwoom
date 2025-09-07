@@ -38,13 +38,13 @@ const Section4 = () => {
         mb={'56px'}
         w={'100%'}
         display={{ base: 'flex', md: 'none' }}
-        bgImage={MY_IMAGES.CONSULTING_IMAGE.src}
+        bgImage={MY_IMAGES.CONSULTING_IMAGE_MO.src}
         bgSize={'cover'}
         py={'56px'}
       >
         <Container>
           <VStack alignItems={'flex-start'}>
-            <Text textStyle={'pre-heading-1'}>
+            <Text textStyle={'pre-heading-1'} color={'grey.9'}>
               법인 대출 혹은 사업자 대출이 필요한 경우
             </Text>
             <Text textStyle={'pre-body-3'}>

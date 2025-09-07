@@ -22,6 +22,10 @@ export const MY_IMAGES = {
     src: '/images/consulting_image.png',
     alt: 'consulting-image',
   },
+  CONSULTING_IMAGE_MO: {
+    src: '/images/consulting_image_mo.png',
+    alt: 'consulting-image-mo',
+  },
   IMG_02: { src: '/images/img02.png', alt: 'img-02' },
   IMG_04: { src: '/images/img04.png', alt: 'img-04' },
   IMG_06: { src: '/images/img06.png', alt: 'img-06' },

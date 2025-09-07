@@ -12,7 +12,6 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { useDisclosure } from '@chakra-ui/react'
 
 import {
   HeaderlogoIcon,
@@ -25,10 +24,21 @@ import InquiryModal from '@/components/@Modal/InquiryModal'
 import { ROUTES } from '@/generated/path/routes'
 
 import LoginCodeModal from '../../../../@Modal/LoginCodeModal'
+import { MENU_ITEMS } from '../consts/menu'
 import HomeHeaderDrawer from './components/HomeHeaderDrawer'
 
-const HomeHeader = ({ ...props }: ContainerProps) => {
-  const { isOpen, onClose, onOpen } = useDisclosure()
+interface HomeHeaderProps {
+  isDrawerOpen: boolean
+  onDrawerOpen: () => void
+  onDrawerClose: () => void
+}
+
+const HomeHeader = ({
+  isDrawerOpen,
+  onDrawerOpen,
+  onDrawerClose,
+  ...props
+}: HomeHeaderProps) => {
   const [isLoanHovered, setIsLoanHovered] = useState(false)
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -54,23 +64,6 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
     }
   }, [])
 
-  const navigationItems = [
-    {
-      label: '대출',
-      href: '/loan',
-      hasSubmenu: true,
-      submenuItems: [
-        { label: '월급 대출', href: '/loan/salary' },
-        { label: '신용 대출', href: '/loan/credit' },
-        { label: '부동산 담보대출', href: '/loan/mortgage' },
-        { label: '대출 절차 안내', href: '/loan/process' },
-      ],
-    },
-    { label: '나의 대출조회', href: '/my-loan' },
-    { label: '고객센터', href: '/customer-service' },
-    { label: '회사 소개', href: '/about' },
-  ]
-
   return (
     <Flex
       w="100%"
@@ -80,7 +73,13 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
       position={'relative'}
       {...props}
     >
-      <Flex py={'12px'} w={'100%'} bg={'primary.3'} alignItems={'center'}>
+      <Flex
+        py={'12px'}
+        w={'100%'}
+        bg={'primary.3'}
+        alignItems={'center'}
+        display={isDrawerOpen ? 'none' : 'flex'}
+      >
         <Container>
           <Text textStyle={'pre-heading-2'} color={'grey.0'}>
             피움대부 주식회사 2023-창원의창-0003[대부업]
@@ -103,7 +102,7 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
             position={'relative'}
             display={{ base: 'none', md: 'flex' }}
           >
-            {navigationItems.map((item, index) => (
+            {MENU_ITEMS.map((item, index) => (
               <Box
                 key={index}
                 px={'25px'}
@@ -132,7 +131,7 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
             <IconButton
               size={'lg'}
               icon={<MenuIcon w="24px" h="24px" color={'grey.10'} />}
-              onClick={onOpen}
+              onClick={isDrawerOpen ? onDrawerClose : onDrawerOpen}
               cursor="pointer"
               bg={'transparent'}
               _hover={{ bg: 'transparent' }}
@@ -164,7 +163,7 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
               h={'100%'}
               gap={'40px'}
             >
-              {navigationItems[0].submenuItems?.map((subItem, subIndex) => (
+              {MENU_ITEMS[0].submenuItems?.map((subItem, subIndex) => (
                 <Link key={subIndex} href={subItem.href} variant={'unstyled'}>
                   <Text
                     textStyle={'pre-heading-2'}
@@ -181,7 +180,7 @@ const HomeHeader = ({ ...props }: ContainerProps) => {
         </Box>
       )}
 
-      <HomeHeaderDrawer isOpen={isOpen} onClose={onClose} />
+      <HomeHeaderDrawer isOpen={isDrawerOpen} onClose={onDrawerClose} />
     </Flex>
   )
 }

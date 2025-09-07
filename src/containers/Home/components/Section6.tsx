@@ -1,9 +1,18 @@
 import { useEffect, useState } from 'react'
 
-import { Box, Container, Flex, HStack, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Container,
+  Flex,
+  HStack,
+  Text,
+  VStack,
+  useDisclosure,
+} from '@chakra-ui/react'
 
 import Slider from 'react-slick'
 
+import YoutubeVideoModal from '@/components/@Modal/YoutubeVideoModal'
 import {
   Slider1Icon,
   Slider2Icon,
@@ -17,7 +26,8 @@ const sliderData = [
     subtitle: '급할수록 조심! 급할수록 안전한 금융을 선택하세요.',
     contact: '1332',
     bgColor: '#F6E6EA',
-    icon: <Slider1Icon boxSize={'240px'} />,
+    icon: <Slider1Icon boxSize={{ base: '100px', md: '240px' }} />,
+    link: 'https://www.youtube.com/watch?v=qwYIff48Bzw',
   },
   {
     id: 2,
@@ -26,7 +36,8 @@ const sliderData = [
     contact: '',
     bgColor: '#E4E2FF',
     textColor: 'grey.800',
-    icon: <Slider2Icon boxSize={'240px'} />,
+    icon: <Slider2Icon boxSize={{ base: '100px', md: '240px' }} />,
+    link: '/',
   },
   {
     id: 3,
@@ -35,14 +46,15 @@ const sliderData = [
     contact: '',
     bgColor: '#F9F2E2',
     textColor: 'grey.800',
-    icon: <Slider3Icon boxSize={'240px'} />,
+    icon: <Slider3Icon boxSize={{ base: '100px', md: '240px' }} />,
+    link: 'https://www.youtube.com/watch?v=JSu3um1awPw',
   },
 ]
 
 const SliderItem = ({ item }: { item: any }) => (
   <Box
     w="100%"
-    h="200px"
+    h={{ base: '260px', md: '200px' }}
     bg={item.bgColor}
     borderRadius="20px"
     p="32px"
@@ -50,8 +62,14 @@ const SliderItem = ({ item }: { item: any }) => (
     minW="0"
     position="relative"
   >
-    <Flex w="100%" h="100%" justifyContent="space-between" alignItems="center">
-      <VStack alignItems="flex-start" spacing="16px">
+    <Flex
+      w="100%"
+      h="100%"
+      flexDir={{ base: 'column', md: 'row' }}
+      justifyContent="space-between"
+      alignItems="center"
+    >
+      <VStack alignItems="flex-start" spacing={{ base: '8px', md: '16px' }}>
         <Text textStyle={'pre-heading-1'} color={'grey.9'}>
           {item.title}
         </Text>
@@ -60,12 +78,11 @@ const SliderItem = ({ item }: { item: any }) => (
         </Text>
       </VStack>
 
-      {/* 우측 아이콘 영역 */}
       <Box
+        w={'100%'}
         display="flex"
         alignItems="center"
-        justifyContent="center"
-        bg="rgba(255,255,255,0.1)"
+        justifyContent={{ base: 'flex-end', md: 'center' }}
         borderRadius="16px"
       >
         {item.icon}
@@ -76,7 +93,7 @@ const SliderItem = ({ item }: { item: any }) => (
 
 function Section6() {
   const [currentSlide, setCurrentSlide] = useState(0)
-
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const settings = {
     dots: true,
     infinite: true,
@@ -138,12 +155,23 @@ function Section6() {
       flexDir="column"
       py={{ base: '16px', sm: '40px', md: '96px' }}
     >
+      <YoutubeVideoModal
+        isOpen={isOpen}
+        onClose={onClose}
+        link={sliderData[currentSlide].link}
+      />
       <Container>
         <VStack spacing="0" w="100%">
           <Box w="100%" overflow="hidden" position="relative">
             <Slider {...settings}>
               {sliderData.map((item) => (
-                <Box key={item.id} w="100%" flexShrink={0}>
+                <Box
+                  key={item.id}
+                  w="100%"
+                  flexShrink={0}
+                  onClick={onOpen}
+                  cursor="pointer"
+                >
                   <SliderItem item={item} />
                 </Box>
               ))}

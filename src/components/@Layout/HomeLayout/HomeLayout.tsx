@@ -9,6 +9,7 @@ import {
   GridItem,
   GridItemProps,
   keyframes,
+  useDisclosure,
 } from '@chakra-ui/react'
 
 import { LAYOUT } from '@/constants/layout'
@@ -23,19 +24,22 @@ interface HomeLayoutProps {
   content?: JSX.Element
   containerProps?: ContainerProps
 }
-const bounceAnimation = keyframes`
-  0% {  transform: translateY(-100px); }
-  60% {  transform: translateY(10px); }
-  80% {  transform: translateY(-5px); }
-  100% {  transform: translateY(0px); }
-`
+
 const HomeLayout = ({
-  //
-  header = <HomeHeader />,
+  header,
   footer = <HomeFooter />,
   containerProps,
   content,
 }: HomeLayoutProps) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const defaultHeader = (
+    <HomeHeader
+      isDrawerOpen={isOpen}
+      onDrawerOpen={onOpen}
+      onDrawerClose={onClose}
+    />
+  )
   return (
     <Box w={'100%'} minH={'100vh'} display={'flex'} flexDirection={'column'}>
       <Flex
@@ -46,7 +50,7 @@ const HomeLayout = ({
         w={'100%'}
         justifyContent={'center'}
       >
-        {header}
+        {header || defaultHeader}
       </Flex>
       <Flex
         as={'main'}

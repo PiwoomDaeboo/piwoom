@@ -22,6 +22,7 @@ interface DrawerBasisProps extends Omit<DrawerProps, 'children'> {
     body?: ChakraProps
     footer?: ChakraProps
   }
+  visibleCloseButton?: boolean
 }
 
 export default function DrawerBasis({
@@ -29,6 +30,7 @@ export default function DrawerBasis({
   body,
   footer,
   styles,
+  visibleCloseButton = true,
   ...props
 }: DrawerBasisProps) {
   return (
@@ -36,11 +38,13 @@ export default function DrawerBasis({
       <Drawer size="sm" placement="right" {...props}>
         <DrawerOverlay />
         <DrawerContent bg="white" {...styles?.content}>
-          <DrawerCloseButton //
-            w="40px"
-            h="40px"
-            onClick={props.onClose}
-          />
+          {visibleCloseButton && (
+            <DrawerCloseButton //
+              w="40px"
+              h="40px"
+              onClick={props.onClose}
+            />
+          )}
           <DrawerHeader {...styles?.header}>{header}</DrawerHeader>
           <DrawerBody {...styles?.body}>{body}</DrawerBody>
           <DrawerFooter {...styles?.footer}>{footer}</DrawerFooter>

@@ -16,14 +16,14 @@ const baseStyle = definePartsStyle({
       bg: 'transparent',
     },
   },
-  panel: {
-    borderTop: '1px solid',
-    borderColor: 'border.basic.1',
-    p: '40px',
-    bg: 'background.basic.2',
-    textStyle: 'pre-body-4',
-    color: 'grey.10',
-  },
+  // panel: {
+  //   borderTop: '1px solid',
+  //   borderColor: 'border.basic.1',
+  //   p: '40px',
+  //   bg: 'background.basic.2',
+  //   textStyle: 'pre-body-4',
+  //   color: 'grey.10',
+  // },
   icon: {
     marginLeft: '20px',
     color: 'grey.8',
