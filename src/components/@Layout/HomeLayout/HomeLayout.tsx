@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react'
 
 import { LAYOUT } from '@/constants/layout'
+import Terms from '@/containers/Terms'
 
 import HomeFooter from './components/HomeFooter'
 import HomeHeader from './components/HomeHeader'
@@ -59,6 +60,7 @@ const HomeLayout = ({
         {...containerProps}
       >
         {content}
+        <Terms />
       </Flex>
       {footer}
     </Box>

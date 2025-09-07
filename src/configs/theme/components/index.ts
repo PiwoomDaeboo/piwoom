@@ -1,3 +1,4 @@
+import Accordion from './multi-parts/accordion'
 import Checkbox from './multi-parts/checkbox'
 import { Form, FormError, FormLabel } from './multi-parts/form-control'
 import Input from './multi-parts/input'
@@ -12,6 +13,7 @@ import Text from './single/text'
 import Textarea from './single/textarea'
 
 export const components = {
+  Accordion,
   Button,
   Checkbox,
   Container,

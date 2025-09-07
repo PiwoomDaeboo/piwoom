@@ -3,17 +3,17 @@ import React from 'react'
 import { NextSeo } from 'next-seo'
 
 import HomeLayout from '@/components/@Layout/HomeLayout'
-import Company from '@/containers/Company/Company'
+import NoticeDetail from '@/containers/NoticeDetail'
 
-function CompanyPage() {
+function NoticeDetailPage() {
   return (
     <>
       {/* output: 똑똑한개발자 | 메인 */}
       {/* titleTemplate는 /configs/seo/config.ts에서 변경 가능합니다. */}
-      <NextSeo title="회사소개" />
-      <HomeLayout content={<Company />} />
+      <NextSeo title="공지사항" />
+      <HomeLayout content={<NoticeDetail />} />
     </>
   )
 }
 
-export default CompanyPage
+export default NoticeDetailPage
