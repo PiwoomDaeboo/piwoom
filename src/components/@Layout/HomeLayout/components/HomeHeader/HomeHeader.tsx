@@ -115,9 +115,9 @@ const HomeHeader = ({
           py={'20px'}
           h={'80px'}
         >
-          {/* <Link variant={'unstyled'} href={ROUTES.MAIN}> */}
-          <HeaderlogoIcon boxSize={'127px'} h={'25px'} />
-          {/* </Link> */}
+          <Link variant={'unstyled'} href={ROUTES.MAIN}>
+            <HeaderlogoIcon boxSize={'127px'} h={'25px'} />
+          </Link>
           <HStack
             gap={'10px'}
             position={'relative'}
