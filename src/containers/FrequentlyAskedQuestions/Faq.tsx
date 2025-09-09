@@ -19,6 +19,7 @@ import {
 } from '@chakra-ui/react'
 
 import { Pagination } from '@/components/pagination'
+import { useFaqListQuery } from '@/generated/apis/Faq/Faq.query'
 import { CaretDownIcon, MagnifyingGlassIcon } from '@/generated/icons/MyIcons'
 
 // 공지사항 데이터 타입 정의
@@ -109,6 +110,16 @@ function Faq() {
 
   const displayData = [...notices, ...currentPosts]
 
+  const { data: faqList } = useFaqListQuery({
+    variables: {
+      query: {
+        q: '',
+        limit: (currentPage - 1) * postsPerPage,
+        offset: 0,
+      },
+    },
+  })
+
   return (
     <>
       <Flex w={'100%'} h={'100%'} py={'60px'} bg={'primary.1'}>
@@ -135,7 +146,7 @@ function Faq() {
           </Flex>
 
           {/* 공지사항 목록 렌더링 */}
-          {displayData.map((item) => (
+          {faqList?.results?.map((item) => (
             <Accordion key={item.id} allowToggle>
               <AccordionItem>
                 <AccordionButton>
@@ -154,7 +165,7 @@ function Faq() {
                         </Text>
                       </Flex>
                       <Text textStyle={'pre-body-3'} color={'grey.10'}>
-                        {item.title}
+                        {item.question}
                       </Text>
                     </HStack>
                   </Box>
@@ -169,13 +180,15 @@ function Faq() {
               </AccordionItem>
             </Accordion>
           ))}
-          <Flex justifyContent={'center'} mt={'48px'}>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
-          </Flex>
+          {faqList?.count !== 0 && (
+            <Flex justifyContent={'center'} mt={'48px'}>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </Flex>
+          )}
         </Flex>
       </Container>
     </>

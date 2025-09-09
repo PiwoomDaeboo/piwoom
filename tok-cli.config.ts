@@ -28,7 +28,7 @@ const config: RootConfig<{
     oneDepth: true,
   },
   'gen:api': {
-    swaggerSchemaUrl: 'https://api.magicube.co.kr/openapi.json/',
+    swaggerSchemaUrl: 'https://api.piwoom.com/openapi.json/',
   },
   'gen:theme': {
     tokenModes: {

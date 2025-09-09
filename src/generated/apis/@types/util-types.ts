@@ -20,6 +20,7 @@ export type DeepOmitReadOnly<T extends object | undefined> = Omit<
   },
   ReadonlyKeys<NonNullable<T>>
 >
+
 export type OmitReadOnly<T extends object> = Omit<T, ReadonlyKeys<T>>
 
 export type ReadonlyKeys<T extends object> = {

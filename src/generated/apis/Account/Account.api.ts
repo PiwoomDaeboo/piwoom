@@ -1,9 +1,9 @@
 import { ContentType, HttpClient, RequestParams } from '../@http-client'
 import {
+  AccountErrorMessageType,
+  AccountRequestType,
+  AccountType,
   CommonErrorType,
-  InquiryErrorMessageType,
-  InquiryRequestType,
-  InquiryType,
 } from '../@types/data-contracts'
 import { DeepOmitReadOnly } from '../@types/util-types'
 
@@ -13,24 +13,24 @@ import { DeepOmitReadOnly } from '../@types/util-types'
  * 스크립트가 실행될때, 파일을 항상 새로 쓰기 때문에 파일 수정시 작성내용이 제거 될 수 있습니다.
  */
 
-export class InquiryApi<
+export class AccountApi<
   SecurityDataType = unknown,
 > extends HttpClient<SecurityDataType> {
   /**
    * No description
    *
-   * @tags inquiry
-   * @name InquiryCreate
-   * @summary 문의 등록
-   * @request POST:/v1/inquiry/
+   * @tags account
+   * @name AccountVerifyCreate
+   * @summary 계좌 검증
+   * @request POST:/v1/account/verify/
    * @secure
    */
-  inquiryCreate = (variables: {
-    data: DeepOmitReadOnly<InquiryRequestType>
+  accountVerifyCreate = (variables: {
+    data: DeepOmitReadOnly<AccountRequestType>
     params?: RequestParams
   }) =>
-    this.request<InquiryType, InquiryErrorMessageType | CommonErrorType>({
-      path: `/v1/inquiry/`,
+    this.request<AccountType, AccountErrorMessageType | CommonErrorType>({
+      path: `/v1/account/verify/`,
       method: 'POST',
       body: variables.data,
       secure: true,

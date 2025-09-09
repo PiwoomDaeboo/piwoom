@@ -4,20 +4,351 @@
  * 스크립트가 실행될때, 파일을 항상 새로 쓰기 때문에 파일 수정시 작성내용이 제거 될 수 있습니다.
  */
 
-export interface CategoryType {
-  readonly id: number
+export interface AccountType {
   /**
-   * 이름
-   * @maxLength 20
+   * 은행
+   * * `0002` - 산업은행
+   * * `0003` - 기업은행
+   * * `0004` - 국민은행
+   * * `0007` - 수협은행
+   * * `0011` - 농협은행
+   * * `0012` - 농축협
+   * * `0020` - 우리은행
+   * * `0023` - SC제일은행
+   * * `0027` - 한국씨티은행
+   * * `0031` - 아이엠뱅크
+   * * `0032` - 부산은행
+   * * `0034` - 광주은행
+   * * `0035` - 제주은행
+   * * `0037` - 전북은행
+   * * `0039` - 경남은행
+   * * `0045` - 새마을금고
+   * * `0048` - 신협중앙회
+   * * `0050` - 상호저축은행
+   * * `0054` - HSBC은행
+   * * `0055` - 도이치은행
+   * * `0057` - JP모간체이스은행
+   * * `0060` - BOA은행
+   * * `0061` - 비엔피파리바은행
+   * * `0062` - 중국공상은행
+   * * `0063` - 중국은행
+   * * `0064` - 산림조합중앙회
+   * * `0067` - 중국건설은행
+   * * `0071` - 우체국
+   * * `0081` - 하나은행
+   * * `0088` - 신한은행
+   * * `0089` - 케이뱅크
+   * * `0090` - 카카오뱅크
+   * * `0092` - 토스뱅크
+   * * `0209` - 유안타증권
+   * * `0218` - KB증권
+   * * `0221` - 상상인증권
+   * * `0224` - BNK투자증권
+   * * `0225` - IBK투자증권
+   * * `0227` - 다올투자증권
+   * * `0238` - 미래에셋증권
+   * * `0240` - 삼성증권
+   * * `0243` - 한국투자증권
+   * * `0247` - NH투자증권
+   * * `0261` - 교보증권
+   * * `0262` - 아이엠증권
+   * * `0263` - 현대차증권
+   * * `0264` - 키움증권
+   * * `0265` - LS증권
+   * * `0266` - SK증권
+   * * `0267` - 대신증권
+   * * `0269` - 한화투자증권
+   * * `0270` - 하나증권
+   * * `0271` - 토스증권
+   * * `0278` - 신한금융투자
+   * * `0279` - DB금융투자
+   * * `0280` - 유진투자증권
+   * * `0287` - 메리츠증권
+   * * `0288` - 카카오페이증권
+   * * `0290` - 부국증권
+   * * `0291` - 신영증권
+   * * `0292` - 케이프투자증권
+   * * `0294` - 우리투자증권
    */
-  title: string
+  bank: AccountBankEnumType
+  /** 계좌번호 */
+  number: string
+  /** 생년월일 */
+  birth: string
+  /** 예금주 */
+  readonly holder: string
+}
+
+export interface AccountErrorMessageType {
+  nonField?: string[]
+  bank?: string[]
+  number?: string[]
+  birth?: string[]
+}
+
+export interface AccountRequestType {
+  /**
+   * 은행
+   * * `0002` - 산업은행
+   * * `0003` - 기업은행
+   * * `0004` - 국민은행
+   * * `0007` - 수협은행
+   * * `0011` - 농협은행
+   * * `0012` - 농축협
+   * * `0020` - 우리은행
+   * * `0023` - SC제일은행
+   * * `0027` - 한국씨티은행
+   * * `0031` - 아이엠뱅크
+   * * `0032` - 부산은행
+   * * `0034` - 광주은행
+   * * `0035` - 제주은행
+   * * `0037` - 전북은행
+   * * `0039` - 경남은행
+   * * `0045` - 새마을금고
+   * * `0048` - 신협중앙회
+   * * `0050` - 상호저축은행
+   * * `0054` - HSBC은행
+   * * `0055` - 도이치은행
+   * * `0057` - JP모간체이스은행
+   * * `0060` - BOA은행
+   * * `0061` - 비엔피파리바은행
+   * * `0062` - 중국공상은행
+   * * `0063` - 중국은행
+   * * `0064` - 산림조합중앙회
+   * * `0067` - 중국건설은행
+   * * `0071` - 우체국
+   * * `0081` - 하나은행
+   * * `0088` - 신한은행
+   * * `0089` - 케이뱅크
+   * * `0090` - 카카오뱅크
+   * * `0092` - 토스뱅크
+   * * `0209` - 유안타증권
+   * * `0218` - KB증권
+   * * `0221` - 상상인증권
+   * * `0224` - BNK투자증권
+   * * `0225` - IBK투자증권
+   * * `0227` - 다올투자증권
+   * * `0238` - 미래에셋증권
+   * * `0240` - 삼성증권
+   * * `0243` - 한국투자증권
+   * * `0247` - NH투자증권
+   * * `0261` - 교보증권
+   * * `0262` - 아이엠증권
+   * * `0263` - 현대차증권
+   * * `0264` - 키움증권
+   * * `0265` - LS증권
+   * * `0266` - SK증권
+   * * `0267` - 대신증권
+   * * `0269` - 한화투자증권
+   * * `0270` - 하나증권
+   * * `0271` - 토스증권
+   * * `0278` - 신한금융투자
+   * * `0279` - DB금융투자
+   * * `0280` - 유진투자증권
+   * * `0287` - 메리츠증권
+   * * `0288` - 카카오페이증권
+   * * `0290` - 부국증권
+   * * `0291` - 신영증권
+   * * `0292` - 케이프투자증권
+   * * `0294` - 우리투자증권
+   */
+  bank: AccountRequestBankEnumType
+  /**
+   * 계좌번호
+   * @minLength 1
+   */
+  number: string
+  /**
+   * 생년월일
+   * @minLength 1
+   */
+  birth: string
+}
+
+export interface CommonType {
+  gwSysNo: string
+  ssSysNo: string
+  threadNo: string
+  lbsNo: string
 }
 
 export interface CommonErrorType {
   detail: string
 }
 
-export interface GalleryType {
+export interface CommonRequestType {
+  /** @minLength 1 */
+  gwSysNo: string
+  /** @minLength 1 */
+  ssSysNo: string
+  /** @minLength 1 */
+  threadNo: string
+  /** @minLength 1 */
+  lbsNo: string
+}
+
+export interface CommonValidationErrorType {
+  gwSysNo?: string[]
+  ssSysNo?: string[]
+  threadNo?: string[]
+  lbsNo?: string[]
+}
+
+export interface CompanyType {
+  /** 법인번호 */
+  no: string
+  /** 회사명 */
+  name: string
+  /** 사업자등록번호 */
+  businessNo: string
+  /** 우편번호 */
+  postalCode: string
+  /** 기본주소 */
+  baseAddress: string
+  /** 상세주소 */
+  detailAddress: string
+  /** 전화번호 */
+  tel: string
+}
+
+export interface DisclaimerType {
+  /**
+   * 유형
+   * * `PRIVACY_POLICY` - 개인정보 처리방침
+   * * `LOAN_STANDARD_TERMS` - 대부거래 표준약관
+   * * `ILLEGAL_DEBT_COLLECTION_RESPONSE` - 불법채권추심대응요령
+   * * `EXTINCTION_DEBT_COLLECTION_NOTICE` - 소멸시효완성채권추심관련안내
+   * * `TERMS_OF_SERVICE` - 서비스이용약관
+   * * `DEBT_COLLECTION_SUPPORT_SYSTEM` - 채권추심 관련 지원제도 안내
+   * * `DEBT_COLLECTION_PROCEDURE` - 채권추심업무처리절차
+   * * `DEBT_COLLECTOR_OBLIGATIONS` - 채권추심자의 의무와 추심에 관한 개인금융채무자의 권리
+   */
+  kind: DisclaimerKindEnumType
+  /** 내용 */
+  body: string
+}
+
+export interface FaqType {
+  readonly id: number
+  /**
+   * 질문
+   * @maxLength 200
+   */
+  question: string
+  /** 답변 */
+  answer: string
+}
+
+export interface GovType {
+  readonly id: number
+  /**
+   * 상태
+   * * `PENDING` - 대기
+   * * `INCOME_CERTIFICATE` - 소득금액증명
+   * * `RESIDENT_REGISTRATION_COPY` - 주민등록표등초본교부
+   * * `HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION` - 건강보험자격득실확인서
+   * * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION` - 건강보험납부확인서
+   * * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2` - 건강보험납부확인서 2
+   * * `SUCCESS` - 성공
+   * * `FAILED` - 실패
+   */
+  status?: GovStatusEnumType
+  /** 실패사유 */
+  failedReason?: string
+  /** 로그 */
+  readonly logSet: GovLogType[]
+}
+
+export interface GovLogType {
+  /**
+   * 유형
+   * * `INCOME_CERTIFICATE` - 소득금액증명
+   * * `RESIDENT_REGISTRATION_COPY` - 주민등록표등초본교부
+   * * `HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION` - 건강보험자격득실확인서
+   * * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION` - 건강보험납부확인서
+   * * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2` - 건강보험납부확인서 2
+   */
+  kind: GovLogKindEnumType
+  file: string
+}
+
+export interface GovLoginType {
+  readonly id: number
+  /** 공통 */
+  readonly common: CommonType
+  /** 세션ID */
+  readonly sessionId: string
+}
+
+export interface GovLoginErrorMessageType {
+  nonField?: string[]
+  method?: string[]
+  name?: string[]
+  birth?: string[]
+  phone?: string[]
+  agency?: string[]
+}
+
+export interface GovLoginRequestType {
+  /**
+   * 인증방식
+   * * `KAKAO` - 카카오톡
+   * * `SAMSUNG` - 삼성패스
+   * * `KB` - 국민인증서
+   * * `PASS` - 통신사PASS
+   * * `SHINHAN` - 신한인증서
+   * * `NAVER` - 네이버
+   * * `TOSS` - 토스
+   * * `NH` - NH인증서
+   * * `WOORI` - 우리인증서
+   * * `HANA` - 하나인증서
+   */
+  method: GovLoginRequestMethodEnumType
+  /**
+   * 이름
+   * @minLength 1
+   * @maxLength 10
+   */
+  name: string
+  /**
+   * 생년월일
+   * @minLength 1
+   * @maxLength 8
+   */
+  birth: string
+  /**
+   * 휴대폰번호
+   * @minLength 1
+   * @maxLength 11
+   */
+  phone: string
+  /**
+   * 통신사
+   * * `01` - SKT
+   * * `02` - KT
+   * * `03` - LGU+
+   */
+  agency?: GovLoginRequestAgencyEnumType
+}
+
+export interface GovOtpErrorMessageType {
+  nonField?: string[]
+  common?: CommonValidationErrorType
+  sessionId?: string[]
+}
+
+export interface GovOtpRequestType {
+  /** 공통 */
+  common: CommonRequestType
+  /**
+   * 세션ID
+   * @minLength 1
+   * @maxLength 52
+   */
+  sessionId: string
+}
+
+export interface NoticeType {
   readonly id: number
   /**
    * 제목
@@ -25,130 +356,57 @@ export interface GalleryType {
    */
   title: string
   /**
-   * 메인 이미지
-   * @format uri
-   */
-  mainImage: string
-  /**
-   * 호버 이미지
-   * @format uri
-   */
-  hoverImage: string
-}
-
-export interface InquiryType {
-  readonly id: number
-  /**
-   * 이름
-   * @maxLength 20
-   */
-  name: string
-  /**
-   * 휴대폰 번호
-   * @maxLength 11
-   */
-  phone: string
-  /**
-   * 이메일
-   * @format email
-   * @maxLength 254
-   */
-  email: string
-  /**
-   * 모델
-   * @maxLength 50
-   */
-  item: string
-  /**
-   * 수량
-   * @min 0
-   * @max 2147483647
-   */
-  quantity: number
-  /** 문의사항 */
-  content: string
-  /** 파일 */
-  file: string
-  /**
    * 생성일시
    * @format date-time
    */
   readonly createdAt: string
 }
 
-export interface InquiryErrorMessageType {
-  nonField?: string[]
-  name?: string[]
-  phone?: string[]
-  email?: string[]
-  item?: string[]
-  quantity?: string[]
-  content?: string[]
-  file?: string[]
+export interface NoticeDetailType {
+  readonly id: number
+  /**
+   * 제목
+   * @maxLength 100
+   */
+  title: string
+  /** 내용 */
+  description: string
+  /**
+   * 생성일시
+   * @format date-time
+   */
+  readonly createdAt: string
+  /** 파일 */
+  fileSet: NoticeFileType[]
+  /** 이전글 */
+  readonly prevNotice: NoticeType | null
+  /** 이전글 */
+  readonly nextNotice: NoticeType | null
 }
 
-export interface InquiryRequestType {
+export interface NoticeFileType {
   /**
-   * 이름
-   * @minLength 1
-   * @maxLength 20
+   * 파일명
+   * @maxLength 100
    */
   name: string
   /**
-   * 휴대폰 번호
-   * @minLength 1
-   * @maxLength 11
+   * 위치
+   * @format uri
    */
-  phone: string
-  /**
-   * 이메일
-   * @format email
-   * @minLength 1
-   * @maxLength 254
-   */
-  email: string
-  /**
-   * 모델
-   * @minLength 1
-   * @maxLength 50
-   */
-  item: string
-  /**
-   * 수량
-   * @min 0
-   * @max 2147483647
-   */
-  quantity: number
-  /**
-   * 문의사항
-   * @minLength 1
-   */
-  content: string
-  /** 파일 */
-  file: string
+  path: string
 }
 
-export interface OrderType {
-  /**
-   * 코드
-   * @pattern ^[-a-zA-Z0-9_]+$
-   */
-  readonly code: string
-  /**
-   * 상태
-   * 확정 상태에서는 고객이 디자인을 수정할 수 없습니다.
-   *
-   * * `PENDING` - 대기
-   * * `SUBMITTED` - 제출
-   * * `CONFIRMED` - 확정
-   */
-  status?: OrderStatusEnumType
-}
-
-export interface PaginatedGalleryListType {
+export interface PaginatedFaqListType {
   count?: number
-  cursor?: string | null
-  results?: GalleryType[]
+  isNext?: boolean
+  results?: FaqType[]
+}
+
+export interface PaginatedNoticeListType {
+  count?: number
+  isNext?: boolean
+  results?: NoticeType[]
 }
 
 export interface PresignedType {
@@ -159,102 +417,521 @@ export interface PresignedType {
 
 export interface PresignedErrorMessageType {
   nonField?: string[]
-  fileName?: string[]
-  fileType?: string[]
   fieldChoice?: string[]
+  fileName?: string[]
   isDownload?: string[]
 }
 
 export interface PresignedRequestType {
-  /** @minLength 1 */
-  fileName: string
   /**
-   * * `image` - 이미지 그래픽 데이터(i.e. jpeg, png, gif, apng, etc.)
-   * * `audio` - 오디오/음악 데이터(i.e. mpeg, vorbis, etc.)
-   * * `text` - 텍스트 데이터(i.e. plain, csv, html, etc.)
-   * * `video` - 비디오 데이터(i.e. mp4, etc.)
-   * * `application` - 이진 데이터(i.e. pdf, zip, pkcs8, etc.)
-   */
-  fileType: PresignedRequestFileTypeEnumType
-  /**
-   * * `product.Product.thumbnail` - 썸네일
-   * * `view.View.thumbnail` - 썸네일
-   * * `view.View.base_image` - 베이스 이미지
-   * * `view.View.overlay_image` - 오버레이 이미지
-   * * `font.Font.normal_400` - 기본 폰트
-   * * `font.Font.normal_700` - 볼드 폰트
-   * * `font.Font.italic_400` - 이탤릭 기본 폰트
-   * * `font.Font.italic_700` - 이탤릭 볼드 폰트
-   * * `design.Category.thumbnail` - 썸네일
-   * * `design.Design.image` - 이미지
-   * * `inquiry.Inquiry.file` - 파일
-   * * `gallery.Gallery.main_image` - 메인 이미지
-   * * `gallery.Gallery.hover_image` - 호버 이미지
+   * * `notice.File.path` - 위치
+   * * `loan.Loan.income_certificate` - 소득금액증명원
+   * * `loan.Loan.resident_registration_copy` - 주민등록등본
+   * * `loan.Loan.health_insurance_eligibility_confirmation` - 건강보험 자격득실확인서
+   * * `loan.Loan.health_insurance_payment_confirmation` - 건강보험 납부확인서
+   * * `loan.Loan.health_insurance_payment_confirmation_2` - 건강보험 납부확인서 2
+   * * `loan.Loan.identity_card` - 신분증
+   * * `loan.File.path` - 위치
+   * * `gov.GovLog.file` - 파일
    */
   fieldChoice: PresignedRequestFieldChoiceEnumType
-  isDownload?: boolean
+  /** @minLength 1 */
+  fileName: string
+  isDownload: boolean
+}
+
+export interface SettingType {
+  /** 대출 활성화 */
+  isLoan?: boolean
+  /** 정부24 제출 활성화 */
+  isGov?: boolean
+  /** 위텍스 제출 활성화 */
+  isWetax?: boolean
+}
+
+export interface UserIdentityVerificationType {
+  /** 본인인증 토큰 */
+  readonly identityVerificationToken: string
+}
+
+export interface UserIdentityVerificationErrorMessageType {
+  nonField?: string[]
+  identityVerificationId?: string[]
+}
+
+export interface UserIdentityVerificationRequestType {
+  /**
+   * 본인인증 id
+   * @minLength 1
+   */
+  identityVerificationId: string
+}
+
+export interface UserLoginType {
+  readonly accessToken: string
+  readonly refreshToken: string
+}
+
+export interface UserLoginErrorMessageType {
+  nonField?: string[]
+  identityVerificationId?: string[]
+}
+
+export interface UserLoginRequestType {
+  /**
+   * 본인인증 id
+   * @minLength 1
+   */
+  identityVerificationId: string
+}
+
+export interface UserRefreshType {
+  refreshToken: string
+  readonly accessToken: string
+}
+
+export interface UserRefreshErrorMessageType {
+  nonField?: string[]
+  refreshToken?: string[]
+}
+
+export interface UserRefreshRequestType {
+  /** @minLength 1 */
+  refreshToken: string
 }
 
 /**
-* 확정 상태에서는 고객이 디자인을 수정할 수 없습니다.
-
-* `PENDING` - 대기
-* `SUBMITTED` - 제출
-* `CONFIRMED` - 확정
-*/
-export type OrderStatusEnumType = keyof typeof OrderStatusEnumTypeMap
-export const OrderStatusEnumTypeMap = {
-  CONFIRMED: '확정',
-  PENDING: '대기',
-  SUBMITTED: '제출',
-} as const
-
-/**
- * * `image` - 이미지 그래픽 데이터(i.e. jpeg, png, gif, apng, etc.)
- * `audio` - 오디오/음악 데이터(i.e. mpeg, vorbis, etc.)
- * `text` - 텍스트 데이터(i.e. plain, csv, html, etc.)
- * `video` - 비디오 데이터(i.e. mp4, etc.)
- * `application` - 이진 데이터(i.e. pdf, zip, pkcs8, etc.)
+ * * `0002` - 산업은행
+ * `0003` - 기업은행
+ * `0004` - 국민은행
+ * `0007` - 수협은행
+ * `0011` - 농협은행
+ * `0012` - 농축협
+ * `0020` - 우리은행
+ * `0023` - SC제일은행
+ * `0027` - 한국씨티은행
+ * `0031` - 아이엠뱅크
+ * `0032` - 부산은행
+ * `0034` - 광주은행
+ * `0035` - 제주은행
+ * `0037` - 전북은행
+ * `0039` - 경남은행
+ * `0045` - 새마을금고
+ * `0048` - 신협중앙회
+ * `0050` - 상호저축은행
+ * `0054` - HSBC은행
+ * `0055` - 도이치은행
+ * `0057` - JP모간체이스은행
+ * `0060` - BOA은행
+ * `0061` - 비엔피파리바은행
+ * `0062` - 중국공상은행
+ * `0063` - 중국은행
+ * `0064` - 산림조합중앙회
+ * `0067` - 중국건설은행
+ * `0071` - 우체국
+ * `0081` - 하나은행
+ * `0088` - 신한은행
+ * `0089` - 케이뱅크
+ * `0090` - 카카오뱅크
+ * `0092` - 토스뱅크
+ * `0209` - 유안타증권
+ * `0218` - KB증권
+ * `0221` - 상상인증권
+ * `0224` - BNK투자증권
+ * `0225` - IBK투자증권
+ * `0227` - 다올투자증권
+ * `0238` - 미래에셋증권
+ * `0240` - 삼성증권
+ * `0243` - 한국투자증권
+ * `0247` - NH투자증권
+ * `0261` - 교보증권
+ * `0262` - 아이엠증권
+ * `0263` - 현대차증권
+ * `0264` - 키움증권
+ * `0265` - LS증권
+ * `0266` - SK증권
+ * `0267` - 대신증권
+ * `0269` - 한화투자증권
+ * `0270` - 하나증권
+ * `0271` - 토스증권
+ * `0278` - 신한금융투자
+ * `0279` - DB금융투자
+ * `0280` - 유진투자증권
+ * `0287` - 메리츠증권
+ * `0288` - 카카오페이증권
+ * `0290` - 부국증권
+ * `0291` - 신영증권
+ * `0292` - 케이프투자증권
+ * `0294` - 우리투자증권
  */
-export type PresignedRequestFileTypeEnumType =
-  keyof typeof PresignedRequestFileTypeEnumTypeMap
-export const PresignedRequestFileTypeEnumTypeMap = {
-  application: '이진 데이터(i.e. pdf, zip, pkcs8, etc.)',
-  audio: '오디오/음악 데이터(i.e. mpeg, vorbis, etc.)',
-  image: '이미지 그래픽 데이터(i.e. jpeg, png, gif, apng, etc.)',
-  text: '텍스트 데이터(i.e. plain, csv, html, etc.)',
-  video: '비디오 데이터(i.e. mp4, etc.)',
+export type AccountBankEnumType = keyof typeof AccountBankEnumTypeMap
+export const AccountBankEnumTypeMap = {
+  '0002': '산업은행',
+  '0003': '기업은행',
+  '0004': '국민은행',
+  '0007': '수협은행',
+  '0011': '농협은행',
+  '0012': '농축협',
+  '0020': '우리은행',
+  '0023': 'SC제일은행',
+  '0027': '한국씨티은행',
+  '0031': '아이엠뱅크',
+  '0032': '부산은행',
+  '0034': '광주은행',
+  '0035': '제주은행',
+  '0037': '전북은행',
+  '0039': '경남은행',
+  '0045': '새마을금고',
+  '0048': '신협중앙회',
+  '0050': '상호저축은행',
+  '0054': 'HSBC은행',
+  '0055': '도이치은행',
+  '0057': 'JP모간체이스은행',
+  '0060': 'BOA은행',
+  '0061': '비엔피파리바은행',
+  '0062': '중국공상은행',
+  '0063': '중국은행',
+  '0064': '산림조합중앙회',
+  '0067': '중국건설은행',
+  '0071': '우체국',
+  '0081': '하나은행',
+  '0088': '신한은행',
+  '0089': '케이뱅크',
+  '0090': '카카오뱅크',
+  '0092': '토스뱅크',
+  '0209': '유안타증권',
+  '0218': 'KB증권',
+  '0221': '상상인증권',
+  '0224': 'BNK투자증권',
+  '0225': 'IBK투자증권',
+  '0227': '다올투자증권',
+  '0238': '미래에셋증권',
+  '0240': '삼성증권',
+  '0243': '한국투자증권',
+  '0247': 'NH투자증권',
+  '0261': '교보증권',
+  '0262': '아이엠증권',
+  '0263': '현대차증권',
+  '0264': '키움증권',
+  '0265': 'LS증권',
+  '0266': 'SK증권',
+  '0267': '대신증권',
+  '0269': '한화투자증권',
+  '0270': '하나증권',
+  '0271': '토스증권',
+  '0278': '신한금융투자',
+  '0279': 'DB금융투자',
+  '0280': '유진투자증권',
+  '0287': '메리츠증권',
+  '0288': '카카오페이증권',
+  '0290': '부국증권',
+  '0291': '신영증권',
+  '0292': '케이프투자증권',
+  '0294': '우리투자증권',
 } as const
 
 /**
- * * `product.Product.thumbnail` - 썸네일
- * `view.View.thumbnail` - 썸네일
- * `view.View.base_image` - 베이스 이미지
- * `view.View.overlay_image` - 오버레이 이미지
- * `font.Font.normal_400` - 기본 폰트
- * `font.Font.normal_700` - 볼드 폰트
- * `font.Font.italic_400` - 이탤릭 기본 폰트
- * `font.Font.italic_700` - 이탤릭 볼드 폰트
- * `design.Category.thumbnail` - 썸네일
- * `design.Design.image` - 이미지
- * `inquiry.Inquiry.file` - 파일
- * `gallery.Gallery.main_image` - 메인 이미지
- * `gallery.Gallery.hover_image` - 호버 이미지
+ * * `0002` - 산업은행
+ * `0003` - 기업은행
+ * `0004` - 국민은행
+ * `0007` - 수협은행
+ * `0011` - 농협은행
+ * `0012` - 농축협
+ * `0020` - 우리은행
+ * `0023` - SC제일은행
+ * `0027` - 한국씨티은행
+ * `0031` - 아이엠뱅크
+ * `0032` - 부산은행
+ * `0034` - 광주은행
+ * `0035` - 제주은행
+ * `0037` - 전북은행
+ * `0039` - 경남은행
+ * `0045` - 새마을금고
+ * `0048` - 신협중앙회
+ * `0050` - 상호저축은행
+ * `0054` - HSBC은행
+ * `0055` - 도이치은행
+ * `0057` - JP모간체이스은행
+ * `0060` - BOA은행
+ * `0061` - 비엔피파리바은행
+ * `0062` - 중국공상은행
+ * `0063` - 중국은행
+ * `0064` - 산림조합중앙회
+ * `0067` - 중국건설은행
+ * `0071` - 우체국
+ * `0081` - 하나은행
+ * `0088` - 신한은행
+ * `0089` - 케이뱅크
+ * `0090` - 카카오뱅크
+ * `0092` - 토스뱅크
+ * `0209` - 유안타증권
+ * `0218` - KB증권
+ * `0221` - 상상인증권
+ * `0224` - BNK투자증권
+ * `0225` - IBK투자증권
+ * `0227` - 다올투자증권
+ * `0238` - 미래에셋증권
+ * `0240` - 삼성증권
+ * `0243` - 한국투자증권
+ * `0247` - NH투자증권
+ * `0261` - 교보증권
+ * `0262` - 아이엠증권
+ * `0263` - 현대차증권
+ * `0264` - 키움증권
+ * `0265` - LS증권
+ * `0266` - SK증권
+ * `0267` - 대신증권
+ * `0269` - 한화투자증권
+ * `0270` - 하나증권
+ * `0271` - 토스증권
+ * `0278` - 신한금융투자
+ * `0279` - DB금융투자
+ * `0280` - 유진투자증권
+ * `0287` - 메리츠증권
+ * `0288` - 카카오페이증권
+ * `0290` - 부국증권
+ * `0291` - 신영증권
+ * `0292` - 케이프투자증권
+ * `0294` - 우리투자증권
+ */
+export type AccountRequestBankEnumType =
+  keyof typeof AccountRequestBankEnumTypeMap
+export const AccountRequestBankEnumTypeMap = {
+  '0002': '산업은행',
+  '0003': '기업은행',
+  '0004': '국민은행',
+  '0007': '수협은행',
+  '0011': '농협은행',
+  '0012': '농축협',
+  '0020': '우리은행',
+  '0023': 'SC제일은행',
+  '0027': '한국씨티은행',
+  '0031': '아이엠뱅크',
+  '0032': '부산은행',
+  '0034': '광주은행',
+  '0035': '제주은행',
+  '0037': '전북은행',
+  '0039': '경남은행',
+  '0045': '새마을금고',
+  '0048': '신협중앙회',
+  '0050': '상호저축은행',
+  '0054': 'HSBC은행',
+  '0055': '도이치은행',
+  '0057': 'JP모간체이스은행',
+  '0060': 'BOA은행',
+  '0061': '비엔피파리바은행',
+  '0062': '중국공상은행',
+  '0063': '중국은행',
+  '0064': '산림조합중앙회',
+  '0067': '중국건설은행',
+  '0071': '우체국',
+  '0081': '하나은행',
+  '0088': '신한은행',
+  '0089': '케이뱅크',
+  '0090': '카카오뱅크',
+  '0092': '토스뱅크',
+  '0209': '유안타증권',
+  '0218': 'KB증권',
+  '0221': '상상인증권',
+  '0224': 'BNK투자증권',
+  '0225': 'IBK투자증권',
+  '0227': '다올투자증권',
+  '0238': '미래에셋증권',
+  '0240': '삼성증권',
+  '0243': '한국투자증권',
+  '0247': 'NH투자증권',
+  '0261': '교보증권',
+  '0262': '아이엠증권',
+  '0263': '현대차증권',
+  '0264': '키움증권',
+  '0265': 'LS증권',
+  '0266': 'SK증권',
+  '0267': '대신증권',
+  '0269': '한화투자증권',
+  '0270': '하나증권',
+  '0271': '토스증권',
+  '0278': '신한금융투자',
+  '0279': 'DB금융투자',
+  '0280': '유진투자증권',
+  '0287': '메리츠증권',
+  '0288': '카카오페이증권',
+  '0290': '부국증권',
+  '0291': '신영증권',
+  '0292': '케이프투자증권',
+  '0294': '우리투자증권',
+} as const
+
+/**
+ * * `PRIVACY_POLICY` - 개인정보 처리방침
+ * `LOAN_STANDARD_TERMS` - 대부거래 표준약관
+ * `ILLEGAL_DEBT_COLLECTION_RESPONSE` - 불법채권추심대응요령
+ * `EXTINCTION_DEBT_COLLECTION_NOTICE` - 소멸시효완성채권추심관련안내
+ * `TERMS_OF_SERVICE` - 서비스이용약관
+ * `DEBT_COLLECTION_SUPPORT_SYSTEM` - 채권추심 관련 지원제도 안내
+ * `DEBT_COLLECTION_PROCEDURE` - 채권추심업무처리절차
+ * `DEBT_COLLECTOR_OBLIGATIONS` - 채권추심자의 의무와 추심에 관한 개인금융채무자의 권리
+ */
+export type DisclaimerKindEnumType = keyof typeof DisclaimerKindEnumTypeMap
+export const DisclaimerKindEnumTypeMap = {
+  DEBT_COLLECTION_PROCEDURE: '채권추심업무처리절차',
+  DEBT_COLLECTION_SUPPORT_SYSTEM: '채권추심 관련 지원제도 안내',
+  DEBT_COLLECTOR_OBLIGATIONS:
+    '채권추심자의 의무와 추심에 관한 개인금융채무자의 권리',
+  EXTINCTION_DEBT_COLLECTION_NOTICE: '소멸시효완성채권추심관련안내',
+  ILLEGAL_DEBT_COLLECTION_RESPONSE: '불법채권추심대응요령',
+  LOAN_STANDARD_TERMS: '대부거래 표준약관',
+  PRIVACY_POLICY: '개인정보 처리방침',
+  TERMS_OF_SERVICE: '서비스이용약관',
+} as const
+
+/**
+ * * `PENDING` - 대기
+ * `INCOME_CERTIFICATE` - 소득금액증명
+ * `RESIDENT_REGISTRATION_COPY` - 주민등록표등초본교부
+ * `HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION` - 건강보험자격득실확인서
+ * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION` - 건강보험납부확인서
+ * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2` - 건강보험납부확인서 2
+ * `SUCCESS` - 성공
+ * `FAILED` - 실패
+ */
+export type GovStatusEnumType = keyof typeof GovStatusEnumTypeMap
+export const GovStatusEnumTypeMap = {
+  FAILED: '실패',
+  HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION: '건강보험자격득실확인서',
+  HEALTH_INSURANCE_PAYMENT_CONFIRMATION: '건강보험납부확인서',
+  HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2: '건강보험납부확인서 2',
+  INCOME_CERTIFICATE: '소득금액증명',
+  PENDING: '대기',
+  RESIDENT_REGISTRATION_COPY: '주민등록표등초본교부',
+  SUCCESS: '성공',
+} as const
+
+/**
+ * * `INCOME_CERTIFICATE` - 소득금액증명
+ * `RESIDENT_REGISTRATION_COPY` - 주민등록표등초본교부
+ * `HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION` - 건강보험자격득실확인서
+ * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION` - 건강보험납부확인서
+ * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2` - 건강보험납부확인서 2
+ */
+export type GovLogKindEnumType = keyof typeof GovLogKindEnumTypeMap
+export const GovLogKindEnumTypeMap = {
+  HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION: '건강보험자격득실확인서',
+  HEALTH_INSURANCE_PAYMENT_CONFIRMATION: '건강보험납부확인서',
+  HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2: '건강보험납부확인서 2',
+  INCOME_CERTIFICATE: '소득금액증명',
+  RESIDENT_REGISTRATION_COPY: '주민등록표등초본교부',
+} as const
+
+/**
+ * * `KAKAO` - 카카오톡
+ * `SAMSUNG` - 삼성패스
+ * `KB` - 국민인증서
+ * `PASS` - 통신사PASS
+ * `SHINHAN` - 신한인증서
+ * `NAVER` - 네이버
+ * `TOSS` - 토스
+ * `NH` - NH인증서
+ * `WOORI` - 우리인증서
+ * `HANA` - 하나인증서
+ */
+export type GovLoginRequestMethodEnumType =
+  keyof typeof GovLoginRequestMethodEnumTypeMap
+export const GovLoginRequestMethodEnumTypeMap = {
+  HANA: '하나인증서',
+  KAKAO: '카카오톡',
+  KB: '국민인증서',
+  NAVER: '네이버',
+  NH: 'NH인증서',
+  PASS: '통신사PASS',
+  SAMSUNG: '삼성패스',
+  SHINHAN: '신한인증서',
+  TOSS: '토스',
+  WOORI: '우리인증서',
+} as const
+
+/**
+ * * `01` - SKT
+ * `02` - KT
+ * `03` - LGU+
+ */
+export type GovLoginRequestAgencyEnumType =
+  keyof typeof GovLoginRequestAgencyEnumTypeMap
+export const GovLoginRequestAgencyEnumTypeMap = {
+  '01': 'SKT',
+  '02': 'KT',
+  '03': 'LGU+',
+} as const
+
+/**
+ * * `notice.File.path` - 위치
+ * `loan.Loan.income_certificate` - 소득금액증명원
+ * `loan.Loan.resident_registration_copy` - 주민등록등본
+ * `loan.Loan.health_insurance_eligibility_confirmation` - 건강보험 자격득실확인서
+ * `loan.Loan.health_insurance_payment_confirmation` - 건강보험 납부확인서
+ * `loan.Loan.health_insurance_payment_confirmation_2` - 건강보험 납부확인서 2
+ * `loan.Loan.identity_card` - 신분증
+ * `loan.File.path` - 위치
+ * `gov.GovLog.file` - 파일
  */
 export type PresignedRequestFieldChoiceEnumType =
   keyof typeof PresignedRequestFieldChoiceEnumTypeMap
 export const PresignedRequestFieldChoiceEnumTypeMap = {
-  'design.Category.thumbnail': '썸네일',
-  'design.Design.image': '이미지',
-  'font.Font.italic_400': '이탤릭 기본 폰트',
-  'font.Font.italic_700': '이탤릭 볼드 폰트',
-  'font.Font.normal_400': '기본 폰트',
-  'font.Font.normal_700': '볼드 폰트',
-  'gallery.Gallery.hover_image': '호버 이미지',
-  'gallery.Gallery.main_image': '메인 이미지',
-  'inquiry.Inquiry.file': '파일',
-  'product.Product.thumbnail': '썸네일',
-  'view.View.base_image': '베이스 이미지',
-  'view.View.overlay_image': '오버레이 이미지',
-  'view.View.thumbnail': '썸네일',
+  'gov.GovLog.file': '파일',
+  'loan.File.path': '위치',
+  'loan.Loan.health_insurance_eligibility_confirmation':
+    '건강보험 자격득실확인서',
+  'loan.Loan.health_insurance_payment_confirmation': '건강보험 납부확인서',
+  'loan.Loan.health_insurance_payment_confirmation_2': '건강보험 납부확인서 2',
+  'loan.Loan.identity_card': '신분증',
+  'loan.Loan.income_certificate': '소득금액증명원',
+  'loan.Loan.resident_registration_copy': '주민등록등본',
+  'notice.File.path': '위치',
+} as const
+
+/**
+ * * `PRIVACY_POLICY` - 개인정보 처리방침
+ * `LOAN_STANDARD_TERMS` - 대부거래 표준약관
+ * `ILLEGAL_DEBT_COLLECTION_RESPONSE` - 불법채권추심대응요령
+ * `EXTINCTION_DEBT_COLLECTION_NOTICE` - 소멸시효완성채권추심관련안내
+ * `TERMS_OF_SERVICE` - 서비스이용약관
+ * `DEBT_COLLECTION_SUPPORT_SYSTEM` - 채권추심 관련 지원제도 안내
+ * `DEBT_COLLECTION_PROCEDURE` - 채권추심업무처리절차
+ * `DEBT_COLLECTOR_OBLIGATIONS` - 채권추심자의 의무와 추심에 관한 개인금융채무자의 권리
+ */
+export type DisclaimerRetrieveParamsKindEnumType =
+  keyof typeof DisclaimerRetrieveParamsKindEnumTypeMap
+export const DisclaimerRetrieveParamsKindEnumTypeMap = {
+  DEBT_COLLECTION_PROCEDURE: '채권추심업무처리절차',
+  DEBT_COLLECTION_SUPPORT_SYSTEM: '채권추심 관련 지원제도 안내',
+  DEBT_COLLECTOR_OBLIGATIONS:
+    '채권추심자의 의무와 추심에 관한 개인금융채무자의 권리',
+  EXTINCTION_DEBT_COLLECTION_NOTICE: '소멸시효완성채권추심관련안내',
+  ILLEGAL_DEBT_COLLECTION_RESPONSE: '불법채권추심대응요령',
+  LOAN_STANDARD_TERMS: '대부거래 표준약관',
+  PRIVACY_POLICY: '개인정보 처리방침',
+  TERMS_OF_SERVICE: '서비스이용약관',
+} as const
+
+/**
+ * * `PRIVACY_POLICY` - 개인정보 처리방침
+ * `LOAN_STANDARD_TERMS` - 대부거래 표준약관
+ * `ILLEGAL_DEBT_COLLECTION_RESPONSE` - 불법채권추심대응요령
+ * `EXTINCTION_DEBT_COLLECTION_NOTICE` - 소멸시효완성채권추심관련안내
+ * `TERMS_OF_SERVICE` - 서비스이용약관
+ * `DEBT_COLLECTION_SUPPORT_SYSTEM` - 채권추심 관련 지원제도 안내
+ * `DEBT_COLLECTION_PROCEDURE` - 채권추심업무처리절차
+ * `DEBT_COLLECTOR_OBLIGATIONS` - 채권추심자의 의무와 추심에 관한 개인금융채무자의 권리
+ */
+export type DisclaimerRetrieveParamsEnumType =
+  keyof typeof DisclaimerRetrieveParamsEnumTypeMap
+export const DisclaimerRetrieveParamsEnumTypeMap = {
+  DEBT_COLLECTION_PROCEDURE: '채권추심업무처리절차',
+  DEBT_COLLECTION_SUPPORT_SYSTEM: '채권추심 관련 지원제도 안내',
+  DEBT_COLLECTOR_OBLIGATIONS:
+    '채권추심자의 의무와 추심에 관한 개인금융채무자의 권리',
+  EXTINCTION_DEBT_COLLECTION_NOTICE: '소멸시효완성채권추심관련안내',
+  ILLEGAL_DEBT_COLLECTION_RESPONSE: '불법채권추심대응요령',
+  LOAN_STANDARD_TERMS: '대부거래 표준약관',
+  PRIVACY_POLICY: '개인정보 처리방침',
+  TERMS_OF_SERVICE: '서비스이용약관',
 } as const

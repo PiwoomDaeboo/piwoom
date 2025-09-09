@@ -4,10 +4,25 @@ export const MY_IMAGES = {
   180: { src: '/images/180.png', alt: '180' },
   192: { src: '/images/192.png', alt: '192' },
   LOGO: { src: '/images/LOGO.png', alt: 'logo' },
+  AWS_INTRODUCTION_MO: {
+    src: '/images/aws_introduction_mo.png',
+    alt: 'aws-introduction-mo',
+  },
+  AWS_INTRODUCTION_PC: {
+    src: '/images/aws_introduction_pc.png',
+    alt: 'aws-introduction-pc',
+  },
+  AWS_INTRODUCTION_TAB: {
+    src: '/images/aws_introduction_tab.png',
+    alt: 'aws-introduction-tab',
+  },
   BELT_IMAGE: { src: '/images/belt_image.png', alt: 'belt-image' },
   BELT_IMAGE_MO: { src: '/images/belt_image_mo.png', alt: 'belt-image-mo' },
   BELT_IMAGE_PC: { src: '/images/belt_image_pc.png', alt: 'belt-image-pc' },
   BELT_IMAGE_TAB: { src: '/images/belt_image_tab.png', alt: 'belt-image-tab' },
+  BG_CEO_MO: { src: '/images/bg_ceo_mo.png', alt: 'bg-ceo-mo' },
+  BG_CEO_PC: { src: '/images/bg_ceo_pc.png', alt: 'bg-ceo-pc' },
+  BG_CEO_TAB: { src: '/images/bg_ceo_tab.png', alt: 'bg-ceo-tab' },
   CEO: { src: '/images/ceo.png', alt: 'ceo' },
   CHECKLIST: { src: '/images/checklist.png', alt: 'checklist' },
   COMPANYSECTION_1: {
