@@ -564,7 +564,9 @@ export interface UserRefreshRequestType {
  * `0292` - 케이프투자증권
  * `0294` - 우리투자증권
  */
+
 export type AccountBankEnumType = keyof typeof AccountBankEnumTypeMap
+
 export const AccountBankEnumTypeMap = {
   '0002': '산업은행',
   '0003': '기업은행',
@@ -694,8 +696,10 @@ export const AccountBankEnumTypeMap = {
  * `0292` - 케이프투자증권
  * `0294` - 우리투자증권
  */
+
 export type AccountRequestBankEnumType =
   keyof typeof AccountRequestBankEnumTypeMap
+
 export const AccountRequestBankEnumTypeMap = {
   '0002': '산업은행',
   '0003': '기업은행',
@@ -771,7 +775,9 @@ export const AccountRequestBankEnumTypeMap = {
  * `DEBT_COLLECTION_PROCEDURE` - 채권추심업무처리절차
  * `DEBT_COLLECTOR_OBLIGATIONS` - 채권추심자의 의무와 추심에 관한 개인금융채무자의 권리
  */
+
 export type DisclaimerKindEnumType = keyof typeof DisclaimerKindEnumTypeMap
+
 export const DisclaimerKindEnumTypeMap = {
   DEBT_COLLECTION_PROCEDURE: '채권추심업무처리절차',
   DEBT_COLLECTION_SUPPORT_SYSTEM: '채권추심 관련 지원제도 안내',
@@ -794,7 +800,9 @@ export const DisclaimerKindEnumTypeMap = {
  * `SUCCESS` - 성공
  * `FAILED` - 실패
  */
+
 export type GovStatusEnumType = keyof typeof GovStatusEnumTypeMap
+
 export const GovStatusEnumTypeMap = {
   FAILED: '실패',
   HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION: '건강보험자격득실확인서',
@@ -813,7 +821,9 @@ export const GovStatusEnumTypeMap = {
  * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION` - 건강보험납부확인서
  * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2` - 건강보험납부확인서 2
  */
+
 export type GovLogKindEnumType = keyof typeof GovLogKindEnumTypeMap
+
 export const GovLogKindEnumTypeMap = {
   HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION: '건강보험자격득실확인서',
   HEALTH_INSURANCE_PAYMENT_CONFIRMATION: '건강보험납부확인서',
@@ -834,8 +844,10 @@ export const GovLogKindEnumTypeMap = {
  * `WOORI` - 우리인증서
  * `HANA` - 하나인증서
  */
+
 export type GovLoginRequestMethodEnumType =
   keyof typeof GovLoginRequestMethodEnumTypeMap
+
 export const GovLoginRequestMethodEnumTypeMap = {
   HANA: '하나인증서',
   KAKAO: '카카오톡',
@@ -854,8 +866,10 @@ export const GovLoginRequestMethodEnumTypeMap = {
  * `02` - KT
  * `03` - LGU+
  */
+
 export type GovLoginRequestAgencyEnumType =
   keyof typeof GovLoginRequestAgencyEnumTypeMap
+
 export const GovLoginRequestAgencyEnumTypeMap = {
   '01': 'SKT',
   '02': 'KT',
@@ -873,8 +887,10 @@ export const GovLoginRequestAgencyEnumTypeMap = {
  * `loan.File.path` - 위치
  * `gov.GovLog.file` - 파일
  */
+
 export type PresignedRequestFieldChoiceEnumType =
   keyof typeof PresignedRequestFieldChoiceEnumTypeMap
+
 export const PresignedRequestFieldChoiceEnumTypeMap = {
   'gov.GovLog.file': '파일',
   'loan.File.path': '위치',
@@ -898,8 +914,10 @@ export const PresignedRequestFieldChoiceEnumTypeMap = {
  * `DEBT_COLLECTION_PROCEDURE` - 채권추심업무처리절차
  * `DEBT_COLLECTOR_OBLIGATIONS` - 채권추심자의 의무와 추심에 관한 개인금융채무자의 권리
  */
+
 export type DisclaimerRetrieveParamsKindEnumType =
   keyof typeof DisclaimerRetrieveParamsKindEnumTypeMap
+
 export const DisclaimerRetrieveParamsKindEnumTypeMap = {
   DEBT_COLLECTION_PROCEDURE: '채권추심업무처리절차',
   DEBT_COLLECTION_SUPPORT_SYSTEM: '채권추심 관련 지원제도 안내',
@@ -922,8 +940,10 @@ export const DisclaimerRetrieveParamsKindEnumTypeMap = {
  * `DEBT_COLLECTION_PROCEDURE` - 채권추심업무처리절차
  * `DEBT_COLLECTOR_OBLIGATIONS` - 채권추심자의 의무와 추심에 관한 개인금융채무자의 권리
  */
+
 export type DisclaimerRetrieveParamsEnumType =
   keyof typeof DisclaimerRetrieveParamsEnumTypeMap
+
 export const DisclaimerRetrieveParamsEnumTypeMap = {
   DEBT_COLLECTION_PROCEDURE: '채권추심업무처리절차',
   DEBT_COLLECTION_SUPPORT_SYSTEM: '채권추심 관련 지원제도 안내',
