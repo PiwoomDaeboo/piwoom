@@ -54,8 +54,8 @@ function Policy() {
           <Skeleton w={'100%'} h={'800px'} />
         : <Box
             dangerouslySetInnerHTML={{ __html: policyData?.body as string }}
-            textStyle={'pre-body-2'}
-            color={'grey.10'}
+            // textStyle={'pre-body-2'}
+            // color={'grey.10'}
             minH={'800px'}
           ></Box>
         }
