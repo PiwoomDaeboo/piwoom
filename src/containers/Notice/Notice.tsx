@@ -16,6 +16,7 @@ import {
 
 import NonData from '@/components/NonData'
 import { Pagination } from '@/components/pagination'
+import { useNoticeListQuery } from '@/generated/apis/Notice/Notice.query'
 import { MagnifyingGlassIcon } from '@/generated/icons/MyIcons'
 
 // 공지사항 데이터 타입 정의
@@ -173,6 +174,16 @@ function Notice() {
   const totalPages = Math.ceil(posts.length / postsPerPage)
 
   const displayData = [...notices, ...currentPosts]
+  const { data: noticeList } = useNoticeListQuery({
+    variables: {
+      query: {
+        q: '',
+        is_pinned: true,
+        limit: (currentPage - 1) * postsPerPage,
+        offset: 0,
+      },
+    },
+  })
 
   return (
     <>
@@ -198,10 +209,10 @@ function Notice() {
               <Input placeholder="검색어를 입력해 주세요." pl={'48px'} />
             </InputGroup>
           </Flex>
-          {/* <NonData /> */}
 
-          {/* 공지사항 목록 렌더링 */}
-          {displayData.map((item, index) => (
+          {noticeList?.count === 0 && <NonData />}
+
+          {noticeList?.results?.map((item, index) => (
             <Flex
               key={item.id}
               borderTop={index === 0 ? '1px solid' : 'none'}
@@ -216,21 +227,17 @@ function Notice() {
               onClick={() => router.push(`/notice/${item.id}`)}
             >
               <HStack gap={'32px'}>
-                {item.type === 'notice' ?
-                  <Badge variant={'solid'}>공지사항</Badge>
-                : <Text
-                    display={{ base: 'none', sm: 'block' }}
-                    w={'36px'}
-                    textStyle={'pre-body-6'}
-                    color={'grey.7'}
-                  >
-                    {item.number}
-                  </Text>
-                }
                 <Text
-                  textStyle={
-                    item.type === 'notice' ? 'pre-body-3' : 'pre-body-4'
-                  }
+                  display={{ base: 'none', sm: 'block' }}
+                  w={'36px'}
+                  textStyle={'pre-body-6'}
+                  color={'grey.7'}
+                >
+                  {index + 1}
+                </Text>
+
+                <Text
+                  textStyle={item.title ? 'pre-body-3' : 'pre-body-4'}
                   color={'grey.10'}
                 >
                   {item.title}
@@ -241,7 +248,7 @@ function Notice() {
                 textStyle={'pre-body-8'}
                 color={'grey.10'}
               >
-                {item.date}
+                {item.createdAt}
               </Text>
             </Flex>
           ))}

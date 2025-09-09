@@ -54,8 +54,7 @@ export const { uploadFile, uploadFiles } = createS3UploadFlow({
     const { fields, url } = await presignedUrlApi.presignedUrlCreate({
       data: {
         fileName: name,
-        fileType: mime,
-        fieldChoice: 'inquiry.Inquiry.file',
+        fieldChoice: 'gov.GovLog.file',
         isDownload: true,
       },
     })

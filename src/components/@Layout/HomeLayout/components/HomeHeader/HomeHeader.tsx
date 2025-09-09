@@ -20,7 +20,6 @@ import {
   MenuIcon,
 } from 'generated/icons/MyIcons'
 
-import InquiryModal from '@/components/@Modal/InquiryModal'
 import { ROUTES } from '@/generated/path/routes'
 
 import LoginCodeModal from '../../../../@Modal/LoginCodeModal'
