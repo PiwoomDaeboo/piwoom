@@ -71,14 +71,24 @@ export default function HomeFooter({ ...props }: ContainerProps) {
         <VStack alignItems="flex-start" color={'grey.2'}>
           <Flex
             mt={'28px'}
-            flexDir={{ base: 'column', md: 'row' }}
+            flexDir={{ base: 'column', sm: 'row' }}
             alignItems={{ base: 'flex-start', sm: 'center' }}
             gap={{ base: '4px', md: '10px' }}
           >
             <Text textStyle="pre-body-6">대표이사 : 장윤석</Text>
-            <Box w={'1px'} h={'16px'} bg={'grey.7'} />
+            <Box
+              display={{ base: 'none', sm: 'block' }}
+              w={'1px'}
+              h={'16px'}
+              bg={'grey.7'}
+            />
             <Text textStyle="pre-body-6">대표번호 : 055-266-2686</Text>
-            <Box w={'1px'} h={'16px'} bg={'grey.7'} />
+            <Box
+              display={{ base: 'none', sm: 'block' }}
+              w={'1px'}
+              h={'16px'}
+              bg={'grey.7'}
+            />
             <Text textStyle="pre-body-6">E-mail : official@piwoom.com</Text>
           </Flex>
           <Text>
