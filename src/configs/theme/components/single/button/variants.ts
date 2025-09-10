@@ -117,15 +117,15 @@ const textPrimary = defineVariant({
 
 const textSecondary = defineVariant({
   basic: {
-    color: 'content.3',
+    color: 'grey.7',
     bgColor: 'transparent',
     otherStyle: {
-      p: '0px',
+      px: '12px',
     },
   },
   hover: { color: 'content.4', bgColor: 'transparent' },
-  active: { color: 'content.5', bgColor: 'transparent' },
-  disabled: { color: 'content.6' },
+  active: { color: 'grey.10', bgColor: 'rgba(27, 28, 29, 0.05)' },
+  disabled: { color: 'grey.5' },
 })
 
 export const variants = {
