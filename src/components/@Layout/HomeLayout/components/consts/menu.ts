@@ -10,7 +10,7 @@ export const MENU_ITEMS = [
       { label: '대출 절차 안내', href: '/loan/process' },
     ],
   },
-  { label: '나의 대출조회', href: '/my-loan' },
+  { label: '나의 대출조회', href: '/myloan' },
   { label: '고객센터', href: '/notice' },
   { label: '회사 소개', href: '/company' },
 ]
