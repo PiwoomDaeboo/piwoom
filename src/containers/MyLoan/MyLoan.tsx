@@ -118,7 +118,7 @@ function MyLoan() {
           </VStack>
           <VStack alignItems={'flex-start'}>
             <Text my={'16px'} textStyle={'pre-body-6'} color={'primary.7'}>
-              간편인증
+              본인인증
             </Text>
             <Flex
               w={'100%'}
@@ -159,11 +159,11 @@ function MyLoan() {
             <Flex w={'100%'} justifyContent={'center'} mt={'24px'}>
               <Button
                 onClick={() => {
-                  alert('간편인증 진행 준비중입니다.')
+                  alert('본인인증 진행 준비중입니다.')
                 }}
                 variant={'solid-primary'}
               >
-                간편인증 진행
+                본인인증 진행
               </Button>
             </Flex>
           </VStack>
