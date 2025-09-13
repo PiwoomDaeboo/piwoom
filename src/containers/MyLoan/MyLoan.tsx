@@ -23,16 +23,6 @@ import { Pagination } from '@/components/pagination'
 import { useFaqListQuery } from '@/generated/apis/Faq/Faq.query'
 import { CaretDownIcon, MagnifyingGlassIcon } from '@/generated/icons/MyIcons'
 
-// 공지사항 데이터 타입 정의
-interface NoticeItem {
-  id: number
-  type: 'notice' | 'post'
-  title: string
-  date: string
-  number?: number // 일반 게시글의 경우에만 번호
-  answer: string
-}
-
 function MyLoan() {
   return (
     <>

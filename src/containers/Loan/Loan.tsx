@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -14,19 +14,9 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
-import Card from '@/components/Card'
-import {
-  DisclaimerRetrieveParamsEnumType,
-  DisclaimerRetrieveParamsKindEnumTypeMap,
-} from '@/generated/apis/@types/data-contracts'
-import { useDisclaimerRetrieveQuery } from '@/generated/apis/Disclaimer/Disclaimer.query'
-import {
-  CaretRightIcon,
-  Loan1Icon,
-  Loan2Icon,
-  Loan3Icon,
-} from '@/generated/icons/MyIcons'
+import { Loan1Icon, Loan2Icon, Loan3Icon } from '@/generated/icons/MyIcons'
 
+import LoanProcedureIntroduction from './components/procedure-introduction'
 import { BUTTON_DATA, CARD_DATA } from './consts'
 
 const listItemStyles = {
@@ -60,125 +50,60 @@ const List = ({ children }: { children: React.ReactNode }) => (
   </Box>
 )
 
-// 대출절차안내 컴포넌트
-const LoanProcedureComponent = () => (
-  <Flex
-    w={'100%'}
-    borderRadius={'32px'}
-    boxShadow={'0 8px 50px 0 rgba(0, 46, 114, 0.10)'}
-    p={{ base: '20px 28px', sm: '20px 48px', md: '40px 64px' }}
-    bg={'grey.0'}
-    flexDir={'column'}
-    justifyContent={'center'}
-    alignItems={'flex-start'}
-  >
-    <VStack w={'100%'} alignItems={'flex-start'} spacing={'24px'}>
-      <Text textStyle={'pre-heading-1'} color={'grey.10'}>
-        대출 절차 안내
-      </Text>
-      <Text textStyle={'pre-body-6'} color={'grey.8'}>
-        피움의 간편한 대출 신청 절차를 확인해보세요
-      </Text>
+// 쿼리스트링과 대출 유형 매핑
+const LOAN_TYPE_MAP = {
+  salary: 0, // 월급대출
+  credit: 1, // 신용대출
+  mortgage: 2, // 부동산 담보대출
+  procedure: 'procedure', // 대출 절차 안내
+}
 
-      <VStack w={'100%'} spacing={'16px'} alignItems={'flex-start'}>
-        <HStack gap={'16px'} w={'100%'}>
-          <Flex
-            justifyContent={'center'}
-            alignItems={'center'}
-            w={'36px'}
-            h={'36px'}
-            borderRadius={'8px'}
-            bg={'primary.4'}
-            color={'grey.0'}
-            textStyle={'pre-body-5'}
-            fontWeight={'bold'}
-          >
-            1
-          </Flex>
-          <Text textStyle={'pre-body-5'} color={'grey.10'}>
-            대출 신청서 작성
-          </Text>
-        </HStack>
-
-        <HStack gap={'16px'} w={'100%'}>
-          <Flex
-            justifyContent={'center'}
-            alignItems={'center'}
-            w={'36px'}
-            h={'36px'}
-            borderRadius={'8px'}
-            bg={'primary.4'}
-            color={'grey.0'}
-            textStyle={'pre-body-5'}
-            fontWeight={'bold'}
-          >
-            2
-          </Flex>
-          <Text textStyle={'pre-body-5'} color={'grey.10'}>
-            서류 제출 및 심사
-          </Text>
-        </HStack>
-
-        <HStack gap={'16px'} w={'100%'}>
-          <Flex
-            justifyContent={'center'}
-            alignItems={'center'}
-            w={'36px'}
-            h={'36px'}
-            borderRadius={'8px'}
-            bg={'primary.4'}
-            color={'grey.0'}
-            textStyle={'pre-body-5'}
-            fontWeight={'bold'}
-          >
-            3
-          </Flex>
-          <Text textStyle={'pre-body-5'} color={'grey.10'}>
-            대출 승인 및 계약
-          </Text>
-        </HStack>
-
-        <HStack gap={'16px'} w={'100%'}>
-          <Flex
-            justifyContent={'center'}
-            alignItems={'center'}
-            w={'36px'}
-            h={'36px'}
-            borderRadius={'8px'}
-            bg={'primary.4'}
-            color={'grey.0'}
-            textStyle={'pre-body-5'}
-            fontWeight={'bold'}
-          >
-            4
-          </Flex>
-          <Text textStyle={'pre-body-5'} color={'grey.10'}>
-            대출금 입금
-          </Text>
-        </HStack>
-      </VStack>
-
-      <Flex mt={'24px'} w={'100%'} justifyContent={'center'}>
-        <Button bg={'primary.4'} color={'grey.0'} minW={'180px'} minH={'48px'}>
-          대출 신청하기
-        </Button>
-      </Flex>
-    </VStack>
-  </Flex>
-)
+const LOAN_TYPE_QUERY_MAP = {
+  0: 'salary',
+  1: 'credit',
+  2: 'mortgage',
+}
 
 function Loan() {
   const router = useRouter()
   const [activeButtonIndex, setActiveButtonIndex] = useState<number>(0)
   const [showProcedure, setShowProcedure] = useState<boolean>(false)
 
+  useEffect(() => {
+    const { type } = router.query
+
+    if (type === 'procedure') {
+      setShowProcedure(true)
+      setActiveButtonIndex(0)
+    } else if (
+      type &&
+      LOAN_TYPE_MAP[type as keyof typeof LOAN_TYPE_MAP] !== undefined
+    ) {
+      const index = LOAN_TYPE_MAP[type as keyof typeof LOAN_TYPE_MAP] as number
+      setActiveButtonIndex(index)
+      setShowProcedure(false)
+    } else {
+      setActiveButtonIndex(0)
+      setShowProcedure(false)
+    }
+  }, [router.query])
+
   const handleButtonClick = (index: number) => {
     setActiveButtonIndex(index)
     setShowProcedure(false)
+
+    // 쿼리스트링 업데이트
+    const queryType =
+      LOAN_TYPE_QUERY_MAP[index as keyof typeof LOAN_TYPE_QUERY_MAP]
+    router.push(`/loan?type=${queryType}`, undefined, { shallow: true })
   }
 
   const handleProcedureClick = () => {
     setShowProcedure(true)
+    setActiveButtonIndex(0)
+
+    // 쿼리스트링 업데이트
+    router.push('/loan?type=procedure', undefined, { shallow: true })
   }
 
   return (
@@ -265,7 +190,7 @@ function Loan() {
           </Flex>
           <Flex flexDir={'column'} w={'100%'}>
             {showProcedure ?
-              <LoanProcedureComponent />
+              <LoanProcedureIntroduction />
             : CARD_DATA.map((card, index) => {
                 if (index !== activeButtonIndex) return null
                 return (
