@@ -59,15 +59,15 @@ const solidPrimary = defineVariant({
 
 const outlinePrimary = defineVariant({
   basic: {
-    color: 'grey.8',
+    color: 'primary.4',
     bgColor: 'grey.0',
-    borderColor: 'grey.3',
+    borderColor: 'primary.4',
   },
   hover: { bgColor: 'primary.1' },
   active: { bgColor: 'primary.2' },
   disabled: {
-    color: 'content.6',
-    borderColor: 'border.basic.2',
+    color: 'primary.2',
+    borderColor: 'primary.2',
     bgColor: 'background.basic.1',
   },
 })
@@ -75,11 +75,12 @@ const outlinePrimary = defineVariant({
 const outlineSecondary = defineVariant({
   basic: {
     color: 'grey.8',
-    bgColor: 'grey.8',
+    bgColor: 'grey.0',
     borderColor: 'grey.3',
   },
-  hover: { bgColor: 'background.basic.3' },
-  active: { bgColor: 'background.basic.4' },
+
+  hover: { bgColor: 'primary.1' },
+  active: { bgColor: 'primary.2' },
   disabled: {
     color: 'content.6',
     borderColor: 'border.basic.2',
@@ -104,11 +105,8 @@ const blackPrimary = defineVariant({
 
 const textPrimary = defineVariant({
   basic: {
-    color: 'primary.3',
-    bgColor: 'transparent',
-    otherStyle: {
-      p: '0px',
-    },
+    color: 'grey.8',
+    bgColor: 'grey.2',
   },
   hover: { color: 'primary.4', bgColor: 'transparent' },
   active: { color: 'primary.5', bgColor: 'transparent' },
@@ -128,10 +126,26 @@ const textSecondary = defineVariant({
   disabled: { color: 'grey.5' },
 })
 
+const outlineSecondarySelected = defineVariant({
+  basic: {
+    color: 'grey.8',
+    bgColor: 'primary.2', // 선택된 상태의 배경색
+    borderColor: 'grey.3',
+  },
+  hover: { bgColor: 'primary.1' },
+  active: { bgColor: 'primary.2' },
+  disabled: {
+    color: 'content.6',
+    borderColor: 'border.basic.2',
+    bgColor: 'background.basic.1',
+  },
+})
+
 export const variants = {
   'solid-primary': solidPrimary,
   'outline-primary': outlinePrimary,
   'outline-secondary': outlineSecondary,
+  'outline-secondary-selected': outlineSecondarySelected,
   'black-primary': blackPrimary,
   'text-primary': textPrimary,
   'text-secondary': textSecondary,

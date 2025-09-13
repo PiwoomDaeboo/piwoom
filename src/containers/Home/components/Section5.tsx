@@ -127,7 +127,7 @@ function Section5() {
                   중요한 소식과 안내를 빠르게 전해드려요
                 </Text>
               </VStack>
-              <Button variant={'outline-primary'}>
+              <Button variant={'outline-secondary'}>
                 <Text textStyle={'pre-caption-1'}>확인하기</Text>
                 <CaretRightIcon boxSize={'16px'} />
               </Button>

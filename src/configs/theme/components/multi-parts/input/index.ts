@@ -10,6 +10,7 @@ const { defineMultiStyleConfig } = createMultiStyleConfigHelpers(parts.keys)
 const Input = defineMultiStyleConfig({
   baseStyle: {
     field: {
+      bg: 'background.basic.2',
       padding: '12px',
       _placeholder: {
         color: 'content.5',

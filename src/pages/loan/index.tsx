@@ -11,7 +11,7 @@ function LoanPage() {
     <>
       {/* output: 똑똑한개발자 | 메인 */}
       {/* titleTemplate는 /configs/seo/config.ts에서 변경 가능합니다. */}
-      <NextSeo title="메인" />
+      <NextSeo title="대출 안내" />
       <HomeLayout content={<Loan />} />
     </>
   )
