@@ -15,14 +15,14 @@ const InputForm = ({
   ...props
 }: InputFormProps) => {
   return (
-    <VStack w="100%" gap="8px" alignItems="flex-start" {...props}>
-      <HStack w="100%" h="auto" alignItems="center" gap="2px">
-        <Text as="label" textStyle="pre-body-07" color="text.secondary">
+    <VStack w={'100%'} gap={'8px'} alignItems={'flex-start'} {...props}>
+      <HStack w={'100%'} h={'auto'} alignItems={'center'} gap={'2px'}>
+        <Text as={'label'} textStyle={'pre-body-7'} color={'grey.10'}>
           {label}
         </Text>
         {isRequired && (
-          <Text textStyle="pre-body-07" color="accent.red.2">
-            *
+          <Text as={'span'} color={'primary.4'}>
+            •
           </Text>
         )}
       </HStack>

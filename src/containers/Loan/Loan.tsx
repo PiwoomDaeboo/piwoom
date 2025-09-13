@@ -105,6 +105,9 @@ function Loan() {
     // 쿼리스트링 업데이트
     router.push('/loan?type=procedure', undefined, { shallow: true })
   }
+  const handleApplyLoanClick = () => {
+    router.push('/apply-loan')
+  }
 
   return (
     <>
@@ -313,6 +316,7 @@ function Loan() {
                     </Flex>
                     <Flex mt={'24px'} w={'100%'} justifyContent={'center'}>
                       <Button
+                        onClick={handleApplyLoanClick}
                         bg={'primary.4'}
                         color={'grey.0'}
                         minW={'180px'}

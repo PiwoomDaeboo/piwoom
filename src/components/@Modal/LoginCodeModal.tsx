@@ -12,28 +12,13 @@ interface LoginCodeModalProps {
 
 function LoginCodeModal({ isOpen, onClose }: LoginCodeModalProps) {
   const [code, setCode] = useState('')
-  const [shouldQuery, setShouldQuery] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const handleNext = () => {
-    onClose()
-    window.open(`https://editor.magicube.co.kr/order/${code}/editor/`, '_blank')
-    setCode('')
-    setError(null)
-    // MC149615
-  }
 
   const handleConfirm = () => {
-    if (code) {
-      setError(null) // 에러 초기화
-      setShouldQuery(true) // 쿼리 실행
-    }
+    onClose()
   }
 
   const handleClose = () => {
     onClose()
-    setCode('')
-    setError(null)
   }
 
   return (
@@ -75,11 +60,6 @@ function LoginCodeModal({ isOpen, onClose }: LoginCodeModalProps) {
                 onChange={(e) => setCode(e.target.value)}
               />
             </InputForm>
-            {error && (
-              <Text color="red.500" fontSize="sm" mt="2">
-                {error}
-              </Text>
-            )}
           </Box>
         </Box>
       }
@@ -90,7 +70,7 @@ function LoginCodeModal({ isOpen, onClose }: LoginCodeModalProps) {
             w="100%"
             onClick={handleClose}
             borderColor="border.basic.2"
-            variant={'outline-primary'}
+            variant={'outline-secondary'}
           >
             취소
           </Button>

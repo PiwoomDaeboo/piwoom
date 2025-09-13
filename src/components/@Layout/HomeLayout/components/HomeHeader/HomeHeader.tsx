@@ -144,7 +144,7 @@ const HomeHeader = ({
             ))}
           </HStack>
           <HStack gap={'10px'} display={{ base: 'none', md: 'flex' }}>
-            <Button variant={'outline-primary'}>대출 조회</Button>
+            <Button variant={'outline-secondary'}>대출 조회</Button>
             <Button variant={'black-primary'}>대출 신청</Button>
           </HStack>
           <HStack display={{ base: 'flex', md: 'none' }}>
