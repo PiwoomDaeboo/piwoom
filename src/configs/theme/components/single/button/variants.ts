@@ -108,7 +108,7 @@ const textPrimary = defineVariant({
     color: 'grey.8',
     bgColor: 'grey.2',
   },
-  hover: { color: 'primary.4', bgColor: 'transparent' },
+  hover: { color: 'grey.8', bgColor: 'grey.2' },
   active: { color: 'primary.5', bgColor: 'transparent' },
   disabled: { color: 'content.6' },
 })
