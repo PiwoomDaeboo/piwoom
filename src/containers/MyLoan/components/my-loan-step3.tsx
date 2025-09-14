@@ -1,0 +1,328 @@
+import { useState } from 'react'
+
+import { useRouter } from 'next/router'
+
+import {
+  AspectRatio,
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  Flex,
+  HStack,
+  SimpleGrid,
+  Text,
+  VStack,
+  useDisclosure,
+} from '@chakra-ui/react'
+
+import ImageAsNext from '@/components/ImageAsNext'
+import InputForm from '@/components/InputForm'
+import { CaretRightIcon } from '@/generated/icons/MyIcons'
+import { MY_IMAGES } from '@/generated/path/images'
+
+import CustomerInfoModal from './customer-info-modal'
+import MyLoanTermsModal from './my-loan-terms-modal'
+
+const AGREEMENT_ITEMS = [
+  {
+    id: 1,
+    key: 'privacy',
+    label: '대부거래 계약 주요 조건 (요약본)',
+  },
+  {
+    id: 2,
+    key: 'collection',
+    label: '대부거래 표준약관',
+  },
+  {
+    id: 3,
+    key: 'provision',
+    label: '채권양도(담보제공) 승낙서',
+  },
+]
+
+const CHECKBOX_STYLES = {
+  '.chakra-checkbox__control': {
+    borderRadius: '50%',
+    border: '1px solid',
+    borderColor: 'border.basic.1',
+    _checked: {
+      bg: 'primary.3',
+      borderColor: 'primary.3',
+      borderRadius: '50%',
+    },
+  },
+  '.chakra-checkbox__control[data-checked]': {
+    bg: 'primary.3',
+    borderColor: 'primary.3',
+    borderRadius: '50%',
+  },
+}
+
+const MyLoanStep3 = () => {
+  const router = useRouter()
+
+  const {
+    isOpen: isTermsOpen,
+    onOpen: onTermsOpen,
+    onClose: onTermsClose,
+  } = useDisclosure()
+  const [isAgree, setIsAgree] = useState(false)
+  const [termsNumber, setTermsNumber] = useState(1)
+  const [agreements, setAgreements] = useState({
+    all: false,
+    privacy: false,
+    collection: false,
+  })
+  const handleIndividualAgreement = (key: string, checked: boolean) => {
+    const newAgreements = { ...agreements, [key]: checked }
+
+    const allIndividualChecked = AGREEMENT_ITEMS.every(
+      (item) => newAgreements[item.key as keyof typeof newAgreements],
+    )
+    newAgreements.all = allIndividualChecked
+
+    setAgreements(newAgreements)
+  }
+
+  const handleAgree = (checked: boolean) => {
+    setIsAgree(checked)
+  }
+  const handleTermsOpen = (termsNumber: number) => {
+    onTermsOpen()
+    setTermsNumber(termsNumber)
+  }
+  return (
+    <Container>
+      <MyLoanTermsModal
+        isOpen={isTermsOpen}
+        onClose={onTermsClose}
+        termsNumber={termsNumber}
+      />
+      <Flex
+        pt={{ base: '40px', sm: '48px', md: '80px' }}
+        pb={'120px'}
+        flexDir={'column'}
+      >
+        <VStack alignItems={'flex-start'} spacing={'8px'}>
+          <Text textStyle={'pre-heading-2'} color={'grey.10'}>
+            계약정보 확인 및 전자서명
+          </Text>
+          <Text textStyle={'pre-body-6'} color={'grey.7'}>
+            고객님의의 대출계약 체결을 위해 전자계약을 진행합니다.
+          </Text>
+        </VStack>
+        <VStack alignItems={'flex-start'} mt={'32px'} spacing={'20px'}>
+          <Text textStyle={'pre-heading-3'} color={'primary.4'}>
+            계약정보
+          </Text>
+          <SimpleGrid columns={{ base: 1, sm: 2 }} gap={'24px'}>
+            <VStack spacing={'15px'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-7'} color={'grey.10'}>
+                대부금액
+              </Text>
+              <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                10,000,000원
+              </Text>
+            </VStack>
+            <VStack spacing={'15px'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-7'} color={'grey.10'}>
+                상환방식
+              </Text>
+              <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                만기일시상환 or 원리금균등분할상환
+              </Text>
+            </VStack>
+            <VStack spacing={'15px'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-7'} color={'grey.10'}>
+                이자율
+              </Text>
+              <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                10%
+              </Text>
+            </VStack>
+            <VStack spacing={'15px'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-7'} color={'grey.10'}>
+                연체 이자율
+              </Text>
+              <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                15%
+              </Text>
+            </VStack>
+            <VStack spacing={'15px'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-7'} color={'grey.10'}>
+                대출일자
+              </Text>
+              <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                2025년 0월 0일
+              </Text>
+            </VStack>
+            <VStack spacing={'15px'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-7'} color={'grey.10'}>
+                대출만기일자
+              </Text>
+              <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                2025년 0월 0일
+              </Text>
+            </VStack>
+            <VStack spacing={'15px'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-7'} color={'grey.10'}>
+                대출 갚는 날
+              </Text>
+              <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                매월 0일
+              </Text>
+            </VStack>
+            <VStack spacing={'15px'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-7'} color={'grey.10'}>
+                중도상환수수료
+              </Text>
+              <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                3%
+              </Text>
+            </VStack>
+            <VStack spacing={'15px'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-7'} color={'grey.10'}>
+                상환금 입금 계좌
+              </Text>
+              <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                농협은행 123-456-7890 (예금주 : 피움대부 주식회사)
+              </Text>
+            </VStack>
+          </SimpleGrid>
+        </VStack>
+        <Box w={'100%'} h={'1px'} bg={'background.basic.2'} my={'48px'} />
+        <Text textStyle={'pre-body-6'} color={'grey.7'} mb={'24px'}>
+          * 아래 상세 내용을 꼭 확인해 주세요.
+        </Text>
+        <VStack spacing={'12px'} w={'100%'}>
+          {AGREEMENT_ITEMS.map((item) => (
+            <Flex
+              key={item.key}
+              w={'100%'}
+              p={'24px'}
+              justifyContent={'space-between'}
+              borderRadius={'20px'}
+              border={'1px solid'}
+              borderColor={'border.basic.2'}
+              cursor={'pointer'}
+              bg={
+                agreements[item.key as keyof typeof agreements] ?
+                  'background.basic.2'
+                : 'transparent'
+              }
+              onClick={() => {
+                handleTermsOpen(item.id)
+                handleIndividualAgreement(
+                  item.key,
+                  !agreements[item.key as keyof typeof agreements],
+                )
+              }}
+            >
+              <HStack w={'100%'} spacing={3}>
+                <Checkbox
+                  isChecked={agreements[item.key as keyof typeof agreements]}
+                  sx={CHECKBOX_STYLES}
+                />
+                <Text textStyle={'pre-body-5'} color={'grey.10'}>
+                  {item.label}
+                </Text>
+              </HStack>
+              <Box onClick={onTermsOpen} cursor={'pointer'} p={'4px'}>
+                <CaretRightIcon boxSize={'24px'} />
+              </Box>
+            </Flex>
+          ))}
+        </VStack>
+        <InputForm label="신분증 인증" mt={'48px'}>
+          <VStack alignItems={'flex-start'} spacing={'12px'}>
+            <Text textStyle={'pre-caption-2'} color={'grey.7'}>
+              신분증 인증을 위해 신분증(주민등록증, 운전면허증, 여권 중 택1)을
+              준비해주세요.
+            </Text>
+            <Button
+              variant={'outline-secondary'}
+              textStyle={'pre-body-5'}
+              color={'grey.8'}
+              w={'209px'}
+            >
+              신분증 인증 진행
+            </Button>
+          </VStack>
+        </InputForm>
+        <VStack alignItems={'flex-start'} my={'64px'} spacing={'32px'}>
+          <VStack alignItems={'flex-start'} spacing={'8px'}>
+            <Text textStyle={'pre-heading-2'} color={'grey.10'}>
+              확인사항
+            </Text>
+            <Text textStyle={'pre-body-6'} color={'grey.7'}>
+              확인사항 내용을 확인하시고 체크해 주세요.
+              <Box as="span" color={'primary.4'}>
+                •
+              </Box>
+            </Text>
+          </VStack>
+          <Flex
+            p={'20px 24px'}
+            flexDir={'column'}
+            gap={'12px'}
+            bg={'background.basic.2'}
+            borderRadius={'20px'}
+          >
+            <HStack w={'100%'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-5'} color={'grey.10'}>
+                1.
+              </Text>
+              <Text textStyle={'pre-body-6'} color={'grey.10'}>
+                계약 내용과 관련하여 이해되지 않는 부분이 있거나 확인이 필요한
+                사항이 있을 경우 전화(055-266-2686) 또는 카카오톡 채널(채널명:
+                피움대부 주식회사)을 통한 상담이 가능합니다. 계약 내용을 제대로
+                이해하지 못했는데도 이해했다고 확인하는 경우, 추후 해당 내용과
+                관련한 권리구제가 어려울 수 있습니다.
+              </Text>
+            </HStack>
+            <HStack w={'100%'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-5'} color={'grey.10'}>
+                2.
+              </Text>
+              <Text textStyle={'pre-body-6'} color={'grey.10'}>
+                본인은 피움대부와 대부거래를 함에 있어 계약 체결 전에 위 계약
+                정보를 포함하여 대부거래의 주요 내용 및 대부이용자가 부담하는
+                비용에 대하여 충분히 이해하였음을 확인합니다.
+              </Text>
+            </HStack>
+          </Flex>
+          <HStack w={'100%'} spacing={3}>
+            <Checkbox
+              isChecked={isAgree}
+              onChange={(e) => handleAgree(e.target.checked)}
+            />
+            <Text textStyle={'pre-body-6'} color={'grey.8'}>
+              네, 충분히 이해했어요
+            </Text>
+          </HStack>
+        </VStack>
+
+        <Flex
+          w={'100%'}
+          justifyContent={'center'}
+          pt={'40px'}
+          borderTop={'1px solid'}
+          borderColor={'border.basic.1'}
+        >
+          <Button
+            variant={'solid-primary'}
+            w={'160px'}
+            isDisabled={!isAgree}
+            onClick={() => router.push('/my-loan?step=2')}
+          >
+            전자서명 진행
+          </Button>
+        </Flex>
+      </Flex>
+    </Container>
+  )
+}
+
+export default MyLoanStep3

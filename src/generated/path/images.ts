@@ -64,6 +64,7 @@ export const MY_IMAGES = {
     src: '/images/mobile_footer_image.png',
     alt: 'mobile-footer-image',
   },
+  MODUSIGN: { src: '/images/modusign.png', alt: 'modusign' },
   NEW_OG: { src: '/images/new_og.png', alt: 'new-og' },
   SOCIAL_APPLE: { src: '/images/social/apple.png', alt: 'apple' },
   SOCIAL_FACEBOOK: { src: '/images/social/facebook.png', alt: 'facebook' },
