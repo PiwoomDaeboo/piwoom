@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 
+import { useRouter } from 'next/router'
+
 import {
   Badge,
   Box,
@@ -20,6 +22,7 @@ import {
 } from '@/generated/icons/MyIcons'
 
 const Section1 = () => {
+  const router = useRouter()
   const [hoverStates, setHoverStates] = useState([false, false, false])
 
   const cardData = [
@@ -28,18 +31,21 @@ const Section1 = () => {
       title: '월급 대출',
       description: '월급 직장인을 위한',
       badges: ['#최대 6개월치 월급', '#최저 월 1% ~', '#최대 1500만원 까지'],
+      href: '/loan?type=salary',
     },
     {
       icon: Loan2Icon,
       title: '신용 대출',
       description: '피움 자체 신용도 평가 시스템으로',
       badges: ['#DSR 미적용', '#신용점수 영향X', '#서류 제출X'],
+      href: '/loan?type=credit',
     },
     {
       icon: Loan3Icon,
       title: '부동산 담보대출',
       description: '중/후순위 대출',
       badges: ['#아파트', '##LTV 최대 90%까지', '#6억원 초과 대출 가능'],
+      href: '/loan?type=mortgage',
     },
   ]
 
@@ -72,6 +78,8 @@ const Section1 = () => {
             return (
               <Card
                 key={index}
+                cursor={'pointer'}
+                onClick={() => router.push(card.href)}
                 flexDir={'column'}
                 justifyContent={'center'}
                 alignItems={'center'}

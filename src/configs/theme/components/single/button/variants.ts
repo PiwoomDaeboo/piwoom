@@ -57,6 +57,16 @@ const solidPrimary = defineVariant({
   disabled: { color: 'content.5', bgColor: 'background.basic.4' },
 })
 
+const solidSecondary = defineVariant({
+  basic: {
+    bgColor: 'grey.0',
+    color: 'primary.4',
+  },
+  hover: { bgColor: 'grey.0' },
+  active: { bgColor: 'grey.0' },
+  disabled: { color: 'content.5', bgColor: 'background.basic.4' },
+})
+
 const outlinePrimary = defineVariant({
   basic: {
     color: 'primary.4',
@@ -143,6 +153,7 @@ const outlineSecondarySelected = defineVariant({
 
 export const variants = {
   'solid-primary': solidPrimary,
+  'solid-secondary': solidSecondary,
   'outline-primary': outlinePrimary,
   'outline-secondary': outlineSecondary,
   'outline-secondary-selected': outlineSecondarySelected,

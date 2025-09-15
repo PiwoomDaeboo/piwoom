@@ -1,8 +1,11 @@
+import { useRouter } from 'next/router'
+
 import { Button, Container, Flex, Text, VStack } from '@chakra-ui/react'
 
 import { MY_IMAGES } from '@/generated/path/images'
 
 const Section0 = () => {
+  const router = useRouter()
   return (
     <>
       <Flex
@@ -30,11 +33,13 @@ const Section0 = () => {
               더 크게 피어날 수 있도록
             </Text>
             <Button
-              variant={'solid-primary'}
-              bg={'grey.0'}
-              color={'primary.4'}
+              mt={{ base: '28px', md: '32px' }}
+              variant={'solid-secondary'}
               minW={'180px'}
               minH={'48px'}
+              onClick={() => {
+                router.push('/loan?type=salary')
+              }}
             >
               대출 신청하기
             </Button>

@@ -3,7 +3,7 @@ import { Flex, Text } from '@chakra-ui/react'
 import { MagnifyingGlassIcon } from '@/generated/icons/MyIcons'
 
 interface NonDataProps {
-  variant?: 'search' | 'default'
+  variant?: 'search' | 'default' | 'faq'
 }
 
 export default function NonData({ variant = 'default' }: NonDataProps) {
@@ -30,6 +30,14 @@ export default function NonData({ variant = 'default' }: NonDataProps) {
           <MagnifyingGlassIcon color={'grey.2'} boxSize={'90px'} />
           <Text textStyle={'pre-heading-3'} color={'grey.4'}>
             아직 작성된 글이 없어요
+          </Text>
+        </>
+      )}
+      {variant === 'faq' && (
+        <>
+          <MagnifyingGlassIcon color={'grey.2'} boxSize={'90px'} />
+          <Text textStyle={'pre-heading-3'} color={'grey.4'}>
+            등록된 자주묻는 질문이 없어요
           </Text>
         </>
       )}

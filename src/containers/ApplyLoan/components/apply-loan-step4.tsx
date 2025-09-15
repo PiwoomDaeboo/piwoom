@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
 import {
+  AspectRatio,
   Box,
   Button,
   Checkbox,
@@ -19,10 +20,11 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 
-import { Select } from 'chakra-react-select'
-
+import { useUploadFileToS3Mutation } from '@/apis/s3-file-uploader/S3FileUploaderApi.query'
 import LoanTermsModal from '@/components/@Modal/LoanTermsModal'
 import ModalBasis from '@/components/@Modal/ModalBasis'
+import CommonSelect from '@/components/CommonSelect'
+import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
 import {
   CaretRightIcon,
@@ -30,9 +32,24 @@ import {
   Loan1Icon,
 } from '@/generated/icons/MyIcons'
 
+import {
+  BANK_DATA,
+  DATE_OF_PAYMENT_DATA,
+  EMPLOYMENT_TYPE,
+  JOP_TYPE,
+  REPAYMENT_TYPE,
+} from '../const/const'
 import { useSelectButtonGroup } from '../hooks/useSelectButtonGroup'
+import OfficeAddressModal from './office-address-modal'
 
-// 소득 카테고리 옵션 데이터
+interface Company {
+  no: string
+  name: string
+  businessNo: string
+  baseAddress: string
+  detailAddress: string
+}
+
 const INCOME_CATEGORIES = [
   { value: 'earned_pension', label: '근로소득 및 연금소득' },
   { value: 'business', label: '사업소득' },
@@ -46,25 +63,69 @@ const INCOME_CATEGORIES = [
 
 const ApplyLoanStep4 = () => {
   const router = useRouter()
-  const [selectedIncome, setSelectedIncome] = useState('')
+  const {
+    isOpen: isOfficeAddressModalOpen,
+    onOpen: onOfficeAddressModalOpen,
+    onClose: onOfficeAddressModalClose,
+  } = useDisclosure()
+
+  const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null)
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const { mutate: uploadIdCard, isPending: isIdCardUploading } =
+    useUploadFileToS3Mutation({
+      options: {
+        onSuccess: (data) => {
+          console.log('파일 업로드 성공:', data)
+          console.log('S3 URL:', data.url)
+          console.log('파일 경로:', data.path)
+          console.log('필드 정보:', data.fields)
+          setUploadedFileUrl(`${data.url}/${data?.path}`)
+        },
+        onError: (error) => {
+          console.error('파일 업로드 실패:', error)
+        },
+      },
+    })
   const { SelectButtonGroup: EmploymentTypeButtons } = useSelectButtonGroup({
     name: 'employmentType',
-    options: [
-      { value: 'regular', label: '정규직' },
-      { value: 'contract', label: '계약직' },
-      { value: 'business', label: '사업자' },
-    ],
+    options: EMPLOYMENT_TYPE,
   })
 
   const { SelectButtonGroup: RepaymentTypeButtons } = useSelectButtonGroup({
     name: 'repaymentType',
-    options: [
-      { value: 'equal_installment', label: '원리금균등분할상환' },
-      { value: 'lump_sum', label: '만기 일시상환' },
-    ],
+    options: REPAYMENT_TYPE,
   })
+
+  const handleUploadIdCard = (file: File) => {
+    uploadIdCard({
+      file,
+      fieldChoice: 'loan.Loan.identity_card',
+    })
+  }
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      handleUploadIdCard(file)
+    }
+  }
+
+  const handleUploadButtonClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleCompanySelect = (company: Company) => {
+    console.log(company)
+    // setSelectedCompany(company)
+  }
   return (
     <Container>
+      <OfficeAddressModal
+        isOpen={isOfficeAddressModalOpen}
+        onClose={onOfficeAddressModalClose}
+        onSelectCompany={handleCompanySelect}
+      />
       <Flex
         py={{ base: '40px', sm: '48px', md: '84px' }}
         flexDir={'column'}
@@ -119,7 +180,7 @@ const ApplyLoanStep4 = () => {
                 <Text>만원</Text>
               </InputRightElement>
             </InputGroup>
-            <Flex gap={'8px'}>
+            <Flex gap={'8px'} flexWrap={'wrap'}>
               <Button variant={'outline-secondary'}>300</Button>
               <Button variant={'outline-secondary'}>600</Button>
               <Button variant={'outline-secondary'}>900</Button>
@@ -130,28 +191,10 @@ const ApplyLoanStep4 = () => {
         </InputForm>
         <InputForm label="상환방식" w={'100%'}>
           <RepaymentTypeButtons />
-          {/* <Flex gap={'8px'}>
-            <Button
-              variant={'outline-secondary'}
-              textStyle={'pre-body-5'}
-              color={'grey.8'}
-              w={'100%'}
-            >
-              원리금균등분할상환
-            </Button>
-            <Button
-              variant={'outline-secondary'}
-              textStyle={'pre-body-5'}
-              color={'grey.8'}
-              w={'100%'}
-            >
-              만기 일시상환
-            </Button>
-          </Flex> */}
         </InputForm>
         <InputForm label="이자납입일자">
           <Box w={'100%'}>
-            <Select options={INCOME_CATEGORIES} placeholder="선택" />
+            <CommonSelect options={DATE_OF_PAYMENT_DATA} placeholder="선택" />
           </Box>
         </InputForm>
         <InputForm label="대출기간">
@@ -165,7 +208,7 @@ const ApplyLoanStep4 = () => {
             <Text textStyle={'pre-caption-2'} color={'grey.6'}>
               최대 60개월까지 입력 가능해요
             </Text>
-            <Flex gap={'8px'}>
+            <Flex gap={'8px'} flexWrap={'wrap'}>
               <Button variant={'outline-secondary'}>6개월</Button>
               <Button variant={'outline-secondary'}>12개월</Button>
               <Button variant={'outline-secondary'}>24개월</Button>
@@ -176,7 +219,7 @@ const ApplyLoanStep4 = () => {
         <Flex gap={'16px'}>
           <InputForm label="입금은행">
             <Box w={'100%'}>
-              <Select options={INCOME_CATEGORIES} placeholder="선택" />
+              <CommonSelect options={BANK_DATA} placeholder="선택" />
             </Box>
           </InputForm>
           <InputForm label="계좌번호">
@@ -197,16 +240,25 @@ const ApplyLoanStep4 = () => {
         <Text textStyle={'pre-heading-3'} color={'primary.4'}>
           직장 정보
         </Text>
-        <Flex gap={'16px'}>
+        <Flex gap={'16px'} flexWrap={'wrap'}>
           <InputForm label="직업구분">
             <Box w={'100%'}>
-              <Select options={INCOME_CATEGORIES} placeholder="선택해주세요" />
+              <CommonSelect options={JOP_TYPE} placeholder="선택해주세요" />
             </Box>
           </InputForm>
           <InputForm label="직장명">
             <Flex w={'100%'} gap={'8px'}>
-              <Input placeholder="직장명" w={'100%'} />
-              <Button variant={'solid-primary'} size={'lg'}>
+              <Input
+                placeholder="직장명"
+                w={'100%'}
+                value={selectedCompany?.name || ''}
+                readOnly
+              />
+              <Button
+                variant={'solid-primary'}
+                size={'lg'}
+                onClick={onOfficeAddressModalOpen}
+              >
                 직장명 검색
               </Button>
             </Flex>
@@ -214,17 +266,6 @@ const ApplyLoanStep4 = () => {
         </Flex>
         <InputForm label="고용구분">
           <EmploymentTypeButtons />
-          {/* <Flex flexWrap={'wrap'} gap={'8px'}>
-            <Button variant={'outline-secondary'} w={'209px'}>
-              정규직
-            </Button>
-            <Button variant={'outline-secondary'} w={'209px'}>
-              계약직
-            </Button>
-            <Button variant={'outline-secondary'} w={'209px'}>
-              사업자
-            </Button>
-          </Flex> */}
         </InputForm>
         <InputForm label="입사년월 또는 창업시기">
           <Flex gap={'16px'}>
@@ -413,7 +454,27 @@ const ApplyLoanStep4 = () => {
             borderRadius={'20px'}
             bg={'background.basic.2'}
           >
-            <Input type="file" />
+            <Input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileSelect}
+              accept="image/*"
+              display="none"
+            />
+            {uploadedFileUrl ?
+              <AspectRatio ratio={237 / 145}>
+                <ImageAsNext
+                  w={'100%'}
+                  h={'100%'}
+                  fill
+                  src={uploadedFileUrl ?? '-'}
+                  alt="신분증"
+                />
+              </AspectRatio>
+            : <Text textStyle={'pre-body-6'} color={'grey.6'}>
+                파일을 선택해주세요
+              </Text>
+            }
           </Flex>
         </VStack>
         <InputForm label="신분증" isRequired>
@@ -422,6 +483,9 @@ const ApplyLoanStep4 = () => {
             textStyle={'pre-body-5'}
             color={'grey.8'}
             w={'209px'}
+            onClick={handleUploadButtonClick}
+            isLoading={isIdCardUploading}
+            loadingText="업로드 중..."
           >
             신분증 업로드
           </Button>
