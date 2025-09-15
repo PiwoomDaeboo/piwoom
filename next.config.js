@@ -40,6 +40,9 @@ module.exports = withBundleAnalyzer({
       {
         hostname: '*.s3.*.amazonaws.com',
       },
+      {
+        hostname: 's3.ap-northeast-2.amazonaws.com',
+      },
     ],
   },
 })

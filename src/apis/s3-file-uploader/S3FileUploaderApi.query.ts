@@ -9,6 +9,7 @@ import {
 
 import axios from 'axios'
 
+import { PresignedRequestFieldChoiceEnumType } from '@/generated/apis/@types/data-contracts'
 import { presignedUrlApi } from '@/generated/apis/PresignedUrl/PresignedUrl.query'
 // import { presignedUrlApi } from '@/generated/apis/PresignedUrl/PresignedUrl.query'
 import { UseMutationParams } from '@/types/module/react-query/use-mutation-params'
@@ -42,8 +43,25 @@ export const s3FileUploaderApi = new S3FileUploaderApi({ instance: axios })
  *
  */
 
+interface UploadFileInput {
+  file: File
+  fieldChoice: PresignedRequestFieldChoiceEnumType
+  isDownload?: boolean
+}
+
+// notice.File.path - 위치
+// loan.Loan.income_certificate - 소득금액증명원
+// loan.Loan.resident_registration_copy - 주민등록등본
+// loan.Loan.health_insurance_eligibility_confirmation - 건강보험 자격득실확인서
+// loan.Loan.health_insurance_payment_confirmation - 건강보험 납부확인서
+// loan.Loan.health_insurance_payment_confirmation_2 - 건강보험 납부확인서 2
+// loan.Loan.identity_card - 신분증
+// loan.Loan.local_tax_payment - 지방세 납부내역
+// loan.File.path - 위치
+// gov.GovLog.file - 파일
+
 export const { uploadFile, uploadFiles } = createS3UploadFlow({
-  prepareUpload: async (file: File) => {
+  prepareUpload: async ({ file, fieldChoice, isDownload }: UploadFileInput) => {
     // throw Error('not implemented s3 file uploader prepare logic')
     const { name, type } = file
     const [mime] = type.split('/')
@@ -54,13 +72,13 @@ export const { uploadFile, uploadFiles } = createS3UploadFlow({
     const { fields, url } = await presignedUrlApi.presignedUrlCreate({
       data: {
         fileName: name,
-        fieldChoice: 'gov.GovLog.file',
-        isDownload: true,
+        fieldChoice: fieldChoice,
+        isDownload: isDownload ?? false,
       },
     })
     const formData = new FormData()
     Object.entries(fields).forEach(([k, v]) => formData.append(k, v as string))
-    formData.append('Content-Type', file.type)
+    // formData.append('Content-Type', file.type)
     formData.append('file', file)
     return {
       url,

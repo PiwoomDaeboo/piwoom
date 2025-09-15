@@ -106,7 +106,12 @@ function Loan() {
     router.push('/loan?type=procedure', undefined, { shallow: true })
   }
   const handleApplyLoanClick = () => {
-    router.push('/apply-loan')
+    router.push(
+      '/apply-loan?type=' +
+        LOAN_TYPE_QUERY_MAP[
+          activeButtonIndex as keyof typeof LOAN_TYPE_QUERY_MAP
+        ],
+    )
   }
 
   return (

@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { useRouter } from 'next/router'
+
 import {
   Box,
   Button,
@@ -18,7 +20,6 @@ import {
   Sectionicon1Icon,
 } from '@/generated/icons/MyIcons'
 
-// 타입 정의
 interface FAQItem {
   id: number
   question: string
@@ -77,7 +78,7 @@ const FAQItem = ({
 
 function Section5() {
   const [openFAQ, setOpenFAQ] = useState<number | null>(1)
-
+  const router = useRouter()
   const handleFAQToggle = (faqId: number) => {
     setOpenFAQ(openFAQ === faqId ? null : faqId)
   }
@@ -185,7 +186,12 @@ function Section5() {
             <Text color={'grey.10'} textStyle={'pre-heading-1'}>
               자주하는 질문
             </Text>
-            <Button p={'11px 24px'} gap={'8px'} variant={'none'}>
+            <Button
+              p={'11px 24px'}
+              gap={'8px'}
+              variant={'none'}
+              onClick={() => router.push('/faq')}
+            >
               <Text color={'grey.8'} textStyle={'pre-body-5'}>
                 더보기
               </Text>

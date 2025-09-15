@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -14,106 +14,50 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
   Text,
   VStack,
 } from '@chakra-ui/react'
 
+import { debounce } from 'lodash'
+
+import NonData from '@/components/NonData'
 import { Pagination } from '@/components/pagination'
 import { useFaqListQuery } from '@/generated/apis/Faq/Faq.query'
 import { CaretDownIcon, MagnifyingGlassIcon } from '@/generated/icons/MyIcons'
-
-// 공지사항 데이터 타입 정의
-interface NoticeItem {
-  id: number
-  type: 'notice' | 'post'
-  title: string
-  date: string
-  number?: number // 일반 게시글의 경우에만 번호
-  answer: string
-}
-
-// 공지사항 데이터 배열
-const noticeData: NoticeItem[] = [
-  // 일반 게시글 5개 (1페이지)
-  {
-    id: 4,
-    type: 'post',
-    title: '대출 신청 절차 변경 안내',
-    date: '2025.01.01',
-    number: 5,
-    answer: '대출 신청 절차 변경 안내11',
-  },
-  {
-    id: 5,
-    type: 'post',
-    title: '고객센터 운영시간 변경 안내',
-    date: '2024.12.28',
-    number: 4,
-    answer: '고객센터 운영시간 변경 안내11',
-  },
-  {
-    id: 6,
-    type: 'post',
-    title: '피움대부 신규 지점 오픈 안내',
-    date: '2024.12.25',
-    number: 3,
-    answer: '피움대부 신규 지점 오픈 안내11',
-  },
-  {
-    id: 7,
-    type: 'post',
-    title: '대출 금리 변동 안내',
-    date: '2024.12.20',
-    number: 2,
-    answer: '대출 금리 변동 안내11',
-  },
-  {
-    id: 8,
-    type: 'post',
-    title: '피움대부 홈페이지 리뉴얼 안내',
-    date: '2024.12.15',
-    number: 1,
-    answer: '피움대부 홈페이지 리뉴얼 안내11',
-  },
-  // 추가 게시글들 (2페이지용)
-  {
-    id: 9,
-    type: 'post',
-    title: '개인정보 처리방침 개정 안내',
-    date: '2024.12.10',
-    number: 6,
-    answer: '개인정보 처리방침 개정 안내11',
-  },
-  {
-    id: 10,
-    type: 'post',
-    title: '대출 상담 예약 시스템 도입',
-    date: '2024.12.05',
-    number: 7,
-    answer: '대출 상담 예약 시스템 도입11',
-  },
-]
 
 function Faq() {
   const router = useRouter()
   const [currentPage, setCurrentPage] = useState(1)
   const postsPerPage = 5
 
-  const notices = noticeData.filter((item) => item.type === 'notice')
-  const posts = noticeData.filter((item) => item.type === 'post')
-
   const startIndex = (currentPage - 1) * postsPerPage
   const endIndex = startIndex + postsPerPage
-  const currentPosts = posts.slice(startIndex, endIndex)
 
-  const totalPages = Math.ceil(posts.length / postsPerPage)
+  const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
 
-  const displayData = [...notices, ...currentPosts]
+  // Debounced search function using lodash
+  const debouncedSetSearch = useCallback(
+    debounce((value: string) => {
+      setDebouncedSearch(value)
+    }, 300),
+    [],
+  )
+
+  // Update debounced search when search changes
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      setSearch(value)
+      debouncedSetSearch(value)
+    },
+    [debouncedSetSearch],
+  )
 
   const { data: faqList } = useFaqListQuery({
     variables: {
       query: {
-        q: '',
+        q: debouncedSearch,
         limit: (currentPage - 1) * postsPerPage,
         offset: 0,
       },
@@ -141,50 +85,58 @@ function Faq() {
               <InputLeftElement pointerEvents="none" pl={'12px'}>
                 <MagnifyingGlassIcon color="grey.8" boxSize={'20px'} />
               </InputLeftElement>
-              <Input placeholder="검색어를 입력해 주세요." pl={'48px'} />
+              <Input
+                placeholder="검색어를 입력해 주세요."
+                value={search}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                pl={'48px'}
+              />
+              <InputRightElement></InputRightElement>
             </InputGroup>
           </Flex>
 
-          {/* 공지사항 목록 렌더링 */}
-          {faqList?.results?.map((item) => (
-            <Accordion key={item.id} allowToggle>
-              <AccordionItem>
-                <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left">
-                    <HStack alignItems={'center'} gap={'10px'}>
-                      <Flex
-                        boxSize={'32px'}
-                        bg={'primary.3'}
-                        borderRadius={'100%'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        flexShrink={0}
-                      >
-                        <Text textStyle={'pre-body-3'} color={'grey.0'}>
-                          Q
+          {faqList?.results?.length === 0 && <NonData variant="faq" />}
+          <Box w={'100%'} minH={'400px'}>
+            {faqList?.results?.map((item) => (
+              <Accordion key={item.id} allowToggle>
+                <AccordionItem>
+                  <AccordionButton>
+                    <Box as="span" flex="1" textAlign="left">
+                      <HStack alignItems={'center'} gap={'10px'}>
+                        <Flex
+                          boxSize={'32px'}
+                          bg={'primary.3'}
+                          borderRadius={'100%'}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                          flexShrink={0}
+                        >
+                          <Text textStyle={'pre-body-3'} color={'grey.0'}>
+                            Q
+                          </Text>
+                        </Flex>
+                        <Text textStyle={'pre-body-3'} color={'grey.10'}>
+                          {item.question}
                         </Text>
-                      </Flex>
-                      <Text textStyle={'pre-body-3'} color={'grey.10'}>
-                        {item.question}
-                      </Text>
-                    </HStack>
-                  </Box>
-                  <CaretDownIcon
-                    boxSize={'24px'}
-                    color={'grey.8'}
-                    ml={'20px'}
-                  />
-                </AccordionButton>
+                      </HStack>
+                    </Box>
+                    <CaretDownIcon
+                      boxSize={'24px'}
+                      color={'grey.8'}
+                      ml={'20px'}
+                    />
+                  </AccordionButton>
 
-                <AccordionPanel>{item.answer}</AccordionPanel>
-              </AccordionItem>
-            </Accordion>
-          ))}
+                  <AccordionPanel>{item.answer}</AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            ))}
+          </Box>
           {faqList?.count !== 0 && (
             <Flex justifyContent={'center'} mt={'48px'}>
               <Pagination
                 currentPage={currentPage}
-                totalPages={totalPages}
+                totalPages={faqList?.count ?? 0}
                 onPageChange={setCurrentPage}
               />
             </Flex>
