@@ -16,6 +16,8 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 
+import { useFormContext } from 'react-hook-form'
+
 import LoanTermsModal from '@/components/@Modal/LoanTermsModal'
 import ModalBasis from '@/components/@Modal/ModalBasis'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
@@ -80,6 +82,8 @@ const CONFIRMATION_ITEMS = [
   },
 ]
 const ApplyLoanStep2 = () => {
+  const methods = useFormContext()
+  console.log(methods.getValues())
   const router = useRouter()
   const [agreements, setAgreements] = useState({
     all: false,

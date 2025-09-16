@@ -36,17 +36,23 @@ const CHECKBOX_STYLES = {
   },
 }
 
-const AGREEMENT_ITEMS = [
+const AGREEMENT_ITEMS: {
+  key:
+    | 'consentToAccessPersonalContent'
+    | 'consentToCollectPersonalContent'
+    | 'consentToProvidePersonalContent'
+  label: string
+}[] = [
   {
-    key: 'privacy',
+    key: 'consentToAccessPersonalContent',
     label: '개인(신용)정보 조회 동의',
   },
   {
-    key: 'collection',
+    key: 'consentToCollectPersonalContent',
     label: '개인(신용)정보 수집 · 이용 동의',
   },
   {
-    key: 'provision',
+    key: 'consentToProvidePersonalContent',
     label: '개인(신용)정보 제공 동의서',
   },
 ]
@@ -81,12 +87,21 @@ const ApplyLoanStep1 = () => {
   const router = useRouter()
   const [agreements, setAgreements] = useState({
     all: false,
-    privacy: false,
-    collection: false,
-    provision: false,
+    consentToAccessPersonalContent: false,
+    consentToCollectPersonalContent: false,
+    consentToProvidePersonalContent: false,
   })
+  const {
+    isOpen: isTermsOpen,
+    onClose: isTermsClose,
+    onOpen: onTermsOpen,
+  } = useDisclosure()
+  const {
+    isOpen: isAlertOpen,
+    onClose: isAlertClose,
+    onOpen: onAlertOpen,
+  } = useDisclosure()
 
-  // 확인사항 상태 관리
   const [confirmations, setConfirmations] = useState({
     question1: null as 'yes' | 'no' | null,
     question2: null as 'yes' | 'no' | null,
@@ -94,18 +109,30 @@ const ApplyLoanStep1 = () => {
     question4: null as 'yes' | 'no' | null,
     question5: null as 'yes' | 'no' | null,
   })
-
+  const [termsType, setTermsType] = useState<
+    | 'consentToAccessPersonalContent'
+    | 'consentToCollectPersonalContent'
+    | 'consentToProvidePersonalContent'
+  >('consentToAccessPersonalContent')
   // 전체 동의 핸들러
   const handleAllAgreement = (checked: boolean) => {
     setAgreements({
       all: checked,
-      privacy: checked,
-      collection: checked,
-      provision: checked,
+      consentToAccessPersonalContent: checked,
+      consentToCollectPersonalContent: checked,
+      consentToProvidePersonalContent: checked,
     })
   }
+  const handleTermsType = (
+    type:
+      | 'consentToAccessPersonalContent'
+      | 'consentToCollectPersonalContent'
+      | 'consentToProvidePersonalContent',
+  ) => {
+    setTermsType(type)
+    onTermsOpen()
+  }
 
-  // 개별 동의 핸들러
   const handleIndividualAgreement = (key: string, checked: boolean) => {
     const newAgreements = { ...agreements, [key]: checked }
 
@@ -127,13 +154,12 @@ const ApplyLoanStep1 = () => {
   const isButtonEnabled = () => {
     const allAgreed = agreements.all
 
-    const allAnsweredNo = CONFIRMATION_ITEMS.every(
+    const allAnsweredYes = CONFIRMATION_ITEMS.every(
       (item) => confirmations[item.key as keyof typeof confirmations] === 'no',
     )
 
-    return allAgreed && allAnsweredNo
+    return allAgreed && allAnsweredYes
   }
-  const { isOpen, onClose, onOpen } = useDisclosure()
   return (
     <Container>
       <Flex py={{ base: '40px', sm: '48px', md: '84px' }} flexDir={'column'}>
@@ -207,7 +233,11 @@ const ApplyLoanStep1 = () => {
                         {item.label}
                       </Text>
                     </HStack>
-                    <Box onClick={onOpen} cursor={'pointer'} p={'4px'}>
+                    <Box
+                      onClick={() => handleTermsType(item.key)}
+                      cursor={'pointer'}
+                      p={'4px'}
+                    >
                       <CaretRightIcon boxSize={'24px'} />
                     </Box>
                   </Flex>
@@ -298,17 +328,23 @@ const ApplyLoanStep1 = () => {
             variant={'solid-primary'}
             w={'160px'}
             isDisabled={!isButtonEnabled()}
-            onClick={() => router.push('/apply-loan?step=2')}
+            onClick={() =>
+              router.push('/apply-loan?step=2&type=' + router.query.type)
+            }
           >
             다음
           </Button>
         </Flex>
       </Flex>
-      <LoanTermsModal isOpen={isOpen} onClose={onClose} />
+      <LoanTermsModal
+        isOpen={isTermsOpen}
+        onClose={isTermsClose}
+        type={termsType}
+      />
       <ModalBasis
-        isOpen={isOpen}
+        isOpen={isAlertOpen}
         visibleCloseButton={false}
-        onClose={onClose}
+        onClose={isAlertClose}
         size={'sm'}
         body={
           <Flex
@@ -327,7 +363,7 @@ const ApplyLoanStep1 = () => {
         }
         footer={
           <Flex w="100%" gap="12px">
-            <Button w="100%" variant={'solid-primary'} onClick={onClose}>
+            <Button w="100%" variant={'solid-primary'} onClick={isAlertClose}>
               확인
             </Button>
           </Flex>
