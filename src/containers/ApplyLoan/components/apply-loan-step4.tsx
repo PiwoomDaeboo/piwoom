@@ -168,7 +168,6 @@ const ApplyLoanStep4 = () => {
     setValue('companyName', company.name)
     setValue('companyBusinessNumber', company.businessNo)
     setValue('baseAddress', company.baseAddress)
-    // setValue('companyDetailAddress', company.detailAddress)
   }
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -514,7 +513,7 @@ const ApplyLoanStep4 = () => {
         <InputForm isRequired label="주소">
           <Input
             placeholder="주소"
-            value={baseAddress + ' ' + detailAddress}
+            value={baseAddress || '' + ' ' + detailAddress || ''}
             readOnly
           />
         </InputForm>
@@ -558,7 +557,6 @@ const ApplyLoanStep4 = () => {
           </Flex>
         </InputForm>
 
-        {/* 주거 정보 */}
         <Box w={'100%'} h={'1px'} bg={'border.basic.1'} my={'48px'} />
         <Text textStyle={'pre-heading-3'} color={'primary.4'}>
           주거 정보
