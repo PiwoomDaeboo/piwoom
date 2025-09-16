@@ -955,3 +955,1573 @@ export const DisclaimerRetrieveParamsEnumTypeMap = {
   PRIVACY_POLICY: '개인정보 처리방침',
   TERMS_OF_SERVICE: '서비스이용약관',
 } as const
+
+export interface LoanType {
+  readonly id: number
+  /** 본인인증 토큰 */
+  identityVerificationToken: string
+  /** 계약번호 */
+  readonly no: string
+  /**
+   * 상태
+   * * `UNDER_REVIEW` - 심사 중
+   * * `IN_PROGRESS` - 대출 중
+   * * `OVERDUE` - 연체 중
+   * * `EARLY_REPAYMENT_COMPLETED` - 중도 상환 완료
+   * * `MATURITY_REPAYMENT_COMPLETED` - 만기 상환 완료
+   * * `REJECTED` - 대출 거절
+   */
+  readonly status: LoanStatusEnumType
+  /**
+   * 유형
+   * * `A` - 월급
+   * * `B` - 신용
+   * * `C` - 부동산 담보
+   */
+  kind: LoanKindEnumType
+  /**
+   * 이메일
+   * @format email
+   */
+  email: string
+  /**
+   * 대출 용도
+   * * `LIVING_EXPENSES` - 생활자금
+   * * `BUSINESS_FUNDS` - 사업자금
+   * * `CARD_DEBT_PAYMENT` - 카드대금상환
+   * * `OTHER_DEBT_REPAYMENT` - 기타부채상환
+   * * `EDUCATION_FUNDS` - 학자금
+   * * `MARRIAGE_FUNDS` - 결혼자금
+   * * `CHILDBIRTH_FUNDS` - 출산자금
+   * * `INVESTMENT_FUNDS` - 투자자금
+   * * `INSURANCE_PAYMENT` - 보험료 납부
+   * * `UTILITY_PAYMENT` - 공과금 납부
+   * * `DIRECT_INPUT` - 직접 입력
+   */
+  purpose: LoanPurposeEnumType
+  /**
+   * 대출 용도 상세
+   * 직접 입력 시 사용
+   */
+  purposeDetail?: string
+  /**
+   * 총자산규모
+   * * `UNDER_100M` - 1억원 미만
+   * * `RANGE_100M_500M` - 1억~5억원 미만
+   * * `OVER_500M` - 5억원 이상
+   * * `NO_ASSET` - 자산 없음
+   */
+  totalAsset: LoanTotalAssetEnumType
+  /**
+   * 연소득
+   * * `UNDER_50M` - 5천만원 미만
+   * * `RANGE_50M_100M` - 5천만원~1억원 미만
+   * * `OVER_100M` - 1억원 이상
+   * * `NO_INCOME` - 소득 없음
+   */
+  annualIncome: LoanAnnualIncomeEnumType
+  /**
+   * 월 실수령액 또는 월 수입 (만원)
+   * 만원 단위로 입력
+   * @min 0
+   * @max 2147483647
+   */
+  monthlyIncome: number
+  /**
+   * 월 고정 지출 (만원)
+   * 만원 단위로 입력
+   * @min 0
+   * @max 2147483647
+   */
+  monthlyFixedExpense: number
+  /**
+   * 부채규모
+   * * `UNDER_50M` - 5천만원 미만
+   * * `RANGE_50M_100M` - 5천만원~1억원 미만
+   * * `OVER_100M` - 1억원 이상
+   * * `NO_DEBT` - 부채 없음
+   */
+  debtScale: LoanDebtScaleEnumType
+  /**
+   * 변재방법
+   * * `EMPLOYMENT_PENSION` - 근로소득 및 연금소득
+   * * `BUSINESS_INCOME` - 사업소득
+   * * `SPOUSE_INCOME` - 배우자 소득
+   * * `RETIREMENT_FUNDS` - 퇴직금
+   * * `REAL_ESTATE_INCOME` - 부동산 임대 및 양도 소득
+   * * `FINANCIAL_INCOME` - 금융소득(이자 및 배당)
+   * * `INHERITANCE_GIFT` - 상속/증여
+   * * `DIRECT_INPUT` - 직접 입력
+   */
+  repaymentMethod: LoanRepaymentMethodEnumType
+  /**
+   * 변재방법 상세
+   * 직접 입력 시 사용
+   */
+  repaymentDetail?: string
+  /**
+   * 신용평가점수
+   * * `UNDER_650` - 650점 미만
+   * * `RANGE_650_700` - 650점 이상~700점 미만
+   * * `RANGE_700_750` - 700점 이상~750점 미만
+   * * `RANGE_750_800` - 750점 이상~800점 미만
+   * * `RANGE_800_850` - 800점 이상~850점 미만
+   * * `RANGE_850_900` - 850점 이상~900점 미만
+   * * `RANGE_900_950` - 900점 이상~950점 미만
+   * * `OVER_950` - 950점 이상
+   */
+  creditScore: LoanCreditScoreEnumType
+  /**
+   * 세이프키
+   * @maxLength 100
+   */
+  safeKey: string
+  /**
+   * 대출 용도 및 상환 계획
+   * 대출 용도와 상환 계획을 상세히 기입해주세요
+   */
+  purposeAndRepaymentPlan: string
+  /** 전자문서 수신 동의 */
+  electronicDocumentConsent?: boolean
+  /**
+   * 대출신청 금액 (만원)
+   * 만원 단위로 입력
+   * @min 0
+   * @max 2147483647
+   */
+  loanAmount: number
+  /**
+   * 상환방식
+   * * `EQUAL_INSTALLMENT` - 원리금균등분할상환
+   * * `LUMP_SUM` - 만기 일시상환
+   */
+  repaymentType: LoanRepaymentTypeEnumType
+  /**
+   * 이자납입일자
+   * * `1` - 1일
+   * * `5` - 5일
+   * * `10` - 10일
+   * * `15` - 15일
+   * * `20` - 20일
+   * * `25` - 25일
+   * @min 0
+   * @max 2147483647
+   */
+  interestPaymentDate: LoanInterestPaymentDateEnumType
+  /**
+   * 대출 기간 (개월)
+   * @min 0
+   * @max 2147483647
+   */
+  loanPeriod: number
+  /**
+   * 입금은행
+   * * `0002` - 산업은행
+   * * `0003` - 기업은행
+   * * `0004` - 국민은행
+   * * `0007` - 수협은행
+   * * `0011` - 농협은행
+   * * `0012` - 농축협
+   * * `0020` - 우리은행
+   * * `0023` - SC제일은행
+   * * `0027` - 한국씨티은행
+   * * `0031` - 아이엠뱅크
+   * * `0032` - 부산은행
+   * * `0034` - 광주은행
+   * * `0035` - 제주은행
+   * * `0037` - 전북은행
+   * * `0039` - 경남은행
+   * * `0045` - 새마을금고
+   * * `0048` - 신협중앙회
+   * * `0050` - 상호저축은행
+   * * `0054` - HSBC은행
+   * * `0055` - 도이치은행
+   * * `0057` - JP모간체이스은행
+   * * `0060` - BOA은행
+   * * `0061` - 비엔피파리바은행
+   * * `0062` - 중국공상은행
+   * * `0063` - 중국은행
+   * * `0064` - 산림조합중앙회
+   * * `0067` - 중국건설은행
+   * * `0071` - 우체국
+   * * `0081` - 하나은행
+   * * `0088` - 신한은행
+   * * `0089` - 케이뱅크
+   * * `0090` - 카카오뱅크
+   * * `0092` - 토스뱅크
+   * * `0209` - 유안타증권
+   * * `0218` - KB증권
+   * * `0221` - 상상인증권
+   * * `0224` - BNK투자증권
+   * * `0225` - IBK투자증권
+   * * `0227` - 다올투자증권
+   * * `0238` - 미래에셋증권
+   * * `0240` - 삼성증권
+   * * `0243` - 한국투자증권
+   * * `0247` - NH투자증권
+   * * `0261` - 교보증권
+   * * `0262` - 아이엠증권
+   * * `0263` - 현대차증권
+   * * `0264` - 키움증권
+   * * `0265` - LS증권
+   * * `0266` - SK증권
+   * * `0267` - 대신증권
+   * * `0269` - 한화투자증권
+   * * `0270` - 하나증권
+   * * `0271` - 토스증권
+   * * `0278` - 신한금융투자
+   * * `0279` - DB금융투자
+   * * `0280` - 유진투자증권
+   * * `0287` - 메리츠증권
+   * * `0288` - 카카오페이증권
+   * * `0290` - 부국증권
+   * * `0291` - 신영증권
+   * * `0292` - 케이프투자증권
+   * * `0294` - 우리투자증권
+   */
+  bank: LoanBankEnumType
+  /**
+   * 계좌번호
+   * @maxLength 50
+   */
+  accountNumber: string
+  /**
+   * 예금주
+   * @maxLength 20
+   */
+  accountHolder: string
+  /**
+   * 예금주 실명번호
+   * @maxLength 20
+   */
+  accountHolderSsn: string
+  /**
+   * 직업구분
+   * * `CIVIL_SERVANT` - 공무원
+   * * `OFFICE_WORKER` - 직장인
+   * * `PROFESSIONAL` - 전문직
+   * * `SELF_EMPLOYED` - 자영업
+   * * `BUSINESS_OWNER` - 사업가
+   * * `PART_TIME` - 아르바이트
+   * * `HOUSEWIFE` - 주부
+   * * `UNEMPLOYED` - 무직
+   * * `OTHER` - 기타
+   */
+  jobType: LoanJobTypeEnumType
+  /**
+   * 직장명
+   * @maxLength 100
+   */
+  companyName?: string
+  /** 직장 주소 */
+  companyAddress?: string
+  /**
+   * 직장 사업자등록번호
+   * @maxLength 20
+   */
+  companyBusinessNumber?: string
+  /**
+   * 고용구분
+   * * `PERMANENT` - 정규직
+   * * `CONTRACT` - 계약직
+   */
+  employmentType?: LoanEmploymentTypeEnumType
+  /**
+   * 입사년
+   * @min 0
+   * @max 2147483647
+   */
+  hireYear?: number | null
+  /**
+   * 입사월
+   * @min 0
+   * @max 2147483647
+   */
+  hireMonth?: number | null
+  /**
+   * 우편번호
+   * @maxLength 5
+   */
+  postcode: string
+  /**
+   * 기본주소
+   * @maxLength 200
+   */
+  baseAddress: string
+  /**
+   * 상세주소
+   * @maxLength 200
+   */
+  detailAddress: string
+  /**
+   * 주거종류
+   * * `APARTMENT` - 아파트/주상복합
+   * * `MULTI_FAMILY` - 연립/다세대/다가구
+   * * `OTHER` - 그 외
+   */
+  housingType: LoanHousingTypeEnumType
+  /**
+   * 주거형태
+   * * `OWNED` - 자가
+   * * `JEONSE` - 전세
+   * * `MONTHLY_RENT` - 월세
+   */
+  residenceType: LoanResidenceTypeEnumType
+  /**
+   * 우편번호
+   * @maxLength 5
+   */
+  assetPostcode: string
+  /**
+   * 기본주소
+   * @maxLength 200
+   */
+  assetBaseAddress: string
+  /**
+   * 상세주소
+   * @maxLength 200
+   */
+  assetDetailAddress: string
+  /** 소득금액증명원 */
+  incomeCertificate: string
+  /** 주민등록등본 */
+  residentRegistrationCopy: string
+  /** 건강보험 자격득실확인서 */
+  healthInsuranceEligibilityConfirmation: string
+  /** 건강보험 납부확인서 */
+  healthInsurancePaymentConfirmation: string
+  /** 건강보험 납부확인서 2 */
+  healthInsurancePaymentConfirmation2: string
+  /** 신분증 */
+  identityCard: string
+  /** 지방세 납부내역 */
+  localTaxPayment: string
+  /** 파일 */
+  fileSet: LoanFileType
+}
+
+export interface LoanErrorMessageType {
+  nonField?: string[]
+  identityVerificationToken?: string[]
+  kind?: string[]
+  email?: string[]
+  purpose?: string[]
+  purposeDetail?: string[]
+  totalAsset?: string[]
+  annualIncome?: string[]
+  monthlyIncome?: string[]
+  monthlyFixedExpense?: string[]
+  debtScale?: string[]
+  repaymentMethod?: string[]
+  repaymentDetail?: string[]
+  creditScore?: string[]
+  safeKey?: string[]
+  purposeAndRepaymentPlan?: string[]
+  electronicDocumentConsent?: string[]
+  loanAmount?: string[]
+  repaymentType?: string[]
+  interestPaymentDate?: string[]
+  loanPeriod?: string[]
+  bank?: string[]
+  accountNumber?: string[]
+  accountHolder?: string[]
+  accountHolderSsn?: string[]
+  jobType?: string[]
+  companyName?: string[]
+  companyAddress?: string[]
+  companyBusinessNumber?: string[]
+  employmentType?: string[]
+  hireYear?: string[]
+  hireMonth?: string[]
+  postcode?: string[]
+  baseAddress?: string[]
+  detailAddress?: string[]
+  housingType?: string[]
+  residenceType?: string[]
+  assetPostcode?: string[]
+  assetBaseAddress?: string[]
+  assetDetailAddress?: string[]
+  incomeCertificate?: string[]
+  residentRegistrationCopy?: string[]
+  healthInsuranceEligibilityConfirmation?: string[]
+  healthInsurancePaymentConfirmation?: string[]
+  healthInsurancePaymentConfirmation2?: string[]
+  identityCard?: string[]
+  localTaxPayment?: string[]
+  fileSet?: LoanFileValidationErrorType
+}
+
+export interface LoanFileType {
+  /**
+   * 파일명
+   * @maxLength 100
+   */
+  name: string
+  /** 위치 */
+  path: string
+}
+
+export interface LoanFileRequestType {
+  /**
+   * 파일명
+   * @minLength 1
+   * @maxLength 100
+   */
+  name: string
+  /**
+   * 위치
+   * @minLength 1
+   */
+  path: string
+}
+
+export interface LoanFileValidationErrorType {
+  name?: string[]
+  path?: string[]
+}
+
+export interface LoanRequestType {
+  /**
+   * 본인인증 토큰
+   * @minLength 1
+   */
+  identityVerificationToken: string
+  /**
+   * 유형
+   * * `A` - 월급
+   * * `B` - 신용
+   * * `C` - 부동산 담보
+   */
+  kind: LoanRequestKindEnumType
+  /**
+   * 이메일
+   * @format email
+   * @minLength 1
+   */
+  email: string
+  /**
+   * 대출 용도
+   * * `LIVING_EXPENSES` - 생활자금
+   * * `BUSINESS_FUNDS` - 사업자금
+   * * `CARD_DEBT_PAYMENT` - 카드대금상환
+   * * `OTHER_DEBT_REPAYMENT` - 기타부채상환
+   * * `EDUCATION_FUNDS` - 학자금
+   * * `MARRIAGE_FUNDS` - 결혼자금
+   * * `CHILDBIRTH_FUNDS` - 출산자금
+   * * `INVESTMENT_FUNDS` - 투자자금
+   * * `INSURANCE_PAYMENT` - 보험료 납부
+   * * `UTILITY_PAYMENT` - 공과금 납부
+   * * `DIRECT_INPUT` - 직접 입력
+   */
+  purpose: LoanRequestPurposeEnumType
+  /**
+   * 대출 용도 상세
+   * 직접 입력 시 사용
+   */
+  purposeDetail?: string
+  /**
+   * 총자산규모
+   * * `UNDER_100M` - 1억원 미만
+   * * `RANGE_100M_500M` - 1억~5억원 미만
+   * * `OVER_500M` - 5억원 이상
+   * * `NO_ASSET` - 자산 없음
+   */
+  totalAsset: LoanRequestTotalAssetEnumType
+  /**
+   * 연소득
+   * * `UNDER_50M` - 5천만원 미만
+   * * `RANGE_50M_100M` - 5천만원~1억원 미만
+   * * `OVER_100M` - 1억원 이상
+   * * `NO_INCOME` - 소득 없음
+   */
+  annualIncome: LoanRequestAnnualIncomeEnumType
+  /**
+   * 월 실수령액 또는 월 수입 (만원)
+   * 만원 단위로 입력
+   * @min 0
+   * @max 2147483647
+   */
+  monthlyIncome: number
+  /**
+   * 월 고정 지출 (만원)
+   * 만원 단위로 입력
+   * @min 0
+   * @max 2147483647
+   */
+  monthlyFixedExpense: number
+  /**
+   * 부채규모
+   * * `UNDER_50M` - 5천만원 미만
+   * * `RANGE_50M_100M` - 5천만원~1억원 미만
+   * * `OVER_100M` - 1억원 이상
+   * * `NO_DEBT` - 부채 없음
+   */
+  debtScale: LoanRequestDebtScaleEnumType
+  /**
+   * 변재방법
+   * * `EMPLOYMENT_PENSION` - 근로소득 및 연금소득
+   * * `BUSINESS_INCOME` - 사업소득
+   * * `SPOUSE_INCOME` - 배우자 소득
+   * * `RETIREMENT_FUNDS` - 퇴직금
+   * * `REAL_ESTATE_INCOME` - 부동산 임대 및 양도 소득
+   * * `FINANCIAL_INCOME` - 금융소득(이자 및 배당)
+   * * `INHERITANCE_GIFT` - 상속/증여
+   * * `DIRECT_INPUT` - 직접 입력
+   */
+  repaymentMethod: LoanRequestRepaymentMethodEnumType
+  /**
+   * 변재방법 상세
+   * 직접 입력 시 사용
+   */
+  repaymentDetail?: string
+  /**
+   * 신용평가점수
+   * * `UNDER_650` - 650점 미만
+   * * `RANGE_650_700` - 650점 이상~700점 미만
+   * * `RANGE_700_750` - 700점 이상~750점 미만
+   * * `RANGE_750_800` - 750점 이상~800점 미만
+   * * `RANGE_800_850` - 800점 이상~850점 미만
+   * * `RANGE_850_900` - 850점 이상~900점 미만
+   * * `RANGE_900_950` - 900점 이상~950점 미만
+   * * `OVER_950` - 950점 이상
+   */
+  creditScore: LoanRequestCreditScoreEnumType
+  /**
+   * 세이프키
+   * @minLength 1
+   * @maxLength 100
+   */
+  safeKey: string
+  /**
+   * 대출 용도 및 상환 계획
+   * 대출 용도와 상환 계획을 상세히 기입해주세요
+   * @minLength 1
+   */
+  purposeAndRepaymentPlan: string
+  /** 전자문서 수신 동의 */
+  electronicDocumentConsent?: boolean
+  /**
+   * 대출신청 금액 (만원)
+   * 만원 단위로 입력
+   * @min 0
+   * @max 2147483647
+   */
+  loanAmount: number
+  /**
+   * 상환방식
+   * * `EQUAL_INSTALLMENT` - 원리금균등분할상환
+   * * `LUMP_SUM` - 만기 일시상환
+   */
+  repaymentType: LoanRequestRepaymentTypeEnumType
+  /**
+   * 이자납입일자
+   * * `1` - 1일
+   * * `5` - 5일
+   * * `10` - 10일
+   * * `15` - 15일
+   * * `20` - 20일
+   * * `25` - 25일
+   * @min 0
+   * @max 2147483647
+   */
+  interestPaymentDate: LoanRequestInterestPaymentDateEnumType
+  /**
+   * 대출 기간 (개월)
+   * @min 0
+   * @max 2147483647
+   */
+  loanPeriod: number
+  /**
+   * 입금은행
+   * * `0002` - 산업은행
+   * * `0003` - 기업은행
+   * * `0004` - 국민은행
+   * * `0007` - 수협은행
+   * * `0011` - 농협은행
+   * * `0012` - 농축협
+   * * `0020` - 우리은행
+   * * `0023` - SC제일은행
+   * * `0027` - 한국씨티은행
+   * * `0031` - 아이엠뱅크
+   * * `0032` - 부산은행
+   * * `0034` - 광주은행
+   * * `0035` - 제주은행
+   * * `0037` - 전북은행
+   * * `0039` - 경남은행
+   * * `0045` - 새마을금고
+   * * `0048` - 신협중앙회
+   * * `0050` - 상호저축은행
+   * * `0054` - HSBC은행
+   * * `0055` - 도이치은행
+   * * `0057` - JP모간체이스은행
+   * * `0060` - BOA은행
+   * * `0061` - 비엔피파리바은행
+   * * `0062` - 중국공상은행
+   * * `0063` - 중국은행
+   * * `0064` - 산림조합중앙회
+   * * `0067` - 중국건설은행
+   * * `0071` - 우체국
+   * * `0081` - 하나은행
+   * * `0088` - 신한은행
+   * * `0089` - 케이뱅크
+   * * `0090` - 카카오뱅크
+   * * `0092` - 토스뱅크
+   * * `0209` - 유안타증권
+   * * `0218` - KB증권
+   * * `0221` - 상상인증권
+   * * `0224` - BNK투자증권
+   * * `0225` - IBK투자증권
+   * * `0227` - 다올투자증권
+   * * `0238` - 미래에셋증권
+   * * `0240` - 삼성증권
+   * * `0243` - 한국투자증권
+   * * `0247` - NH투자증권
+   * * `0261` - 교보증권
+   * * `0262` - 아이엠증권
+   * * `0263` - 현대차증권
+   * * `0264` - 키움증권
+   * * `0265` - LS증권
+   * * `0266` - SK증권
+   * * `0267` - 대신증권
+   * * `0269` - 한화투자증권
+   * * `0270` - 하나증권
+   * * `0271` - 토스증권
+   * * `0278` - 신한금융투자
+   * * `0279` - DB금융투자
+   * * `0280` - 유진투자증권
+   * * `0287` - 메리츠증권
+   * * `0288` - 카카오페이증권
+   * * `0290` - 부국증권
+   * * `0291` - 신영증권
+   * * `0292` - 케이프투자증권
+   * * `0294` - 우리투자증권
+   */
+  bank: LoanRequestBankEnumType
+  /**
+   * 계좌번호
+   * @minLength 1
+   * @maxLength 50
+   */
+  accountNumber: string
+  /**
+   * 예금주
+   * @minLength 1
+   * @maxLength 20
+   */
+  accountHolder: string
+  /**
+   * 예금주 실명번호
+   * @minLength 1
+   * @maxLength 20
+   */
+  accountHolderSsn: string
+  /**
+   * 직업구분
+   * * `CIVIL_SERVANT` - 공무원
+   * * `OFFICE_WORKER` - 직장인
+   * * `PROFESSIONAL` - 전문직
+   * * `SELF_EMPLOYED` - 자영업
+   * * `BUSINESS_OWNER` - 사업가
+   * * `PART_TIME` - 아르바이트
+   * * `HOUSEWIFE` - 주부
+   * * `UNEMPLOYED` - 무직
+   * * `OTHER` - 기타
+   */
+  jobType: LoanRequestJobTypeEnumType
+  /**
+   * 직장명
+   * @maxLength 100
+   */
+  companyName?: string
+  /** 직장 주소 */
+  companyAddress?: string
+  /**
+   * 직장 사업자등록번호
+   * @maxLength 20
+   */
+  companyBusinessNumber?: string
+  /**
+   * 고용구분
+   * * `PERMANENT` - 정규직
+   * * `CONTRACT` - 계약직
+   */
+  employmentType?: LoanRequestEmploymentTypeEnumType
+  /**
+   * 입사년
+   * @min 0
+   * @max 2147483647
+   */
+  hireYear?: number | null
+  /**
+   * 입사월
+   * @min 0
+   * @max 2147483647
+   */
+  hireMonth?: number | null
+  /**
+   * 우편번호
+   * @minLength 1
+   * @maxLength 5
+   */
+  postcode: string
+  /**
+   * 기본주소
+   * @minLength 1
+   * @maxLength 200
+   */
+  baseAddress: string
+  /**
+   * 상세주소
+   * @minLength 1
+   * @maxLength 200
+   */
+  detailAddress: string
+  /**
+   * 주거종류
+   * * `APARTMENT` - 아파트/주상복합
+   * * `MULTI_FAMILY` - 연립/다세대/다가구
+   * * `OTHER` - 그 외
+   */
+  housingType: LoanRequestHousingTypeEnumType
+  /**
+   * 주거형태
+   * * `OWNED` - 자가
+   * * `JEONSE` - 전세
+   * * `MONTHLY_RENT` - 월세
+   */
+  residenceType: LoanRequestResidenceTypeEnumType
+  /**
+   * 우편번호
+   * @minLength 1
+   * @maxLength 5
+   */
+  assetPostcode: string
+  /**
+   * 기본주소
+   * @minLength 1
+   * @maxLength 200
+   */
+  assetBaseAddress: string
+  /**
+   * 상세주소
+   * @minLength 1
+   * @maxLength 200
+   */
+  assetDetailAddress: string
+  /** 소득금액증명원 */
+  incomeCertificate: string
+  /** 주민등록등본 */
+  residentRegistrationCopy: string
+  /** 건강보험 자격득실확인서 */
+  healthInsuranceEligibilityConfirmation: string
+  /** 건강보험 납부확인서 */
+  healthInsurancePaymentConfirmation: string
+  /** 건강보험 납부확인서 2 */
+  healthInsurancePaymentConfirmation2: string
+  /** 신분증 */
+  identityCard: string
+  /** 지방세 납부내역 */
+  localTaxPayment: string
+  /** 파일 */
+  fileSet: LoanFileRequestType
+}
+
+export interface PaginatedLoanListType {
+  count?: number
+  cursor?: string | null
+  results?: LoanType[]
+}
+
+export interface UsebAccessTokenType {
+  /** 액세스 토큰 */
+  readonly accessToken: string
+}
+
+export interface UsebAccessTokenErrorMessageType {
+  nonField?: string[]
+}
+
+export type LoanStatusEnumType = keyof typeof LoanStatusEnumTypeMap
+
+export const LoanStatusEnumTypeMap = {
+  EARLY_REPAYMENT_COMPLETED: '중도 상환 완료',
+  IN_PROGRESS: '대출 중',
+  MATURITY_REPAYMENT_COMPLETED: '만기 상환 완료',
+  OVERDUE: '연체 중',
+  REJECTED: '대출 거절',
+  UNDER_REVIEW: '심사 중',
+} as const
+
+/**
+ * * `A` - 월급
+ * `B` - 신용
+ * `C` - 부동산 담보
+ */
+
+export type LoanKindEnumType = keyof typeof LoanKindEnumTypeMap
+
+export const LoanKindEnumTypeMap = {
+  A: '월급',
+  B: '신용',
+  C: '부동산 담보',
+} as const
+
+/**
+ * * `LIVING_EXPENSES` - 생활자금
+ * `BUSINESS_FUNDS` - 사업자금
+ * `CARD_DEBT_PAYMENT` - 카드대금상환
+ * `OTHER_DEBT_REPAYMENT` - 기타부채상환
+ * `EDUCATION_FUNDS` - 학자금
+ * `MARRIAGE_FUNDS` - 결혼자금
+ * `CHILDBIRTH_FUNDS` - 출산자금
+ * `INVESTMENT_FUNDS` - 투자자금
+ * `INSURANCE_PAYMENT` - 보험료 납부
+ * `UTILITY_PAYMENT` - 공과금 납부
+ * `DIRECT_INPUT` - 직접 입력
+ */
+
+export type LoanPurposeEnumType = keyof typeof LoanPurposeEnumTypeMap
+
+export const LoanPurposeEnumTypeMap = {
+  BUSINESS_FUNDS: '사업자금',
+  CARD_DEBT_PAYMENT: '카드대금상환',
+  CHILDBIRTH_FUNDS: '출산자금',
+  DIRECT_INPUT: '직접 입력',
+  EDUCATION_FUNDS: '학자금',
+  INSURANCE_PAYMENT: '보험료 납부',
+  INVESTMENT_FUNDS: '투자자금',
+  LIVING_EXPENSES: '생활자금',
+  MARRIAGE_FUNDS: '결혼자금',
+  OTHER_DEBT_REPAYMENT: '기타부채상환',
+  UTILITY_PAYMENT: '공과금 납부',
+} as const
+
+/**
+ * * `UNDER_100M` - 1억원 미만
+ * `RANGE_100M_500M` - 1억~5억원 미만
+ * `OVER_500M` - 5억원 이상
+ * `NO_ASSET` - 자산 없음
+ */
+
+export type LoanTotalAssetEnumType = keyof typeof LoanTotalAssetEnumTypeMap
+
+export const LoanTotalAssetEnumTypeMap = {
+  NO_ASSET: '자산 없음',
+  OVER_500M: '5억원 이상',
+  RANGE_100M_500M: '1억~5억원 미만',
+  UNDER_100M: '1억원 미만',
+} as const
+
+/**
+ * * `UNDER_50M` - 5천만원 미만
+ * `RANGE_50M_100M` - 5천만원~1억원 미만
+ * `OVER_100M` - 1억원 이상
+ * `NO_INCOME` - 소득 없음
+ */
+
+export type LoanAnnualIncomeEnumType = keyof typeof LoanAnnualIncomeEnumTypeMap
+
+export const LoanAnnualIncomeEnumTypeMap = {
+  NO_INCOME: '소득 없음',
+  OVER_100M: '1억원 이상',
+  RANGE_50M_100M: '5천만원~1억원 미만',
+  UNDER_50M: '5천만원 미만',
+} as const
+
+/**
+ * * `UNDER_50M` - 5천만원 미만
+ * `RANGE_50M_100M` - 5천만원~1억원 미만
+ * `OVER_100M` - 1억원 이상
+ * `NO_DEBT` - 부채 없음
+ */
+
+export type LoanDebtScaleEnumType = keyof typeof LoanDebtScaleEnumTypeMap
+
+export const LoanDebtScaleEnumTypeMap = {
+  NO_DEBT: '부채 없음',
+  OVER_100M: '1억원 이상',
+  RANGE_50M_100M: '5천만원~1억원 미만',
+  UNDER_50M: '5천만원 미만',
+} as const
+
+/**
+ * * `EMPLOYMENT_PENSION` - 근로소득 및 연금소득
+ * `BUSINESS_INCOME` - 사업소득
+ * `SPOUSE_INCOME` - 배우자 소득
+ * `RETIREMENT_FUNDS` - 퇴직금
+ * `REAL_ESTATE_INCOME` - 부동산 임대 및 양도 소득
+ * `FINANCIAL_INCOME` - 금융소득(이자 및 배당)
+ * `INHERITANCE_GIFT` - 상속/증여
+ * `DIRECT_INPUT` - 직접 입력
+ */
+
+export type LoanRepaymentMethodEnumType =
+  keyof typeof LoanRepaymentMethodEnumTypeMap
+
+export const LoanRepaymentMethodEnumTypeMap = {
+  BUSINESS_INCOME: '사업소득',
+  DIRECT_INPUT: '직접 입력',
+  EMPLOYMENT_PENSION: '근로소득 및 연금소득',
+  FINANCIAL_INCOME: '금융소득(이자 및 배당)',
+  INHERITANCE_GIFT: '상속/증여',
+  REAL_ESTATE_INCOME: '부동산 임대 및 양도 소득',
+  RETIREMENT_FUNDS: '퇴직금',
+  SPOUSE_INCOME: '배우자 소득',
+} as const
+
+/**
+ * * `UNDER_650` - 650점 미만
+ * `RANGE_650_700` - 650점 이상~700점 미만
+ * `RANGE_700_750` - 700점 이상~750점 미만
+ * `RANGE_750_800` - 750점 이상~800점 미만
+ * `RANGE_800_850` - 800점 이상~850점 미만
+ * `RANGE_850_900` - 850점 이상~900점 미만
+ * `RANGE_900_950` - 900점 이상~950점 미만
+ * `OVER_950` - 950점 이상
+ */
+
+export type LoanCreditScoreEnumType = keyof typeof LoanCreditScoreEnumTypeMap
+
+export const LoanCreditScoreEnumTypeMap = {
+  OVER_950: '950점 이상',
+  RANGE_650_700: '650점 이상~700점 미만',
+  RANGE_700_750: '700점 이상~750점 미만',
+  RANGE_750_800: '750점 이상~800점 미만',
+  RANGE_800_850: '800점 이상~850점 미만',
+  RANGE_850_900: '850점 이상~900점 미만',
+  RANGE_900_950: '900점 이상~950점 미만',
+  UNDER_650: '650점 미만',
+} as const
+
+/**
+ * * `EQUAL_INSTALLMENT` - 원리금균등분할상환
+ * `LUMP_SUM` - 만기 일시상환
+ */
+
+export type LoanRepaymentTypeEnumType =
+  keyof typeof LoanRepaymentTypeEnumTypeMap
+
+export const LoanRepaymentTypeEnumTypeMap = {
+  EQUAL_INSTALLMENT: '원리금균등분할상환',
+  LUMP_SUM: '만기 일시상환',
+} as const
+
+/**
+ * * `1` - 1일
+ * `5` - 5일
+ * `10` - 10일
+ * `15` - 15일
+ * `20` - 20일
+ * `25` - 25일
+ * @min 0
+ * @max 2147483647
+ */
+
+export type LoanInterestPaymentDateEnumType =
+  keyof typeof LoanInterestPaymentDateEnumTypeMap
+
+export const LoanInterestPaymentDateEnumTypeMap = {
+  1: '1일',
+  5: '5일',
+  10: '10일',
+  15: '15일',
+  20: '20일',
+  25: '25일',
+} as const
+
+/**
+ * * `0002` - 산업은행
+ * `0003` - 기업은행
+ * `0004` - 국민은행
+ * `0007` - 수협은행
+ * `0011` - 농협은행
+ * `0012` - 농축협
+ * `0020` - 우리은행
+ * `0023` - SC제일은행
+ * `0027` - 한국씨티은행
+ * `0031` - 아이엠뱅크
+ * `0032` - 부산은행
+ * `0034` - 광주은행
+ * `0035` - 제주은행
+ * `0037` - 전북은행
+ * `0039` - 경남은행
+ * `0045` - 새마을금고
+ * `0048` - 신협중앙회
+ * `0050` - 상호저축은행
+ * `0054` - HSBC은행
+ * `0055` - 도이치은행
+ * `0057` - JP모간체이스은행
+ * `0060` - BOA은행
+ * `0061` - 비엔피파리바은행
+ * `0062` - 중국공상은행
+ * `0063` - 중국은행
+ * `0064` - 산림조합중앙회
+ * `0067` - 중국건설은행
+ * `0071` - 우체국
+ * `0081` - 하나은행
+ * `0088` - 신한은행
+ * `0089` - 케이뱅크
+ * `0090` - 카카오뱅크
+ * `0092` - 토스뱅크
+ * `0209` - 유안타증권
+ * `0218` - KB증권
+ * `0221` - 상상인증권
+ * `0224` - BNK투자증권
+ * `0225` - IBK투자증권
+ * `0227` - 다올투자증권
+ * `0238` - 미래에셋증권
+ * `0240` - 삼성증권
+ * `0243` - 한국투자증권
+ * `0247` - NH투자증권
+ * `0261` - 교보증권
+ * `0262` - 아이엠증권
+ * `0263` - 현대차증권
+ * `0264` - 키움증권
+ * `0265` - LS증권
+ * `0266` - SK증권
+ * `0267` - 대신증권
+ * `0269` - 한화투자증권
+ * `0270` - 하나증권
+ * `0271` - 토스증권
+ * `0278` - 신한금융투자
+ * `0279` - DB금융투자
+ * `0280` - 유진투자증권
+ * `0287` - 메리츠증권
+ * `0288` - 카카오페이증권
+ * `0290` - 부국증권
+ * `0291` - 신영증권
+ * `0292` - 케이프투자증권
+ * `0294` - 우리투자증권
+ */
+
+export type LoanBankEnumType = keyof typeof LoanBankEnumTypeMap
+
+export const LoanBankEnumTypeMap = {
+  '0002': '산업은행',
+  '0003': '기업은행',
+  '0004': '국민은행',
+  '0007': '수협은행',
+  '0011': '농협은행',
+  '0012': '농축협',
+  '0020': '우리은행',
+  '0023': 'SC제일은행',
+  '0027': '한국씨티은행',
+  '0031': '아이엠뱅크',
+  '0032': '부산은행',
+  '0034': '광주은행',
+  '0035': '제주은행',
+  '0037': '전북은행',
+  '0039': '경남은행',
+  '0045': '새마을금고',
+  '0048': '신협중앙회',
+  '0050': '상호저축은행',
+  '0054': 'HSBC은행',
+  '0055': '도이치은행',
+  '0057': 'JP모간체이스은행',
+  '0060': 'BOA은행',
+  '0061': '비엔피파리바은행',
+  '0062': '중국공상은행',
+  '0063': '중국은행',
+  '0064': '산림조합중앙회',
+  '0067': '중국건설은행',
+  '0071': '우체국',
+  '0081': '하나은행',
+  '0088': '신한은행',
+  '0089': '케이뱅크',
+  '0090': '카카오뱅크',
+  '0092': '토스뱅크',
+  '0209': '유안타증권',
+  '0218': 'KB증권',
+  '0221': '상상인증권',
+  '0224': 'BNK투자증권',
+  '0225': 'IBK투자증권',
+  '0227': '다올투자증권',
+  '0238': '미래에셋증권',
+  '0240': '삼성증권',
+  '0243': '한국투자증권',
+  '0247': 'NH투자증권',
+  '0261': '교보증권',
+  '0262': '아이엠증권',
+  '0263': '현대차증권',
+  '0264': '키움증권',
+  '0265': 'LS증권',
+  '0266': 'SK증권',
+  '0267': '대신증권',
+  '0269': '한화투자증권',
+  '0270': '하나증권',
+  '0271': '토스증권',
+  '0278': '신한금융투자',
+  '0279': 'DB금융투자',
+  '0280': '유진투자증권',
+  '0287': '메리츠증권',
+  '0288': '카카오페이증권',
+  '0290': '부국증권',
+  '0291': '신영증권',
+  '0292': '케이프투자증권',
+  '0294': '우리투자증권',
+} as const
+
+/**
+ * * `CIVIL_SERVANT` - 공무원
+ * `OFFICE_WORKER` - 직장인
+ * `PROFESSIONAL` - 전문직
+ * `SELF_EMPLOYED` - 자영업
+ * `BUSINESS_OWNER` - 사업가
+ * `PART_TIME` - 아르바이트
+ * `HOUSEWIFE` - 주부
+ * `UNEMPLOYED` - 무직
+ * `OTHER` - 기타
+ */
+
+export type LoanJobTypeEnumType = keyof typeof LoanJobTypeEnumTypeMap
+
+export const LoanJobTypeEnumTypeMap = {
+  BUSINESS_OWNER: '사업가',
+  CIVIL_SERVANT: '공무원',
+  HOUSEWIFE: '주부',
+  OFFICE_WORKER: '직장인',
+  OTHER: '기타',
+  PART_TIME: '아르바이트',
+  PROFESSIONAL: '전문직',
+  SELF_EMPLOYED: '자영업',
+  UNEMPLOYED: '무직',
+} as const
+
+/**
+ * * `PERMANENT` - 정규직
+ * `CONTRACT` - 계약직
+ */
+
+export type LoanEmploymentTypeEnumType =
+  keyof typeof LoanEmploymentTypeEnumTypeMap
+
+export const LoanEmploymentTypeEnumTypeMap = {
+  CONTRACT: '계약직',
+  PERMANENT: '정규직',
+} as const
+
+/**
+ * * `APARTMENT` - 아파트/주상복합
+ * `MULTI_FAMILY` - 연립/다세대/다가구
+ * `OTHER` - 그 외
+ */
+
+export type LoanHousingTypeEnumType = keyof typeof LoanHousingTypeEnumTypeMap
+
+export const LoanHousingTypeEnumTypeMap = {
+  APARTMENT: '아파트/주상복합',
+  MULTI_FAMILY: '연립/다세대/다가구',
+  OTHER: '그 외',
+} as const
+
+/**
+ * * `OWNED` - 자가
+ * `JEONSE` - 전세
+ * `MONTHLY_RENT` - 월세
+ */
+
+export type LoanResidenceTypeEnumType =
+  keyof typeof LoanResidenceTypeEnumTypeMap
+
+export const LoanResidenceTypeEnumTypeMap = {
+  JEONSE: '전세',
+  MONTHLY_RENT: '월세',
+  OWNED: '자가',
+} as const
+
+/**
+ * * `A` - 월급
+ * `B` - 신용
+ * `C` - 부동산 담보
+ */
+
+export type LoanRequestKindEnumType = keyof typeof LoanRequestKindEnumTypeMap
+
+export const LoanRequestKindEnumTypeMap = {
+  A: '월급',
+  B: '신용',
+  C: '부동산 담보',
+} as const
+
+/**
+ * * `LIVING_EXPENSES` - 생활자금
+ * `BUSINESS_FUNDS` - 사업자금
+ * `CARD_DEBT_PAYMENT` - 카드대금상환
+ * `OTHER_DEBT_REPAYMENT` - 기타부채상환
+ * `EDUCATION_FUNDS` - 학자금
+ * `MARRIAGE_FUNDS` - 결혼자금
+ * `CHILDBIRTH_FUNDS` - 출산자금
+ * `INVESTMENT_FUNDS` - 투자자금
+ * `INSURANCE_PAYMENT` - 보험료 납부
+ * `UTILITY_PAYMENT` - 공과금 납부
+ * `DIRECT_INPUT` - 직접 입력
+ */
+
+export type LoanRequestPurposeEnumType =
+  keyof typeof LoanRequestPurposeEnumTypeMap
+
+export const LoanRequestPurposeEnumTypeMap = {
+  BUSINESS_FUNDS: '사업자금',
+  CARD_DEBT_PAYMENT: '카드대금상환',
+  CHILDBIRTH_FUNDS: '출산자금',
+  DIRECT_INPUT: '직접 입력',
+  EDUCATION_FUNDS: '학자금',
+  INSURANCE_PAYMENT: '보험료 납부',
+  INVESTMENT_FUNDS: '투자자금',
+  LIVING_EXPENSES: '생활자금',
+  MARRIAGE_FUNDS: '결혼자금',
+  OTHER_DEBT_REPAYMENT: '기타부채상환',
+  UTILITY_PAYMENT: '공과금 납부',
+} as const
+
+/**
+ * * `UNDER_100M` - 1억원 미만
+ * `RANGE_100M_500M` - 1억~5억원 미만
+ * `OVER_500M` - 5억원 이상
+ * `NO_ASSET` - 자산 없음
+ */
+
+export type LoanRequestTotalAssetEnumType =
+  keyof typeof LoanRequestTotalAssetEnumTypeMap
+
+export const LoanRequestTotalAssetEnumTypeMap = {
+  NO_ASSET: '자산 없음',
+  OVER_500M: '5억원 이상',
+  RANGE_100M_500M: '1억~5억원 미만',
+  UNDER_100M: '1억원 미만',
+} as const
+
+/**
+ * * `UNDER_50M` - 5천만원 미만
+ * `RANGE_50M_100M` - 5천만원~1억원 미만
+ * `OVER_100M` - 1억원 이상
+ * `NO_INCOME` - 소득 없음
+ */
+
+export type LoanRequestAnnualIncomeEnumType =
+  keyof typeof LoanRequestAnnualIncomeEnumTypeMap
+
+export const LoanRequestAnnualIncomeEnumTypeMap = {
+  NO_INCOME: '소득 없음',
+  OVER_100M: '1억원 이상',
+  RANGE_50M_100M: '5천만원~1억원 미만',
+  UNDER_50M: '5천만원 미만',
+} as const
+
+/**
+ * * `UNDER_50M` - 5천만원 미만
+ * `RANGE_50M_100M` - 5천만원~1억원 미만
+ * `OVER_100M` - 1억원 이상
+ * `NO_DEBT` - 부채 없음
+ */
+
+export type LoanRequestDebtScaleEnumType =
+  keyof typeof LoanRequestDebtScaleEnumTypeMap
+
+export const LoanRequestDebtScaleEnumTypeMap = {
+  NO_DEBT: '부채 없음',
+  OVER_100M: '1억원 이상',
+  RANGE_50M_100M: '5천만원~1억원 미만',
+  UNDER_50M: '5천만원 미만',
+} as const
+
+/**
+ * * `EMPLOYMENT_PENSION` - 근로소득 및 연금소득
+ * `BUSINESS_INCOME` - 사업소득
+ * `SPOUSE_INCOME` - 배우자 소득
+ * `RETIREMENT_FUNDS` - 퇴직금
+ * `REAL_ESTATE_INCOME` - 부동산 임대 및 양도 소득
+ * `FINANCIAL_INCOME` - 금융소득(이자 및 배당)
+ * `INHERITANCE_GIFT` - 상속/증여
+ * `DIRECT_INPUT` - 직접 입력
+ */
+
+export type LoanRequestRepaymentMethodEnumType =
+  keyof typeof LoanRequestRepaymentMethodEnumTypeMap
+
+export const LoanRequestRepaymentMethodEnumTypeMap = {
+  BUSINESS_INCOME: '사업소득',
+  DIRECT_INPUT: '직접 입력',
+  EMPLOYMENT_PENSION: '근로소득 및 연금소득',
+  FINANCIAL_INCOME: '금융소득(이자 및 배당)',
+  INHERITANCE_GIFT: '상속/증여',
+  REAL_ESTATE_INCOME: '부동산 임대 및 양도 소득',
+  RETIREMENT_FUNDS: '퇴직금',
+  SPOUSE_INCOME: '배우자 소득',
+} as const
+
+/**
+ * * `UNDER_650` - 650점 미만
+ * `RANGE_650_700` - 650점 이상~700점 미만
+ * `RANGE_700_750` - 700점 이상~750점 미만
+ * `RANGE_750_800` - 750점 이상~800점 미만
+ * `RANGE_800_850` - 800점 이상~850점 미만
+ * `RANGE_850_900` - 850점 이상~900점 미만
+ * `RANGE_900_950` - 900점 이상~950점 미만
+ * `OVER_950` - 950점 이상
+ */
+
+export type LoanRequestCreditScoreEnumType =
+  keyof typeof LoanRequestCreditScoreEnumTypeMap
+
+export const LoanRequestCreditScoreEnumTypeMap = {
+  OVER_950: '950점 이상',
+  RANGE_650_700: '650점 이상~700점 미만',
+  RANGE_700_750: '700점 이상~750점 미만',
+  RANGE_750_800: '750점 이상~800점 미만',
+  RANGE_800_850: '800점 이상~850점 미만',
+  RANGE_850_900: '850점 이상~900점 미만',
+  RANGE_900_950: '900점 이상~950점 미만',
+  UNDER_650: '650점 미만',
+} as const
+
+/**
+ * * `EQUAL_INSTALLMENT` - 원리금균등분할상환
+ * `LUMP_SUM` - 만기 일시상환
+ */
+
+export type LoanRequestRepaymentTypeEnumType =
+  keyof typeof LoanRequestRepaymentTypeEnumTypeMap
+
+export const LoanRequestRepaymentTypeEnumTypeMap = {
+  EQUAL_INSTALLMENT: '원리금균등분할상환',
+  LUMP_SUM: '만기 일시상환',
+} as const
+
+/**
+ * * `1` - 1일
+ * `5` - 5일
+ * `10` - 10일
+ * `15` - 15일
+ * `20` - 20일
+ * `25` - 25일
+ * @min 0
+ * @max 2147483647
+ */
+
+export type LoanRequestInterestPaymentDateEnumType =
+  keyof typeof LoanRequestInterestPaymentDateEnumTypeMap
+
+export const LoanRequestInterestPaymentDateEnumTypeMap = {
+  1: '1일',
+  5: '5일',
+  10: '10일',
+  15: '15일',
+  20: '20일',
+  25: '25일',
+} as const
+
+/**
+ * * `0002` - 산업은행
+ * `0003` - 기업은행
+ * `0004` - 국민은행
+ * `0007` - 수협은행
+ * `0011` - 농협은행
+ * `0012` - 농축협
+ * `0020` - 우리은행
+ * `0023` - SC제일은행
+ * `0027` - 한국씨티은행
+ * `0031` - 아이엠뱅크
+ * `0032` - 부산은행
+ * `0034` - 광주은행
+ * `0035` - 제주은행
+ * `0037` - 전북은행
+ * `0039` - 경남은행
+ * `0045` - 새마을금고
+ * `0048` - 신협중앙회
+ * `0050` - 상호저축은행
+ * `0054` - HSBC은행
+ * `0055` - 도이치은행
+ * `0057` - JP모간체이스은행
+ * `0060` - BOA은행
+ * `0061` - 비엔피파리바은행
+ * `0062` - 중국공상은행
+ * `0063` - 중국은행
+ * `0064` - 산림조합중앙회
+ * `0067` - 중국건설은행
+ * `0071` - 우체국
+ * `0081` - 하나은행
+ * `0088` - 신한은행
+ * `0089` - 케이뱅크
+ * `0090` - 카카오뱅크
+ * `0092` - 토스뱅크
+ * `0209` - 유안타증권
+ * `0218` - KB증권
+ * `0221` - 상상인증권
+ * `0224` - BNK투자증권
+ * `0225` - IBK투자증권
+ * `0227` - 다올투자증권
+ * `0238` - 미래에셋증권
+ * `0240` - 삼성증권
+ * `0243` - 한국투자증권
+ * `0247` - NH투자증권
+ * `0261` - 교보증권
+ * `0262` - 아이엠증권
+ * `0263` - 현대차증권
+ * `0264` - 키움증권
+ * `0265` - LS증권
+ * `0266` - SK증권
+ * `0267` - 대신증권
+ * `0269` - 한화투자증권
+ * `0270` - 하나증권
+ * `0271` - 토스증권
+ * `0278` - 신한금융투자
+ * `0279` - DB금융투자
+ * `0280` - 유진투자증권
+ * `0287` - 메리츠증권
+ * `0288` - 카카오페이증권
+ * `0290` - 부국증권
+ * `0291` - 신영증권
+ * `0292` - 케이프투자증권
+ * `0294` - 우리투자증권
+ */
+
+export type LoanRequestBankEnumType = keyof typeof LoanRequestBankEnumTypeMap
+
+export const LoanRequestBankEnumTypeMap = {
+  '0002': '산업은행',
+  '0003': '기업은행',
+  '0004': '국민은행',
+  '0007': '수협은행',
+  '0011': '농협은행',
+  '0012': '농축협',
+  '0020': '우리은행',
+  '0023': 'SC제일은행',
+  '0027': '한국씨티은행',
+  '0031': '아이엠뱅크',
+  '0032': '부산은행',
+  '0034': '광주은행',
+  '0035': '제주은행',
+  '0037': '전북은행',
+  '0039': '경남은행',
+  '0045': '새마을금고',
+  '0048': '신협중앙회',
+  '0050': '상호저축은행',
+  '0054': 'HSBC은행',
+  '0055': '도이치은행',
+  '0057': 'JP모간체이스은행',
+  '0060': 'BOA은행',
+  '0061': '비엔피파리바은행',
+  '0062': '중국공상은행',
+  '0063': '중국은행',
+  '0064': '산림조합중앙회',
+  '0067': '중국건설은행',
+  '0071': '우체국',
+  '0081': '하나은행',
+  '0088': '신한은행',
+  '0089': '케이뱅크',
+  '0090': '카카오뱅크',
+  '0092': '토스뱅크',
+  '0209': '유안타증권',
+  '0218': 'KB증권',
+  '0221': '상상인증권',
+  '0224': 'BNK투자증권',
+  '0225': 'IBK투자증권',
+  '0227': '다올투자증권',
+  '0238': '미래에셋증권',
+  '0240': '삼성증권',
+  '0243': '한국투자증권',
+  '0247': 'NH투자증권',
+  '0261': '교보증권',
+  '0262': '아이엠증권',
+  '0263': '현대차증권',
+  '0264': '키움증권',
+  '0265': 'LS증권',
+  '0266': 'SK증권',
+  '0267': '대신증권',
+  '0269': '한화투자증권',
+  '0270': '하나증권',
+  '0271': '토스증권',
+  '0278': '신한금융투자',
+  '0279': 'DB금융투자',
+  '0280': '유진투자증권',
+  '0287': '메리츠증권',
+  '0288': '카카오페이증권',
+  '0290': '부국증권',
+  '0291': '신영증권',
+  '0292': '케이프투자증권',
+  '0294': '우리투자증권',
+} as const
+
+/**
+ * * `CIVIL_SERVANT` - 공무원
+ * `OFFICE_WORKER` - 직장인
+ * `PROFESSIONAL` - 전문직
+ * `SELF_EMPLOYED` - 자영업
+ * `BUSINESS_OWNER` - 사업가
+ * `PART_TIME` - 아르바이트
+ * `HOUSEWIFE` - 주부
+ * `UNEMPLOYED` - 무직
+ * `OTHER` - 기타
+ */
+
+export type LoanRequestJobTypeEnumType =
+  keyof typeof LoanRequestJobTypeEnumTypeMap
+
+export const LoanRequestJobTypeEnumTypeMap = {
+  BUSINESS_OWNER: '사업가',
+  CIVIL_SERVANT: '공무원',
+  HOUSEWIFE: '주부',
+  OFFICE_WORKER: '직장인',
+  OTHER: '기타',
+  PART_TIME: '아르바이트',
+  PROFESSIONAL: '전문직',
+  SELF_EMPLOYED: '자영업',
+  UNEMPLOYED: '무직',
+} as const
+
+/**
+ * * `PERMANENT` - 정규직
+ * `CONTRACT` - 계약직
+ */
+
+export type LoanRequestEmploymentTypeEnumType =
+  keyof typeof LoanRequestEmploymentTypeEnumTypeMap
+
+export const LoanRequestEmploymentTypeEnumTypeMap = {
+  CONTRACT: '계약직',
+  PERMANENT: '정규직',
+} as const
+
+/**
+ * * `APARTMENT` - 아파트/주상복합
+ * `MULTI_FAMILY` - 연립/다세대/다가구
+ * `OTHER` - 그 외
+ */
+
+export type LoanRequestHousingTypeEnumType =
+  keyof typeof LoanRequestHousingTypeEnumTypeMap
+
+export const LoanRequestHousingTypeEnumTypeMap = {
+  APARTMENT: '아파트/주상복합',
+  MULTI_FAMILY: '연립/다세대/다가구',
+  OTHER: '그 외',
+} as const
+
+/**
+ * * `OWNED` - 자가
+ * `JEONSE` - 전세
+ * `MONTHLY_RENT` - 월세
+ */
+
+export type LoanRequestResidenceTypeEnumType =
+  keyof typeof LoanRequestResidenceTypeEnumTypeMap
+
+export const LoanRequestResidenceTypeEnumTypeMap = {
+  JEONSE: '전세',
+  MONTHLY_RENT: '월세',
+  OWNED: '자가',
+} as const
+
+/**
+ * * `notice.File.path` - 위치
+ * `loan.Loan.income_certificate` - 소득금액증명원
+ * `loan.Loan.resident_registration_copy` - 주민등록등본
+ * `loan.Loan.health_insurance_eligibility_confirmation` - 건강보험 자격득실확인서
+ * `loan.Loan.health_insurance_payment_confirmation` - 건강보험 납부확인서
+ * `loan.Loan.health_insurance_payment_confirmation_2` - 건강보험 납부확인서 2
+ * `loan.Loan.identity_card` - 신분증
+ * `loan.Loan.local_tax_payment` - 지방세 납부내역
+ * `loan.File.path` - 위치
+ * `gov.GovLog.file` - 파일
+ */

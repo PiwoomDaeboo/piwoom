@@ -173,3 +173,30 @@ export const DEBT_SCALE_OPTIONS = [
   { label: '1억원 이상', value: 'OVER_100M' },
   { label: '부채 없음', value: 'NO_DEBT' },
 ]
+
+export const LOAN_AMOUNT_OPTIONS = [
+  { label: '300만원', value: 300 },
+  { label: '600만원', value: 600 },
+  { label: '900만원', value: 900 },
+  { label: '1200만원', value: 1200 },
+  { label: '1500만원', value: 1500 },
+]
+
+export const LOAN_PERIOD_OPTIONS = [
+  { label: '6개월', value: 6 },
+  { label: '12개월', value: 12 },
+  { label: '24개월', value: 24 },
+  { label: '36개월', value: 36 },
+]
+
+export const RESIDENCE_TYPE_OPTIONS = [
+  { label: '자가', value: '자가' },
+  { label: '전세', value: '전세' },
+  { label: '월세', value: '월세' },
+]
+
+export const HOUSING_TYPE_OPTIONS = [
+  { label: '아파트/주상복합', value: '아파트/주상복합' },
+  { label: '연립/다세대/다가구', value: '연립/다세대/다가구' },
+  { label: '그 외', value: '그 외' },
+]

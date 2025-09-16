@@ -19,9 +19,9 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 
-import { Select } from 'chakra-react-select'
-import { Controller, useFormContext } from 'react-hook-form'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
 
+import ModalBasis from '@/components/@Modal/ModalBasis'
 import CommonSelect from '@/components/CommonSelect'
 import InputForm from '@/components/InputForm'
 import { InfoFillIcon } from '@/generated/icons/MyIcons'
@@ -38,13 +38,66 @@ import {
 const ApplyLoanStep3 = () => {
   const { register, control, watch, setValue } = useFormContext()
   const router = useRouter()
+  const totalAsset = useWatch({ control, name: 'totalAsset' })
+  const annualIncome = useWatch({ control, name: 'annualIncome' })
+  const debtScale = useWatch({ control, name: 'debtScale' })
+  const repaymentMethod = useWatch({ control, name: 'repaymentMethod' })
+  const loanPurpose = useWatch({ control, name: 'loanPurpose' })
+  const monthlyIncome = useWatch({ control, name: 'monthlyIncome' })
+  const creditScore = useWatch({ control, name: 'creditScore' })
 
-  // 폼 값들을 watch로 감시
-  const formValues = watch('suitability')
-  console.log(watch())
-  // 버튼 선택 핸들러
+  const {
+    isOpen: isLoanAlertOpen,
+    onOpen: onLoanAlertOpen,
+    onClose: onLoanAlertClose,
+  } = useDisclosure()
+  const {
+    isOpen: isLoanRejectOpen,
+    onOpen: onLoanRejectOpen,
+    onClose: onLoanRejectClose,
+  } = useDisclosure()
+
   const handleButtonSelect = (field: string, value: string) => {
-    setValue(`suitability.${field}`, value)
+    setValue(`${field}`, value)
+  }
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    const pastedText = e.clipboardData.getData('text')
+
+    const numbersOnly = pastedText.replace(/[^0-9]/g, '')
+
+    const target = e.target as HTMLInputElement
+    const fieldName = target.name
+
+    if (fieldName && numbersOnly) {
+      setValue(fieldName, parseInt(numbersOnly) || 0)
+    }
+  }
+
+  const checkLoanEligibility = () => {
+    const isNoIncome = annualIncome === 'NO_INCOME'
+
+    const isZeroMonthlyIncome =
+      monthlyIncome === 0 ||
+      monthlyIncome === null ||
+      monthlyIncome === undefined
+
+    const isLowCreditScore = creditScore === 'UNDER_650'
+
+    if (isNoIncome || isZeroMonthlyIncome || isLowCreditScore) {
+      onLoanRejectOpen()
+      return false
+    }
+
+    return true
+  }
+
+  // 다음 버튼 클릭 핸들러
+  const handleNextClick = () => {
+    if (checkLoanEligibility()) {
+      router.push('/apply-loan?step=4&type=' + router.query.type)
+    }
   }
 
   return (
@@ -67,26 +120,35 @@ const ApplyLoanStep3 = () => {
 
         <InputForm label="대출용도">
           <Flex w={'100%'} gap={'16px'}>
-            <Box w={'100%'}>
-              <Controller
-                name="suitability.loanPurpose"
-                control={control}
-                render={({ field }) => (
-                  <CommonSelect
-                    placeholder="선택"
-                    options={LOAN_PURPOSE_OPTIONS}
-                    variant="outline"
-                    value={LOAN_PURPOSE_OPTIONS.find(
-                      (option) => option.value === field.value,
-                    )}
-                    onChange={(selectedOption) =>
-                      field.onChange(selectedOption?.value || '')
-                    }
-                  />
-                )}
-              />
-            </Box>
-            <Box w={'100%'}></Box>
+            <VStack w={'50%'}>
+              <Box w={'100%'}>
+                <Controller
+                  name="loanPurpose"
+                  control={control}
+                  render={({ field }) => (
+                    <CommonSelect
+                      placeholder="선택"
+                      options={LOAN_PURPOSE_OPTIONS}
+                      variant="outline"
+                      value={LOAN_PURPOSE_OPTIONS.find(
+                        (option) => option.value === field.value,
+                      )}
+                      onChange={(selectedOption) =>
+                        field.onChange(selectedOption?.value || '')
+                      }
+                    />
+                  )}
+                />
+              </Box>
+
+              {loanPurpose === 'DIRECT_INPUT' && (
+                <Input
+                  placeholder="대출 용도 직접입력"
+                  {...register('purposeDetail')}
+                />
+              )}
+            </VStack>
+            <Box />
           </Flex>
         </InputForm>
         <InputForm label="총 자산 규모" w={'100%'}>
@@ -95,18 +157,14 @@ const ApplyLoanStep3 = () => {
               <Button
                 key={option.value}
                 variant={
-                  formValues?.totalAssets === option.value ?
+                  totalAsset === option.value ?
                     'outline-primary'
                   : 'outline-secondary'
                 }
                 textStyle={'pre-body-5'}
-                color={
-                  formValues?.totalAssets === option.value ?
-                    'primary.3'
-                  : 'grey.8'
-                }
+                color={totalAsset === option.value ? 'primary.3' : 'grey.8'}
                 w={'100%'}
-                onClick={() => handleButtonSelect('totalAssets', option.value)}
+                onClick={() => handleButtonSelect('totalAsset', option.value)}
               >
                 {option.label}
               </Button>
@@ -119,16 +177,12 @@ const ApplyLoanStep3 = () => {
               <Button
                 key={option.value}
                 variant={
-                  formValues?.annualIncome === option.value ?
+                  annualIncome === option.value ?
                     'outline-primary'
                   : 'outline-secondary'
                 }
                 textStyle={'pre-body-5'}
-                color={
-                  formValues?.annualIncome === option.value ?
-                    'primary.3'
-                  : 'grey.8'
-                }
+                color={annualIncome === option.value ? 'primary.3' : 'grey.8'}
                 w={'100%'}
                 onClick={() => handleButtonSelect('annualIncome', option.value)}
               >
@@ -143,7 +197,8 @@ const ApplyLoanStep3 = () => {
               <Input
                 placeholder="0"
                 type="number"
-                {...register('suitability.monthlyIncome', {
+                onPaste={handlePaste}
+                {...register('monthlyIncome', {
                   valueAsNumber: true,
                 })}
               />
@@ -157,7 +212,8 @@ const ApplyLoanStep3 = () => {
               <Input
                 placeholder="0"
                 type="number"
-                {...register('suitability.monthlyExpenses', {
+                onPaste={handlePaste}
+                {...register('monthlyFixedExpense', {
                   valueAsNumber: true,
                 })}
               />
@@ -174,18 +230,14 @@ const ApplyLoanStep3 = () => {
               <Button
                 key={option.value}
                 variant={
-                  formValues?.debtAmount === option.value ?
+                  debtScale === option.value ?
                     'outline-primary'
                   : 'outline-secondary'
                 }
                 textStyle={'pre-body-5'}
-                color={
-                  formValues?.debtAmount === option.value ?
-                    'primary.3'
-                  : 'grey.8'
-                }
+                color={debtScale === option.value ? 'primary.3' : 'grey.8'}
                 w={'100%'}
-                onClick={() => handleButtonSelect('debtAmount', option.value)}
+                onClick={() => handleButtonSelect('debtScale', option.value)}
               >
                 {option.label}
               </Button>
@@ -196,10 +248,10 @@ const ApplyLoanStep3 = () => {
           <InputForm label="변제방법 (자금원천)">
             <Box w={'100%'}>
               <Controller
-                name="suitability.repaymentMethod"
+                name="repaymentMethod"
                 control={control}
                 render={({ field }) => (
-                  <Select
+                  <CommonSelect
                     options={REPAYMENT_METHOD_OPTIONS}
                     placeholder="선택"
                     value={REPAYMENT_METHOD_OPTIONS.find(
@@ -212,15 +264,24 @@ const ApplyLoanStep3 = () => {
                 )}
               />
             </Box>
+            {/* DIRECT_INPUT 선택 시 추가 인풋 표시 */}
+            {repaymentMethod === 'DIRECT_INPUT' && (
+              <Box w={'100%'}>
+                <Input
+                  placeholder="재방법(자급원천) 입력"
+                  {...register('customRepaymentMethod')}
+                />
+              </Box>
+            )}
           </InputForm>
           <InputForm label="신용평가점수 (NICE 기준)">
             <>
               <Box w={'100%'}>
                 <Controller
-                  name="suitability.creditScore"
+                  name="creditScore"
                   control={control}
                   render={({ field }) => (
-                    <Select
+                    <CommonSelect
                       options={CREDIT_SCORE_OPTIONS}
                       placeholder="선택"
                       value={CREDIT_SCORE_OPTIONS.find(
@@ -236,6 +297,7 @@ const ApplyLoanStep3 = () => {
               <Button
                 variant={'text-primary'}
                 textStyle={'pre-body-5'}
+                size={'lg'}
                 onClick={() => {
                   window.open('https://campaign.naver.com/credit/', '_blank')
                 }}
@@ -245,7 +307,10 @@ const ApplyLoanStep3 = () => {
             </>
           </InputForm>
         </Flex>
-        <InputForm label="신용정보 제출하기">
+        <InputForm
+          label="신용정보 제출하기"
+          tooltipLabel="대출 심사를 위해 고객님의 신용정보 확인이 필수입니다. [제출] 버튼을 누르시면 NICE평가정보의 ‘신용인증송부 서비스’를 통해 본인인증과 정보 확인을 거친 뒤, 고객님이 동의하신 신용정보만 심사 목적으로 안전하게 당사에 제공됩니다."
+        >
           <Button
             variant={'outline-secondary'}
             textStyle={'pre-body-5'}
@@ -302,8 +367,10 @@ const ApplyLoanStep3 = () => {
               w={'100%'}
               h={'200px'}
               p={'10px'}
-              placeholder="(예시) 자녀 출산으로 인해 산후 조리원 비용이 예상보다 많이 나왔습니다. <br/>오백만원만 빌리면, 3개월 동안 월급을 모아서 상환할 수 있습니다."
-              {...register('suitability.loanPurposeAndPlan')}
+              maxLength={2000}
+              // placeholder="(예시) 자녀 출산으로 인해 산후 조리원 비용이 예상보다 많이 나왔습니다. <br/>오백만원만 빌리면, 3개월 동안 월급을 모아서 상환할 수 있습니다."
+              placeholder="(예시) 서울시 성동구에 위치한 10억원짜리 아파트를 사게 되었습니다. 잔금이 2개월 후라, 잔금일에 아파트 2순위 담보로 2억원을 빌리고 싶습니다. 참고로 1순위 은행 대출은 4억원입니다. 연 소득이 6000만원이기 때문에 매월 대출 이자 납부에는 문제가 없으며, 대출 기간 3년 동안 월급을 열심히 모아서 원금 일부는 상환하고 나머지는 은행 신용대출로 대환할 계획입니다."
+              {...register('purposeAndRepaymentPlan')}
             />
           </Flex>
         </InputForm>
@@ -317,12 +384,93 @@ const ApplyLoanStep3 = () => {
           <Button
             variant={'solid-primary'}
             w={'160px'}
-            onClick={() => router.push('/apply-loan?step=3')}
+            onClick={handleNextClick}
           >
             다음
           </Button>
         </Flex>
       </Flex>
+      <ModalBasis
+        isOpen={isLoanAlertOpen}
+        visibleCloseButton={false}
+        onClose={onLoanAlertClose}
+        size={'sm'}
+        body={
+          <Flex
+            flexDir={'column'}
+            gap={'12px'}
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
+            <Text textStyle={'pre-heading-4'}>알림</Text>
+            <Text textStyle={'pre-body-6'}>
+              현재는 보이스피싱이 의심되어
+              <br />
+              대출 신청이 어렵습니다.
+            </Text>
+          </Flex>
+        }
+        footer={
+          <Flex w="100%" gap="12px">
+            <Button
+              w="100%"
+              variant={'solid-primary'}
+              onClick={onLoanAlertClose}
+            >
+              확인
+            </Button>
+          </Flex>
+        }
+      ></ModalBasis>
+
+      <ModalBasis
+        isOpen={isLoanRejectOpen}
+        visibleCloseButton={false}
+        onClose={onLoanRejectClose}
+        size={'sm'}
+        body={
+          <Flex
+            flexDir={'column'}
+            gap={'12px'}
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
+            <Text textStyle={'pre-heading-4'} color={'grey.10'}>
+              대출 진행 불가
+            </Text>
+            <Text
+              textAlign={'center'}
+              textStyle={'pre-body-68'}
+              color={'grey.7'}
+            >
+              당사 대출 심사 기준에 부합하지 않아,
+              <br /> 대출 진행이 불가함을 알려드립니다.
+              <br /> 담보 제공 또는 연대보증 등을 통한 추가적인 대출 상담을
+              원하실 경우 상담하기 버튼을 눌러주세요.
+            </Text>
+          </Flex>
+        }
+        footer={
+          <Flex w="100%" gap="12px">
+            <Button
+              w="100%"
+              variant={'text-primary'}
+              onClick={onLoanRejectClose}
+            >
+              취소
+            </Button>
+            <Button
+              w="100%"
+              variant={'solid-primary'}
+              onClick={() => {
+                window.open('http://pf.kakao.com/_xkxoben/chat', '_blank')
+              }}
+            >
+              상담하기
+            </Button>
+          </Flex>
+        }
+      ></ModalBasis>
     </Container>
   )
 }

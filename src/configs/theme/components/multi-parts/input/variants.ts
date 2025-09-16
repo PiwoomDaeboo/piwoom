@@ -9,7 +9,11 @@ const outline = defineStyle({
     borderWidth: '1px',
     borderColor: 'border.basic.1',
     borderRadius: '10px',
-
+    bg: 'grey.1',
+    _placeholder: {
+      textStyle: 'pre-body-6',
+      color: 'grey.5',
+    },
     /**
      *  컬러 토큰 적용이 되지 않습니다.
      *  caretColor: 'primary.3'

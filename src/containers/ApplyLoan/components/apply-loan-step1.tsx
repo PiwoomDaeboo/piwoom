@@ -329,7 +329,7 @@ const ApplyLoanStep1 = () => {
             w={'160px'}
             isDisabled={!isButtonEnabled()}
             onClick={() =>
-              router.push('/apply-loan?step=2?type=' + router.query.type)
+              router.push('/apply-loan?step=2&type=' + router.query.type)
             }
           >
             다음
