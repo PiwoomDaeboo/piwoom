@@ -20,27 +20,32 @@ import {
 } from '@chakra-ui/react'
 
 import { Select } from 'chakra-react-select'
+import { Controller, useFormContext } from 'react-hook-form'
 
-import LoanTermsModal from '@/components/@Modal/LoanTermsModal'
-import ModalBasis from '@/components/@Modal/ModalBasis'
+import CommonSelect from '@/components/CommonSelect'
 import InputForm from '@/components/InputForm'
-import { CaretRightIcon, InfoFillIcon } from '@/generated/icons/MyIcons'
+import { InfoFillIcon } from '@/generated/icons/MyIcons'
 
-// 소득 카테고리 옵션 데이터
-const INCOME_CATEGORIES = [
-  { value: 'earned_pension', label: '근로소득 및 연금소득' },
-  { value: 'business', label: '사업소득' },
-  { value: 'spouse', label: '배우자 소득' },
-  { value: 'severance', label: '퇴직금' },
-  { value: 'real_estate', label: '부동산 임대 및 양도 소득' },
-  { value: 'financial', label: '금융소득(이자 및 배당)' },
-  { value: 'inheritance', label: '상속/증여' },
-  { value: 'direct_input', label: '직접 입력' },
-]
+import {
+  ANNUAL_INCOME_OPTIONS,
+  CREDIT_SCORE_OPTIONS,
+  DEBT_SCALE_OPTIONS,
+  LOAN_PURPOSE_OPTIONS,
+  REPAYMENT_METHOD_OPTIONS,
+  TOTAL_ASSET_OPTIONS,
+} from '../const/const'
 
 const ApplyLoanStep3 = () => {
+  const { register, control, watch, setValue } = useFormContext()
   const router = useRouter()
-  const [selectedIncome, setSelectedIncome] = useState('')
+
+  // 폼 값들을 watch로 감시
+  const formValues = watch('suitability')
+  console.log(watch())
+  // 버튼 선택 핸들러
+  const handleButtonSelect = (field: string, value: string) => {
+    setValue(`suitability.${field}`, value)
+  }
 
   return (
     <Container>
@@ -63,10 +68,22 @@ const ApplyLoanStep3 = () => {
         <InputForm label="대출용도">
           <Flex w={'100%'} gap={'16px'}>
             <Box w={'100%'}>
-              <Select
-                placeholder="선택"
-                options={INCOME_CATEGORIES}
-                variant="outline"
+              <Controller
+                name="suitability.loanPurpose"
+                control={control}
+                render={({ field }) => (
+                  <CommonSelect
+                    placeholder="선택"
+                    options={LOAN_PURPOSE_OPTIONS}
+                    variant="outline"
+                    value={LOAN_PURPOSE_OPTIONS.find(
+                      (option) => option.value === field.value,
+                    )}
+                    onChange={(selectedOption) =>
+                      field.onChange(selectedOption?.value || '')
+                    }
+                  />
+                )}
               />
             </Box>
             <Box w={'100%'}></Box>
@@ -74,80 +91,62 @@ const ApplyLoanStep3 = () => {
         </InputForm>
         <InputForm label="총 자산 규모" w={'100%'}>
           <SimpleGrid w={'100%'} gap={'16px'} columns={{ base: 2, sm: 4 }}>
-            <Button
-              variant={'outline-secondary'}
-              textStyle={'pre-body-5'}
-              color={'grey.8'}
-              w={'100%'}
-            >
-              1억원 미만
-            </Button>
-            <Button
-              variant={'outline-secondary'}
-              textStyle={'pre-body-5'}
-              color={'grey.8'}
-              w={'100%'}
-            >
-              1억~5억원 미만
-            </Button>
-            <Button
-              variant={'outline-secondary'}
-              textStyle={'pre-body-5'}
-              color={'grey.8'}
-              w={'100%'}
-            >
-              5억원 이상
-            </Button>
-            <Button
-              variant={'outline-secondary'}
-              textStyle={'pre-body-5'}
-              color={'grey.8'}
-              w={'100%'}
-            >
-              자산 없음
-            </Button>
+            {TOTAL_ASSET_OPTIONS.map((option) => (
+              <Button
+                key={option.value}
+                variant={
+                  formValues?.totalAssets === option.value ?
+                    'outline-primary'
+                  : 'outline-secondary'
+                }
+                textStyle={'pre-body-5'}
+                color={
+                  formValues?.totalAssets === option.value ?
+                    'primary.3'
+                  : 'grey.8'
+                }
+                w={'100%'}
+                onClick={() => handleButtonSelect('totalAssets', option.value)}
+              >
+                {option.label}
+              </Button>
+            ))}
           </SimpleGrid>
         </InputForm>
         <InputForm label="연 소득">
           <SimpleGrid w={'100%'} gap={'16px'} columns={{ base: 2, sm: 4 }}>
-            <Button
-              variant={'outline-secondary'}
-              textStyle={'pre-body-5'}
-              color={'grey.8'}
-              w={'100%'}
-            >
-              5천만원 미만
-            </Button>
-            <Button
-              variant={'outline-secondary'}
-              textStyle={'pre-body-5'}
-              color={'grey.8'}
-              w={'100%'}
-            >
-              5천만원~1억원 미만
-            </Button>
-            <Button
-              variant={'outline-secondary'}
-              textStyle={'pre-body-5'}
-              color={'grey.8'}
-              w={'100%'}
-            >
-              1억원 이상
-            </Button>
-            <Button
-              variant={'outline-secondary'}
-              textStyle={'pre-body-5'}
-              color={'grey.8'}
-              w={'100%'}
-            >
-              소득 없음
-            </Button>
+            {ANNUAL_INCOME_OPTIONS.map((option) => (
+              <Button
+                key={option.value}
+                variant={
+                  formValues?.annualIncome === option.value ?
+                    'outline-primary'
+                  : 'outline-secondary'
+                }
+                textStyle={'pre-body-5'}
+                color={
+                  formValues?.annualIncome === option.value ?
+                    'primary.3'
+                  : 'grey.8'
+                }
+                w={'100%'}
+                onClick={() => handleButtonSelect('annualIncome', option.value)}
+              >
+                {option.label}
+              </Button>
+            ))}
           </SimpleGrid>
         </InputForm>
         <Flex gap={'16px'}>
           <InputForm label="월 실수령액 또는 월 수입">
             <InputGroup>
-              <Input placeholder="0" />
+              <Input
+                placeholder="0"
+                type="number"
+                {...register('suitability.monthlyIncome', {
+                  valueAsNumber: true,
+                })}
+              />
               <InputRightElement>
                 <Text>만원</Text>
               </InputRightElement>
@@ -155,7 +154,13 @@ const ApplyLoanStep3 = () => {
           </InputForm>
           <InputForm label="월 고정 지출">
             <InputGroup>
-              <Input placeholder="0" />
+              <Input
+                placeholder="0"
+                type="number"
+                {...register('suitability.monthlyExpenses', {
+                  valueAsNumber: true,
+                })}
+              />
               <InputRightElement>
                 <Text>만원</Text>
               </InputRightElement>
@@ -165,50 +170,68 @@ const ApplyLoanStep3 = () => {
 
         <InputForm label="부채규모">
           <SimpleGrid w={'100%'} gap={'16px'} columns={{ base: 2, sm: 4 }}>
-            <Button
-              variant={'outline-secondary'}
-              textStyle={'pre-body-5'}
-              color={'grey.8'}
-              w={'100%'}
-            >
-              5천만원 미만
-            </Button>
-            <Button
-              variant={'outline-secondary'}
-              textStyle={'pre-body-5'}
-              color={'grey.8'}
-              w={'100%'}
-            >
-              5천만원~1억원 미만
-            </Button>
-            <Button
-              variant={'outline-secondary'}
-              textStyle={'pre-body-5'}
-              color={'grey.8'}
-              w={'100%'}
-            >
-              1억원 이상
-            </Button>
-            <Button
-              variant={'outline-secondary'}
-              textStyle={'pre-body-5'}
-              color={'grey.8'}
-              w={'100%'}
-            >
-              부채 없음
-            </Button>
+            {DEBT_SCALE_OPTIONS.map((option) => (
+              <Button
+                key={option.value}
+                variant={
+                  formValues?.debtAmount === option.value ?
+                    'outline-primary'
+                  : 'outline-secondary'
+                }
+                textStyle={'pre-body-5'}
+                color={
+                  formValues?.debtAmount === option.value ?
+                    'primary.3'
+                  : 'grey.8'
+                }
+                w={'100%'}
+                onClick={() => handleButtonSelect('debtAmount', option.value)}
+              >
+                {option.label}
+              </Button>
+            ))}
           </SimpleGrid>
         </InputForm>
         <Flex gap={'16px'}>
           <InputForm label="변제방법 (자금원천)">
             <Box w={'100%'}>
-              <Select options={INCOME_CATEGORIES} placeholder="선택" />
+              <Controller
+                name="suitability.repaymentMethod"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    options={REPAYMENT_METHOD_OPTIONS}
+                    placeholder="선택"
+                    value={REPAYMENT_METHOD_OPTIONS.find(
+                      (option) => option.value === field.value,
+                    )}
+                    onChange={(selectedOption) =>
+                      field.onChange(selectedOption?.value || '')
+                    }
+                  />
+                )}
+              />
             </Box>
           </InputForm>
           <InputForm label="신용평가점수 (NICE 기준)">
             <>
               <Box w={'100%'}>
-                <Select options={INCOME_CATEGORIES} placeholder="선택" />
+                <Controller
+                  name="suitability.creditScore"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      options={CREDIT_SCORE_OPTIONS}
+                      placeholder="선택"
+                      value={CREDIT_SCORE_OPTIONS.find(
+                        (option) => option.value === field.value,
+                      )}
+                      onChange={(selectedOption) =>
+                        field.onChange(selectedOption?.value || '')
+                      }
+                    />
+                  )}
+                />
               </Box>
               <Button
                 variant={'text-primary'}
@@ -280,6 +303,7 @@ const ApplyLoanStep3 = () => {
               h={'200px'}
               p={'10px'}
               placeholder="(예시) 자녀 출산으로 인해 산후 조리원 비용이 예상보다 많이 나왔습니다. <br/>오백만원만 빌리면, 3개월 동안 월급을 모아서 상환할 수 있습니다."
+              {...register('suitability.loanPurposeAndPlan')}
             />
           </Flex>
         </InputForm>

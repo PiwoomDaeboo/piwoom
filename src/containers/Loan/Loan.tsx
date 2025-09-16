@@ -107,7 +107,7 @@ function Loan() {
   }
   const handleApplyLoanClick = () => {
     router.push(
-      '/apply-loan?type=' +
+      '/apply-loan?step=1&type=' +
         LOAN_TYPE_QUERY_MAP[
           activeButtonIndex as keyof typeof LOAN_TYPE_QUERY_MAP
         ],

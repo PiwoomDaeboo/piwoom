@@ -179,7 +179,7 @@ function ApplyLoan() {
   return (
     <FormProvider {...methods}>
       <ApplyLoanProcess step={(step as string) || '1'} />
-      {step === undefined && <ApplyLoanStep1 />}
+      {step === '1' && <ApplyLoanStep1 />}
       {step === '2' && <ApplyLoanStep2 />}
       {step === '3' && <ApplyLoanStep3 />}
       {step === '4' && <ApplyLoanStep4 />}

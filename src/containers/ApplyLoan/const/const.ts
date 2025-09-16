@@ -107,7 +107,7 @@ export const LOAN_PURPOSE = [
   { label: '직접 입력', value: 'DIRECT_INPUT' },
 ]
 
-export const REPAYMENT_METHOD = [
+export const REPAYMENT_METHOD_OPTIONS = [
   { label: '근로소득 및 연금소득', value: 'EMPLOYMENT_PENSION' },
   { label: '사업소득', value: 'BUSINESS_INCOME' },
   { label: '배우자 소득', value: 'SPOUSE_INCOME' },
@@ -118,7 +118,7 @@ export const REPAYMENT_METHOD = [
   { label: '직접 입력', value: 'DIRECT_INPUT' },
 ]
 
-export const CREDIT_SCORE = [
+export const CREDIT_SCORE_OPTIONS = [
   { label: '650점 미만', value: 'UNDER_650' },
   { label: '650점 이상~700점 미만', value: 'RANGE_650_700' },
   { label: '700점 이상~750점 미만', value: 'RANGE_700_750' },
@@ -137,4 +137,39 @@ export const EMPLOYMENT_TYPE = [
 export const REPAYMENT_TYPE = [
   { label: '원리금균등분할상환', value: 'EQUAL_INSTALLMENT' },
   { label: '만기 일시상환', value: 'LUMP_SUM' },
+]
+
+export const LOAN_PURPOSE_OPTIONS = [
+  { label: '생활자금', value: 'LIVING_EXPENSES' },
+  { label: '사업자금', value: 'BUSINESS_FUNDS' },
+  { label: '카드대금상환', value: 'CARD_DEBT_PAYMENT' },
+  { label: '기타부채상환', value: 'OTHER_DEBT_REPAYMENT' },
+  { label: '학자금', value: 'EDUCATION_FUNDS' },
+  { label: '결혼자금', value: 'MARRIAGE_FUNDS' },
+  { label: '출산자금', value: 'CHILDBIRTH_FUNDS' },
+  { label: '투자자금', value: 'INVESTMENT_FUNDS' },
+  { label: '보험료 납부', value: 'INSURANCE_PAYMENT' },
+  { label: '공과금 납부', value: 'UTILITY_PAYMENT' },
+  { label: '직접 입력', value: 'DIRECT_INPUT' },
+]
+
+export const TOTAL_ASSET_OPTIONS = [
+  { label: '1억원 미만', value: 'UNDER_100M' },
+  { label: '1억~5억원 미만', value: 'RANGE_100M_500M' },
+  { label: '5억원 이상', value: 'OVER_500M' },
+  { label: '자산 없음', value: 'NO_ASSET' },
+]
+
+export const ANNUAL_INCOME_OPTIONS = [
+  { label: '5천만원 미만', value: 'UNDER_50M' },
+  { label: '5천만원~1억원 미만', value: 'RANGE_50M_100M' },
+  { label: '1억원 이상', value: 'OVER_100M' },
+  { label: '소득 없음', value: 'NO_INCOME' },
+]
+
+export const DEBT_SCALE_OPTIONS = [
+  { label: '5천만원 미만', value: 'UNDER_50M' },
+  { label: '5천만원~1억원 미만', value: 'RANGE_50M_100M' },
+  { label: '1억원 이상', value: 'OVER_100M' },
+  { label: '부채 없음', value: 'NO_DEBT' },
 ]
