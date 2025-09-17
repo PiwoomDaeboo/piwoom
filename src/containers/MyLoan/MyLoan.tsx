@@ -30,12 +30,11 @@ function MyLoan() {
   }
   return (
     <>
-      <MyLoanProcess step={'4'} />
-      {step === undefined && <MyLoanStep1 />}
+      <MyLoanProcess step={(step as string) || '1'} />
+      {(step === undefined || step === '1') && <MyLoanStep1 />}
       {step === '2' && <MyLoanStep2 />}
       {step === '3' && <MyLoanStep3 />}
       {step === '4' && <MyLoanStep4 />}
-      <MyLoanStep4 />
     </>
   )
 }

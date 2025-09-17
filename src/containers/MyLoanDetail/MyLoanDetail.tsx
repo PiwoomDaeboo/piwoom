@@ -23,10 +23,10 @@ import {
   getFormattedDetailData,
 } from './consts'
 
-const LOAN_TYPE_MAP = {
-  detail: 0, // detail
-  schedule: 1, // schedule
-}
+// const LOAN_TYPE_MAP = {
+//   detail: 0, // detail
+//   schedule: 1, // schedule
+// }
 
 const LOAN_TYPE_QUERY_MAP = {
   0: 'detail',
@@ -37,40 +37,9 @@ function MyLoanDetail() {
   const router = useRouter()
   const [activeButtonIndex, setActiveButtonIndex] = useState<number>(0)
   const [showProcedure, setShowProcedure] = useState<boolean>(false)
+  const [isDetailMenu, setIsDetailMenu] = useState<string>('detail')
 
   const [loanData, setLoanData] = useState<LoanDetailApiData>(SAMPLE_LOAN_DATA)
-
-  useEffect(() => {
-    const { type } = router.query
-
-    if (type === 'procedure') {
-      setShowProcedure(true)
-      setActiveButtonIndex(0)
-    } else if (
-      type &&
-      LOAN_TYPE_MAP[type as keyof typeof LOAN_TYPE_MAP] !== undefined
-    ) {
-      const index = LOAN_TYPE_MAP[type as keyof typeof LOAN_TYPE_MAP] as number
-      setActiveButtonIndex(index)
-      setShowProcedure(false)
-    } else {
-      setActiveButtonIndex(0)
-      setShowProcedure(false)
-    }
-  }, [router.query])
-
-  const handleButtonClick = (index: number) => {
-    setActiveButtonIndex(index)
-    setShowProcedure(false)
-
-    const queryType =
-      LOAN_TYPE_QUERY_MAP[index as keyof typeof LOAN_TYPE_QUERY_MAP]
-    router.push(`/my-loan/${router.query.id}?type=${queryType}`, undefined, {
-      shallow: true,
-    })
-  }
-
-  const detailData = getFormattedDetailData(loanData)
 
   return (
     <>
@@ -123,25 +92,25 @@ function MyLoanDetail() {
                 },
               }}
             >
-              {BUTTON_DATA.map((buttonText, index) => (
+              {BUTTON_DATA.map((button, index) => (
                 <Button
                   transition={'all 0.2s ease-in-out'}
                   key={index}
                   w={{ base: 'fit-content', md: '260px' }}
                   minW={{ base: '120px', md: '260px' }}
                   flexShrink={0}
-                  isActive={activeButtonIndex === index}
+                  isActive={isDetailMenu === button.value}
                   variant={'text-secondary'}
-                  onClick={() => handleButtonClick(index)}
+                  onClick={() => setIsDetailMenu(button.value)}
                 >
-                  {buttonText}
+                  {button.title}
                 </Button>
               ))}
             </Flex>
           </Flex>
-          {/* 컴포넌트 위치 */}
-          {router.query.type === 'detail' && <Detail />}
-          {router.query.type === 'schedule' && <Schedule />}
+
+          {isDetailMenu === 'detail' && <Detail />}
+          {isDetailMenu === 'schedule' && <Schedule />}
         </Flex>
       </Container>
     </>

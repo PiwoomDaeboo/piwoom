@@ -18,15 +18,32 @@ import {
   Tabs,
   Text,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react'
 
 import NonData from '@/components/NonData'
 import { Pagination } from '@/components/pagination'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
 
+import AdditionalDocumentModal from './components/modal/addtional-document-modal'
+import LoanDelayModal from './components/modal/loan-delay-modal'
+import MyLoanAuthentication from './components/my-loan-authentication'
+
 function MyLoanStatus() {
   const router = useRouter()
+  const {
+    isOpen: isLoanDelayOpen,
+    onOpen: onLoanDelayOpen,
+    onClose: onLoanDelayClose,
+  } = useDisclosure()
+  const {
+    isOpen: isAdditionalDocumentOpen,
+    onOpen: onAdditionalDocumentOpen,
+    onClose: onAdditionalDocumentClose,
+  } = useDisclosure()
+
   const [selectedTab, setSelectedTab] = useState(0)
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 
   const handleTabChange = (index: number) => {
     setSelectedTab(index)
@@ -52,6 +69,12 @@ function MyLoanStatus() {
   return (
     <>
       <Flex w={'100%'} h={'100%'} py={'60px'} bg={'primary.1'}>
+        <LoanDelayModal isOpen={isLoanDelayOpen} onClose={onLoanDelayClose} />
+        <AdditionalDocumentModal
+          isOpen={isAdditionalDocumentOpen}
+          onClose={onAdditionalDocumentClose}
+          selectedIndex={selectedIndex}
+        />
         <Container>
           <VStack alignItems={'flex-start'} spacing={'8px'}>
             <Text textStyle={'pre-display-3'} color={'grey.10'}>
@@ -64,167 +87,183 @@ function MyLoanStatus() {
         </Container>
       </Flex>
       <Container py={'64px'}>
-        <Tabs index={selectedTab} onChange={handleTabChange}>
-          <TabList>
-            <Tab>
-              <Text
-                textStyle={'pre-body-3'}
-                color={selectedTab === 0 ? 'grey.10' : 'grey.7'}
-              >
-                진행중
-              </Text>
-            </Tab>
-            <Tab>
-              <Text
-                textStyle={'pre-body-3'}
-                color={selectedTab === 1 ? 'grey.10' : 'grey.7'}
-              >
-                상환완료
-              </Text>
-            </Tab>
-            <Tab>
-              <Text
-                textStyle={'pre-body-3'}
-                color={selectedTab === 2 ? 'grey.10' : 'grey.7'}
-              >
-                대출거절
-              </Text>
-            </Tab>
-          </TabList>
+        <MyLoanAuthentication />
+        {/* <>
+          <Tabs index={selectedTab} onChange={handleTabChange}>
+            <TabList>
+              <Tab>
+                <Text
+                  textStyle={'pre-body-3'}
+                  color={selectedTab === 0 ? 'grey.10' : 'grey.7'}
+                >
+                  진행중
+                </Text>
+              </Tab>
+              <Tab>
+                <Text
+                  textStyle={'pre-body-3'}
+                  color={selectedTab === 1 ? 'grey.10' : 'grey.7'}
+                >
+                  상환완료
+                </Text>
+              </Tab>
+              <Tab>
+                <Text
+                  textStyle={'pre-body-3'}
+                  color={selectedTab === 2 ? 'grey.10' : 'grey.7'}
+                >
+                  대출거절
+                </Text>
+              </Tab>
+            </TabList>
 
-          <TabPanels p={'0px'}>
-            <TabPanel p={'36px 0px 48px 0px'}>
-              <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} gap={'20px'}>
-                {Array.from({ length: 10 }).map((_, index) => (
-                  <Flex
-                    key={index}
-                    flexDirection={'column'}
-                    p={'24px 32px'}
-                    borderRadius={'32px'}
-                    boxShadow={'0 8px 50px 0 rgba(0, 46, 114, 0.10)'}
-                  >
-                    <HStack
-                      w={'100%'}
-                      justifyContent={'space-between'}
-                      alignItems={'flex-start'}
-                    >
-                      <VStack alignItems={'flex-start'}>
-                        <Badge
-                          variant={'subtle_primary'}
-                          style={getBadgeStyle('IN_PROGRESS')}
-                        >
-                          대출 중
-                        </Badge>
-                        <Text>
-                          계약번호{' '}
-                          <Box as="span" ml={'8px'} color={'primary.4'}>
-                            12345678
-                          </Box>
-                        </Text>
-                      </VStack>
-                      <Flex
-                        justifyContent={'center'}
-                        alignItems={'center'}
-                        w={'40px'}
-                        h={'40px'}
-                        borderRadius={'50%'}
-                        border={'1px solid'}
-                        borderColor={'primary.4'}
-                        onClick={() =>
-                          router.push(`/my-loan/${index}?type=detail`)
-                        }
-                      >
-                        <CaretRightIcon boxSize={'24px'} color={'primary.4'} />
-                      </Flex>
-                    </HStack>
+            <TabPanels p={'0px'}>
+              <TabPanel p={'36px 0px 48px 0px'}>
+                <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} gap={'20px'}>
+                  {Array.from({ length: 10 }).map((_, index) => (
                     <Flex
+                      key={index}
                       flexDirection={'column'}
-                      w={'100%'}
-                      gap={'6px'}
-                      mt={'20px'}
+                      p={'24px 32px'}
+                      borderRadius={'32px'}
+                      boxShadow={'0 8px 50px 0 rgba(0, 46, 114, 0.10)'}
                     >
-                      <HStack justifyContent={'space-between'}>
-                        <Text textStyle={'pre-body-6'} color={'grey.10'}>
-                          대출 금액
-                        </Text>
-                        <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                          100,000,000원
-                        </Text>
+                      <HStack
+                        w={'100%'}
+                        justifyContent={'space-between'}
+                        alignItems={'flex-start'}
+                      >
+                        <VStack alignItems={'flex-start'}>
+                          <Badge
+                            variant={'subtle_primary'}
+                            style={getBadgeStyle('IN_PROGRESS')}
+                          >
+                            대출 중
+                          </Badge>
+                          <Text>
+                            계약번호{' '}
+                            <Box as="span" ml={'8px'} color={'primary.4'}>
+                              12345678
+                            </Box>
+                          </Text>
+                        </VStack>
+                        <Flex
+                          justifyContent={'center'}
+                          alignItems={'center'}
+                          w={'40px'}
+                          h={'40px'}
+                          borderRadius={'50%'}
+                          border={'1px solid'}
+                          borderColor={'primary.4'}
+                          onClick={() =>
+                            router.push(`/my-loan-status/${index}`)
+                          }
+                        >
+                          <CaretRightIcon
+                            boxSize={'24px'}
+                            color={'primary.4'}
+                          />
+                        </Flex>
                       </HStack>
-                      <HStack justifyContent={'space-between'}>
-                        <Text textStyle={'pre-body-6'} color={'grey.10'}>
-                          대출 갚는날
-                        </Text>
-                        <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                          100,000,000원
-                        </Text>
-                      </HStack>
-                      <HStack justifyContent={'space-between'}>
-                        <Text textStyle={'pre-body-6'} color={'grey.10'}>
-                          대출 갚을 금액
-                        </Text>
-                        <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                          100,000,000원
-                        </Text>
-                      </HStack>
-                    </Flex>
+                      <Flex
+                        flexDirection={'column'}
+                        w={'100%'}
+                        gap={'6px'}
+                        mt={'20px'}
+                      >
+                        <HStack justifyContent={'space-between'}>
+                          <Text textStyle={'pre-body-6'} color={'grey.10'}>
+                            대출 금액
+                          </Text>
+                          <Text textStyle={'pre-body-5'} color={'grey.10'}>
+                            100,000,000원
+                          </Text>
+                        </HStack>
+                        <HStack justifyContent={'space-between'}>
+                          <Text textStyle={'pre-body-6'} color={'grey.10'}>
+                            대출 갚는날
+                          </Text>
+                          <Text textStyle={'pre-body-5'} color={'grey.10'}>
+                            100,000,000원
+                          </Text>
+                        </HStack>
+                        <HStack justifyContent={'space-between'}>
+                          <Text textStyle={'pre-body-6'} color={'grey.10'}>
+                            대출 갚을 금액
+                          </Text>
+                          <Text textStyle={'pre-body-5'} color={'grey.10'}>
+                            100,000,000원
+                          </Text>
+                        </HStack>
+                      </Flex>
 
-                    <SimpleGrid
-                      // visibility={'hidden'}
-                      visibility={'visible'}
-                      columns={2}
-                      gap={'8px'}
-                      mt={'20px'}
-                    >
-                      <Button variant={'outline-secondary'}>
+                      <SimpleGrid
+                        // visibility={'hidden'}
+                        visibility={'visible'}
+                        columns={2}
+                        gap={'8px'}
+                        mt={'20px'}
+                      >
+                        <Button variant={'outline-secondary'}>
+                          <Text textStyle={'pre-body-7'} color={'grey.8'}>
+                            상환 스케줄 확인하기
+                          </Text>
+                        </Button>
+                        <Button
+                          variant={'outline-secondary'}
+                          // onClick={onLoanDelayOpen}
+                          onClick={() => {
+                            router.push(`/my-loan-status/repayment/${index}`)
+                          }}
+                        >
+                          <Text textStyle={'pre-body-7'} color={'grey.8'}>
+                            중도 상환 신청하기
+                          </Text>
+                        </Button>
+                        <Button variant={'outline-secondary'}>
+                          <Text textStyle={'pre-body-7'} color={'grey.8'}>
+                            계약서 다운로드
+                          </Text>
+                        </Button>
+                        <Button variant={'outline-secondary'}>
+                          <Text textStyle={'pre-body-7'} color={'grey.8'}>
+                            기타서류 발급 요청하기
+                          </Text>
+                        </Button>
+                      </SimpleGrid>
+                      <Button
+                        mt={'10px'}
+                        variant={'outline-secondary'}
+                        w={'100%'}
+                        onClick={() => {
+                          setSelectedIndex(index)
+                          onAdditionalDocumentOpen()
+                        }}
+                      >
                         <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                          상환 스케줄 확인하기
+                          추가서류 제출
                         </Text>
                       </Button>
-                      <Button variant={'outline-secondary'}>
-                        <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                          중도 상환 신청하기
-                        </Text>
-                      </Button>
-                      <Button variant={'outline-secondary'}>
-                        <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                          계약서 다운로드
-                        </Text>
-                      </Button>
-                      <Button variant={'outline-secondary'}>
-                        <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                          기타서류 발급 요청하기
-                        </Text>
-                      </Button>
-                    </SimpleGrid>
-                    <Button
-                      mt={'10px'}
-                      variant={'outline-secondary'}
-                      w={'100%'}
-                    >
-                      <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                        추가서류 제출
-                      </Text>
-                    </Button>
-                  </Flex>
-                ))}
-              </SimpleGrid>
-            </TabPanel>
-            <TabPanel>
-              <NonData variant="loan" />
-            </TabPanel>
-            <TabPanel></TabPanel>
-          </TabPanels>
-        </Tabs>
-        <Flex w={'100%'} justifyContent={'center'} h={'fit-content'}>
-          <Flex justifyContent={'center'}>
-            <Pagination
-              currentPage={1}
-              totalPages={10}
-              onPageChange={() => {}}
-            />
+                    </Flex>
+                  ))}
+                </SimpleGrid>
+              </TabPanel>
+              <TabPanel>
+                <NonData variant="loan" />
+              </TabPanel>
+              <TabPanel></TabPanel>
+            </TabPanels>
+          </Tabs>
+          <Flex w={'100%'} justifyContent={'center'} h={'fit-content'}>
+            <Flex justifyContent={'center'}>
+              <Pagination
+                currentPage={1}
+                totalPages={10}
+                onPageChange={() => {}}
+              />
+            </Flex>
           </Flex>
-        </Flex>
+        </> */}
       </Container>
     </>
   )

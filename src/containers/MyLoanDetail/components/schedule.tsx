@@ -68,45 +68,74 @@ export default function Schedule() {
           </VStack>
         </HStack>
 
-        {/* 동적으로 생성되는 상세 정보 */}
-        <Flex w={'100%'} flexDir={'column'} mt={'32px'} gap={'16px'}>
-          {Array.from({ length: 10 }).map((_, index) => (
-            <Flex
-              key={index}
-              w={'100%'}
-              justifyContent={'space-between'}
-              alignItems={{ base: 'flex-end', sm: 'center' }}
-              borderRadius={'12px'}
-              bg={'background.basic.2'}
-              p={{ base: '16px 20px', sm: '14.5px 24px', md: '14.5px 40px' }}
-            >
+        <Box
+          w={'100%'}
+          mt={'32px'}
+          maxH={'860px'}
+          overflowY={'auto'}
+          pr={'4px'}
+          css={{
+            '&::-webkit-scrollbar': {
+              width: '6px',
+            },
+            '&::-webkit-scrollbar-track': {
+              background: 'transparent',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              background: '#E2E8F0',
+              borderRadius: '3px',
+              '&:hover': {
+                background: '#CBD5E0',
+              },
+            },
+            '&::-webkit-scrollbar-corner': {
+              background: 'transparent',
+            },
+          }}
+        >
+          <VStack gap={'16px'} alignItems={'stretch'}>
+            {Array.from({ length: 30 }).map((_, index) => (
               <Flex
-                flexDir={{ base: 'column', sm: 'row' }}
-                gap={{ base: '10px', sm: '80px' }}
-                alignItems={{ base: 'flex-start', sm: 'center' }}
+                key={index}
+                w={'100%'}
+                justifyContent={'space-between'}
+                alignItems={{ base: 'flex-end', sm: 'center' }}
+                borderRadius={'12px'}
+                bg={'background.basic.2'}
+                p={{ base: '16px 20px', sm: '14.5px 24px', md: '14.5px 40px' }}
               >
-                <Text minW={'60px'} textStyle={'pre-body-4'} color={'grey.10'}>
-                  {index + 1}회차
-                </Text>
-                <VStack alignItems={'flex-start'}>
-                  <Text textStyle={'pre-caption-2'} color={'primary.3'}>
-                    이자
-                  </Text>
+                <Flex
+                  flexDir={{ base: 'column', sm: 'row' }}
+                  gap={{ base: '10px', sm: '80px' }}
+                  alignItems={{ base: 'flex-start', sm: 'center' }}
+                >
                   <Text
-                    textStyle={'pre-body-3'}
+                    minW={'60px'}
+                    textStyle={'pre-body-4'}
                     color={'grey.10'}
-                    textAlign={'right'}
                   >
-                    589,000원
+                    {index + 1}회차
                   </Text>
-                </VStack>
+                  <Flex flexDir={'column'} alignItems={'flex-start'}>
+                    <Text textStyle={'pre-caption-2'} color={'primary.3'}>
+                      이자
+                    </Text>
+                    <Text
+                      textStyle={'pre-body-3'}
+                      color={'grey.10'}
+                      textAlign={'right'}
+                    >
+                      589,000원
+                    </Text>
+                  </Flex>
+                </Flex>
+                <Text textStyle={'pre-body-6'} color={'grey.7'}>
+                  2025.12.12
+                </Text>
               </Flex>
-              <Text textStyle={'pre-body-6'} color={'grey.7'}>
-                2025.12.12
-              </Text>
-            </Flex>
-          ))}
-        </Flex>
+            ))}
+          </VStack>
+        </Box>
       </Flex>
     </Flex>
   )

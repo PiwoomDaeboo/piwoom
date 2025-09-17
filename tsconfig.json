@@ -13,6 +13,7 @@
       "@/icons": ["./generated/icons/MyIcons.tsx"],
       "@/packageJSON": ["../package.json"]
     },
+    "strict": true,
     "incremental": true,
     "declaration": false,
     "moduleResolution": "Node"

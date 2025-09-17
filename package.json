@@ -52,6 +52,7 @@
     "slick-carousel": "^1.8.1",
     "use-context-selector": "^2.0.0",
     "yup": "^1.4.0",
+    "zod": "^4.1.9",
     "zustand": "^4.5.4"
   },
   "devDependencies": {

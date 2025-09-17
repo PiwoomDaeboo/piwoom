@@ -1,4 +1,13 @@
-export const BUTTON_DATA = ['상세 정보', '상환 스케줄 확인하기']
+export const BUTTON_DATA = [
+  {
+    title: '상세 정보',
+    value: 'detail',
+  },
+  {
+    title: '상환 스케줄 확인하기',
+    value: 'schedule',
+  },
+]
 
 export const CARD_DATA = [
   {

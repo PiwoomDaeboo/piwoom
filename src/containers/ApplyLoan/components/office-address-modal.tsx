@@ -69,6 +69,8 @@ function OfficeAddressModal({
         query: {
           name: searchType === 'name' ? name : '',
           no: searchType === 'no' ? name : '',
+          limit: 5,
+          offset: (currentPage - 1) * 5,
         },
       },
       options: {
@@ -147,7 +149,7 @@ function OfficeAddressModal({
                 <Spinner />
               </Center>
             )}
-            {companyList?.length === 0 && !isCompanyListLoading && (
+            {companyList?.results?.length === 0 && !isCompanyListLoading && (
               <Center h={'100%'} bg={'background.basic.2'}>
                 <VStack>
                   <Text
@@ -163,7 +165,7 @@ function OfficeAddressModal({
                 </VStack>
               </Center>
             )}
-            {companyList?.map((company, index) => (
+            {companyList?.results?.map((company, index) => (
               <Flex
                 w={'100%'}
                 key={company.no + index}
@@ -240,7 +242,7 @@ function OfficeAddressModal({
       }
       footer={
         <Flex w={'100%'} justifyContent={'center'} h={'fit-content'}>
-          {companyList?.length !== 0 && (
+          {companyList?.results?.length !== 0 && (
             <Flex justifyContent={'center'}>
               <Pagination
                 currentPage={currentPage}
