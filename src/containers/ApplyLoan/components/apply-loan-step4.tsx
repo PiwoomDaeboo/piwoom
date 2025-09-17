@@ -29,12 +29,14 @@ import CommonSelect from '@/components/CommonSelect'
 import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
 import { LoanRequestType } from '@/generated/apis/@types/data-contracts'
+import { useGovRetrieveQuery } from '@/generated/apis/Gov/Gov.query'
 import {
   CaretRightIcon,
   FolderIcon,
   InfoFillIcon,
   Loan1Icon,
 } from '@/generated/icons/MyIcons'
+import { useQueryEffects } from '@/hooks/useQueryEffect'
 
 import {
   BANK_DATA,
@@ -76,9 +78,8 @@ const CHECKBOX_STYLES = {
 
 const ApplyLoanStep4 = () => {
   const router = useRouter()
-  const { register, setValue, watch, control, handleSubmit } = useFormContext()
+  const { register, setValue, control, handleSubmit } = useFormContext()
 
-  // 개별 필드들을 useWatch로 감시
   const loanAmount = useWatch({ control, name: 'loanAmount' })
   const loanPeriod = useWatch({ control, name: 'loanPeriod' })
   const residenceType = useWatch({ control, name: 'residenceType' })
@@ -111,23 +112,69 @@ const ApplyLoanStep4 = () => {
 
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null)
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
+  const [shouldExecuteGovQuery, setShouldExecuteGovQuery] = useState(false)
+  const [isDocumentSubmissionCompleted, setIsDocumentSubmissionCompleted] =
+    useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const { mutate: uploadIdCard, isPending: isIdCardUploading } =
     useUploadFileToS3Mutation({
       options: {
         onSuccess: (data) => {
-          console.log('파일 업로드 성공:', data)
-          console.log('S3 URL:', data.url)
-          console.log('파일 경로:', data.path)
-          console.log('필드 정보:', data.fields)
-          setUploadedFileUrl(`${data.url}/${data?.path}`)
+          setUploadedFileUrl(`${data.url}/${data?.fields?.key}`)
         },
         onError: (error) => {
           console.error('파일 업로드 실패:', error)
         },
       },
     })
+  const govQuery = useGovRetrieveQuery({
+    variables: {
+      id: 29,
+    },
+    options: {
+      enabled: shouldExecuteGovQuery,
+    },
+  })
+  const { isLoading: isGovQueryLoading } = govQuery
+  console.log('govQuery', govQuery)
+  useQueryEffects(govQuery, {
+    onSuccess: (data) => {
+      // Map each document kind to the corresponding form field with file value
+      if (data.logSet && Array.isArray(data.logSet)) {
+        data.logSet.forEach((logItem) => {
+          switch (logItem.kind) {
+            case 'INCOME_CERTIFICATE':
+              setValue('incomeCertificate', logItem.file)
+              break
+            case 'RESIDENT_REGISTRATION_COPY':
+              setValue('residentRegistrationCopy', logItem.file)
+              break
+            case 'HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION':
+              setValue('healthInsuranceEligibilityConfirmation', logItem.file)
+              break
+            case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION':
+              setValue('healthInsurancePaymentConfirmation', logItem.file)
+              break
+            case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2':
+              setValue('healthInsurancePaymentConfirmation2', logItem.file)
+              break
+            default:
+              console.warn('Unknown document kind:', logItem.kind)
+          }
+        })
+      }
+      console.log('[onSuccess]:', data)
+      setShouldExecuteGovQuery(false)
+      setIsDocumentSubmissionCompleted(true)
+    },
+    onError: (error) => {
+      console.error('[onError]:', error)
+    },
+    onSettled: (data, error) => {
+      console.log('[onSettled]:', data, error)
+    },
+  })
   const { SelectButtonGroup: EmploymentTypeButtons } = useSelectButtonGroup({
     name: 'employmentType',
     options: EMPLOYMENT_TYPE,
@@ -164,7 +211,6 @@ const ApplyLoanStep4 = () => {
   }
 
   const handleCompanySelect = (company: Company) => {
-    console.log(company)
     setValue('companyName', company.name)
     setValue('companyBusinessNumber', company.businessNo)
     setValue('baseAddress', company.baseAddress)
@@ -660,12 +706,16 @@ const ApplyLoanStep4 = () => {
         </InputForm>
         <InputForm label="비대면 서류제출">
           <Button
-            variant={'outline-primary'}
             textStyle={'pre-body-5'}
-            color={'grey.8'}
             w={'209px'}
+            isLoading={isGovQueryLoading}
+            isDisabled={isDocumentSubmissionCompleted}
+            onClick={() => {
+              setShouldExecuteGovQuery(true)
+              // TODO: 정부24 API 활용
+            }}
           >
-            비대면 서류제출
+            {isDocumentSubmissionCompleted ? '서류제출완료' : '비대면 서류제출'}
           </Button>
         </InputForm>
 

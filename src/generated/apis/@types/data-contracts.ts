@@ -211,6 +211,28 @@ export interface CompanyType {
   tel: string
 }
 
+export interface DataType {
+  /** @format date */
+  paymentDate: string
+  taxNumber: string
+  electronicPaymentNumber: string
+  taxpayerName: string
+  paymentJurisdiction: string
+  taxType: string
+  taxCategory: string
+  paymentTaxAmount: string
+  taxYearMonth: string
+  withdrawalBank: string
+  detailTaxType: string
+  taxBase: string
+  taxTarget: string
+  prepaymentRequest: string
+  totalPaymentAmount: string
+  overpaymentAmount: string
+  unpaidAmount: string
+  installmentStatus: string
+}
+
 export interface DisclaimerType {
   /**
    * 유형
@@ -269,7 +291,13 @@ export interface GovLogType {
    * * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2` - 건강보험납부확인서 2
    */
   kind: GovLogKindEnumType
+  /** 파일 */
   file: string
+  /**
+   * 주소
+   * @maxLength 200
+   */
+  address?: string
 }
 
 export interface GovLoginType {
@@ -348,614 +376,6 @@ export interface GovOtpRequestType {
   sessionId: string
 }
 
-export interface NoticeType {
-  readonly id: number
-  /**
-   * 제목
-   * @maxLength 100
-   */
-  title: string
-  /**
-   * 생성일시
-   * @format date-time
-   */
-  readonly createdAt: string
-}
-
-export interface NoticeDetailType {
-  readonly id: number
-  /**
-   * 제목
-   * @maxLength 100
-   */
-  title: string
-  /** 내용 */
-  description: string
-  /**
-   * 생성일시
-   * @format date-time
-   */
-  readonly createdAt: string
-  /** 파일 */
-  fileSet: NoticeFileType[]
-  /** 이전글 */
-  readonly prevNotice: NoticeType | null
-  /** 이전글 */
-  readonly nextNotice: NoticeType | null
-}
-
-export interface NoticeFileType {
-  /**
-   * 파일명
-   * @maxLength 100
-   */
-  name: string
-  /**
-   * 위치
-   * @format uri
-   */
-  path: string
-}
-
-export interface PaginatedFaqListType {
-  count?: number
-  isNext?: boolean
-  results?: FaqType[]
-}
-
-export interface PaginatedNoticeListType {
-  count?: number
-  isNext?: boolean
-  results?: NoticeType[]
-}
-
-export interface PresignedType {
-  /** @format uri */
-  readonly url: string
-  readonly fields: any
-}
-
-export interface PresignedErrorMessageType {
-  nonField?: string[]
-  fieldChoice?: string[]
-  fileName?: string[]
-  isDownload?: string[]
-}
-
-export interface PresignedRequestType {
-  /**
-   * * `notice.File.path` - 위치
-   * * `loan.Loan.income_certificate` - 소득금액증명원
-   * * `loan.Loan.resident_registration_copy` - 주민등록등본
-   * * `loan.Loan.health_insurance_eligibility_confirmation` - 건강보험 자격득실확인서
-   * * `loan.Loan.health_insurance_payment_confirmation` - 건강보험 납부확인서
-   * * `loan.Loan.health_insurance_payment_confirmation_2` - 건강보험 납부확인서 2
-   * * `loan.Loan.identity_card` - 신분증
-   * * `loan.File.path` - 위치
-   * * `gov.GovLog.file` - 파일
-   */
-  fieldChoice: PresignedRequestFieldChoiceEnumType
-  /** @minLength 1 */
-  fileName: string
-  isDownload: boolean
-}
-
-export interface SettingType {
-  /** 대출 활성화 */
-  isLoan?: boolean
-  /** 정부24 제출 활성화 */
-  isGov?: boolean
-  /** 위텍스 제출 활성화 */
-  isWetax?: boolean
-}
-
-export interface UserIdentityVerificationType {
-  /** 본인인증 토큰 */
-  readonly identityVerificationToken: string
-}
-
-export interface UserIdentityVerificationErrorMessageType {
-  nonField?: string[]
-  identityVerificationId?: string[]
-}
-
-export interface UserIdentityVerificationRequestType {
-  /**
-   * 본인인증 id
-   * @minLength 1
-   */
-  identityVerificationId: string
-}
-
-export interface UserLoginType {
-  readonly accessToken: string
-  readonly refreshToken: string
-}
-
-export interface UserLoginErrorMessageType {
-  nonField?: string[]
-  identityVerificationId?: string[]
-}
-
-export interface UserLoginRequestType {
-  /**
-   * 본인인증 id
-   * @minLength 1
-   */
-  identityVerificationId: string
-}
-
-export interface UserRefreshType {
-  refreshToken: string
-  readonly accessToken: string
-}
-
-export interface UserRefreshErrorMessageType {
-  nonField?: string[]
-  refreshToken?: string[]
-}
-
-export interface UserRefreshRequestType {
-  /** @minLength 1 */
-  refreshToken: string
-}
-
-/**
- * * `0002` - 산업은행
- * `0003` - 기업은행
- * `0004` - 국민은행
- * `0007` - 수협은행
- * `0011` - 농협은행
- * `0012` - 농축협
- * `0020` - 우리은행
- * `0023` - SC제일은행
- * `0027` - 한국씨티은행
- * `0031` - 아이엠뱅크
- * `0032` - 부산은행
- * `0034` - 광주은행
- * `0035` - 제주은행
- * `0037` - 전북은행
- * `0039` - 경남은행
- * `0045` - 새마을금고
- * `0048` - 신협중앙회
- * `0050` - 상호저축은행
- * `0054` - HSBC은행
- * `0055` - 도이치은행
- * `0057` - JP모간체이스은행
- * `0060` - BOA은행
- * `0061` - 비엔피파리바은행
- * `0062` - 중국공상은행
- * `0063` - 중국은행
- * `0064` - 산림조합중앙회
- * `0067` - 중국건설은행
- * `0071` - 우체국
- * `0081` - 하나은행
- * `0088` - 신한은행
- * `0089` - 케이뱅크
- * `0090` - 카카오뱅크
- * `0092` - 토스뱅크
- * `0209` - 유안타증권
- * `0218` - KB증권
- * `0221` - 상상인증권
- * `0224` - BNK투자증권
- * `0225` - IBK투자증권
- * `0227` - 다올투자증권
- * `0238` - 미래에셋증권
- * `0240` - 삼성증권
- * `0243` - 한국투자증권
- * `0247` - NH투자증권
- * `0261` - 교보증권
- * `0262` - 아이엠증권
- * `0263` - 현대차증권
- * `0264` - 키움증권
- * `0265` - LS증권
- * `0266` - SK증권
- * `0267` - 대신증권
- * `0269` - 한화투자증권
- * `0270` - 하나증권
- * `0271` - 토스증권
- * `0278` - 신한금융투자
- * `0279` - DB금융투자
- * `0280` - 유진투자증권
- * `0287` - 메리츠증권
- * `0288` - 카카오페이증권
- * `0290` - 부국증권
- * `0291` - 신영증권
- * `0292` - 케이프투자증권
- * `0294` - 우리투자증권
- */
-
-export type AccountBankEnumType = keyof typeof AccountBankEnumTypeMap
-
-export const AccountBankEnumTypeMap = {
-  '0002': '산업은행',
-  '0003': '기업은행',
-  '0004': '국민은행',
-  '0007': '수협은행',
-  '0011': '농협은행',
-  '0012': '농축협',
-  '0020': '우리은행',
-  '0023': 'SC제일은행',
-  '0027': '한국씨티은행',
-  '0031': '아이엠뱅크',
-  '0032': '부산은행',
-  '0034': '광주은행',
-  '0035': '제주은행',
-  '0037': '전북은행',
-  '0039': '경남은행',
-  '0045': '새마을금고',
-  '0048': '신협중앙회',
-  '0050': '상호저축은행',
-  '0054': 'HSBC은행',
-  '0055': '도이치은행',
-  '0057': 'JP모간체이스은행',
-  '0060': 'BOA은행',
-  '0061': '비엔피파리바은행',
-  '0062': '중국공상은행',
-  '0063': '중국은행',
-  '0064': '산림조합중앙회',
-  '0067': '중국건설은행',
-  '0071': '우체국',
-  '0081': '하나은행',
-  '0088': '신한은행',
-  '0089': '케이뱅크',
-  '0090': '카카오뱅크',
-  '0092': '토스뱅크',
-  '0209': '유안타증권',
-  '0218': 'KB증권',
-  '0221': '상상인증권',
-  '0224': 'BNK투자증권',
-  '0225': 'IBK투자증권',
-  '0227': '다올투자증권',
-  '0238': '미래에셋증권',
-  '0240': '삼성증권',
-  '0243': '한국투자증권',
-  '0247': 'NH투자증권',
-  '0261': '교보증권',
-  '0262': '아이엠증권',
-  '0263': '현대차증권',
-  '0264': '키움증권',
-  '0265': 'LS증권',
-  '0266': 'SK증권',
-  '0267': '대신증권',
-  '0269': '한화투자증권',
-  '0270': '하나증권',
-  '0271': '토스증권',
-  '0278': '신한금융투자',
-  '0279': 'DB금융투자',
-  '0280': '유진투자증권',
-  '0287': '메리츠증권',
-  '0288': '카카오페이증권',
-  '0290': '부국증권',
-  '0291': '신영증권',
-  '0292': '케이프투자증권',
-  '0294': '우리투자증권',
-} as const
-
-/**
- * * `0002` - 산업은행
- * `0003` - 기업은행
- * `0004` - 국민은행
- * `0007` - 수협은행
- * `0011` - 농협은행
- * `0012` - 농축협
- * `0020` - 우리은행
- * `0023` - SC제일은행
- * `0027` - 한국씨티은행
- * `0031` - 아이엠뱅크
- * `0032` - 부산은행
- * `0034` - 광주은행
- * `0035` - 제주은행
- * `0037` - 전북은행
- * `0039` - 경남은행
- * `0045` - 새마을금고
- * `0048` - 신협중앙회
- * `0050` - 상호저축은행
- * `0054` - HSBC은행
- * `0055` - 도이치은행
- * `0057` - JP모간체이스은행
- * `0060` - BOA은행
- * `0061` - 비엔피파리바은행
- * `0062` - 중국공상은행
- * `0063` - 중국은행
- * `0064` - 산림조합중앙회
- * `0067` - 중국건설은행
- * `0071` - 우체국
- * `0081` - 하나은행
- * `0088` - 신한은행
- * `0089` - 케이뱅크
- * `0090` - 카카오뱅크
- * `0092` - 토스뱅크
- * `0209` - 유안타증권
- * `0218` - KB증권
- * `0221` - 상상인증권
- * `0224` - BNK투자증권
- * `0225` - IBK투자증권
- * `0227` - 다올투자증권
- * `0238` - 미래에셋증권
- * `0240` - 삼성증권
- * `0243` - 한국투자증권
- * `0247` - NH투자증권
- * `0261` - 교보증권
- * `0262` - 아이엠증권
- * `0263` - 현대차증권
- * `0264` - 키움증권
- * `0265` - LS증권
- * `0266` - SK증권
- * `0267` - 대신증권
- * `0269` - 한화투자증권
- * `0270` - 하나증권
- * `0271` - 토스증권
- * `0278` - 신한금융투자
- * `0279` - DB금융투자
- * `0280` - 유진투자증권
- * `0287` - 메리츠증권
- * `0288` - 카카오페이증권
- * `0290` - 부국증권
- * `0291` - 신영증권
- * `0292` - 케이프투자증권
- * `0294` - 우리투자증권
- */
-
-export type AccountRequestBankEnumType =
-  keyof typeof AccountRequestBankEnumTypeMap
-
-export const AccountRequestBankEnumTypeMap = {
-  '0002': '산업은행',
-  '0003': '기업은행',
-  '0004': '국민은행',
-  '0007': '수협은행',
-  '0011': '농협은행',
-  '0012': '농축협',
-  '0020': '우리은행',
-  '0023': 'SC제일은행',
-  '0027': '한국씨티은행',
-  '0031': '아이엠뱅크',
-  '0032': '부산은행',
-  '0034': '광주은행',
-  '0035': '제주은행',
-  '0037': '전북은행',
-  '0039': '경남은행',
-  '0045': '새마을금고',
-  '0048': '신협중앙회',
-  '0050': '상호저축은행',
-  '0054': 'HSBC은행',
-  '0055': '도이치은행',
-  '0057': 'JP모간체이스은행',
-  '0060': 'BOA은행',
-  '0061': '비엔피파리바은행',
-  '0062': '중국공상은행',
-  '0063': '중국은행',
-  '0064': '산림조합중앙회',
-  '0067': '중국건설은행',
-  '0071': '우체국',
-  '0081': '하나은행',
-  '0088': '신한은행',
-  '0089': '케이뱅크',
-  '0090': '카카오뱅크',
-  '0092': '토스뱅크',
-  '0209': '유안타증권',
-  '0218': 'KB증권',
-  '0221': '상상인증권',
-  '0224': 'BNK투자증권',
-  '0225': 'IBK투자증권',
-  '0227': '다올투자증권',
-  '0238': '미래에셋증권',
-  '0240': '삼성증권',
-  '0243': '한국투자증권',
-  '0247': 'NH투자증권',
-  '0261': '교보증권',
-  '0262': '아이엠증권',
-  '0263': '현대차증권',
-  '0264': '키움증권',
-  '0265': 'LS증권',
-  '0266': 'SK증권',
-  '0267': '대신증권',
-  '0269': '한화투자증권',
-  '0270': '하나증권',
-  '0271': '토스증권',
-  '0278': '신한금융투자',
-  '0279': 'DB금융투자',
-  '0280': '유진투자증권',
-  '0287': '메리츠증권',
-  '0288': '카카오페이증권',
-  '0290': '부국증권',
-  '0291': '신영증권',
-  '0292': '케이프투자증권',
-  '0294': '우리투자증권',
-} as const
-
-/**
- * * `PRIVACY_POLICY` - 개인정보 처리방침
- * `LOAN_STANDARD_TERMS` - 대부거래 표준약관
- * `ILLEGAL_DEBT_COLLECTION_RESPONSE` - 불법채권추심대응요령
- * `EXTINCTION_DEBT_COLLECTION_NOTICE` - 소멸시효완성채권추심관련안내
- * `TERMS_OF_SERVICE` - 서비스이용약관
- * `DEBT_COLLECTION_SUPPORT_SYSTEM` - 채권추심 관련 지원제도 안내
- * `DEBT_COLLECTION_PROCEDURE` - 채권추심업무처리절차
- * `DEBT_COLLECTOR_OBLIGATIONS` - 채권추심자의 의무와 추심에 관한 개인금융채무자의 권리
- */
-
-export type DisclaimerKindEnumType = keyof typeof DisclaimerKindEnumTypeMap
-
-export const DisclaimerKindEnumTypeMap = {
-  DEBT_COLLECTION_PROCEDURE: '채권추심업무처리절차',
-  DEBT_COLLECTION_SUPPORT_SYSTEM: '채권추심 관련 지원제도 안내',
-  DEBT_COLLECTOR_OBLIGATIONS:
-    '채권추심자의 의무와 추심에 관한 개인금융채무자의 권리',
-  EXTINCTION_DEBT_COLLECTION_NOTICE: '소멸시효완성채권추심관련안내',
-  ILLEGAL_DEBT_COLLECTION_RESPONSE: '불법채권추심대응요령',
-  LOAN_STANDARD_TERMS: '대부거래 표준약관',
-  PRIVACY_POLICY: '개인정보 처리방침',
-  TERMS_OF_SERVICE: '서비스이용약관',
-} as const
-
-/**
- * * `PENDING` - 대기
- * `INCOME_CERTIFICATE` - 소득금액증명
- * `RESIDENT_REGISTRATION_COPY` - 주민등록표등초본교부
- * `HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION` - 건강보험자격득실확인서
- * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION` - 건강보험납부확인서
- * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2` - 건강보험납부확인서 2
- * `SUCCESS` - 성공
- * `FAILED` - 실패
- */
-
-export type GovStatusEnumType = keyof typeof GovStatusEnumTypeMap
-
-export const GovStatusEnumTypeMap = {
-  FAILED: '실패',
-  HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION: '건강보험자격득실확인서',
-  HEALTH_INSURANCE_PAYMENT_CONFIRMATION: '건강보험납부확인서',
-  HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2: '건강보험납부확인서 2',
-  INCOME_CERTIFICATE: '소득금액증명',
-  PENDING: '대기',
-  RESIDENT_REGISTRATION_COPY: '주민등록표등초본교부',
-  SUCCESS: '성공',
-} as const
-
-/**
- * * `INCOME_CERTIFICATE` - 소득금액증명
- * `RESIDENT_REGISTRATION_COPY` - 주민등록표등초본교부
- * `HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION` - 건강보험자격득실확인서
- * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION` - 건강보험납부확인서
- * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2` - 건강보험납부확인서 2
- */
-
-export type GovLogKindEnumType = keyof typeof GovLogKindEnumTypeMap
-
-export const GovLogKindEnumTypeMap = {
-  HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION: '건강보험자격득실확인서',
-  HEALTH_INSURANCE_PAYMENT_CONFIRMATION: '건강보험납부확인서',
-  HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2: '건강보험납부확인서 2',
-  INCOME_CERTIFICATE: '소득금액증명',
-  RESIDENT_REGISTRATION_COPY: '주민등록표등초본교부',
-} as const
-
-/**
- * * `KAKAO` - 카카오톡
- * `SAMSUNG` - 삼성패스
- * `KB` - 국민인증서
- * `PASS` - 통신사PASS
- * `SHINHAN` - 신한인증서
- * `NAVER` - 네이버
- * `TOSS` - 토스
- * `NH` - NH인증서
- * `WOORI` - 우리인증서
- * `HANA` - 하나인증서
- */
-
-export type GovLoginRequestMethodEnumType =
-  keyof typeof GovLoginRequestMethodEnumTypeMap
-
-export const GovLoginRequestMethodEnumTypeMap = {
-  HANA: '하나인증서',
-  KAKAO: '카카오톡',
-  KB: '국민인증서',
-  NAVER: '네이버',
-  NH: 'NH인증서',
-  PASS: '통신사PASS',
-  SAMSUNG: '삼성패스',
-  SHINHAN: '신한인증서',
-  TOSS: '토스',
-  WOORI: '우리인증서',
-} as const
-
-/**
- * * `01` - SKT
- * `02` - KT
- * `03` - LGU+
- */
-
-export type GovLoginRequestAgencyEnumType =
-  keyof typeof GovLoginRequestAgencyEnumTypeMap
-
-export const GovLoginRequestAgencyEnumTypeMap = {
-  '01': 'SKT',
-  '02': 'KT',
-  '03': 'LGU+',
-} as const
-
-/**
- * * `notice.File.path` - 위치
- * `loan.Loan.income_certificate` - 소득금액증명원
- * `loan.Loan.resident_registration_copy` - 주민등록등본
- * `loan.Loan.health_insurance_eligibility_confirmation` - 건강보험 자격득실확인서
- * `loan.Loan.health_insurance_payment_confirmation` - 건강보험 납부확인서
- * `loan.Loan.health_insurance_payment_confirmation_2` - 건강보험 납부확인서 2
- * `loan.Loan.identity_card` - 신분증
- * `loan.File.path` - 위치
- * `gov.GovLog.file` - 파일
- */
-
-export type PresignedRequestFieldChoiceEnumType =
-  keyof typeof PresignedRequestFieldChoiceEnumTypeMap
-
-export const PresignedRequestFieldChoiceEnumTypeMap = {
-  'gov.GovLog.file': '파일',
-  'loan.File.path': '위치',
-  'loan.Loan.health_insurance_eligibility_confirmation':
-    '건강보험 자격득실확인서',
-  'loan.Loan.health_insurance_payment_confirmation': '건강보험 납부확인서',
-  'loan.Loan.health_insurance_payment_confirmation_2': '건강보험 납부확인서 2',
-  'loan.Loan.identity_card': '신분증',
-  'loan.Loan.income_certificate': '소득금액증명원',
-  'loan.Loan.resident_registration_copy': '주민등록등본',
-  'notice.File.path': '위치',
-} as const
-
-/**
- * * `PRIVACY_POLICY` - 개인정보 처리방침
- * `LOAN_STANDARD_TERMS` - 대부거래 표준약관
- * `ILLEGAL_DEBT_COLLECTION_RESPONSE` - 불법채권추심대응요령
- * `EXTINCTION_DEBT_COLLECTION_NOTICE` - 소멸시효완성채권추심관련안내
- * `TERMS_OF_SERVICE` - 서비스이용약관
- * `DEBT_COLLECTION_SUPPORT_SYSTEM` - 채권추심 관련 지원제도 안내
- * `DEBT_COLLECTION_PROCEDURE` - 채권추심업무처리절차
- * `DEBT_COLLECTOR_OBLIGATIONS` - 채권추심자의 의무와 추심에 관한 개인금융채무자의 권리
- */
-
-export type DisclaimerRetrieveParamsKindEnumType =
-  keyof typeof DisclaimerRetrieveParamsKindEnumTypeMap
-
-export const DisclaimerRetrieveParamsKindEnumTypeMap = {
-  DEBT_COLLECTION_PROCEDURE: '채권추심업무처리절차',
-  DEBT_COLLECTION_SUPPORT_SYSTEM: '채권추심 관련 지원제도 안내',
-  DEBT_COLLECTOR_OBLIGATIONS:
-    '채권추심자의 의무와 추심에 관한 개인금융채무자의 권리',
-  EXTINCTION_DEBT_COLLECTION_NOTICE: '소멸시효완성채권추심관련안내',
-  ILLEGAL_DEBT_COLLECTION_RESPONSE: '불법채권추심대응요령',
-  LOAN_STANDARD_TERMS: '대부거래 표준약관',
-  PRIVACY_POLICY: '개인정보 처리방침',
-  TERMS_OF_SERVICE: '서비스이용약관',
-} as const
-
-/**
- * * `PRIVACY_POLICY` - 개인정보 처리방침
- * `LOAN_STANDARD_TERMS` - 대부거래 표준약관
- * `ILLEGAL_DEBT_COLLECTION_RESPONSE` - 불법채권추심대응요령
- * `EXTINCTION_DEBT_COLLECTION_NOTICE` - 소멸시효완성채권추심관련안내
- * `TERMS_OF_SERVICE` - 서비스이용약관
- * `DEBT_COLLECTION_SUPPORT_SYSTEM` - 채권추심 관련 지원제도 안내
- * `DEBT_COLLECTION_PROCEDURE` - 채권추심업무처리절차
- * `DEBT_COLLECTOR_OBLIGATIONS` - 채권추심자의 의무와 추심에 관한 개인금융채무자의 권리
- */
-
-export type DisclaimerRetrieveParamsEnumType =
-  keyof typeof DisclaimerRetrieveParamsEnumTypeMap
-
-export const DisclaimerRetrieveParamsEnumTypeMap = {
-  DEBT_COLLECTION_PROCEDURE: '채권추심업무처리절차',
-  DEBT_COLLECTION_SUPPORT_SYSTEM: '채권추심 관련 지원제도 안내',
-  DEBT_COLLECTOR_OBLIGATIONS:
-    '채권추심자의 의무와 추심에 관한 개인금융채무자의 권리',
-  EXTINCTION_DEBT_COLLECTION_NOTICE: '소멸시효완성채권추심관련안내',
-  ILLEGAL_DEBT_COLLECTION_RESPONSE: '불법채권추심대응요령',
-  LOAN_STANDARD_TERMS: '대부거래 표준약관',
-  PRIVACY_POLICY: '개인정보 처리방침',
-  TERMS_OF_SERVICE: '서비스이용약관',
-} as const
-
 export interface LoanType {
   readonly id: number
   /** 본인인증 토큰 */
@@ -965,6 +385,7 @@ export interface LoanType {
   /**
    * 상태
    * * `UNDER_REVIEW` - 심사 중
+   * * `CONTRACTING` - 계약 중
    * * `IN_PROGRESS` - 대출 중
    * * `OVERDUE` - 연체 중
    * * `EARLY_REPAYMENT_COMPLETED` - 중도 상환 완료
@@ -1022,14 +443,12 @@ export interface LoanType {
   annualIncome: LoanAnnualIncomeEnumType
   /**
    * 월 실수령액 또는 월 수입 (만원)
-   * 만원 단위로 입력
    * @min 0
    * @max 2147483647
    */
   monthlyIncome: number
   /**
    * 월 고정 지출 (만원)
-   * 만원 단위로 입력
    * @min 0
    * @max 2147483647
    */
@@ -1076,16 +495,12 @@ export interface LoanType {
    * @maxLength 100
    */
   safeKey: string
-  /**
-   * 대출 용도 및 상환 계획
-   * 대출 용도와 상환 계획을 상세히 기입해주세요
-   */
+  /** 대출 용도 및 상환 계획 */
   purposeAndRepaymentPlan: string
   /** 전자문서 수신 동의 */
   electronicDocumentConsent?: boolean
   /**
    * 대출신청 금액 (만원)
-   * 만원 단위로 입력
    * @min 0
    * @max 2147483647
    */
@@ -1093,7 +508,7 @@ export interface LoanType {
   /**
    * 상환방식
    * * `EQUAL_INSTALLMENT` - 원리금균등분할상환
-   * * `LUMP_SUM` - 만기 일시상환
+   * * `LUMP_SUM` - 만기일시상환
    */
   repaymentType: LoanRepaymentTypeEnumType
   /**
@@ -1109,7 +524,7 @@ export interface LoanType {
    */
   interestPaymentDate: LoanInterestPaymentDateEnumType
   /**
-   * 대출 기간 (개월)
+   * 대출 기간(개월)
    * @min 0
    * @max 2147483647
    */
@@ -1282,6 +697,11 @@ export interface LoanType {
    * @maxLength 200
    */
   assetDetailAddress: string
+  /**
+   * 등본상주소
+   * @maxLength 500
+   */
+  rrcAddress?: string
   /** 소득금액증명원 */
   incomeCertificate: string
   /** 주민등록등본 */
@@ -1294,8 +714,6 @@ export interface LoanType {
   healthInsurancePaymentConfirmation2: string
   /** 신분증 */
   identityCard: string
-  /** 지방세 납부내역 */
-  localTaxPayment: string
   /** 파일 */
   fileSet: LoanFileType
 }
@@ -1341,13 +759,13 @@ export interface LoanErrorMessageType {
   assetPostcode?: string[]
   assetBaseAddress?: string[]
   assetDetailAddress?: string[]
+  rrcAddress?: string[]
   incomeCertificate?: string[]
   residentRegistrationCopy?: string[]
   healthInsuranceEligibilityConfirmation?: string[]
   healthInsurancePaymentConfirmation?: string[]
   healthInsurancePaymentConfirmation2?: string[]
   identityCard?: string[]
-  localTaxPayment?: string[]
   fileSet?: LoanFileValidationErrorType
 }
 
@@ -1437,14 +855,12 @@ export interface LoanRequestType {
   annualIncome: LoanRequestAnnualIncomeEnumType
   /**
    * 월 실수령액 또는 월 수입 (만원)
-   * 만원 단위로 입력
    * @min 0
    * @max 2147483647
    */
   monthlyIncome: number
   /**
    * 월 고정 지출 (만원)
-   * 만원 단위로 입력
    * @min 0
    * @max 2147483647
    */
@@ -1494,7 +910,6 @@ export interface LoanRequestType {
   safeKey: string
   /**
    * 대출 용도 및 상환 계획
-   * 대출 용도와 상환 계획을 상세히 기입해주세요
    * @minLength 1
    */
   purposeAndRepaymentPlan: string
@@ -1502,7 +917,6 @@ export interface LoanRequestType {
   electronicDocumentConsent?: boolean
   /**
    * 대출신청 금액 (만원)
-   * 만원 단위로 입력
    * @min 0
    * @max 2147483647
    */
@@ -1510,7 +924,7 @@ export interface LoanRequestType {
   /**
    * 상환방식
    * * `EQUAL_INSTALLMENT` - 원리금균등분할상환
-   * * `LUMP_SUM` - 만기 일시상환
+   * * `LUMP_SUM` - 만기일시상환
    */
   repaymentType: LoanRequestRepaymentTypeEnumType
   /**
@@ -1526,7 +940,7 @@ export interface LoanRequestType {
    */
   interestPaymentDate: LoanRequestInterestPaymentDateEnumType
   /**
-   * 대출 기간 (개월)
+   * 대출 기간(개월)
    * @min 0
    * @max 2147483647
    */
@@ -1708,6 +1122,11 @@ export interface LoanRequestType {
    * @maxLength 200
    */
   assetDetailAddress: string
+  /**
+   * 등본상주소
+   * @maxLength 500
+   */
+  rrcAddress?: string
   /** 소득금액증명원 */
   incomeCertificate: string
   /** 주민등록등본 */
@@ -1720,16 +1139,133 @@ export interface LoanRequestType {
   healthInsurancePaymentConfirmation2: string
   /** 신분증 */
   identityCard: string
-  /** 지방세 납부내역 */
-  localTaxPayment: string
   /** 파일 */
   fileSet: LoanFileRequestType
 }
 
+export interface LoanSignType {
+  /**
+   * 서명 URL
+   * @format uri
+   */
+  readonly signUrl: string
+}
+
+export interface LoanSignErrorMessageType {
+  nonField?: string[]
+}
+
+export interface NoticeType {
+  readonly id: number
+  /**
+   * 제목
+   * @maxLength 100
+   */
+  title: string
+  /**
+   * 생성일시
+   * @format date-time
+   */
+  readonly createdAt: string
+}
+
+export interface NoticeDetailType {
+  readonly id: number
+  /**
+   * 제목
+   * @maxLength 100
+   */
+  title: string
+  /** 내용 */
+  description: string
+  /**
+   * 생성일시
+   * @format date-time
+   */
+  readonly createdAt: string
+  /** 파일 */
+  fileSet: NoticeFileType[]
+  /** 이전글 */
+  readonly prevNotice: NoticeType | null
+  /** 이전글 */
+  readonly nextNotice: NoticeType | null
+}
+
+export interface NoticeFileType {
+  /**
+   * 파일명
+   * @maxLength 100
+   */
+  name: string
+  /**
+   * 위치
+   * @format uri
+   */
+  path: string
+}
+
+export interface PaginatedCompanyListType {
+  count?: number
+  isNext?: boolean
+  results?: CompanyType[]
+}
+
+export interface PaginatedFaqListType {
+  count?: number
+  isNext?: boolean
+  results?: FaqType[]
+}
+
 export interface PaginatedLoanListType {
   count?: number
-  cursor?: string | null
+  isNext?: boolean
   results?: LoanType[]
+}
+
+export interface PaginatedNoticeListType {
+  count?: number
+  isNext?: boolean
+  results?: NoticeType[]
+}
+
+export interface PresignedType {
+  /** @format uri */
+  readonly url: string
+  readonly fields: any
+}
+
+export interface PresignedErrorMessageType {
+  nonField?: string[]
+  fieldChoice?: string[]
+  fileName?: string[]
+  isDownload?: string[]
+}
+
+export interface PresignedRequestType {
+  /**
+   * * `notice.File.path` - 위치
+   * * `loan.Loan.income_certificate` - 소득금액증명원
+   * * `loan.Loan.resident_registration_copy` - 주민등록등본
+   * * `loan.Loan.health_insurance_eligibility_confirmation` - 건강보험 자격득실확인서
+   * * `loan.Loan.health_insurance_payment_confirmation` - 건강보험 납부확인서
+   * * `loan.Loan.health_insurance_payment_confirmation_2` - 건강보험 납부확인서 2
+   * * `loan.Loan.identity_card` - 신분증
+   * * `loan.File.path` - 위치
+   * * `gov.GovLog.file` - 파일
+   */
+  fieldChoice: PresignedRequestFieldChoiceEnumType
+  /** @minLength 1 */
+  fileName: string
+  isDownload: boolean
+}
+
+export interface SettingType {
+  /** 대출 활성화 */
+  isLoan?: boolean
+  /** 정부24 제출 활성화 */
+  isGov?: boolean
+  /** 위텍스 제출 활성화 */
+  isWetax?: boolean
 }
 
 export interface UsebAccessTokenType {
@@ -1741,9 +1277,517 @@ export interface UsebAccessTokenErrorMessageType {
   nonField?: string[]
 }
 
-export type LoanStatusEnumType = keyof typeof LoanStatusEnumTypeMap
+export interface UserIdentityVerificationType {
+  /** 본인인증 토큰 */
+  readonly identityVerificationToken: string
+}
 
+export interface UserIdentityVerificationErrorMessageType {
+  nonField?: string[]
+  identityVerificationId?: string[]
+}
+
+export interface UserIdentityVerificationRequestType {
+  /**
+   * 본인인증 id
+   * @minLength 1
+   */
+  identityVerificationId: string
+}
+
+export interface UserLoginType {
+  readonly accessToken: string
+  readonly refreshToken: string
+}
+
+export interface UserLoginErrorMessageType {
+  nonField?: string[]
+  identityVerificationId?: string[]
+}
+
+export interface UserLoginRequestType {
+  /**
+   * 본인인증 id
+   * @minLength 1
+   */
+  identityVerificationId: string
+}
+
+export interface UserRefreshType {
+  refreshToken: string
+  readonly accessToken: string
+}
+
+export interface UserRefreshErrorMessageType {
+  nonField?: string[]
+  refreshToken?: string[]
+}
+
+export interface UserRefreshRequestType {
+  /** @minLength 1 */
+  refreshToken: string
+}
+
+export interface WetaxType {
+  readonly id: number
+  /**
+   * 상태
+   * * `PENDING` - 대기
+   * * `SUCCESS` - 성공
+   * * `FAILED` - 실패
+   */
+  status?: WetaxStatusEnumType
+  /** 실패사유 */
+  failedReason?: string
+  dataSet: DataType[]
+}
+
+export interface WetaxLoginType {
+  readonly id: number
+  /** 공통 */
+  readonly common: CommonType
+  /** 세션ID */
+  readonly sessionId: string
+}
+
+export interface WetaxLoginErrorMessageType {
+  nonField?: string[]
+  method?: string[]
+  name?: string[]
+  birth?: string[]
+  phone?: string[]
+  agency?: string[]
+}
+
+export interface WetaxLoginRequestType {
+  /**
+   * 인증방식
+   * * `KAKAO` - 카카오톡
+   * * `KB` - 국민인증서
+   * * `PASS` - 통신사PASS
+   * * `SHINHAN` - 신한인증서
+   * * `NAVER` - 네이버
+   * * `TOSS` - 토스
+   */
+  method: WetaxLoginRequestMethodEnumType
+  /**
+   * 이름
+   * @minLength 1
+   * @maxLength 10
+   */
+  name: string
+  /**
+   * 생년월일
+   * @minLength 1
+   * @maxLength 8
+   */
+  birth: string
+  /**
+   * 휴대폰번호
+   * @minLength 1
+   * @maxLength 11
+   */
+  phone: string
+  /**
+   * 통신사
+   * * `01` - SKT
+   * * `02` - KT
+   * * `03` - LGU+
+   */
+  agency?: WetaxLoginRequestAgencyEnumType
+}
+
+export interface WetaxOtpErrorMessageType {
+  nonField?: string[]
+  common?: CommonValidationErrorType
+  sessionId?: string[]
+}
+
+export interface WetaxOtpRequestType {
+  /** 공통 */
+  common: CommonRequestType
+  /**
+   * 세션ID
+   * @minLength 1
+   * @maxLength 52
+   */
+  sessionId: string
+}
+
+/**
+ * * `0002` - 산업은행
+ * `0003` - 기업은행
+ * `0004` - 국민은행
+ * `0007` - 수협은행
+ * `0011` - 농협은행
+ * `0012` - 농축협
+ * `0020` - 우리은행
+ * `0023` - SC제일은행
+ * `0027` - 한국씨티은행
+ * `0031` - 아이엠뱅크
+ * `0032` - 부산은행
+ * `0034` - 광주은행
+ * `0035` - 제주은행
+ * `0037` - 전북은행
+ * `0039` - 경남은행
+ * `0045` - 새마을금고
+ * `0048` - 신협중앙회
+ * `0050` - 상호저축은행
+ * `0054` - HSBC은행
+ * `0055` - 도이치은행
+ * `0057` - JP모간체이스은행
+ * `0060` - BOA은행
+ * `0061` - 비엔피파리바은행
+ * `0062` - 중국공상은행
+ * `0063` - 중국은행
+ * `0064` - 산림조합중앙회
+ * `0067` - 중국건설은행
+ * `0071` - 우체국
+ * `0081` - 하나은행
+ * `0088` - 신한은행
+ * `0089` - 케이뱅크
+ * `0090` - 카카오뱅크
+ * `0092` - 토스뱅크
+ * `0209` - 유안타증권
+ * `0218` - KB증권
+ * `0221` - 상상인증권
+ * `0224` - BNK투자증권
+ * `0225` - IBK투자증권
+ * `0227` - 다올투자증권
+ * `0238` - 미래에셋증권
+ * `0240` - 삼성증권
+ * `0243` - 한국투자증권
+ * `0247` - NH투자증권
+ * `0261` - 교보증권
+ * `0262` - 아이엠증권
+ * `0263` - 현대차증권
+ * `0264` - 키움증권
+ * `0265` - LS증권
+ * `0266` - SK증권
+ * `0267` - 대신증권
+ * `0269` - 한화투자증권
+ * `0270` - 하나증권
+ * `0271` - 토스증권
+ * `0278` - 신한금융투자
+ * `0279` - DB금융투자
+ * `0280` - 유진투자증권
+ * `0287` - 메리츠증권
+ * `0288` - 카카오페이증권
+ * `0290` - 부국증권
+ * `0291` - 신영증권
+ * `0292` - 케이프투자증권
+ * `0294` - 우리투자증권
+ */
+export type AccountBankEnumType = keyof typeof AccountBankEnumTypeMap
+export const AccountBankEnumTypeMap = {
+  '0002': '산업은행',
+  '0003': '기업은행',
+  '0004': '국민은행',
+  '0007': '수협은행',
+  '0011': '농협은행',
+  '0012': '농축협',
+  '0020': '우리은행',
+  '0023': 'SC제일은행',
+  '0027': '한국씨티은행',
+  '0031': '아이엠뱅크',
+  '0032': '부산은행',
+  '0034': '광주은행',
+  '0035': '제주은행',
+  '0037': '전북은행',
+  '0039': '경남은행',
+  '0045': '새마을금고',
+  '0048': '신협중앙회',
+  '0050': '상호저축은행',
+  '0054': 'HSBC은행',
+  '0055': '도이치은행',
+  '0057': 'JP모간체이스은행',
+  '0060': 'BOA은행',
+  '0061': '비엔피파리바은행',
+  '0062': '중국공상은행',
+  '0063': '중국은행',
+  '0064': '산림조합중앙회',
+  '0067': '중국건설은행',
+  '0071': '우체국',
+  '0081': '하나은행',
+  '0088': '신한은행',
+  '0089': '케이뱅크',
+  '0090': '카카오뱅크',
+  '0092': '토스뱅크',
+  '0209': '유안타증권',
+  '0218': 'KB증권',
+  '0221': '상상인증권',
+  '0224': 'BNK투자증권',
+  '0225': 'IBK투자증권',
+  '0227': '다올투자증권',
+  '0238': '미래에셋증권',
+  '0240': '삼성증권',
+  '0243': '한국투자증권',
+  '0247': 'NH투자증권',
+  '0261': '교보증권',
+  '0262': '아이엠증권',
+  '0263': '현대차증권',
+  '0264': '키움증권',
+  '0265': 'LS증권',
+  '0266': 'SK증권',
+  '0267': '대신증권',
+  '0269': '한화투자증권',
+  '0270': '하나증권',
+  '0271': '토스증권',
+  '0278': '신한금융투자',
+  '0279': 'DB금융투자',
+  '0280': '유진투자증권',
+  '0287': '메리츠증권',
+  '0288': '카카오페이증권',
+  '0290': '부국증권',
+  '0291': '신영증권',
+  '0292': '케이프투자증권',
+  '0294': '우리투자증권',
+} as const
+
+/**
+ * * `0002` - 산업은행
+ * `0003` - 기업은행
+ * `0004` - 국민은행
+ * `0007` - 수협은행
+ * `0011` - 농협은행
+ * `0012` - 농축협
+ * `0020` - 우리은행
+ * `0023` - SC제일은행
+ * `0027` - 한국씨티은행
+ * `0031` - 아이엠뱅크
+ * `0032` - 부산은행
+ * `0034` - 광주은행
+ * `0035` - 제주은행
+ * `0037` - 전북은행
+ * `0039` - 경남은행
+ * `0045` - 새마을금고
+ * `0048` - 신협중앙회
+ * `0050` - 상호저축은행
+ * `0054` - HSBC은행
+ * `0055` - 도이치은행
+ * `0057` - JP모간체이스은행
+ * `0060` - BOA은행
+ * `0061` - 비엔피파리바은행
+ * `0062` - 중국공상은행
+ * `0063` - 중국은행
+ * `0064` - 산림조합중앙회
+ * `0067` - 중국건설은행
+ * `0071` - 우체국
+ * `0081` - 하나은행
+ * `0088` - 신한은행
+ * `0089` - 케이뱅크
+ * `0090` - 카카오뱅크
+ * `0092` - 토스뱅크
+ * `0209` - 유안타증권
+ * `0218` - KB증권
+ * `0221` - 상상인증권
+ * `0224` - BNK투자증권
+ * `0225` - IBK투자증권
+ * `0227` - 다올투자증권
+ * `0238` - 미래에셋증권
+ * `0240` - 삼성증권
+ * `0243` - 한국투자증권
+ * `0247` - NH투자증권
+ * `0261` - 교보증권
+ * `0262` - 아이엠증권
+ * `0263` - 현대차증권
+ * `0264` - 키움증권
+ * `0265` - LS증권
+ * `0266` - SK증권
+ * `0267` - 대신증권
+ * `0269` - 한화투자증권
+ * `0270` - 하나증권
+ * `0271` - 토스증권
+ * `0278` - 신한금융투자
+ * `0279` - DB금융투자
+ * `0280` - 유진투자증권
+ * `0287` - 메리츠증권
+ * `0288` - 카카오페이증권
+ * `0290` - 부국증권
+ * `0291` - 신영증권
+ * `0292` - 케이프투자증권
+ * `0294` - 우리투자증권
+ */
+export type AccountRequestBankEnumType =
+  keyof typeof AccountRequestBankEnumTypeMap
+export const AccountRequestBankEnumTypeMap = {
+  '0002': '산업은행',
+  '0003': '기업은행',
+  '0004': '국민은행',
+  '0007': '수협은행',
+  '0011': '농협은행',
+  '0012': '농축협',
+  '0020': '우리은행',
+  '0023': 'SC제일은행',
+  '0027': '한국씨티은행',
+  '0031': '아이엠뱅크',
+  '0032': '부산은행',
+  '0034': '광주은행',
+  '0035': '제주은행',
+  '0037': '전북은행',
+  '0039': '경남은행',
+  '0045': '새마을금고',
+  '0048': '신협중앙회',
+  '0050': '상호저축은행',
+  '0054': 'HSBC은행',
+  '0055': '도이치은행',
+  '0057': 'JP모간체이스은행',
+  '0060': 'BOA은행',
+  '0061': '비엔피파리바은행',
+  '0062': '중국공상은행',
+  '0063': '중국은행',
+  '0064': '산림조합중앙회',
+  '0067': '중국건설은행',
+  '0071': '우체국',
+  '0081': '하나은행',
+  '0088': '신한은행',
+  '0089': '케이뱅크',
+  '0090': '카카오뱅크',
+  '0092': '토스뱅크',
+  '0209': '유안타증권',
+  '0218': 'KB증권',
+  '0221': '상상인증권',
+  '0224': 'BNK투자증권',
+  '0225': 'IBK투자증권',
+  '0227': '다올투자증권',
+  '0238': '미래에셋증권',
+  '0240': '삼성증권',
+  '0243': '한국투자증권',
+  '0247': 'NH투자증권',
+  '0261': '교보증권',
+  '0262': '아이엠증권',
+  '0263': '현대차증권',
+  '0264': '키움증권',
+  '0265': 'LS증권',
+  '0266': 'SK증권',
+  '0267': '대신증권',
+  '0269': '한화투자증권',
+  '0270': '하나증권',
+  '0271': '토스증권',
+  '0278': '신한금융투자',
+  '0279': 'DB금융투자',
+  '0280': '유진투자증권',
+  '0287': '메리츠증권',
+  '0288': '카카오페이증권',
+  '0290': '부국증권',
+  '0291': '신영증권',
+  '0292': '케이프투자증권',
+  '0294': '우리투자증권',
+} as const
+
+/**
+ * * `PRIVACY_POLICY` - 개인정보 처리방침
+ * `LOAN_STANDARD_TERMS` - 대부거래 표준약관
+ * `ILLEGAL_DEBT_COLLECTION_RESPONSE` - 불법채권추심대응요령
+ * `EXTINCTION_DEBT_COLLECTION_NOTICE` - 소멸시효완성채권추심관련안내
+ * `TERMS_OF_SERVICE` - 서비스이용약관
+ * `DEBT_COLLECTION_SUPPORT_SYSTEM` - 채권추심 관련 지원제도 안내
+ * `DEBT_COLLECTION_PROCEDURE` - 채권추심업무처리절차
+ * `DEBT_COLLECTOR_OBLIGATIONS` - 채권추심자의 의무와 추심에 관한 개인금융채무자의 권리
+ */
+export type DisclaimerKindEnumType = keyof typeof DisclaimerKindEnumTypeMap
+export const DisclaimerKindEnumTypeMap = {
+  DEBT_COLLECTION_PROCEDURE: '채권추심업무처리절차',
+  DEBT_COLLECTION_SUPPORT_SYSTEM: '채권추심 관련 지원제도 안내',
+  DEBT_COLLECTOR_OBLIGATIONS:
+    '채권추심자의 의무와 추심에 관한 개인금융채무자의 권리',
+  EXTINCTION_DEBT_COLLECTION_NOTICE: '소멸시효완성채권추심관련안내',
+  ILLEGAL_DEBT_COLLECTION_RESPONSE: '불법채권추심대응요령',
+  LOAN_STANDARD_TERMS: '대부거래 표준약관',
+  PRIVACY_POLICY: '개인정보 처리방침',
+  TERMS_OF_SERVICE: '서비스이용약관',
+} as const
+
+/**
+ * * `PENDING` - 대기
+ * `INCOME_CERTIFICATE` - 소득금액증명
+ * `RESIDENT_REGISTRATION_COPY` - 주민등록표등초본교부
+ * `HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION` - 건강보험자격득실확인서
+ * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION` - 건강보험납부확인서
+ * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2` - 건강보험납부확인서 2
+ * `SUCCESS` - 성공
+ * `FAILED` - 실패
+ */
+export type GovStatusEnumType = keyof typeof GovStatusEnumTypeMap
+export const GovStatusEnumTypeMap = {
+  FAILED: '실패',
+  HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION: '건강보험자격득실확인서',
+  HEALTH_INSURANCE_PAYMENT_CONFIRMATION: '건강보험납부확인서',
+  HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2: '건강보험납부확인서 2',
+  INCOME_CERTIFICATE: '소득금액증명',
+  PENDING: '대기',
+  RESIDENT_REGISTRATION_COPY: '주민등록표등초본교부',
+  SUCCESS: '성공',
+} as const
+
+/**
+ * * `INCOME_CERTIFICATE` - 소득금액증명
+ * `RESIDENT_REGISTRATION_COPY` - 주민등록표등초본교부
+ * `HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION` - 건강보험자격득실확인서
+ * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION` - 건강보험납부확인서
+ * `HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2` - 건강보험납부확인서 2
+ */
+export type GovLogKindEnumType = keyof typeof GovLogKindEnumTypeMap
+export const GovLogKindEnumTypeMap = {
+  HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION: '건강보험자격득실확인서',
+  HEALTH_INSURANCE_PAYMENT_CONFIRMATION: '건강보험납부확인서',
+  HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2: '건강보험납부확인서 2',
+  INCOME_CERTIFICATE: '소득금액증명',
+  RESIDENT_REGISTRATION_COPY: '주민등록표등초본교부',
+} as const
+
+/**
+ * * `KAKAO` - 카카오톡
+ * `SAMSUNG` - 삼성패스
+ * `KB` - 국민인증서
+ * `PASS` - 통신사PASS
+ * `SHINHAN` - 신한인증서
+ * `NAVER` - 네이버
+ * `TOSS` - 토스
+ * `NH` - NH인증서
+ * `WOORI` - 우리인증서
+ * `HANA` - 하나인증서
+ */
+export type GovLoginRequestMethodEnumType =
+  keyof typeof GovLoginRequestMethodEnumTypeMap
+export const GovLoginRequestMethodEnumTypeMap = {
+  HANA: '하나인증서',
+  KAKAO: '카카오톡',
+  KB: '국민인증서',
+  NAVER: '네이버',
+  NH: 'NH인증서',
+  PASS: '통신사PASS',
+  SAMSUNG: '삼성패스',
+  SHINHAN: '신한인증서',
+  TOSS: '토스',
+  WOORI: '우리인증서',
+} as const
+
+/**
+ * * `01` - SKT
+ * `02` - KT
+ * `03` - LGU+
+ */
+export type GovLoginRequestAgencyEnumType =
+  keyof typeof GovLoginRequestAgencyEnumTypeMap
+export const GovLoginRequestAgencyEnumTypeMap = {
+  '01': 'SKT',
+  '02': 'KT',
+  '03': 'LGU+',
+} as const
+
+/**
+ * * `UNDER_REVIEW` - 심사 중
+ * `CONTRACTING` - 계약 중
+ * `IN_PROGRESS` - 대출 중
+ * `OVERDUE` - 연체 중
+ * `EARLY_REPAYMENT_COMPLETED` - 중도 상환 완료
+ * `MATURITY_REPAYMENT_COMPLETED` - 만기 상환 완료
+ * `REJECTED` - 대출 거절
+ */
+export type LoanStatusEnumType = keyof typeof LoanStatusEnumTypeMap
 export const LoanStatusEnumTypeMap = {
+  CONTRACTING: '계약 중',
   EARLY_REPAYMENT_COMPLETED: '중도 상환 완료',
   IN_PROGRESS: '대출 중',
   MATURITY_REPAYMENT_COMPLETED: '만기 상환 완료',
@@ -1757,9 +1801,7 @@ export const LoanStatusEnumTypeMap = {
  * `B` - 신용
  * `C` - 부동산 담보
  */
-
 export type LoanKindEnumType = keyof typeof LoanKindEnumTypeMap
-
 export const LoanKindEnumTypeMap = {
   A: '월급',
   B: '신용',
@@ -1779,9 +1821,7 @@ export const LoanKindEnumTypeMap = {
  * `UTILITY_PAYMENT` - 공과금 납부
  * `DIRECT_INPUT` - 직접 입력
  */
-
 export type LoanPurposeEnumType = keyof typeof LoanPurposeEnumTypeMap
-
 export const LoanPurposeEnumTypeMap = {
   BUSINESS_FUNDS: '사업자금',
   CARD_DEBT_PAYMENT: '카드대금상환',
@@ -1802,9 +1842,7 @@ export const LoanPurposeEnumTypeMap = {
  * `OVER_500M` - 5억원 이상
  * `NO_ASSET` - 자산 없음
  */
-
 export type LoanTotalAssetEnumType = keyof typeof LoanTotalAssetEnumTypeMap
-
 export const LoanTotalAssetEnumTypeMap = {
   NO_ASSET: '자산 없음',
   OVER_500M: '5억원 이상',
@@ -1818,9 +1856,7 @@ export const LoanTotalAssetEnumTypeMap = {
  * `OVER_100M` - 1억원 이상
  * `NO_INCOME` - 소득 없음
  */
-
 export type LoanAnnualIncomeEnumType = keyof typeof LoanAnnualIncomeEnumTypeMap
-
 export const LoanAnnualIncomeEnumTypeMap = {
   NO_INCOME: '소득 없음',
   OVER_100M: '1억원 이상',
@@ -1834,9 +1870,7 @@ export const LoanAnnualIncomeEnumTypeMap = {
  * `OVER_100M` - 1억원 이상
  * `NO_DEBT` - 부채 없음
  */
-
 export type LoanDebtScaleEnumType = keyof typeof LoanDebtScaleEnumTypeMap
-
 export const LoanDebtScaleEnumTypeMap = {
   NO_DEBT: '부채 없음',
   OVER_100M: '1억원 이상',
@@ -1854,10 +1888,8 @@ export const LoanDebtScaleEnumTypeMap = {
  * `INHERITANCE_GIFT` - 상속/증여
  * `DIRECT_INPUT` - 직접 입력
  */
-
 export type LoanRepaymentMethodEnumType =
   keyof typeof LoanRepaymentMethodEnumTypeMap
-
 export const LoanRepaymentMethodEnumTypeMap = {
   BUSINESS_INCOME: '사업소득',
   DIRECT_INPUT: '직접 입력',
@@ -1879,9 +1911,7 @@ export const LoanRepaymentMethodEnumTypeMap = {
  * `RANGE_900_950` - 900점 이상~950점 미만
  * `OVER_950` - 950점 이상
  */
-
 export type LoanCreditScoreEnumType = keyof typeof LoanCreditScoreEnumTypeMap
-
 export const LoanCreditScoreEnumTypeMap = {
   OVER_950: '950점 이상',
   RANGE_650_700: '650점 이상~700점 미만',
@@ -1895,15 +1925,13 @@ export const LoanCreditScoreEnumTypeMap = {
 
 /**
  * * `EQUAL_INSTALLMENT` - 원리금균등분할상환
- * `LUMP_SUM` - 만기 일시상환
+ * `LUMP_SUM` - 만기일시상환
  */
-
 export type LoanRepaymentTypeEnumType =
   keyof typeof LoanRepaymentTypeEnumTypeMap
-
 export const LoanRepaymentTypeEnumTypeMap = {
   EQUAL_INSTALLMENT: '원리금균등분할상환',
-  LUMP_SUM: '만기 일시상환',
+  LUMP_SUM: '만기일시상환',
 } as const
 
 /**
@@ -1916,10 +1944,8 @@ export const LoanRepaymentTypeEnumTypeMap = {
  * @min 0
  * @max 2147483647
  */
-
 export type LoanInterestPaymentDateEnumType =
   keyof typeof LoanInterestPaymentDateEnumTypeMap
-
 export const LoanInterestPaymentDateEnumTypeMap = {
   1: '1일',
   5: '5일',
@@ -1993,9 +2019,7 @@ export const LoanInterestPaymentDateEnumTypeMap = {
  * `0292` - 케이프투자증권
  * `0294` - 우리투자증권
  */
-
 export type LoanBankEnumType = keyof typeof LoanBankEnumTypeMap
-
 export const LoanBankEnumTypeMap = {
   '0002': '산업은행',
   '0003': '기업은행',
@@ -2072,9 +2096,7 @@ export const LoanBankEnumTypeMap = {
  * `UNEMPLOYED` - 무직
  * `OTHER` - 기타
  */
-
 export type LoanJobTypeEnumType = keyof typeof LoanJobTypeEnumTypeMap
-
 export const LoanJobTypeEnumTypeMap = {
   BUSINESS_OWNER: '사업가',
   CIVIL_SERVANT: '공무원',
@@ -2091,10 +2113,8 @@ export const LoanJobTypeEnumTypeMap = {
  * * `PERMANENT` - 정규직
  * `CONTRACT` - 계약직
  */
-
 export type LoanEmploymentTypeEnumType =
   keyof typeof LoanEmploymentTypeEnumTypeMap
-
 export const LoanEmploymentTypeEnumTypeMap = {
   CONTRACT: '계약직',
   PERMANENT: '정규직',
@@ -2105,9 +2125,7 @@ export const LoanEmploymentTypeEnumTypeMap = {
  * `MULTI_FAMILY` - 연립/다세대/다가구
  * `OTHER` - 그 외
  */
-
 export type LoanHousingTypeEnumType = keyof typeof LoanHousingTypeEnumTypeMap
-
 export const LoanHousingTypeEnumTypeMap = {
   APARTMENT: '아파트/주상복합',
   MULTI_FAMILY: '연립/다세대/다가구',
@@ -2119,10 +2137,8 @@ export const LoanHousingTypeEnumTypeMap = {
  * `JEONSE` - 전세
  * `MONTHLY_RENT` - 월세
  */
-
 export type LoanResidenceTypeEnumType =
   keyof typeof LoanResidenceTypeEnumTypeMap
-
 export const LoanResidenceTypeEnumTypeMap = {
   JEONSE: '전세',
   MONTHLY_RENT: '월세',
@@ -2134,9 +2150,7 @@ export const LoanResidenceTypeEnumTypeMap = {
  * `B` - 신용
  * `C` - 부동산 담보
  */
-
 export type LoanRequestKindEnumType = keyof typeof LoanRequestKindEnumTypeMap
-
 export const LoanRequestKindEnumTypeMap = {
   A: '월급',
   B: '신용',
@@ -2156,10 +2170,8 @@ export const LoanRequestKindEnumTypeMap = {
  * `UTILITY_PAYMENT` - 공과금 납부
  * `DIRECT_INPUT` - 직접 입력
  */
-
 export type LoanRequestPurposeEnumType =
   keyof typeof LoanRequestPurposeEnumTypeMap
-
 export const LoanRequestPurposeEnumTypeMap = {
   BUSINESS_FUNDS: '사업자금',
   CARD_DEBT_PAYMENT: '카드대금상환',
@@ -2180,10 +2192,8 @@ export const LoanRequestPurposeEnumTypeMap = {
  * `OVER_500M` - 5억원 이상
  * `NO_ASSET` - 자산 없음
  */
-
 export type LoanRequestTotalAssetEnumType =
   keyof typeof LoanRequestTotalAssetEnumTypeMap
-
 export const LoanRequestTotalAssetEnumTypeMap = {
   NO_ASSET: '자산 없음',
   OVER_500M: '5억원 이상',
@@ -2197,10 +2207,8 @@ export const LoanRequestTotalAssetEnumTypeMap = {
  * `OVER_100M` - 1억원 이상
  * `NO_INCOME` - 소득 없음
  */
-
 export type LoanRequestAnnualIncomeEnumType =
   keyof typeof LoanRequestAnnualIncomeEnumTypeMap
-
 export const LoanRequestAnnualIncomeEnumTypeMap = {
   NO_INCOME: '소득 없음',
   OVER_100M: '1억원 이상',
@@ -2214,10 +2222,8 @@ export const LoanRequestAnnualIncomeEnumTypeMap = {
  * `OVER_100M` - 1억원 이상
  * `NO_DEBT` - 부채 없음
  */
-
 export type LoanRequestDebtScaleEnumType =
   keyof typeof LoanRequestDebtScaleEnumTypeMap
-
 export const LoanRequestDebtScaleEnumTypeMap = {
   NO_DEBT: '부채 없음',
   OVER_100M: '1억원 이상',
@@ -2235,10 +2241,8 @@ export const LoanRequestDebtScaleEnumTypeMap = {
  * `INHERITANCE_GIFT` - 상속/증여
  * `DIRECT_INPUT` - 직접 입력
  */
-
 export type LoanRequestRepaymentMethodEnumType =
   keyof typeof LoanRequestRepaymentMethodEnumTypeMap
-
 export const LoanRequestRepaymentMethodEnumTypeMap = {
   BUSINESS_INCOME: '사업소득',
   DIRECT_INPUT: '직접 입력',
@@ -2260,10 +2264,8 @@ export const LoanRequestRepaymentMethodEnumTypeMap = {
  * `RANGE_900_950` - 900점 이상~950점 미만
  * `OVER_950` - 950점 이상
  */
-
 export type LoanRequestCreditScoreEnumType =
   keyof typeof LoanRequestCreditScoreEnumTypeMap
-
 export const LoanRequestCreditScoreEnumTypeMap = {
   OVER_950: '950점 이상',
   RANGE_650_700: '650점 이상~700점 미만',
@@ -2277,15 +2279,13 @@ export const LoanRequestCreditScoreEnumTypeMap = {
 
 /**
  * * `EQUAL_INSTALLMENT` - 원리금균등분할상환
- * `LUMP_SUM` - 만기 일시상환
+ * `LUMP_SUM` - 만기일시상환
  */
-
 export type LoanRequestRepaymentTypeEnumType =
   keyof typeof LoanRequestRepaymentTypeEnumTypeMap
-
 export const LoanRequestRepaymentTypeEnumTypeMap = {
   EQUAL_INSTALLMENT: '원리금균등분할상환',
-  LUMP_SUM: '만기 일시상환',
+  LUMP_SUM: '만기일시상환',
 } as const
 
 /**
@@ -2298,10 +2298,8 @@ export const LoanRequestRepaymentTypeEnumTypeMap = {
  * @min 0
  * @max 2147483647
  */
-
 export type LoanRequestInterestPaymentDateEnumType =
   keyof typeof LoanRequestInterestPaymentDateEnumTypeMap
-
 export const LoanRequestInterestPaymentDateEnumTypeMap = {
   1: '1일',
   5: '5일',
@@ -2375,9 +2373,7 @@ export const LoanRequestInterestPaymentDateEnumTypeMap = {
  * `0292` - 케이프투자증권
  * `0294` - 우리투자증권
  */
-
 export type LoanRequestBankEnumType = keyof typeof LoanRequestBankEnumTypeMap
-
 export const LoanRequestBankEnumTypeMap = {
   '0002': '산업은행',
   '0003': '기업은행',
@@ -2454,10 +2450,8 @@ export const LoanRequestBankEnumTypeMap = {
  * `UNEMPLOYED` - 무직
  * `OTHER` - 기타
  */
-
 export type LoanRequestJobTypeEnumType =
   keyof typeof LoanRequestJobTypeEnumTypeMap
-
 export const LoanRequestJobTypeEnumTypeMap = {
   BUSINESS_OWNER: '사업가',
   CIVIL_SERVANT: '공무원',
@@ -2474,10 +2468,8 @@ export const LoanRequestJobTypeEnumTypeMap = {
  * * `PERMANENT` - 정규직
  * `CONTRACT` - 계약직
  */
-
 export type LoanRequestEmploymentTypeEnumType =
   keyof typeof LoanRequestEmploymentTypeEnumTypeMap
-
 export const LoanRequestEmploymentTypeEnumTypeMap = {
   CONTRACT: '계약직',
   PERMANENT: '정규직',
@@ -2488,10 +2480,8 @@ export const LoanRequestEmploymentTypeEnumTypeMap = {
  * `MULTI_FAMILY` - 연립/다세대/다가구
  * `OTHER` - 그 외
  */
-
 export type LoanRequestHousingTypeEnumType =
   keyof typeof LoanRequestHousingTypeEnumTypeMap
-
 export const LoanRequestHousingTypeEnumTypeMap = {
   APARTMENT: '아파트/주상복합',
   MULTI_FAMILY: '연립/다세대/다가구',
@@ -2503,10 +2493,8 @@ export const LoanRequestHousingTypeEnumTypeMap = {
  * `JEONSE` - 전세
  * `MONTHLY_RENT` - 월세
  */
-
 export type LoanRequestResidenceTypeEnumType =
   keyof typeof LoanRequestResidenceTypeEnumTypeMap
-
 export const LoanRequestResidenceTypeEnumTypeMap = {
   JEONSE: '전세',
   MONTHLY_RENT: '월세',
@@ -2521,7 +2509,124 @@ export const LoanRequestResidenceTypeEnumTypeMap = {
  * `loan.Loan.health_insurance_payment_confirmation` - 건강보험 납부확인서
  * `loan.Loan.health_insurance_payment_confirmation_2` - 건강보험 납부확인서 2
  * `loan.Loan.identity_card` - 신분증
- * `loan.Loan.local_tax_payment` - 지방세 납부내역
  * `loan.File.path` - 위치
  * `gov.GovLog.file` - 파일
  */
+export type PresignedRequestFieldChoiceEnumType =
+  keyof typeof PresignedRequestFieldChoiceEnumTypeMap
+export const PresignedRequestFieldChoiceEnumTypeMap = {
+  'gov.GovLog.file': '파일',
+  'loan.File.path': '위치',
+  'loan.Loan.health_insurance_eligibility_confirmation':
+    '건강보험 자격득실확인서',
+  'loan.Loan.health_insurance_payment_confirmation': '건강보험 납부확인서',
+  'loan.Loan.health_insurance_payment_confirmation_2': '건강보험 납부확인서 2',
+  'loan.Loan.identity_card': '신분증',
+  'loan.Loan.income_certificate': '소득금액증명원',
+  'loan.Loan.resident_registration_copy': '주민등록등본',
+  'notice.File.path': '위치',
+} as const
+
+/**
+ * * `PENDING` - 대기
+ * `SUCCESS` - 성공
+ * `FAILED` - 실패
+ */
+export type WetaxStatusEnumType = keyof typeof WetaxStatusEnumTypeMap
+export const WetaxStatusEnumTypeMap = {
+  FAILED: '실패',
+  PENDING: '대기',
+  SUCCESS: '성공',
+} as const
+
+/**
+ * * `KAKAO` - 카카오톡
+ * `KB` - 국민인증서
+ * `PASS` - 통신사PASS
+ * `SHINHAN` - 신한인증서
+ * `NAVER` - 네이버
+ * `TOSS` - 토스
+ */
+export type WetaxLoginRequestMethodEnumType =
+  keyof typeof WetaxLoginRequestMethodEnumTypeMap
+export const WetaxLoginRequestMethodEnumTypeMap = {
+  KAKAO: '카카오톡',
+  KB: '국민인증서',
+  NAVER: '네이버',
+  PASS: '통신사PASS',
+  SHINHAN: '신한인증서',
+  TOSS: '토스',
+} as const
+
+/**
+ * * `01` - SKT
+ * `02` - KT
+ * `03` - LGU+
+ */
+export type WetaxLoginRequestAgencyEnumType =
+  keyof typeof WetaxLoginRequestAgencyEnumTypeMap
+export const WetaxLoginRequestAgencyEnumTypeMap = {
+  '01': 'SKT',
+  '02': 'KT',
+  '03': 'LGU+',
+} as const
+
+/**
+ * * `PRIVACY_POLICY` - 개인정보 처리방침
+ * `LOAN_STANDARD_TERMS` - 대부거래 표준약관
+ * `ILLEGAL_DEBT_COLLECTION_RESPONSE` - 불법채권추심대응요령
+ * `EXTINCTION_DEBT_COLLECTION_NOTICE` - 소멸시효완성채권추심관련안내
+ * `TERMS_OF_SERVICE` - 서비스이용약관
+ * `DEBT_COLLECTION_SUPPORT_SYSTEM` - 채권추심 관련 지원제도 안내
+ * `DEBT_COLLECTION_PROCEDURE` - 채권추심업무처리절차
+ * `DEBT_COLLECTOR_OBLIGATIONS` - 채권추심자의 의무와 추심에 관한 개인금융채무자의 권리
+ */
+export type DisclaimerRetrieveParamsKindEnumType =
+  keyof typeof DisclaimerRetrieveParamsKindEnumTypeMap
+export const DisclaimerRetrieveParamsKindEnumTypeMap = {
+  DEBT_COLLECTION_PROCEDURE: '채권추심업무처리절차',
+  DEBT_COLLECTION_SUPPORT_SYSTEM: '채권추심 관련 지원제도 안내',
+  DEBT_COLLECTOR_OBLIGATIONS:
+    '채권추심자의 의무와 추심에 관한 개인금융채무자의 권리',
+  EXTINCTION_DEBT_COLLECTION_NOTICE: '소멸시효완성채권추심관련안내',
+  ILLEGAL_DEBT_COLLECTION_RESPONSE: '불법채권추심대응요령',
+  LOAN_STANDARD_TERMS: '대부거래 표준약관',
+  PRIVACY_POLICY: '개인정보 처리방침',
+  TERMS_OF_SERVICE: '서비스이용약관',
+} as const
+
+/**
+ * * `PRIVACY_POLICY` - 개인정보 처리방침
+ * `LOAN_STANDARD_TERMS` - 대부거래 표준약관
+ * `ILLEGAL_DEBT_COLLECTION_RESPONSE` - 불법채권추심대응요령
+ * `EXTINCTION_DEBT_COLLECTION_NOTICE` - 소멸시효완성채권추심관련안내
+ * `TERMS_OF_SERVICE` - 서비스이용약관
+ * `DEBT_COLLECTION_SUPPORT_SYSTEM` - 채권추심 관련 지원제도 안내
+ * `DEBT_COLLECTION_PROCEDURE` - 채권추심업무처리절차
+ * `DEBT_COLLECTOR_OBLIGATIONS` - 채권추심자의 의무와 추심에 관한 개인금융채무자의 권리
+ */
+export type DisclaimerRetrieveParamsEnumType =
+  keyof typeof DisclaimerRetrieveParamsEnumTypeMap
+export const DisclaimerRetrieveParamsEnumTypeMap = {
+  DEBT_COLLECTION_PROCEDURE: '채권추심업무처리절차',
+  DEBT_COLLECTION_SUPPORT_SYSTEM: '채권추심 관련 지원제도 안내',
+  DEBT_COLLECTOR_OBLIGATIONS:
+    '채권추심자의 의무와 추심에 관한 개인금융채무자의 권리',
+  EXTINCTION_DEBT_COLLECTION_NOTICE: '소멸시효완성채권추심관련안내',
+  ILLEGAL_DEBT_COLLECTION_RESPONSE: '불법채권추심대응요령',
+  LOAN_STANDARD_TERMS: '대부거래 표준약관',
+  PRIVACY_POLICY: '개인정보 처리방침',
+  TERMS_OF_SERVICE: '서비스이용약관',
+} as const
+
+export type LoanListParamsStatusInEnumType =
+  keyof typeof LoanListParamsStatusInEnumTypeMap
+export const LoanListParamsStatusInEnumTypeMap = {
+  CONTRACTING: '계약 중',
+  EARLY_REPAYMENT_COMPLETED: '중도 상환 완료',
+  IN_PROGRESS: '대출 중',
+  MATURITY_REPAYMENT_COMPLETED: '만기 상환 완료',
+  OVERDUE: '연체 중',
+  REJECTED: '대출 거절',
+  UNDER_REVIEW: '심사 중',
+} as const

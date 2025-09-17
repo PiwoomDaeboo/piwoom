@@ -1,17 +1,15 @@
-import {
-  InfiniteData,
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-} from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { AxiosError } from 'axios'
 
 import instance from '@/configs/axios/instance'
 
-import { CommonErrorType, LoanErrorMessageType } from '../@types/data-contracts'
 import {
-  InfiniteQueryHookParams,
+  CommonErrorType,
+  LoanErrorMessageType,
+  LoanSignErrorMessageType,
+} from '../@types/data-contracts'
+import {
   MutationHookParams,
   Parameter,
   QueryHookParams,
@@ -41,13 +39,11 @@ const isDefined = (v: unknown) => typeof v !== 'undefined'
 export const QUERY_KEY_LOAN_API = {
   LIST: (variables?: Parameter<typeof loanApi.loanList>) =>
     ['LOAN_LIST', variables].filter(isDefined),
-  LIST_INFINITE: (variables?: Parameter<typeof loanApi.loanList>) =>
-    ['LOAN_LIST_INFINITE', variables].filter(isDefined),
   CREATE: () => ['LOAN_CREATE'],
   RETRIEVE: (variables?: Parameter<typeof loanApi.loanRetrieve>) =>
     ['LOAN_RETRIEVE', variables].filter(isDefined),
   UPDATE: () => ['LOAN_UPDATE'],
-  DESTROY: () => ['LOAN_DESTROY'],
+  SIGN_CREATE: () => ['LOAN_SIGN_CREATE'],
 }
 
 /**
@@ -72,42 +68,6 @@ export const useLoanListQuery = <
   return useQuery({
     queryKey,
     queryFn: () => loanApi.loanList(params?.variables),
-    ...params?.options,
-  })
-}
-
-/**
- * No description    *      * @tags loan
- * @name LoanList
- * @summary 대출 목록 조회
- * @request GET:/v1/loan/
- * @secure    */
-export const useLoanListInfiniteQuery = <
-  TData = InfiniteData<
-    RequestFnReturn<typeof loanApi.loanList>,
-    Parameter<typeof loanApi.loanList>
-  >,
->(
-  params?: InfiniteQueryHookParams<
-    typeof loanApi.loanList,
-    AxiosError<CommonErrorType>,
-    TData
-  >,
-) => {
-  const queryKey = QUERY_KEY_LOAN_API.LIST_INFINITE(params?.variables)
-  return useInfiniteQuery({
-    queryKey,
-    initialPageParam: null,
-    queryFn: ({ pageParam }) => {
-      return loanApi.loanList({
-        ...params?.variables,
-        query: { ...params?.variables?.query, cursor: pageParam },
-      })
-    },
-    getNextPageParam: (lastPage) => {
-      const cursor = lastPage.cursor ?? null
-      return cursor
-    },
     ...params?.options,
   })
 }
@@ -188,21 +148,21 @@ export const useLoanUpdateMutation = (
  * No description
  *
  * @tags loan
- * @name LoanDestroy
- * @summary 대출 삭제
- * @request DELETE:/v1/loan/{id}/
+ * @name LoanSignCreate
+ * @summary 대출 서명 URL 발급
+ * @request POST:/v1/loan/{id}/sign/
  * @secure  */
 
-export const useLoanDestroyMutation = (
+export const useLoanSignCreateMutation = (
   params: MutationHookParams<
-    typeof loanApi.loanDestroy,
-    AxiosError<CommonErrorType>
+    typeof loanApi.loanSignCreate,
+    AxiosError<LoanSignErrorMessageType | CommonErrorType>
   >,
 ) => {
-  const mutationKey = QUERY_KEY_LOAN_API.DESTROY()
+  const mutationKey = QUERY_KEY_LOAN_API.SIGN_CREATE()
   return useMutation({
     mutationKey,
-    mutationFn: loanApi.loanDestroy,
+    mutationFn: loanApi.loanSignCreate,
     ...params?.options,
   })
 }

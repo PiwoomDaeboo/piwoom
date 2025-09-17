@@ -7,7 +7,7 @@ const { definePartsStyle, defineMultiStyleConfig } =
 const baseStyle = definePartsStyle({
   dialogContainer: {
     alignItems: 'center',
-    // px: '16px',
+    px: '16px',
   },
 })
 
@@ -42,11 +42,28 @@ const variants = {
   }),
   modal: definePartsStyle({
     dialog: {
-      my: [0, 'auto'],
+      my: { base: 0, sm: 'auto' },
+      borderTopRadius: { base: '0px', sm: '16px' },
       borderBottomRadius: { base: '0px', sm: '16px' },
     },
     dialogContainer: {
-      alignItems: ['flex-end', 'center'],
+      alignItems: ['center'],
+    },
+  }),
+}
+
+const sizes = {
+  full: definePartsStyle({
+    dialog: {
+      borderRadius: '0px',
+      maxW: '100vw',
+      maxH: '100vh',
+      m: 0,
+    },
+    dialogContainer: {
+      px: '0px',
+      py: '0px',
+      borderRadius: '0px',
     },
   }),
 }
@@ -54,6 +71,7 @@ const variants = {
 export const Modal = defineMultiStyleConfig({
   baseStyle,
   variants,
+  sizes,
   defaultProps: {
     variant: 'modal',
   },
