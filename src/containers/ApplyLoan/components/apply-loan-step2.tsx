@@ -15,12 +15,15 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
+import * as PortOne from '@portone/browser-sdk/v2'
 
 import { useFormContext } from 'react-hook-form'
 
 import LoanTermsModal from '@/components/@Modal/LoanTermsModal'
 import ModalBasis from '@/components/@Modal/ModalBasis'
+import { useUserIdentityVerificationCreateMutation } from '@/generated/apis/User/User.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
+import { useSessionStorage } from '@/stores/session/state'
 
 const CHECKBOX_STYLES = {
   '.chakra-checkbox__control': {
@@ -110,6 +113,37 @@ const ApplyLoanStep2 = () => {
       provision: checked,
     })
   }
+  const { set } = useSessionStorage()
+  const { mutateAsync: userIdentityVerificationCreate } =
+    useUserIdentityVerificationCreateMutation({
+      options: {
+        onSuccess: (data) => {
+          set({
+            identityVerificationToken: data.identityVerificationToken,
+          })
+          setIsPhoneCertification(true)
+          // router.push(`/apply-loan?step=2`)
+        },
+      },
+    })
+  const handleAuthentication = async () => {
+    const response = await PortOne.requestIdentityVerification({
+      storeId: 'store-5fcf48f2-05d3-43e2-9abe-c09b3f461e2d',
+      identityVerificationId: crypto.randomUUID(),
+      channelKey: 'channel-key-1e7295f0-e634-4e2b-9da5-2402b97e7a63',
+      redirectUrl: `${window.location.origin}/my-loan?step=2`,
+    })
+    if (response?.code !== undefined) {
+      return alert(response?.message)
+    }
+
+    userIdentityVerificationCreate({
+      data: {
+        identityVerificationId: response?.identityVerificationId || '',
+      },
+    })
+    //TODO: 인증 후 개인정보를 가져와서 사용자 정보 표기하기
+  }
 
   // 개별 동의 핸들러
   const handleIndividualAgreement = (key: string, checked: boolean) => {
@@ -139,7 +173,7 @@ const ApplyLoanStep2 = () => {
 
     return allAgreed && allAnsweredNo
   }
-  const [isPhoneCertification, setIsPhoneCertification] = useState(true)
+  const [isPhoneCertification, setIsPhoneCertification] = useState(false)
   return (
     <Container>
       <Flex py={{ base: '40px', sm: '48px', md: '84px' }} flexDir={'column'}>
@@ -161,7 +195,7 @@ const ApplyLoanStep2 = () => {
             <Button
               variant={'outline-primary'}
               w={'209px'}
-              isDisabled={isPhoneCertification}
+              onClick={handleAuthentication}
             >
               {isPhoneCertification ?
                 '휴대폰 간편인증 완료'
@@ -169,41 +203,43 @@ const ApplyLoanStep2 = () => {
             </Button>
           </VStack>
         </VStack>
-        <SimpleGrid columns={{ base: 1, sm: 2 }} gap={'24px'} mb={'64px'}>
-          <VStack spacing={'15px'} alignItems={'flex-start'}>
-            <Text textStyle={'pre-body-7'} color={'grey.10'}>
-              이름(한글)
-            </Text>
-            <Text textStyle={'pre-body-6'} color={'grey.7'}>
-              김이름
-            </Text>
-          </VStack>
-          <VStack spacing={'15px'} alignItems={'flex-start'}>
-            <Text textStyle={'pre-body-7'} color={'grey.10'}>
-              주민등록번호
-            </Text>
-            <Text textStyle={'pre-body-6'} color={'grey.7'}>
-              900101-1234567
-            </Text>
-          </VStack>
-          <VStack spacing={'15px'} alignItems={'flex-start'}>
-            <Text textStyle={'pre-body-7'} color={'grey.10'}>
-              휴대폰번호
-            </Text>
-            <Text textStyle={'pre-body-6'} color={'grey.7'}>
-              010-1234-5678
-            </Text>
-          </VStack>
-          <VStack spacing={'15px'} alignItems={'flex-start'}>
-            <Text textStyle={'pre-body-7'} color={'grey.10'}>
-              이메일
-              <Text as="span" color={'primary.4'}>
-                •
+        {isPhoneCertification && (
+          <SimpleGrid columns={{ base: 1, sm: 2 }} gap={'24px'} mb={'64px'}>
+            <VStack spacing={'15px'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-7'} color={'grey.10'}>
+                이름(한글)
               </Text>
-            </Text>
-            <Input disabled placeholder="이메일" />
-          </VStack>
-        </SimpleGrid>
+              <Text textStyle={'pre-body-6'} color={'grey.7'}>
+                김이름
+              </Text>
+            </VStack>
+            <VStack spacing={'15px'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-7'} color={'grey.10'}>
+                주민등록번호
+              </Text>
+              <Text textStyle={'pre-body-6'} color={'grey.7'}>
+                900101-1234567
+              </Text>
+            </VStack>
+            <VStack spacing={'15px'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-7'} color={'grey.10'}>
+                휴대폰번호
+              </Text>
+              <Text textStyle={'pre-body-6'} color={'grey.7'}>
+                010-1234-5678
+              </Text>
+            </VStack>
+            <VStack spacing={'15px'} alignItems={'flex-start'}>
+              <Text textStyle={'pre-body-7'} color={'grey.10'}>
+                이메일
+                <Text as="span" color={'primary.4'}>
+                  •
+                </Text>
+              </Text>
+              <Input disabled placeholder="이메일" />
+            </VStack>
+          </SimpleGrid>
+        )}
 
         <Flex
           w={'100%'}

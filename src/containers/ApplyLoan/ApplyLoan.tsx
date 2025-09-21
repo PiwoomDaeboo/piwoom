@@ -70,7 +70,7 @@ function ApplyLoan() {
     <FormProvider {...methods}>
       <ApplyLoanProcess step={(step as string) || '1'} />
       {/* type query와 관계없이 step에 따라 화면이 결정됨 */}
-      {step === '1' && <ApplyLoanStep1 />}
+      {(step === '1' || step === undefined) && <ApplyLoanStep1 />}
       {step === '2' && <ApplyLoanStep2 />}
       {step === '3' && <ApplyLoanStep3 />}
       {step === '4' && <ApplyLoanStep4 />}

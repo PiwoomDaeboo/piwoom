@@ -200,3 +200,21 @@ export const HOUSING_TYPE_OPTIONS = [
   { label: '연립/다세대/다가구', value: '연립/다세대/다가구' },
   { label: '그 외', value: '그 외' },
 ]
+
+export const CHECKBOX_STYLES = {
+  '.chakra-checkbox__control': {
+    borderRadius: '50%',
+    border: '1px solid',
+    borderColor: 'border.basic.1',
+    _checked: {
+      bg: 'primary.3',
+      borderColor: 'primary.3',
+      borderRadius: '50%',
+    },
+  },
+  '.chakra-checkbox__control[data-checked]': {
+    bg: 'primary.3',
+    borderColor: 'primary.3',
+    borderRadius: '50%',
+  },
+}

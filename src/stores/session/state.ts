@@ -7,7 +7,7 @@ import { immer } from 'zustand/middleware/immer'
 import { TodoType } from './types'
 
 export type SessionStorage = {
-  todo: TodoType | null
+  identityVerificationToken: string | null
 }
 
 /**
@@ -23,11 +23,11 @@ export const useSessionStorage = create(
   persist(
     withSetter(
       immer<SessionStorage>(() => ({
-        todo: null,
+        identityVerificationToken: null,
       })),
     ),
     {
-      name: '@toktokhan-dev',
+      name: '@token',
       storage: createJSONStorage(() => sessionStorage),
     },
   ),

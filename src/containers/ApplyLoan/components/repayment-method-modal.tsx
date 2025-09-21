@@ -50,7 +50,7 @@ function RepaymentMethodModal({ isOpen, onClose }: RepaymentMethodModalProps) {
         <VStack
           spacing={'32px'}
           //   align={'stretch'}
-          //   maxH={'450px'}
+          maxH={{ base: '100%', sm: '600px' }}
           overflowY={'auto'}
         >
           {/* 만기 일시상환 */}

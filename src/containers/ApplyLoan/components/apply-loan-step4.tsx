@@ -23,29 +23,28 @@ import {
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
 
 import { useUploadFileToS3Mutation } from '@/apis/s3-file-uploader/S3FileUploaderApi.query'
-import LoanTermsModal from '@/components/@Modal/LoanTermsModal'
-import ModalBasis from '@/components/@Modal/ModalBasis'
 import CommonSelect from '@/components/CommonSelect'
 import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
-import { LoanRequestType } from '@/generated/apis/@types/data-contracts'
+import { useAccountVerifyCreateMutation } from '@/generated/apis/Account/Account.query'
 import { useGovRetrieveQuery } from '@/generated/apis/Gov/Gov.query'
 import {
   CaretRightIcon,
   FolderIcon,
   InfoFillIcon,
-  Loan1Icon,
 } from '@/generated/icons/MyIcons'
 import { useQueryEffects } from '@/hooks/useQueryEffect'
 
 import {
   BANK_DATA,
+  CHECKBOX_STYLES,
   DATE_OF_PAYMENT_DATA,
   EMPLOYMENT_TYPE,
   JOP_TYPE,
   REPAYMENT_TYPE,
 } from '../const/const'
 import { useSelectButtonGroup } from '../hooks/useSelectButtonGroup'
+import AddressModal from './address-modal'
 import DocumentAgreeModal from './document-agree-modal'
 import OfficeAddressModal from './office-address-modal'
 import RepaymentMethodModal from './repayment-method-modal'
@@ -58,28 +57,11 @@ interface Company {
   detailAddress: string
 }
 
-const CHECKBOX_STYLES = {
-  '.chakra-checkbox__control': {
-    borderRadius: '50%',
-    border: '1px solid',
-    borderColor: 'border.basic.1',
-    _checked: {
-      bg: 'primary.3',
-      borderColor: 'primary.3',
-      borderRadius: '50%',
-    },
-  },
-  '.chakra-checkbox__control[data-checked]': {
-    bg: 'primary.3',
-    borderColor: 'primary.3',
-    borderRadius: '50%',
-  },
-}
-
 const ApplyLoanStep4 = () => {
   const router = useRouter()
-  const { register, setValue, control, handleSubmit } = useFormContext()
-
+  const { register, setValue, control, handleSubmit, watch } = useFormContext()
+  const watchAll = watch()
+  console.log('watchAll', watchAll)
   const loanAmount = useWatch({ control, name: 'loanAmount' })
   const loanPeriod = useWatch({ control, name: 'loanPeriod' })
   const residenceType = useWatch({ control, name: 'residenceType' })
@@ -90,6 +72,10 @@ const ApplyLoanStep4 = () => {
   })
   const baseAddress = useWatch({ control, name: 'baseAddress' })
   const detailAddress = useWatch({ control, name: 'detailAddress' })
+  const assetBaseAddress = useWatch({ control, name: 'assetBaseAddress' })
+  const assetDetailAddress = useWatch({ control, name: 'assetDetailAddress' })
+  const postcode = useWatch({ control, name: 'postcode' })
+  const assetPostcode = useWatch({ control, name: 'assetPostcode' })
   const electronicDocumentConsent = useWatch({
     control,
     name: 'electronicDocumentConsent',
@@ -109,13 +95,23 @@ const ApplyLoanStep4 = () => {
     onOpen: onRepaymentMethodModalOpen,
     onClose: onRepaymentMethodModalClose,
   } = useDisclosure()
-
+  const {
+    isOpen: isAddressModalOpen,
+    onOpen: onAddressModalOpen,
+    onClose: onAddressModalClose,
+  } = useDisclosure()
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null)
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
   const [shouldExecuteGovQuery, setShouldExecuteGovQuery] = useState(false)
   const [isDocumentSubmissionCompleted, setIsDocumentSubmissionCompleted] =
     useState(false)
+  const [addressModalType, setAddressModalType] = useState<
+    'normal' | 'real-estate'
+  >('normal')
+  const [isBankAccountVerified, setIsBankAccountVerified] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const bankWatchValue = useWatch({ control, name: 'bank' })
+  const accountNumberWatchValue = useWatch({ control, name: 'accountNumber' })
 
   const { mutate: uploadIdCard, isPending: isIdCardUploading } =
     useUploadFileToS3Mutation({
@@ -128,6 +124,21 @@ const ApplyLoanStep4 = () => {
         },
       },
     })
+  const {
+    mutate: accountVerifyMutation,
+    isPending: isAccountVerifyMutationLoading,
+  } = useAccountVerifyCreateMutation({
+    options: {
+      onSuccess: (data) => {
+        // setValue('accountHolderSsn', true)
+        console.log('ownerNameSearch', data)
+        setIsBankAccountVerified(true)
+      },
+      onError: (error) => {
+        console.error('ownerNameSearch', error)
+      },
+    },
+  })
   const govQuery = useGovRetrieveQuery({
     variables: {
       id: 29,
@@ -137,7 +148,7 @@ const ApplyLoanStep4 = () => {
     },
   })
   const { isLoading: isGovQueryLoading } = govQuery
-  console.log('govQuery', govQuery)
+
   useQueryEffects(govQuery, {
     onSuccess: (data) => {
       // Map each document kind to the corresponding form field with file value
@@ -214,6 +225,12 @@ const ApplyLoanStep4 = () => {
     setValue('companyName', company.name)
     setValue('companyBusinessNumber', company.businessNo)
     setValue('baseAddress', company.baseAddress)
+    setValue('detailAddress', company.detailAddress || '')
+  }
+
+  const handleAddressModalOpen = (type: 'normal' | 'real-estate') => {
+    setAddressModalType(type)
+    onAddressModalOpen()
   }
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -245,8 +262,26 @@ const ApplyLoanStep4 = () => {
   const handleResidenceTypeSelect = (ownership: string) => {
     setValue('residenceType', ownership)
   }
+
+  const handleOwnerNameSearch = () => {
+    accountVerifyMutation({
+      data: {
+        bank: '0088',
+        // || bankWatchValue,
+        number: '110220577207',
+        // || accountNumberWatchValue,
+        birth: '880814',
+      },
+    })
+  }
+
   return (
     <Container>
+      <AddressModal
+        isOpen={isAddressModalOpen}
+        onClose={onAddressModalClose}
+        type={addressModalType}
+      />
       <OfficeAddressModal
         isOpen={isOfficeAddressModalOpen}
         onClose={onOfficeAddressModalClose}
@@ -498,10 +533,18 @@ const ApplyLoanStep4 = () => {
             variant={'outline-secondary'}
             textStyle={'pre-body-5'}
             color={'grey.8'}
+            isLoading={isAccountVerifyMutationLoading}
+            disabled={isAccountVerifyMutationLoading || isBankAccountVerified}
             w={'209px'}
+            onClick={handleOwnerNameSearch}
           >
-            예금주 실명조회
+            {isBankAccountVerified ? '예금주 실명조회 완료' : '예금주 실명조회'}
           </Button>
+          {isBankAccountVerified && (
+            <Text textStyle={'pre-body-6'} color={'grey.8'}>
+              예금주 실명조회가 완료됐어요
+            </Text>
+          )}
         </InputForm>
         <Box w={'100%'} h={'1px'} bg={'border.basic.1'} my={'48px'} />
         <Text textStyle={'pre-heading-3'} color={'primary.4'}>
@@ -557,11 +600,14 @@ const ApplyLoanStep4 = () => {
           </InputForm>
         )}
         <InputForm isRequired label="주소">
-          <Input
-            placeholder="주소"
-            value={baseAddress || '' + ' ' + detailAddress || ''}
-            readOnly
-          />
+          <VStack w={'100%'} gap={'8px'} alignItems={'stretch'}>
+            <Input
+              placeholder="기본주소"
+              w={'100%'}
+              value={baseAddress || ''}
+              readOnly
+            />
+          </VStack>
         </InputForm>
         <InputForm label="고용구분">
           <EmploymentTypeButtons />
@@ -609,12 +655,28 @@ const ApplyLoanStep4 = () => {
         </Text>
 
         <InputForm label="주소">
-          <Flex w={'100%'} gap={'8px'}>
-            <Input placeholder="주소" w={'100%'} />
-            <Button variant={'solid-primary'} size={'lg'}>
-              주소검색
-            </Button>
-          </Flex>
+          <VStack w={'100%'} gap={'8px'} alignItems={'stretch'}>
+            <Flex w={'100%'} gap={'8px'}>
+              <Input
+                placeholder="기본주소"
+                w={'100%'}
+                value={baseAddress || ''}
+                readOnly
+              />
+              <Button
+                variant={'solid-primary'}
+                size={'lg'}
+                onClick={() => handleAddressModalOpen('normal')}
+              >
+                주소검색
+              </Button>
+            </Flex>
+            <Input
+              placeholder="상세주소"
+              w={'100%'}
+              {...register('detailAddress')}
+            />
+          </VStack>
         </InputForm>
 
         <InputForm label="주거종류">
@@ -697,12 +759,28 @@ const ApplyLoanStep4 = () => {
         </Text>
 
         <InputForm label="부동산 정보">
-          <Flex w={'100%'} gap={'8px'}>
-            <Input placeholder="주소" w={'100%'} />
-            <Button variant={'solid-primary'} size={'lg'}>
-              주소검색
-            </Button>
-          </Flex>
+          <VStack w={'100%'} gap={'8px'} alignItems={'stretch'}>
+            <Flex w={'100%'} gap={'8px'}>
+              <Input
+                placeholder="기본주소"
+                w={'100%'}
+                value={assetBaseAddress || ''}
+                readOnly
+              />
+              <Button
+                variant={'solid-primary'}
+                size={'lg'}
+                onClick={() => handleAddressModalOpen('real-estate')}
+              >
+                주소검색
+              </Button>
+            </Flex>
+            <Input
+              placeholder="상세주소"
+              w={'100%'}
+              {...register('assetDetailAddress')}
+            />
+          </VStack>
         </InputForm>
         <InputForm label="비대면 서류제출">
           <Button
@@ -712,11 +790,15 @@ const ApplyLoanStep4 = () => {
             isDisabled={isDocumentSubmissionCompleted}
             onClick={() => {
               setShouldExecuteGovQuery(true)
-              // TODO: 정부24 API 활용
             }}
           >
             {isDocumentSubmissionCompleted ? '서류제출완료' : '비대면 서류제출'}
           </Button>
+          {isDocumentSubmissionCompleted && (
+            <Text textStyle={'pre-body-6'} color={'grey.8'}>
+              비대면 서류제출이 완료됐어요.
+            </Text>
+          )}
         </InputForm>
 
         <VStack

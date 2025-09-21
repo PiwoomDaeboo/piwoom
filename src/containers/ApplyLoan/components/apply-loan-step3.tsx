@@ -94,10 +94,29 @@ const ApplyLoanStep3 = () => {
   }
 
   // 다음 버튼 클릭 핸들러
-  const handleNextClick = () => {
-    if (checkLoanEligibility()) {
-      router.push('/apply-loan?step=4&type=' + router.query.type)
-    }
+  const handleNextClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    console.log('다음 버튼 클릭됨')
+    router.push('/apply-loan?step=4&type=' + router.query.type)
+  }
+
+  const handleApplyCreditInfoSubmit = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    console.log('제출 버튼 클릭됨')
+    window.open(
+      'https://api.piwoom.com/v1/nice/?name=윤준구&birth=19910321&gender=1',
+      'popupChk',
+      'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
+    )
+    window.addEventListener('message', (event) => {
+      // event가 safeKey임.
+      // safeKey를 폼에 저장(safeKey 존재하는 경우 해당 버튼 비활성화)
+      if (event.data.safeKey) {
+        setValue('safeKey', event.data.safeKey)
+      }
+    })
   }
 
   return (
@@ -197,6 +216,9 @@ const ApplyLoanStep3 = () => {
               <Input
                 placeholder="0"
                 type="number"
+                textAlign="right"
+                dir="rtl"
+                pr="50px"
                 onPaste={handlePaste}
                 {...register('monthlyIncome', {
                   valueAsNumber: true,
@@ -213,6 +235,9 @@ const ApplyLoanStep3 = () => {
                 placeholder="0"
                 type="number"
                 onPaste={handlePaste}
+                textAlign="right"
+                dir="rtl"
+                pr="50px"
                 {...register('monthlyFixedExpense', {
                   valueAsNumber: true,
                 })}
@@ -268,7 +293,7 @@ const ApplyLoanStep3 = () => {
             {repaymentMethod === 'DIRECT_INPUT' && (
               <Box w={'100%'}>
                 <Input
-                  placeholder="재방법(자급원천) 입력"
+                  placeholder="변제방법(자급원천) 입력"
                   {...register('customRepaymentMethod')}
                 />
               </Box>
@@ -312,9 +337,11 @@ const ApplyLoanStep3 = () => {
           tooltipLabel="대출 심사를 위해 고객님의 신용정보 확인이 필수입니다. [제출] 버튼을 누르시면 NICE평가정보의 ‘신용인증송부 서비스’를 통해 본인인증과 정보 확인을 거친 뒤, 고객님이 동의하신 신용정보만 심사 목적으로 안전하게 당사에 제공됩니다."
         >
           <Button
+            type="button"
             variant={'outline-secondary'}
             textStyle={'pre-body-5'}
             color={'grey.8'}
+            onClick={handleApplyCreditInfoSubmit}
             w={'209px'}
           >
             제출

@@ -29,7 +29,7 @@ import { CaretDownIcon, MagnifyingGlassIcon } from '@/generated/icons/MyIcons'
 function Faq() {
   const router = useRouter()
   const [currentPage, setCurrentPage] = useState(1)
-  const postsPerPage = 5
+  const postsPerPage = 10
 
   const startIndex = (currentPage - 1) * postsPerPage
   const endIndex = startIndex + postsPerPage
@@ -37,7 +37,6 @@ function Faq() {
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
 
-  // Debounced search function using lodash
   const debouncedSetSearch = useCallback(
     debounce((value: string) => {
       setDebouncedSearch(value)
@@ -45,11 +44,11 @@ function Faq() {
     [],
   )
 
-  // Update debounced search when search changes
   const handleSearchChange = useCallback(
     (value: string) => {
       setSearch(value)
       debouncedSetSearch(value)
+      setCurrentPage(1)
     },
     [debouncedSetSearch],
   )
@@ -58,12 +57,12 @@ function Faq() {
     variables: {
       query: {
         q: debouncedSearch,
-        limit: (currentPage - 1) * postsPerPage,
-        offset: 0,
+        limit: postsPerPage,
+        offset: (currentPage - 1) * postsPerPage,
       },
     },
   })
-
+  const totalPages = Math.ceil((faqList?.count || 0) / postsPerPage)
   return (
     <>
       <Flex w={'100%'} h={'100%'} py={'60px'} bg={'primary.1'}>
@@ -97,9 +96,16 @@ function Faq() {
 
           {faqList?.results?.length === 0 && <NonData variant="faq" />}
           <Box w={'100%'} minH={'400px'}>
-            {faqList?.results?.map((item) => (
+            {faqList?.results?.map((item, index) => (
               <Accordion key={item.id} allowToggle>
-                <AccordionItem>
+                <AccordionItem
+                  borderBottom={
+                    index === (faqList?.results?.length || 0) - 1 ?
+                      '1px solid'
+                    : 'none'
+                  }
+                  borderColor={'grey.2'}
+                >
                   <AccordionButton>
                     <Box as="span" flex="1" textAlign="left">
                       <HStack alignItems={'center'} gap={'10px'}>
@@ -127,7 +133,9 @@ function Faq() {
                     />
                   </AccordionButton>
 
-                  <AccordionPanel>{item.answer}</AccordionPanel>
+                  <AccordionPanel bg={'background.basic.2'} p={'40px'}>
+                    {item.answer}
+                  </AccordionPanel>
                 </AccordionItem>
               </Accordion>
             ))}
@@ -136,7 +144,7 @@ function Faq() {
             <Flex justifyContent={'center'} mt={'48px'}>
               <Pagination
                 currentPage={currentPage}
-                totalPages={faqList?.count ?? 0}
+                totalPages={totalPages}
                 onPageChange={setCurrentPage}
               />
             </Flex>

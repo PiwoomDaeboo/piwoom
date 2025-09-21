@@ -13,8 +13,10 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 
+import { AuthRedirectLoader } from '@/components/AuthRedirectLoader'
 import ImageAsNext from '@/components/ImageAsNext'
 import { MY_IMAGES } from '@/generated/path/images'
+import { useAuthRedirect } from '@/hooks/useAuthRedirect'
 
 import CustomerInfoModal from './customer-info-modal'
 

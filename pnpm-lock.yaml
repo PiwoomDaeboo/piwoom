@@ -29,6 +29,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.6.0
         version: 3.10.0(react-hook-form@7.62.0(react@18.3.1))
+      '@portone/browser-sdk':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@tanstack/react-query':
         specifier: ^5.45.1
         version: 5.84.1(react@18.3.1)
@@ -80,6 +83,9 @@ importers:
       react:
         specifier: ^18.3.1
         version: 18.3.1
+      react-daum-postcode:
+        specifier: ^3.2.0
+        version: 3.2.0(react@18.3.1)
       react-device-detect:
         specifier: ^2.2.3
         version: 2.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1365,6 +1371,9 @@ packages:
 
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
+
+  '@portone/browser-sdk@0.1.0':
+    resolution: {integrity: sha512-4LO5XXqAohbXQbjHXjsJD8YCwNv/6RVkBXhWw+Icf5Hogx1RyRuVJ9Qfa4hr72j+oZCbUCBiaLpPUBVf+Weu1Q==}
 
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
@@ -3816,6 +3825,11 @@ packages:
     peerDependencies:
       react: '>= 16.3.0'
 
+  react-daum-postcode@3.2.0:
+    resolution: {integrity: sha512-NHY8TUicZXMqykbKYT8kUo2PEU7xu1DFsdRmyWJrLEUY93Xhd3rEdoJ7vFqrvs+Grl9wIm9Byxh3bI+eZxepMQ==}
+    peerDependencies:
+      react: '>=16.8.0'
+
   react-device-detect@2.2.3:
     resolution: {integrity: sha512-buYY3qrCnQVlIFHrC5UcUoAj7iANs/+srdkwsnNjI7anr3Tt7UY6MqNxtMLlr0tMBied0O49UZVK8XKs3ZIiPw==}
     peerDependencies:
@@ -6172,6 +6186,8 @@ snapshots:
   '@polka/url@1.0.0-next.29': {}
 
   '@popperjs/core@2.11.8': {}
+
+  '@portone/browser-sdk@0.1.0': {}
 
   '@sinclair/typebox@0.27.8': {}
 
@@ -9156,6 +9172,10 @@ snapshots:
       universal-cookie: 7.2.2
     transitivePeerDependencies:
       - '@types/react'
+
+  react-daum-postcode@3.2.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   react-device-detect@2.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
