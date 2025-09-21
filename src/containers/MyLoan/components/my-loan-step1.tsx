@@ -8,12 +8,45 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import * as PortOne from '@portone/browser-sdk/v2'
 
 import ImageAsNext from '@/components/ImageAsNext'
+import { useUserIdentityVerificationCreateMutation } from '@/generated/apis/User/User.query'
 import { MY_IMAGES } from '@/generated/path/images'
+import { cookieStorage } from '@/utils/cookie-storage'
 
 const MyLoanStep1 = () => {
   const router = useRouter()
+  const { mutateAsync: userIdentityVerificationCreate } =
+    useUserIdentityVerificationCreateMutation({
+      options: {
+        onSuccess: (data) => {
+          // cookie에 직접 저장
+          cookieStorage.setItem(
+            'identityVerificationToken',
+            data.identityVerificationToken,
+          )
+          router.push(`/my-loan?step=2`)
+        },
+      },
+    })
+  const handleAuthentication = async () => {
+    const response = await PortOne.requestIdentityVerification({
+      storeId: 'store-5fcf48f2-05d3-43e2-9abe-c09b3f461e2d',
+      identityVerificationId: crypto.randomUUID(),
+      channelKey: 'channel-key-1e7295f0-e634-4e2b-9da5-2402b97e7a63',
+      redirectUrl: `${window.location.origin}/my-loan?step=2`,
+    })
+    if (response?.code !== undefined) {
+      return alert(response?.message)
+    }
+
+    userIdentityVerificationCreate({
+      data: {
+        identityVerificationId: response?.identityVerificationId || '',
+      },
+    })
+  }
   return (
     <Container>
       <Flex
@@ -81,9 +114,7 @@ const MyLoanStep1 = () => {
           <Flex w={'100%'} justifyContent={'center'} mt={'24px'}>
             <Button
               w={'200px'}
-              onClick={() => {
-                router.push('/my-loan?step=2')
-              }}
+              onClick={handleAuthentication}
               variant={'solid-primary'}
             >
               본인인증 진행

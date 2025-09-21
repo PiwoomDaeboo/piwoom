@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { useRouter } from 'next/router'
+
 import { Link } from '@chakra-ui/next-js'
 import {
   Box,
@@ -38,6 +40,7 @@ const HomeHeader = ({
   onDrawerClose,
   ...props
 }: HomeHeaderProps) => {
+  const router = useRouter()
   const [isLoanHovered, setIsLoanHovered] = useState(false)
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -52,7 +55,7 @@ const HomeHeader = ({
   const handleMouseLeave = () => {
     hoverTimeoutRef.current = setTimeout(() => {
       setIsLoanHovered(false)
-    }, 200) // 200ms 지연
+    }, 200)
   }
 
   useEffect(() => {
@@ -144,8 +147,18 @@ const HomeHeader = ({
             ))}
           </HStack>
           <HStack gap={'10px'} display={{ base: 'none', md: 'flex' }}>
-            <Button variant={'outline-secondary'}>대출 조회</Button>
-            <Button variant={'black-primary'}>대출 신청</Button>
+            <Button
+              onClick={() => router.push(ROUTES.MY_LOAN_MAIN)}
+              variant={'outline-secondary'}
+            >
+              대출 조회
+            </Button>
+            <Button
+              onClick={() => router.push(ROUTES.APPLY_LOAN_MAIN)}
+              variant={'black-primary'}
+            >
+              대출 신청
+            </Button>
           </HStack>
           <HStack display={{ base: 'flex', md: 'none' }}>
             <Button variant={'black-primary'}>대출 신청</Button>

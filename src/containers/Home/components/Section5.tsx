@@ -159,6 +159,8 @@ function Section5() {
                 border={'1px solid'}
                 borderColor={'grey.3'}
                 borderRadius={'100%'}
+                cursor={'pointer'}
+                onClick={() => window.open('https://blog.naver.com/', '_blank')}
               >
                 <NaverIcon boxSize={'24px'} />
               </Flex>
@@ -171,6 +173,10 @@ function Section5() {
                 border={'1px solid'}
                 borderColor={'grey.3'}
                 borderRadius={'100%'}
+                cursor={'pointer'}
+                onClick={() =>
+                  window.open('https://www.instagram.com/', '_blank')
+                }
               >
                 <InstagramIcon boxSize={'24px'} />
               </Flex>

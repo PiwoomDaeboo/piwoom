@@ -4,12 +4,7 @@ import { useRouter } from 'next/router'
 
 import { Box, Button, Container, Flex, Text, VStack } from '@chakra-ui/react'
 
-import {
-  BluecheckIcon,
-  InfoIcon,
-  Loan1Icon,
-  LoancompletepersonIcon,
-} from '@/generated/icons/MyIcons'
+import { BluecheckIcon } from '@/generated/icons/MyIcons'
 
 function MyLoanStep4() {
   const router = useRouter()

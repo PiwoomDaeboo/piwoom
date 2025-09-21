@@ -10,34 +10,42 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
+import { useNoticeRetrieveQuery } from '@/generated/apis/Notice/Notice.query'
 import { PaperclipIcon } from '@/generated/icons/MyIcons'
-
-const displayData = [
-  {
-    id: 9,
-    title: '개인정보 처리방침 개정 안내',
-    date: '2024.12.10',
-    number: 6,
-  },
-  {
-    id: 10,
-    title: '대출 상담 예약 시스템 도입',
-    date: '2024.12.05',
-    number: 7,
-  },
-]
+import { formatDate } from '@/utils/date-format'
 
 function NoticeDetail() {
   const router = useRouter()
+  const { id } = router.query
+  const { data: noticeDetail } = useNoticeRetrieveQuery({
+    variables: {
+      id: Number(id),
+    },
+  })
+  console.log(noticeDetail)
+
+  const handleFileDownload = (file: { name: string; path: string }) => {
+    if (!file.path) {
+      alert('파일이 존재하지 않습니다.')
+      return
+    }
+
+    const link = document.createElement('a')
+    link.href = file.path
+    link.download = file.name
+    link.target = '_blank'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
   return (
     <>
       <Container>
         <Flex
           pt={{ base: '34px', sm: '72px', md: '80px' }}
-          pb={{ base: '49px', sm: '102px' }}
+          pb={{ base: '80px', sm: '120px' }}
           flexDir={'column'}
         >
-          {/* 공지사항 목록 렌더링 */}
           <VStack
             borderBottom={'1px solid'}
             borderColor={'border.basic.1'}
@@ -45,51 +53,92 @@ function NoticeDetail() {
             alignItems={'center'}
             spacing={'16px'}
           >
-            <Text textStyle={'pre-body-6'}>2021.02.02</Text>
-            <Text textStyle={'pre-display-4'}>불법사금융 피해 예방 안내</Text>
-          </VStack>
-          <Box py={'56px'} minH={'473px'}></Box>
-          <Flex pb={'56px'} gap={'40px'}>
-            <Text textStyle={'pre-body-5'} color={'grey.10'}>
-              첨부파일
+            <Text textStyle={'pre-body-6'}>
+              {formatDate({
+                date: new Date(noticeDetail?.createdAt || '-'),
+                format: 'YYYY. MM. DD',
+              })}
             </Text>
-            <HStack
-              gap={'8px'}
-              as={'a'}
-              cursor={'pointer'}
-              onClick={() => alert('첨부파일 다운로드')}
-            >
-              <PaperclipIcon boxSize={'16px'} />
-              <Text>파일명.mp4</Text>
+            <Text textStyle={'pre-display-4'}>
+              {noticeDetail?.title || '-'}
+            </Text>
+          </VStack>
+          <Box
+            py={'56px'}
+            minH={'473px'}
+            whiteSpace={'pre-line'}
+            dangerouslySetInnerHTML={{
+              __html: noticeDetail?.description as string,
+            }}
+          />
+          {noticeDetail?.fileSet && noticeDetail.fileSet.length > 0 && (
+            <Flex pb={'56px'} gap={'40px'}>
+              <Text textStyle={'pre-body-5'} color={'grey.10'}>
+                첨부파일
+              </Text>
+              <VStack alignItems={'flex-start'} spacing={'8px'}>
+                {noticeDetail.fileSet.map((file, index) => (
+                  <HStack
+                    key={index}
+                    gap={'8px'}
+                    as={'a'}
+                    cursor={'pointer'}
+                    onClick={() => handleFileDownload(file)}
+                  >
+                    <PaperclipIcon boxSize={'16px'} />
+                    <Text>{file.name}</Text>
+                  </HStack>
+                ))}
+              </VStack>
+            </Flex>
+          )}
+
+          <Flex
+            borderTop={'1px solid'}
+            borderBottom={'1px solid'}
+            borderColor={'grey.2'}
+            py={{ base: '27px', sm: '27px' }}
+            w={'100%'}
+            justifyContent={'space-between'}
+            _hover={{ bg: 'grey.1' }}
+            cursor={'pointer'}
+          >
+            <HStack gap={'56px'}>
+              <Text
+                display={{ base: 'none', sm: 'block' }}
+                textStyle={'pre-body-5'}
+                color={'grey.10'}
+              >
+                다음글
+              </Text>
+
+              <Text textStyle={'pre-body-4'} color={'grey.10'}>
+                {noticeDetail?.nextNotice?.title || '다음 글이 없습니다.'}
+              </Text>
             </HStack>
           </Flex>
-          {displayData.map((item, index) => (
-            <Flex
-              key={item.id}
-              borderTop={index === 0 ? '1px solid' : 'none'}
-              borderBottom={'1px solid'}
-              borderColor={'grey.2'}
-              py={{ base: '27px', sm: '27px' }}
-              w={'100%'}
-              justifyContent={'space-between'}
-              _hover={{ bg: 'grey.1' }}
-              cursor={'pointer'}
-            >
-              <HStack gap={'56px'}>
-                <Text
-                  display={{ base: 'none', sm: 'block' }}
-                  textStyle={'pre-body-5'}
-                  color={'grey.10'}
-                >
-                  {item.number > 6 ? '이전글' : '다음글'}
-                </Text>
 
-                <Text textStyle={'pre-body-4'} color={'grey.10'}>
-                  {item.title}
-                </Text>
-              </HStack>
-            </Flex>
-          ))}
+          <Flex
+            py={{ base: '27px', sm: '27px' }}
+            w={'100%'}
+            justifyContent={'space-between'}
+            _hover={{ bg: 'grey.1' }}
+            cursor={'pointer'}
+          >
+            <HStack gap={'56px'}>
+              <Text
+                display={{ base: 'none', sm: 'block' }}
+                textStyle={'pre-body-5'}
+                color={'grey.10'}
+              >
+                이전글
+              </Text>
+              <Text textStyle={'pre-body-4'} color={'grey.10'}>
+                {noticeDetail?.prevNotice?.title || '이전 글이 없습니다.'}
+              </Text>
+            </HStack>
+          </Flex>
+
           <Flex justifyContent={'center'} mt={'40px'}>
             <Button
               variant={'solid-primary'}

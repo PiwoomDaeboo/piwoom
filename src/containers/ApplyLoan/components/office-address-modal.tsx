@@ -48,6 +48,26 @@ function OfficeAddressModal({
   const [searchType, setSearchType] = useState('name')
   const [currentPage, setCurrentPage] = useState(1)
   const postsPerPage = 5
+  const [searchError, setSearchError] = useState('')
+
+  // 검색 실행 함수
+  const handleSearch = () => {
+    if (!name.trim()) {
+      setSearchError('검색어를 입력해주세요.')
+      return
+    }
+    setSearchError('')
+    // 검색 로직 실행
+  }
+
+  // 검색어 변경 시 에러 메시지 초기화
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setName(value)
+    if (searchError && value.trim()) {
+      setSearchError('')
+    }
+  }
 
   const handleConfirm = () => {
     onClose()
@@ -69,15 +89,15 @@ function OfficeAddressModal({
         query: {
           name: searchType === 'name' ? name : '',
           no: searchType === 'no' ? name : '',
-          limit: 5,
-          offset: (currentPage - 1) * 5,
+          limit: postsPerPage,
+          offset: (currentPage - 1) * postsPerPage,
         },
       },
       options: {
         enabled: !!isOpen,
       },
     })
-
+  const totalPages = Math.ceil((companyList?.count || 0) / postsPerPage)
   return (
     <ModalBasis
       isOpen={isOpen}
@@ -110,6 +130,7 @@ function OfficeAddressModal({
                     { label: '직장명', value: 'name' },
                     { label: '법인번호', value: 'no' },
                   ]}
+                  defaultValue={{ label: '직장명', value: 'name' }}
                   onChange={(selectedOption) => {
                     if (selectedOption) {
                       setSearchType(selectedOption.value as string)
@@ -131,9 +152,21 @@ function OfficeAddressModal({
                       )
                     }
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={handleNameChange}
+                    isInvalid={!!searchError}
+                    borderColor={searchError ? 'accent.red.2' : undefined}
                   />
                 </InputGroup>
+                {searchError && (
+                  <Text
+                    textStyle={'pre-caption-1'}
+                    color={'accent.red.2'}
+                    mt={'4px'}
+                    ml={'12px'}
+                  >
+                    {searchError}
+                  </Text>
+                )}
               </Box>
             </HStack>
           </InputForm>
@@ -241,17 +274,17 @@ function OfficeAddressModal({
         </Flex>
       }
       footer={
-        <Flex w={'100%'} justifyContent={'center'} h={'fit-content'}>
-          {companyList?.results?.length !== 0 && (
+        companyList?.count && (
+          <Flex w={'100%'} justifyContent={'center'} h={'fit-content'}>
             <Flex justifyContent={'center'}>
               <Pagination
                 currentPage={currentPage}
-                totalPages={10}
+                totalPages={totalPages}
                 onPageChange={setCurrentPage}
               />
             </Flex>
-          )}
-        </Flex>
+          </Flex>
+        )
       }
     ></ModalBasis>
   )
