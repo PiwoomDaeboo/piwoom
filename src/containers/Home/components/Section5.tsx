@@ -13,6 +13,8 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
+import { FaqType } from '@/generated/apis/@types/data-contracts'
+import { useFaqListQuery } from '@/generated/apis/Faq/Faq.query'
 import {
   CaretRightIcon,
   InstagramIcon,
@@ -20,28 +22,18 @@ import {
   Sectionicon1Icon,
 } from '@/generated/icons/MyIcons'
 
-interface FAQItem {
-  id: number
-  question: string
-  answer: string
-}
-
-interface IconComponent {
-  boxSize?: string | number
-}
-
 // FAQ 아이템 컴포넌트
 const FAQItem = ({
   item,
   isOpen,
   onToggle,
 }: {
-  item: FAQItem
+  item: FaqType
   isOpen: boolean
   onToggle: () => void
 }) => (
   <Flex
-    p="32px 28px"
+    p="24px 28px"
     bg="grey.0"
     borderRadius="20px"
     boxShadow="0 4px 24px 0 rgba(0, 46, 114, 0.06)"
@@ -77,32 +69,19 @@ const FAQItem = ({
 )
 
 function Section5() {
-  const [openFAQ, setOpenFAQ] = useState<number | null>(1)
+  const [openFAQ, setOpenFAQ] = useState<number | null>(14)
   const router = useRouter()
   const handleFAQToggle = (faqId: number) => {
     setOpenFAQ(openFAQ === faqId ? null : faqId)
   }
 
-  const faqItems: FAQItem[] = [
-    {
-      id: 1,
-      question: '현재 남아있는 잔액 확인을 하고 싶어요.',
-      answer:
-        "현재 남아있는 대출 잔액은 당사 홈페이지(PC 및 모바일)에서 확인 하실 수 있습니다. 홈페이지에서 '나의대출조회' 메뉴 '대출정보조회' 에서 확인 가능하십니다.",
+  const { data: faqList } = useFaqListQuery({
+    variables: {
+      query: {
+        limit: 3,
+      },
     },
-    {
-      id: 2,
-      question: '현재 남아있는 잔액 확인을 하고 싶어요.',
-      answer:
-        "현재 남아있는 대출 잔액은 당사 홈페이지(PC 및 모바일)에서 확인 하실 수 있습니다. 홈페이지에서 '나의대출조회' 메뉴 '대출정보조회' 에서 확인 가능하십니다.",
-    },
-    {
-      id: 3,
-      question: '현재 남아있는 잔액 확인을 하고 싶어요.',
-      answer:
-        "현재 남아있는 대출 잔액은 당사 홈페이지(PC 및 모바일)에서 확인 하실 수 있습니다. 홈페이지에서 '나의대출조회' 메뉴 '대출정보조회' 에서 확인 가능하십니다.",
-    },
-  ]
+  })
 
   return (
     <Container>
@@ -114,7 +93,7 @@ function Section5() {
             h={'193px'}
             borderRadius={'20px'}
             boxShadow={'0 8px 50px 0 rgba(0, 46, 114, 0.10)'}
-            alignItems={'flex-end'}
+            alignItems={'center'}
             w={'100%'}
           >
             <VStack
@@ -128,7 +107,11 @@ function Section5() {
                   중요한 소식과 안내를 빠르게 전해드려요
                 </Text>
               </VStack>
-              <Button variant={'outline-secondary'}>
+              <Button
+                variant={'outline-secondary'}
+                onClick={() => router.push('/notice')}
+                alignItems={'center'}
+              >
                 <Text textStyle={'pre-caption-1'}>확인하기</Text>
                 <CaretRightIcon boxSize={'16px'} />
               </Button>
@@ -205,7 +188,7 @@ function Section5() {
             </Button>
           </Flex>
           <VStack w={'100%'} gap={'20px'} maxH={'360px'} overflowY={'auto'}>
-            {faqItems.map((item) => (
+            {faqList?.results?.map((item) => (
               <FAQItem
                 key={item.id}
                 item={item}

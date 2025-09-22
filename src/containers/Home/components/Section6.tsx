@@ -37,7 +37,7 @@ const sliderData = [
     bgColor: '#E4E2FF',
     textColor: 'grey.800',
     icon: <Slider2Icon boxSize={{ base: '100px', md: '240px' }} />,
-    link: '/',
+    link: 'https://www.youtube.com/watch?v=msPbJBlbJxY',
   },
   {
     id: 3,
@@ -82,7 +82,7 @@ const SliderItem = ({ item }: { item: any }) => (
         w={'100%'}
         display="flex"
         alignItems="center"
-        justifyContent={{ base: 'flex-end', md: 'center' }}
+        justifyContent={{ base: 'flex-end', md: 'flex-end' }}
         borderRadius="16px"
       >
         {item.icon}

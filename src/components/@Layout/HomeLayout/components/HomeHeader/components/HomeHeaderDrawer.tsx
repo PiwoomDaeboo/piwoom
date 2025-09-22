@@ -40,6 +40,7 @@ const HomeHeaderDrawer = ({
       isOpen={isOpen}
       onClose={onClose}
       visibleCloseButton={false}
+      size={'full'}
       header={
         <Flex
           w="100%"
@@ -87,53 +88,55 @@ const HomeHeaderDrawer = ({
         </Flex>
       }
       body={
-        <VStack alignItems={'flex-start'} spacing={'0px'}>
-          {MENU_ITEMS.map((item) => (
-            <Accordion key={item.label} allowToggle w={'100%'}>
-              <AccordionItem
-                border={'none'}
-                borderBottom={'1px solid'}
-                borderColor={'grey.2'}
-              >
-                <AccordionButton py={'10px'} px={'0px'}>
-                  <Box as="span" flex="1" textAlign="left">
-                    <HStack alignItems={'center'} gap={'10px'}>
-                      <Text textStyle={'pre-body-3'} color={'grey.10'}>
-                        {item.label}
-                      </Text>
-                    </HStack>
-                  </Box>
-                  <CaretDownIcon
-                    boxSize={'24px'}
-                    color={'grey.8'}
-                    ml={'20px'}
-                  />
-                </AccordionButton>
+        <Container px={'0px'}>
+          <VStack alignItems={'flex-start'} spacing={'0px'} px={'0px'}>
+            {MENU_ITEMS.map((item) => (
+              <Accordion key={item.label} allowToggle w={'100%'} px={'0px'}>
+                <AccordionItem
+                  border={'none'}
+                  borderBottom={'1px solid'}
+                  borderColor={'grey.2'}
+                >
+                  <AccordionButton py={'10px'} px={'0px'}>
+                    <Box as="span" flex="1" textAlign="left">
+                      <HStack alignItems={'center'} gap={'10px'}>
+                        <Text textStyle={'pre-body-3'} color={'grey.10'}>
+                          {item.label}
+                        </Text>
+                      </HStack>
+                    </Box>
+                    <CaretDownIcon
+                      boxSize={'24px'}
+                      color={'grey.8'}
+                      ml={'20px'}
+                    />
+                  </AccordionButton>
 
-                <AccordionPanel py={'12px'} bg={'grey.0'}>
-                  <Flex flexDir={'column'} gap={'10px'}>
-                    {item.submenuItems?.map((subItem) => (
-                      <Box
-                        key={subItem.label}
-                        p={'12px 16px'}
-                        borderRadius={'16px'}
-                        textStyle={'pre-body-4'}
-                        color={'grey.10'}
-                        _hover={{
-                          bg: 'primary.1',
-                          color: 'primary.4',
-                          textStyle: 'pre-body-3',
-                        }}
-                      >
-                        <Link href={subItem.href}>{subItem.label}</Link>
-                      </Box>
-                    ))}
-                  </Flex>
-                </AccordionPanel>
-              </AccordionItem>
-            </Accordion>
-          ))}
-        </VStack>
+                  <AccordionPanel py={'12px'} bg={'grey.0'}>
+                    <Flex flexDir={'column'} gap={'10px'}>
+                      {item.submenuItems?.map((subItem) => (
+                        <Box
+                          key={subItem.label}
+                          p={'12px 16px'}
+                          borderRadius={'16px'}
+                          textStyle={'pre-body-4'}
+                          color={'grey.10'}
+                          _hover={{
+                            bg: 'primary.1',
+                            color: 'primary.4',
+                            textStyle: 'pre-body-3',
+                          }}
+                        >
+                          <Link href={subItem.href}>{subItem.label}</Link>
+                        </Box>
+                      ))}
+                    </Flex>
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            ))}
+          </VStack>
+        </Container>
       }
       styles={{
         header: {

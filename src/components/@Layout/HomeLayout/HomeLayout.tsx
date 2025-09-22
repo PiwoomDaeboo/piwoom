@@ -15,6 +15,7 @@ import {
 import { LAYOUT } from '@/constants/layout'
 import Terms from '@/containers/Terms'
 
+import FloatingActionButton from './components/FloatingActionButton'
 import HomeFooter from './components/HomeFooter'
 import HomeHeader from './components/HomeHeader'
 
@@ -61,10 +62,12 @@ const HomeLayout = ({
         flexDirection="column"
         justifyContent={'center'}
         alignItems={'center'}
+        pt={{ base: '160px', md: '130px' }} // 헤더 높이만큼 padding-top 추가
         {...containerProps}
       >
         {content}
         <Terms />
+        <FloatingActionButton />
       </Flex>
       {footer}
     </Box>
