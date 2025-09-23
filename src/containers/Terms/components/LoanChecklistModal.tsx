@@ -20,7 +20,7 @@ function LoanChecklistModal({ isOpen, onClose }: LoanChecklistModalProps) {
     <ModalBasis
       isOpen={isOpen}
       onClose={handleClose}
-      size={'xl'}
+      size={{ base: 'full', sm: 'xl' }}
       body={
         <Box>
           <Box

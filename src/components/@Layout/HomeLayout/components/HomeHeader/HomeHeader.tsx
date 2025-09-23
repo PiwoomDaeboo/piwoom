@@ -7,7 +7,6 @@ import {
   Box,
   Button,
   Container,
-  ContainerProps,
   Flex,
   HStack,
   IconButton,
@@ -24,7 +23,6 @@ import {
 
 import { ROUTES } from '@/generated/path/routes'
 
-import LoginCodeModal from '../../../../@Modal/LoginCodeModal'
 import { MENU_ITEMS } from '../consts/menu'
 import HomeHeaderDrawer from './components/HomeHeaderDrawer'
 
@@ -42,6 +40,8 @@ const HomeHeader = ({
 }: HomeHeaderProps) => {
   const router = useRouter()
   const [isLoanHovered, setIsLoanHovered] = useState(false)
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const handleMouseEnter = () => {
@@ -58,13 +58,32 @@ const HomeHeader = ({
     }, 200)
   }
 
+  // 스크롤 이벤트 핸들러
   useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      if (currentScrollY <= 0 || isDrawerOpen) {
+        setIsHeaderVisible(true)
+      } else {
+        if (currentScrollY > lastScrollY && currentScrollY > 80) {
+          setIsHeaderVisible(false)
+        } else if (currentScrollY < lastScrollY) {
+          setIsHeaderVisible(true)
+        }
+      }
+
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
     return () => {
+      window.removeEventListener('scroll', handleScroll)
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current)
       }
     }
-  }, [])
+  }, [lastScrollY, isDrawerOpen])
 
   return (
     <Flex
@@ -72,7 +91,14 @@ const HomeHeader = ({
       alignItems="center"
       justifyContent="space-between"
       flexDir={'column'}
-      position={'relative'}
+      position={'fixed'}
+      top={0}
+      left={0}
+      right={0}
+      zIndex={1000}
+      bg={'white'}
+      transform={isHeaderVisible ? 'translateY(0)' : 'translateY(-100%)'}
+      transition={'transform 0.3s ease-in-out'}
       {...props}
     >
       <Flex
@@ -134,7 +160,14 @@ const HomeHeader = ({
                 onMouseEnter={() => item.hasSubmenu && handleMouseEnter()}
                 onMouseLeave={() => item.hasSubmenu && handleMouseLeave()}
               >
-                <Link href={item.href} variant={'unstyled'}>
+                <Link
+                  href={item.hasSubmenu ? '#' : item.href}
+                  variant={'unstyled'}
+                  onClick={
+                    item.hasSubmenu ? (e) => e.preventDefault() : undefined
+                  }
+                  cursor={item.hasSubmenu ? 'default' : 'pointer'}
+                >
                   <Text
                     textStyle={'pre-heading-2'}
                     color={'grey.10'}
@@ -154,7 +187,7 @@ const HomeHeader = ({
               대출 조회
             </Button>
             <Button
-              onClick={() => router.push(ROUTES.APPLY_LOAN_MAIN)}
+              onClick={() => router.push(ROUTES.LOAN_MAIN)}
               variant={'black-primary'}
             >
               대출 신청

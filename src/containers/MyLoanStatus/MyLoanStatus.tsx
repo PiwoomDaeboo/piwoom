@@ -2,28 +2,7 @@ import { useState } from 'react'
 
 import { useRouter } from 'next/router'
 
-import {
-  Badge,
-  Box,
-  Button,
-  Container,
-  Flex,
-  HStack,
-  SimpleGrid,
-  Skeleton,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
-  VStack,
-  useDisclosure,
-} from '@chakra-ui/react'
-
-import NonData from '@/components/NonData'
-import { Pagination } from '@/components/pagination'
-import { CaretRightIcon } from '@/generated/icons/MyIcons'
+import { Container, Flex, Text, VStack, useDisclosure } from '@chakra-ui/react'
 
 import AdditionalDocumentModal from './components/modal/addtional-document-modal'
 import LoanDelayModal from './components/modal/loan-delay-modal'

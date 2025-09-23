@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { Button, Container, Flex, Text, VStack } from '@chakra-ui/react'
 
 import { MY_IMAGES } from '@/generated/path/images'
+import { ROUTES } from '@/generated/path/routes'
 
 const Section0 = () => {
   const router = useRouter()
@@ -37,9 +38,7 @@ const Section0 = () => {
               variant={'solid-secondary'}
               minW={'180px'}
               minH={'48px'}
-              onClick={() => {
-                router.push('/loan?type=salary')
-              }}
+              onClick={() => router.push(ROUTES.LOAN_MAIN)}
             >
               대출 신청하기
             </Button>

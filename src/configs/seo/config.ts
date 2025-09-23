@@ -11,7 +11,7 @@ export const config: DefaultSeoProps = {
   title: undefined, // 페이지의 meta title 입니다. defaultTitle 값이 있으면 undefined로 고정합니다.
   titleTemplate: '피움대부 | %s', // 타이틀에 추가될 기본 title 템플릿입니다. 각 페이지에서 작성한 title이 %s에 적용됩니다.
   defaultTitle: '피움대부', // 페이지에 title이 설정되어 있지 않으면 빈 정보 대신 defaultTitle이 사용됩니다.
-  description: 'piwoom', // 페이지의 meta 설명 설정입니다.
+  description: '소중한 순간들이 더 크게 피어날 수 있도록', // 페이지의 meta 설명 설정입니다.
   canonical: 'https://piwoom.com/', // 페이지의 표준 URL 설정입니다.
   openGraph: {
     /**

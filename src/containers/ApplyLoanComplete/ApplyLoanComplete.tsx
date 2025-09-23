@@ -2,7 +2,15 @@ import { useState } from 'react'
 
 import { useRouter } from 'next/router'
 
-import { Box, Button, Container, Flex, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Text,
+  VStack,
+  useDisclosure,
+} from '@chakra-ui/react'
 
 import {
   BluecheckIcon,
@@ -11,11 +19,15 @@ import {
   LoancompletepersonIcon,
 } from '@/generated/icons/MyIcons'
 
+import WetaxModal from './components/wetax-modal'
+
 function ApplyLoanComplete() {
   const router = useRouter()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <Container>
+      <WetaxModal isOpen={isOpen} onClose={onClose} />
       <Flex
         py={{ base: '48px', sm: '64px', md: '120px' }}
         flexDir={'column'}
@@ -93,7 +105,9 @@ function ApplyLoanComplete() {
                 <br />
                 아래 버튼을 눌러 세금 납부 내역을 제출해보세요!
               </Text>
-              <Button variant={'solid-primary'}>세금 납부 내역 제출</Button>
+              <Button variant={'solid-primary'} onClick={onOpen}>
+                세금 납부 내역 제출
+              </Button>
             </VStack>
           </Box>
         </Flex>
