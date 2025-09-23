@@ -7,7 +7,6 @@ import {
   Box,
   Button,
   Container,
-  ContainerProps,
   Flex,
   HStack,
   IconButton,
@@ -24,7 +23,6 @@ import {
 
 import { ROUTES } from '@/generated/path/routes'
 
-import LoginCodeModal from '../../../../@Modal/LoginCodeModal'
 import { MENU_ITEMS } from '../consts/menu'
 import HomeHeaderDrawer from './components/HomeHeaderDrawer'
 
@@ -189,7 +187,7 @@ const HomeHeader = ({
               대출 조회
             </Button>
             <Button
-              onClick={() => router.push(ROUTES.APPLY_LOAN_MAIN)}
+              onClick={() => router.push(ROUTES.LOAN_MAIN)}
               variant={'black-primary'}
             >
               대출 신청

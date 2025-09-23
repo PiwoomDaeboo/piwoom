@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -25,6 +25,8 @@ import ModalBasis from '@/components/@Modal/ModalBasis'
 import CommonSelect from '@/components/CommonSelect'
 import InputForm from '@/components/InputForm'
 import { InfoFillIcon } from '@/generated/icons/MyIcons'
+import { useSessionStorage } from '@/stores/session/state'
+import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 import {
   ANNUAL_INCOME_OPTIONS,
@@ -38,6 +40,13 @@ import {
 const ApplyLoanStep3 = () => {
   const { register, control, watch, setValue } = useFormContext()
   const router = useRouter()
+  const [userInfo, setUserInfo] = useState<{
+    name?: string
+    phone?: string
+    birth?: string
+    gender_code?: string
+  } | null>(null)
+  const { identityVerificationToken } = useSessionStorage()
   const totalAsset = useWatch({ control, name: 'totalAsset' })
   const annualIncome = useWatch({ control, name: 'annualIncome' })
   const debtScale = useWatch({ control, name: 'debtScale' })
@@ -46,6 +55,18 @@ const ApplyLoanStep3 = () => {
   const monthlyIncome = useWatch({ control, name: 'monthlyIncome' })
   const creditScore = useWatch({ control, name: 'creditScore' })
 
+  const [popupWindow, setPopupWindow] = useState<Window | null>(null)
+
+  const handleApplyCreditInfoSubmit = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    const popup = window.open(
+      `https://api.piwoom.com/v1/nice/?name=${userInfo?.name}&birth=${userInfo?.birth}&gender=${userInfo?.gender_code}`,
+      'popupChk',
+      'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
+    )
+  }
   const {
     isOpen: isLoanAlertOpen,
     onOpen: onLoanAlertOpen,
@@ -101,23 +122,72 @@ const ApplyLoanStep3 = () => {
     router.push('/apply-loan?step=4&type=' + router.query.type)
   }
 
-  const handleApplyCreditInfoSubmit = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    console.log('제출 버튼 클릭됨')
-    window.open(
-      'https://api.piwoom.com/v1/nice/?name=윤준구&birth=19910321&gender=1',
-      'popupChk',
-      'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
+  const getUserInfo = () => {
+    const extractedUserInfo = extractUserInfoFromJWT(
+      identityVerificationToken as string,
     )
-    window.addEventListener('message', (event) => {
-      // event가 safeKey임.
-      // safeKey를 폼에 저장(safeKey 존재하는 경우 해당 버튼 비활성화)
-      if (event.data.safeKey) {
-        setValue('safeKey', event.data.safeKey)
-      }
-    })
+    if (extractedUserInfo) {
+      setUserInfo(extractedUserInfo)
+      console.log('Extracted user info:', extractedUserInfo)
+    }
   }
+
+  // const handleApplyCreditInfoSubmit = (e: React.MouseEvent) => {
+  //   e.preventDefault()
+  //   e.stopPropagation()
+
+  //   window.open(
+  //     `https://api.piwoom.com/v1/nice/?name=${userInfo?.name}&birth=${userInfo?.birth}&gender=${userInfo?.gender_code}`,
+  //     'popupChk',
+  //     'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
+  //   )
+  // }
+
+  useEffect(() => {
+    const extractedUserInfo = extractUserInfoFromJWT(
+      identityVerificationToken as string,
+    )
+    if (extractedUserInfo) {
+      setUserInfo(extractedUserInfo)
+      console.log('Extracted user info:', extractedUserInfo)
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      console.log('=== Message Event Received ===')
+      console.log('Origin:', event.origin)
+
+      console.log('Data:', event.data)
+      console.log('Data type:', typeof event.data)
+      console.log('Data length:', event.data?.length)
+      console.log('Data constructor:', event.data?.constructor?.name)
+
+      // Origin 검증 없이 모든 메시지 처리
+      if (typeof event.data === 'string' && event.data.trim()) {
+        console.log('✅ safeKey received:', event.data)
+        setValue('safeKey', event.data)
+      } else if (
+        event.data &&
+        typeof event.data === 'object' &&
+        event.data.safeKey
+      ) {
+        console.log('✅ safeKey from object:', event.data.safeKey)
+        setValue('safeKey', event.data.safeKey)
+      } else {
+        console.log('❌ No valid safeKey found')
+        console.log('Raw data:', JSON.stringify(event.data))
+      }
+    }
+
+    console.log('Adding message event listener...')
+    window.addEventListener('message', handleMessage)
+
+    return () => {
+      console.log('Removing message event listener...')
+      window.removeEventListener('message', handleMessage)
+    }
+  }, [setValue])
 
   return (
     <Container>

@@ -48,6 +48,7 @@ import AddressModal from './address-modal'
 import DocumentAgreeModal from './document-agree-modal'
 import OfficeAddressModal from './office-address-modal'
 import RepaymentMethodModal from './repayment-method-modal'
+import UntactDocumentApplyModal from './untact-document-apply-modal'
 
 interface Company {
   no: string
@@ -100,6 +101,11 @@ const ApplyLoanStep4 = () => {
     onOpen: onAddressModalOpen,
     onClose: onAddressModalClose,
   } = useDisclosure()
+  const {
+    isOpen: isUntactDocumentApplyModalOpen,
+    onOpen: onUntactDocumentApplyModalOpen,
+    onClose: onUntactDocumentApplyModalClose,
+  } = useDisclosure()
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null)
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
   const [shouldExecuteGovQuery, setShouldExecuteGovQuery] = useState(false)
@@ -139,53 +145,7 @@ const ApplyLoanStep4 = () => {
       },
     },
   })
-  const govQuery = useGovRetrieveQuery({
-    variables: {
-      id: 29,
-    },
-    options: {
-      enabled: shouldExecuteGovQuery,
-    },
-  })
-  const { isLoading: isGovQueryLoading } = govQuery
 
-  useQueryEffects(govQuery, {
-    onSuccess: (data) => {
-      // Map each document kind to the corresponding form field with file value
-      if (data.logSet && Array.isArray(data.logSet)) {
-        data.logSet.forEach((logItem) => {
-          switch (logItem.kind) {
-            case 'INCOME_CERTIFICATE':
-              setValue('incomeCertificate', logItem.file)
-              break
-            case 'RESIDENT_REGISTRATION_COPY':
-              setValue('residentRegistrationCopy', logItem.file)
-              break
-            case 'HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION':
-              setValue('healthInsuranceEligibilityConfirmation', logItem.file)
-              break
-            case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION':
-              setValue('healthInsurancePaymentConfirmation', logItem.file)
-              break
-            case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2':
-              setValue('healthInsurancePaymentConfirmation2', logItem.file)
-              break
-            default:
-              console.warn('Unknown document kind:', logItem.kind)
-          }
-        })
-      }
-      console.log('[onSuccess]:', data)
-      setShouldExecuteGovQuery(false)
-      setIsDocumentSubmissionCompleted(true)
-    },
-    onError: (error) => {
-      console.error('[onError]:', error)
-    },
-    onSettled: (data, error) => {
-      console.log('[onSettled]:', data, error)
-    },
-  })
   const { SelectButtonGroup: EmploymentTypeButtons } = useSelectButtonGroup({
     name: 'employmentType',
     options: EMPLOYMENT_TYPE,
@@ -274,9 +234,16 @@ const ApplyLoanStep4 = () => {
       },
     })
   }
+  const handleUntactDocumentApplyModalOpen = () => {
+    onUntactDocumentApplyModalOpen()
+  }
 
   return (
     <Container>
+      <UntactDocumentApplyModal
+        isOpen={isUntactDocumentApplyModalOpen}
+        onClose={onUntactDocumentApplyModalClose}
+      />
       <AddressModal
         isOpen={isAddressModalOpen}
         onClose={onAddressModalClose}
@@ -786,11 +753,8 @@ const ApplyLoanStep4 = () => {
           <Button
             textStyle={'pre-body-5'}
             w={'209px'}
-            isLoading={isGovQueryLoading}
             isDisabled={isDocumentSubmissionCompleted}
-            onClick={() => {
-              setShouldExecuteGovQuery(true)
-            }}
+            onClick={handleUntactDocumentApplyModalOpen}
           >
             {isDocumentSubmissionCompleted ? '서류제출완료' : '비대면 서류제출'}
           </Button>

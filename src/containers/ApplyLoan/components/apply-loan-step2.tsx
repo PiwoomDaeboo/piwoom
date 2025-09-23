@@ -24,6 +24,7 @@ import ModalBasis from '@/components/@Modal/ModalBasis'
 import { useUserIdentityVerificationCreateMutation } from '@/generated/apis/User/User.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
 import { useSessionStorage } from '@/stores/session/state'
+import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 const CHECKBOX_STYLES = {
   '.chakra-checkbox__control': {
@@ -104,6 +105,14 @@ const ApplyLoanStep2 = () => {
     question5: null as 'yes' | 'no' | null,
   })
 
+  // 사용자 정보 상태 관리
+  const [userInfo, setUserInfo] = useState<{
+    name?: string
+    phone?: string
+    birth?: string
+    gender_code?: string
+  } | null>(null)
+
   // 전체 동의 핸들러
   const handleAllAgreement = (checked: boolean) => {
     setAgreements({
@@ -121,6 +130,15 @@ const ApplyLoanStep2 = () => {
           set({
             identityVerificationToken: data.identityVerificationToken,
           })
+
+          const extractedUserInfo = extractUserInfoFromJWT(
+            data.identityVerificationToken,
+          )
+          if (extractedUserInfo) {
+            setUserInfo(extractedUserInfo)
+            console.log('Extracted user info:', extractedUserInfo)
+          }
+
           setIsPhoneCertification(true)
           // router.push(`/apply-loan?step=2`)
         },
@@ -210,7 +228,7 @@ const ApplyLoanStep2 = () => {
                 이름(한글)
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.7'}>
-                김이름
+                {userInfo?.name || '-'}
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -218,7 +236,9 @@ const ApplyLoanStep2 = () => {
                 주민등록번호
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.7'}>
-                900101-1234567
+                {userInfo?.birth && userInfo?.gender_code ?
+                  `${userInfo.birth.slice(2, 8)}-${userInfo.gender_code}******`
+                : '-'}
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -226,7 +246,9 @@ const ApplyLoanStep2 = () => {
                 휴대폰번호
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.7'}>
-                010-1234-5678
+                {userInfo?.phone ?
+                  `${userInfo.phone.slice(0, 3)}-${userInfo.phone.slice(3, 7)}-${userInfo.phone.slice(7)}`
+                : '-'}
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>

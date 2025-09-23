@@ -2,25 +2,11 @@ import { useState } from 'react'
 
 import { useRouter } from 'next/router'
 
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  HStack,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Container, Flex, HStack, Text } from '@chakra-ui/react'
 
-import InputForm from '@/components/InputForm'
 import { BluecheckIcon } from '@/generated/icons/MyIcons'
 
 function RepaymentApplicationComplete() {
-  const router = useRouter()
-
   return (
     <Container>
       <Flex

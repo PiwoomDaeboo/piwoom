@@ -143,7 +143,9 @@ function Section5() {
                 borderColor={'grey.3'}
                 borderRadius={'100%'}
                 cursor={'pointer'}
-                onClick={() => window.open('https://blog.naver.com/', '_blank')}
+                onClick={() =>
+                  window.open('https://blog.naver.com/piwoomofficial', '_blank')
+                }
               >
                 <NaverIcon boxSize={'24px'} />
               </Flex>
@@ -158,7 +160,10 @@ function Section5() {
                 borderRadius={'100%'}
                 cursor={'pointer'}
                 onClick={() =>
-                  window.open('https://www.instagram.com/', '_blank')
+                  window.open(
+                    'https://www.instagram.com/piwoom.official?igsh=dmhrcmdweTU4d3J5',
+                    '_blank',
+                  )
                 }
               >
                 <InstagramIcon boxSize={'24px'} />

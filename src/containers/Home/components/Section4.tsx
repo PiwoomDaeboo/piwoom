@@ -50,7 +50,14 @@ const Section4 = () => {
             <Text textStyle={'pre-body-3'}>
               성장 기회를 포착하셨나요? 지금 바로 상담을 신청해보세요.
             </Text>
-            <Button variant={'black-primary'} minW={'180px'} minH={'48px'}>
+            <Button
+              onClick={() => {
+                window.open('http://pf.kakao.com/_xkxoben/chat', '_blank')
+              }}
+              variant={'black-primary'}
+              minW={'180px'}
+              minH={'48px'}
+            >
               상담하기
             </Button>
           </VStack>
