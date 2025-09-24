@@ -16,13 +16,7 @@ import {
 
 import { CaretLeftIcon } from '@/generated/icons/MyIcons'
 
-import {
-  BUTTON_DATA,
-  CARD_DATA,
-  LoanDetailApiData,
-  SAMPLE_LOAN_DATA,
-  getFormattedDetailData,
-} from '../consts'
+import { SAMPLE_LOAN_DATA, getFormattedDetailData } from '../consts'
 
 export default function Detail() {
   const router = useRouter()

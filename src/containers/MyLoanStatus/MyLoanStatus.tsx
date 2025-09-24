@@ -4,8 +4,8 @@ import { useRouter } from 'next/router'
 
 import { Container, Flex, Text, VStack, useDisclosure } from '@chakra-ui/react'
 
-import AdditionalDocumentModal from './components/modal/addtional-document-modal'
-import LoanDelayModal from './components/modal/loan-delay-modal'
+import AdditionalDocumentModal from '../../components/@Modal/addtional-document-modal'
+import LoanDelayModal from '../../components/@Modal/loan-delay-modal'
 import MyLoanAuthentication from './components/my-loan-authentication'
 
 function MyLoanStatus() {
