@@ -227,6 +227,7 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
     window.addEventListener('message', (event: any) => {
       // event가 true or false.
       // event 값에 따라 성공 실패 처리
+
       if (event.data.success) {
         console.log('성공')
       } else {
