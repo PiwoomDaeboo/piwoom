@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 
 import Detail from './components/detail'
+import Document from './components/document'
 import Schedule from './components/schedule'
 import {
   BUTTON_DATA,
@@ -31,6 +32,7 @@ import {
 const LOAN_TYPE_QUERY_MAP = {
   0: 'detail',
   1: 'schedule',
+  2: 'document',
 }
 
 function MyLoanDetail() {
@@ -111,6 +113,7 @@ function MyLoanDetail() {
 
           {isDetailMenu === 'detail' && <Detail />}
           {isDetailMenu === 'schedule' && <Schedule />}
+          {isDetailMenu === 'document' && <Document />}
         </Flex>
       </Container>
     </>

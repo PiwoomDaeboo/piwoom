@@ -172,6 +172,8 @@ const ApplyLoanStep3 = () => {
         typeof event.data === 'object' &&
         event.data.safeKey
       ) {
+        alert(event?.data)
+        window.alert(event?.data)
         console.log('✅ safeKey from object:', event.data.safeKey)
         setValue('safeKey', event.data.safeKey)
       } else {

@@ -16,18 +16,8 @@ import {
 
 import { CaretLeftIcon } from '@/generated/icons/MyIcons'
 
-import {
-  BUTTON_DATA,
-  CARD_DATA,
-  LoanDetailApiData,
-  SAMPLE_LOAN_DATA,
-  getFormattedDetailData,
-} from '../consts'
-
 export default function Schedule() {
   const router = useRouter()
-
-  const detailData = getFormattedDetailData(SAMPLE_LOAN_DATA)
 
   return (
     <Flex flexDir={'column'} w={'100%'}>

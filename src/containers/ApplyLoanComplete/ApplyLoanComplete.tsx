@@ -19,7 +19,7 @@ import {
   LoancompletepersonIcon,
 } from '@/generated/icons/MyIcons'
 
-import WetaxModal from './components/wetax-modal'
+import WetaxModal from '../../components/@Modal/wetax-modal'
 
 function ApplyLoanComplete() {
   const router = useRouter()

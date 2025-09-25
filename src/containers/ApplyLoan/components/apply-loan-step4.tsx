@@ -35,6 +35,11 @@ import {
 } from '@/generated/icons/MyIcons'
 import { useQueryEffects } from '@/hooks/useQueryEffect'
 
+import AddressModal from '../../../components/@Modal/address-modal'
+import DocumentAgreeModal from '../../../components/@Modal/document-agree-modal'
+import OfficeAddressModal from '../../../components/@Modal/office-address-modal'
+import RepaymentMethodModal from '../../../components/@Modal/repayment-method-modal'
+import UntactDocumentApplyModal from '../../../components/@Modal/untact-document-apply-modal'
 import {
   BANK_DATA,
   CHECKBOX_STYLES,
@@ -44,11 +49,6 @@ import {
   REPAYMENT_TYPE,
 } from '../const/const'
 import { useSelectButtonGroup } from '../hooks/useSelectButtonGroup'
-import AddressModal from './address-modal'
-import DocumentAgreeModal from './document-agree-modal'
-import OfficeAddressModal from './office-address-modal'
-import RepaymentMethodModal from './repayment-method-modal'
-import UntactDocumentApplyModal from './untact-document-apply-modal'
 
 interface Company {
   no: string
