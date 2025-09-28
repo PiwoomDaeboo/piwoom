@@ -51,16 +51,17 @@ const sliderData = [
   },
 ]
 
-const SliderItem = ({ item }: { item: any }) => (
+const SliderItem = ({ item, onOpen }: { item: any; onOpen: () => void }) => (
   <Box
     w="100%"
     h={{ base: '260px', md: '200px' }}
     bg={item.bgColor}
     borderRadius="20px"
     p="32px"
-    flexShrink={0}
-    minW="0"
     position="relative"
+    onClick={onOpen}
+    cursor="pointer"
+    overflow="hidden"
   >
     <Flex
       w="100%"
@@ -79,11 +80,11 @@ const SliderItem = ({ item }: { item: any }) => (
       </VStack>
 
       <Box
-        w={'100%'}
         display="flex"
         alignItems="center"
-        justifyContent={{ base: 'flex-end', md: 'flex-end' }}
-        borderRadius="16px"
+        justifyContent="center"
+        flexShrink={0}
+        ml={{ base: '0', md: '16px' }}
       >
         {item.icon}
       </Box>
@@ -94,6 +95,7 @@ const SliderItem = ({ item }: { item: any }) => (
 function Section6() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [isDragging, setIsDragging] = useState(false)
   const settings = {
     dots: true,
     infinite: true,
@@ -101,11 +103,15 @@ function Section6() {
     slidesToShow: 1,
     slidesToScroll: 1,
     adaptiveHeight: false,
+    arrows: false,
 
     variableWidth: false,
     beforeChange: (oldIndex: number, newIndex: number) => {
       setCurrentSlide(newIndex)
     },
+    onSwipe: () => setIsDragging(true),
+    onEdge: () => setIsDragging(false),
+    afterChange: () => setIsDragging(false),
     appendDots: (dots: any) => (
       <Box
         position="absolute"
@@ -147,6 +153,11 @@ function Section6() {
     ),
   }
 
+  const handleSlideClick = () => {
+    if (!isDragging) {
+      onOpen()
+    }
+  }
   return (
     <Flex
       w="100%"
@@ -165,14 +176,8 @@ function Section6() {
           <Box w="100%" overflow="hidden" position="relative">
             <Slider {...settings}>
               {sliderData.map((item) => (
-                <Box
-                  key={item.id}
-                  w="100%"
-                  flexShrink={0}
-                  onClick={onOpen}
-                  cursor="pointer"
-                >
-                  <SliderItem item={item} />
+                <Box key={item.id} w="100%">
+                  <SliderItem item={item} onOpen={handleSlideClick} />
                 </Box>
               ))}
             </Slider>

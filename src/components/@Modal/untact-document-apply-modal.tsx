@@ -86,6 +86,11 @@ function UntactDocumentApplyModal({
   const toast = useToast()
 
   const [govData, setGovData] = useState<any>(null)
+  const [shouldPoll, setShouldPoll] = useState(true)
+  const [completedDocuments, setCompletedDocuments] = useState<number>(0)
+  const [totalDocuments, setTotalDocuments] = useState<number>(5) // 총 5개 문서
+  const [currentStatus, setCurrentStatus] = useState<string>('PENDING')
+
   useEffect(() => {
     const extractedUserInfo = extractUserInfoFromJWT(
       identityVerificationToken as string,
@@ -108,12 +113,23 @@ function UntactDocumentApplyModal({
         },
       },
     })
+
+  console.log('[govQuery] enabled check:', {
+    govRetrieveId,
+    loadingProcess,
+    shouldPoll,
+    enabled: !!govRetrieveId && loadingProcess === 2 && shouldPoll,
+  })
+
   const govQuery = useGovRetrieveQuery({
     variables: {
       id: govRetrieveId || 0,
     },
     options: {
-      enabled: !!govRetrieveId && loadingProcess === 2,
+      enabled: !!govRetrieveId && loadingProcess === 2 && shouldPoll,
+      refetchInterval: shouldPoll ? 5000 : false,
+      refetchIntervalInBackground: true,
+      refetchOnWindowFocus: true,
     },
   })
 
@@ -149,7 +165,35 @@ function UntactDocumentApplyModal({
 
   useQueryEffects(govQuery, {
     onSuccess: (data) => {
-      // Map each document kind to the corresponding form field with file value
+      console.log('[useQueryEffects onSuccess] data:', data)
+      console.log('[useQueryEffects onSuccess] current status:', data.status)
+
+      // 상태 업데이트
+      if (data.status) {
+        setCurrentStatus(data.status)
+        console.log(
+          '[useQueryEffects onSuccess] setCurrentStatus called with:',
+          data.status,
+        )
+      }
+
+      let completedCount = 0
+
+      if (data.logSet && Array.isArray(data.logSet)) {
+        completedCount = data.logSet.filter((logItem) => logItem.file).length
+      }
+
+      console.log(
+        '[useQueryEffects] status:',
+        data.status,
+        'logSet:',
+        data.logSet,
+        'completedCount:',
+        completedCount,
+      )
+      setCompletedDocuments(completedCount)
+
+      // 각 문서를 폼에 설정
       if (data.logSet && Array.isArray(data.logSet)) {
         data.logSet.forEach((logItem) => {
           switch (logItem.kind) {
@@ -157,7 +201,7 @@ function UntactDocumentApplyModal({
               setValue('incomeCertificate', logItem.file)
               break
             case 'RESIDENT_REGISTRATION_COPY':
-              setValue('residentRegistrationCopy', logItem.file)
+              setValue('residentRegistrationCopy', logItem.address)
               break
             case 'HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION':
               setValue('healthInsuranceEligibilityConfirmation', logItem.file)
@@ -173,11 +217,36 @@ function UntactDocumentApplyModal({
           }
         })
       }
+
+      // 상태에 따른 토스트 메시지 및 polling 중단
+      if (data.status === 'SUCCESS') {
+        console.log('[useQueryEffects] SUCCESS detected, stopping polling')
+        setShouldPoll(false)
+        toast({
+          title: '서류 제출 완료',
+          description: '모든 서류가 성공적으로 제출되었습니다.',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        })
+      } else if (data.status === 'FAILED') {
+        console.log('[useQueryEffects] FAILED detected, stopping polling')
+        setShouldPoll(false)
+        toast({
+          title: '서류 제출 실패',
+          description: data.failedReason || '서류 제출 중 오류가 발생했습니다.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+
       console.log('[onSuccess]:', data)
     },
     onError: (error: any) => {
       console.error('[onError]:', error)
-      // 에러 메시지 추출
+      setShouldPoll(false)
+      setCurrentStatus('FAILED')
 
       toast({
         title: '서류 제출 실패',
@@ -196,6 +265,9 @@ function UntactDocumentApplyModal({
 
   const handleClose = () => {
     setLoadingProcess(0)
+    setShouldPoll(true)
+    setCompletedDocuments(0)
+    setCurrentStatus('PENDING')
     onClose()
   }
 
@@ -285,7 +357,13 @@ function UntactDocumentApplyModal({
       case 1:
         return <SubmittingAuthProcess />
       case 2:
-        return <SubmittingProcess />
+        return (
+          <SubmittingProcess
+            completedDocuments={completedDocuments}
+            totalDocuments={totalDocuments}
+            currentStatus={currentStatus}
+          />
+        )
     }
   }
   return (
@@ -478,7 +556,53 @@ const SubmittingAuthProcess = () => {
   )
 }
 
-const SubmittingProcess = () => {
+const SubmittingProcess = ({
+  completedDocuments,
+  totalDocuments,
+  currentStatus,
+}: {
+  completedDocuments: number
+  totalDocuments: number
+  currentStatus: string
+}) => {
+  console.log('[SubmittingProcess] currentStatus:', currentStatus)
+  console.log('[SubmittingProcess] completedDocuments:', completedDocuments)
+  console.log('[SubmittingProcess] totalDocuments:', totalDocuments)
+
+  const getStatusText = () => {
+    switch (currentStatus) {
+      case 'PENDING':
+        return '서류를 불러오는 중입니다'
+      case 'INCOME_CERTIFICATE':
+        return '소득금액증명서를 처리하는 중입니다'
+      case 'RESIDENT_REGISTRATION_COPY':
+        return '주민등록표등초본을 처리하는 중입니다'
+      case 'HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION':
+        return '건강보험자격득실확인서를 처리하는 중입니다'
+      case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION':
+        return '건강보험납부확인서를 처리하는 중입니다'
+      case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2':
+        return '건강보험납부확인서 2를 처리하는 중입니다'
+      case 'SUCCESS':
+        return '모든 서류가 성공적으로 제출되었습니다'
+      case 'FAILED':
+        return '서류 제출 중 오류가 발생했습니다'
+      default:
+        return '서류를 불러오는 중입니다'
+    }
+  }
+
+  const getStatusColor = () => {
+    switch (currentStatus) {
+      case 'SUCCESS':
+        return 'green.500'
+      case 'FAILED':
+        return 'red.500'
+      default:
+        return 'grey.10'
+    }
+  }
+
   return (
     <VStack
       spacing={'20px'}
@@ -489,21 +613,63 @@ const SubmittingProcess = () => {
       borderRadius={'10px'}
     >
       <VStack spacing={'8px'} alignItems={'center'}>
-        <Text textStyle={'pre-heading-3'} color={'grey.10'}>
-          서류를 불러오는 중입니다
+        <Text textStyle={'pre-heading-3'} color={getStatusColor()}>
+          {getStatusText()}
         </Text>
         <Text textStyle={'pre-body-6'} color={'grey.7'} textAlign={'center'}>
-          조금만 기다려 주세요!
+          {currentStatus === 'SUCCESS' ?
+            '모든 서류가 완료되었습니다!'
+          : currentStatus === 'FAILED' ?
+            '다시 시도해 주세요.'
+          : '조금만 기다려 주세요!'}
         </Text>
       </VStack>
-      <Box w={'144px'} h={'144px'}>
-        <Lottie
-          animationData={loadingLottieData}
-          loop={true}
-          autoplay={true}
-          style={{ width: '100%', height: '100%' }}
-        />
-      </Box>
+
+      {/* 진행률 표시 */}
+      <VStack spacing={'8px'} alignItems={'center'}>
+        <Text textStyle={'pre-body-5'} color={'primary.4'}>
+          {completedDocuments}/{totalDocuments} 완료
+        </Text>
+        <Box
+          w={'200px'}
+          h={'8px'}
+          bg={'grey.3'}
+          borderRadius={'4px'}
+          overflow={'hidden'}
+        >
+          <Box
+            w={`${(completedDocuments / totalDocuments) * 100}%`}
+            h={'100%'}
+            bg={currentStatus === 'FAILED' ? 'red.500' : 'primary.4'}
+            transition={'width 0.3s ease'}
+          />
+        </Box>
+      </VStack>
+
+      {/* 로딩 애니메이션 - 실패 시에는 숨김 */}
+      {currentStatus !== 'FAILED' && (
+        <Box w={'144px'} h={'144px'}>
+          <Lottie
+            animationData={loadingLottieData}
+            loop={currentStatus !== 'SUCCESS'}
+            autoplay={true}
+            style={{ width: '100%', height: '100%' }}
+          />
+        </Box>
+      )}
+
+      {/* 실패 시 에러 아이콘 */}
+      {currentStatus === 'FAILED' && (
+        <Box
+          w={'144px'}
+          h={'144px'}
+          display={'flex'}
+          alignItems={'center'}
+          justifyContent={'center'}
+        >
+          <XCircleFillIcon boxSize={'80px'} color={'red.500'} />
+        </Box>
+      )}
     </VStack>
   )
 }

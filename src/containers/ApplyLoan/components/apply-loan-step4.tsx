@@ -124,6 +124,7 @@ const ApplyLoanStep4 = () => {
       options: {
         onSuccess: (data) => {
           setUploadedFileUrl(`${data.url}/${data?.fields?.key}`)
+          setValue('identityCard', `${data?.fields?.key}`)
         },
         onError: (error) => {
           console.error('파일 업로드 실패:', error)

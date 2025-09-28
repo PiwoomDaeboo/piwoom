@@ -39,16 +39,22 @@ function YoutubeVideoModal({ isOpen, onClose, link }: YoutubeVideoModalProps) {
           bg: 'transparent',
           border: 'none',
           p: 0,
-          position: 'relative',
+          m: 0,
+          minH: 'auto',
+          h: 'auto',
         },
         footer: {
           bg: 'transparent',
           border: 'none',
           p: 0,
+          m: 0,
         },
         body: {
           p: 0,
+          m: 0,
           bg: 'black',
+          minH: 'auto',
+          h: 'auto',
         },
       }}
       header={
