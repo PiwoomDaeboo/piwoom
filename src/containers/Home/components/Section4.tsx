@@ -28,6 +28,9 @@ const Section4 = () => {
               variant={'black-primary'}
               minW={'180px'}
               minH={'48px'}
+              onClick={() => {
+                window.open('http://pf.kakao.com/_xkxoben/chat', '_blank')
+              }}
             >
               상담하기
             </Button>

@@ -145,7 +145,7 @@ const HomeHeader = ({
           h={'80px'}
         >
           <Link variant={'unstyled'} href={ROUTES.MAIN}>
-            <HeaderlogoIcon boxSize={'127px'} h={'25px'} />
+            <HeaderlogoIcon boxSize={'174px'} h={'25px'} />
           </Link>
           <HStack
             gap={'10px'}
@@ -168,11 +168,7 @@ const HomeHeader = ({
                   }
                   cursor={item.hasSubmenu ? 'default' : 'pointer'}
                 >
-                  <Text
-                    textStyle={'pre-heading-2'}
-                    color={'grey.10'}
-                    pb={'2px'}
-                  >
+                  <Text textStyle={'pre-body-3'} color={'grey.10'} pb={'2px'}>
                     {item.label}
                   </Text>
                 </Link>
@@ -184,13 +180,17 @@ const HomeHeader = ({
               onClick={() => router.push(ROUTES.MY_LOAN_MAIN)}
               variant={'outline-secondary'}
             >
-              대출 조회
+              <Text textStyle={'pre-body-7'} color={'grey.8'}>
+                대출 조회
+              </Text>
             </Button>
             <Button
               onClick={() => router.push(ROUTES.LOAN_MAIN)}
               variant={'black-primary'}
             >
-              대출 신청
+              <Text textStyle={'pre-body-7'} color={'grey.0'}>
+                대출 신청
+              </Text>
             </Button>
           </HStack>
           <HStack display={{ base: 'flex', md: 'none' }}>
@@ -233,7 +233,7 @@ const HomeHeader = ({
               {MENU_ITEMS[0].submenuItems?.map((subItem, subIndex) => (
                 <Link key={subIndex} href={subItem.href} variant={'unstyled'}>
                   <Text
-                    textStyle={'pre-heading-2'}
+                    textStyle={'pre-body-3'}
                     color={'grey.10'}
                     _hover={{ color: 'primary.4' }}
                     cursor={'pointer'}

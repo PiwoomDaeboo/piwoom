@@ -14,7 +14,13 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
-import { Loan1Icon, Loan2Icon, Loan3Icon } from '@/generated/icons/MyIcons'
+import {
+  Loan1Icon,
+  Loan2Icon,
+  Loan3Icon,
+  MoneyWavyIcon,
+  UserCheckIcon,
+} from '@/generated/icons/MyIcons'
 
 import LoanProcedureIntroduction from './components/procedure-introduction'
 import { BUTTON_DATA, CARD_DATA } from './consts'
@@ -295,7 +301,7 @@ function Loan() {
                           borderColor={'border.basic.1'}
                           bg={'background.basic.2'}
                         >
-                          <Loan1Icon boxSize={'24px'} />
+                          <UserCheckIcon boxSize={'24px'} />
                         </Flex>
                         <Text textStyle={'pre-body-5'} color={'grey.10'}>
                           {card.description1}
@@ -312,7 +318,7 @@ function Loan() {
                           borderColor={'border.basic.1'}
                           bg={'background.basic.2'}
                         >
-                          <Loan2Icon boxSize={'24px'} />
+                          <MoneyWavyIcon boxSize={'24px'} />
                         </Flex>
                         <Text textStyle={'pre-body-5'} color={'grey.10'}>
                           {card.description2}

@@ -30,7 +30,10 @@ import {
   useWetaxRetrieveQuery,
 } from '@/generated/apis/Wetax/Wetax.query'
 import {
+  AuthUserIcon,
   CaretRightIcon,
+  DeviceMobile1Icon,
+  DeviceMobileIcon,
   KakaoAuthenticationIcon,
   KbAuthenticationIcon,
   Loan1Icon,
@@ -338,7 +341,7 @@ const SubmittingAuthProcess = () => {
             alignItems={'center'}
             w={'94px'}
           >
-            <Loan1Icon boxSize={'24px'} />
+            <DeviceMobile1Icon boxSize={'28px'} />
           </Flex>
           <Flex flexDir={'column'} alignItems={'center'}>
             <Text textStyle={'pre-caption-1'} color={'primary.4'}>
@@ -371,7 +374,7 @@ const SubmittingAuthProcess = () => {
             alignItems={'center'}
             w={'94px'}
           >
-            <Loan1Icon boxSize={'24px'} />
+            <AuthUserIcon boxSize={'28px'} />
           </Flex>
           <Flex flexDir={'column'} alignItems={'center'}>
             <Text textStyle={'pre-caption-1'} color={'primary.4'}>
@@ -402,7 +405,7 @@ const SubmittingAuthProcess = () => {
             alignItems={'center'}
             w={'94px'}
           >
-            <Loan1Icon boxSize={'24px'} />
+            <DeviceMobileIcon boxSize={'28px'} />
           </Flex>
           <Flex flexDir={'column'} alignItems={'center'}>
             <Text textStyle={'pre-caption-1'} color={'primary.4'}>

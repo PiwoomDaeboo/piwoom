@@ -15,6 +15,7 @@ import {
 
 import { AuthRedirectLoader } from '@/components/AuthRedirectLoader'
 import ImageAsNext from '@/components/ImageAsNext'
+import { useLoanListQuery } from '@/generated/apis/Loan/Loan.query'
 import { MY_IMAGES } from '@/generated/path/images'
 import { useAuthRedirect } from '@/hooks/useAuthRedirect'
 
@@ -34,6 +35,17 @@ const MyLoanStep2 = () => {
   //             'https://app.modusign.co.kr/embedded-participant?di=bc615c10-92d2-11f0-b573-dd5faac0c738&pi=bccf8730-92d2-11f0-b573-dd5faac0c738&ci=MDEwOTc5Nzk3NDY&sm=SECURE_LINK&token=sha256.GjhqbFrTXWZsJ7T9t6OPQTXRIfZHDS1wLlShhRy4Yi4&expiry=1758532991884&redirectUrl=http%3A%2F%2Fapi.piwoom.com%2Fv1%2Floan%2F1%2Fsign_callback%2F'
   //           }
   //         ></iframe>
+
+  const { data: loanList } = useLoanListQuery({
+    variables: {
+      query: {
+        // status_in: [],
+        limit: 10,
+        offset: 0,
+      },
+    },
+    options: {},
+  })
   return (
     <Container>
       <CustomerInfoModal isOpen={isOpen} onClose={onClose} />
@@ -85,7 +97,8 @@ const MyLoanStep2 = () => {
                 123-45678-911
               </Text>
               <Button
-                onClick={onElectronicContractModalOpen}
+                // onClick={onElectronicContractModalOpen}
+                onClick={() => router.push('/my-loan?step=3')}
                 variant={'solid-primary'}
               >
                 전자계약서 작성

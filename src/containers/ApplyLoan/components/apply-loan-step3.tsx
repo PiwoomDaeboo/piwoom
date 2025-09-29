@@ -54,7 +54,7 @@ const ApplyLoanStep3 = () => {
   const loanPurpose = useWatch({ control, name: 'loanPurpose' })
   const monthlyIncome = useWatch({ control, name: 'monthlyIncome' })
   const creditScore = useWatch({ control, name: 'creditScore' })
-
+  const safeKey = useWatch({ control, name: 'safeKey' })
   const [popupWindow, setPopupWindow] = useState<Window | null>(null)
 
   const handleApplyCreditInfoSubmit = (e: React.MouseEvent) => {
@@ -172,8 +172,6 @@ const ApplyLoanStep3 = () => {
         typeof event.data === 'object' &&
         event.data.safeKey
       ) {
-        alert(event?.data)
-        window.alert(event?.data)
         console.log('✅ safeKey from object:', event.data.safeKey)
         setValue('safeKey', event.data.safeKey)
       } else {

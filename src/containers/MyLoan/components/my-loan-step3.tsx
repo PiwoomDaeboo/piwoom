@@ -16,49 +16,19 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 
+import AuthAlertModal from '@/components/@Modal/Auth-alert-modal'
 import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
 import { MY_IMAGES } from '@/generated/path/images'
 
+import {
+  AGREEMENT_ITEMS,
+  CHECKBOX_STYLES,
+  SQUARE_CHECKBOX_STYLES,
+} from '../const/consts'
 import CustomerInfoModal from './customer-info-modal'
 import MyLoanTermsModal from './my-loan-terms-modal'
-
-const AGREEMENT_ITEMS = [
-  {
-    id: 1,
-    key: 'privacy',
-    label: '대부거래 계약 주요 조건 (요약본)',
-  },
-  {
-    id: 2,
-    key: 'collection',
-    label: '대부거래 표준약관',
-  },
-  {
-    id: 3,
-    key: 'provision',
-    label: '채권양도(담보제공) 승낙서',
-  },
-]
-
-const CHECKBOX_STYLES = {
-  '.chakra-checkbox__control': {
-    borderRadius: '50%',
-    border: '1px solid',
-    borderColor: 'border.basic.1',
-    _checked: {
-      bg: 'primary.3',
-      borderColor: 'primary.3',
-      borderRadius: '50%',
-    },
-  },
-  '.chakra-checkbox__control[data-checked]': {
-    bg: 'primary.3',
-    borderColor: 'primary.3',
-    borderRadius: '50%',
-  },
-}
 
 const MyLoanStep3 = () => {
   const router = useRouter()
@@ -67,6 +37,11 @@ const MyLoanStep3 = () => {
     isOpen: isTermsOpen,
     onOpen: onTermsOpen,
     onClose: onTermsClose,
+  } = useDisclosure()
+  const {
+    isOpen: isAuthAlertOpen,
+    onOpen: onAuthAlertOpen,
+    onClose: onAuthAlertClose,
   } = useDisclosure()
   const [isAgree, setIsAgree] = useState(false)
   const [termsNumber, setTermsNumber] = useState(1)
@@ -100,6 +75,7 @@ const MyLoanStep3 = () => {
         onClose={onTermsClose}
         termsNumber={termsNumber}
       />
+      <AuthAlertModal isOpen={isAuthAlertOpen} onClose={onAuthAlertClose} />
       <Flex
         pt={{ base: '40px', sm: '48px', md: '80px' }}
         pb={'120px'}
@@ -246,6 +222,9 @@ const MyLoanStep3 = () => {
               textStyle={'pre-body-5'}
               color={'grey.8'}
               w={'209px'}
+              onClick={() => {
+                onAuthAlertOpen()
+              }}
             >
               신분증 인증 진행
             </Button>
@@ -296,6 +275,7 @@ const MyLoanStep3 = () => {
           <HStack w={'100%'} spacing={3}>
             <Checkbox
               isChecked={isAgree}
+              sx={SQUARE_CHECKBOX_STYLES}
               onChange={(e) => handleAgree(e.target.checked)}
             />
             <Text textStyle={'pre-body-6'} color={'grey.8'}>
@@ -315,7 +295,7 @@ const MyLoanStep3 = () => {
             variant={'solid-primary'}
             w={'160px'}
             isDisabled={!isAgree}
-            onClick={() => router.push('/my-loan?step=2')}
+            onClick={() => router.push('/my-loan?step=4')}
           >
             전자서명 진행
           </Button>
