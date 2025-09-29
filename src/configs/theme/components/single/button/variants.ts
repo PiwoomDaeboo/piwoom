@@ -51,10 +51,15 @@ const solidPrimary = defineVariant({
   basic: {
     bgColor: 'primary.4',
     color: 'grey.0',
+    borderColor: 'primary.4',
   },
   hover: { bgColor: 'primary.4' },
   active: { bgColor: 'primary.5' },
-  disabled: { color: 'content.5', bgColor: 'background.basic.4' },
+  disabled: {
+    color: 'content.5',
+    bgColor: 'background.basic.4',
+    borderColor: 'transparent',
+  },
 })
 
 const solidSecondary = defineVariant({

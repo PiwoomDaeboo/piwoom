@@ -4,6 +4,8 @@ import { useRouter } from 'next/router'
 
 import { Center, Spinner } from '@chakra-ui/react'
 
+import { useAuth } from '@/hooks/useAuth'
+
 import MyLoanProcess from './components/my-loan-process'
 import MyLoanStep1 from './components/my-loan-step1'
 import MyLoanStep2 from './components/my-loan-step2'
@@ -12,15 +14,22 @@ import MyLoanStep4 from './components/my-loan-step4'
 
 function MyLoan() {
   const [isLoading, setIsLoading] = useState(false)
-
+  const { isLogin } = useAuth()
   const router = useRouter()
+
   const { step } = router.query
+  console.log('isLogin', isLogin)
   useEffect(() => {
     setIsLoading(true)
     setTimeout(() => {
       setIsLoading(false)
     }, 1000)
   }, [step])
+  useEffect(() => {
+    if (isLogin) {
+      router.push(`/my-loan?step=2`)
+    }
+  }, [isLogin])
   if (isLoading) {
     return (
       <Center h={'100vh'}>

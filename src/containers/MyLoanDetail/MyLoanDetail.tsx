@@ -37,11 +37,18 @@ const LOAN_TYPE_QUERY_MAP = {
 
 function MyLoanDetail() {
   const router = useRouter()
+  const { detailMenu } = router.query
   const [activeButtonIndex, setActiveButtonIndex] = useState<number>(0)
   const [showProcedure, setShowProcedure] = useState<boolean>(false)
   const [isDetailMenu, setIsDetailMenu] = useState<string>('detail')
 
   const [loanData, setLoanData] = useState<LoanDetailApiData>(SAMPLE_LOAN_DATA)
+
+  useEffect(() => {
+    if (detailMenu) {
+      setIsDetailMenu(detailMenu as string)
+    }
+  }, [detailMenu])
 
   return (
     <>

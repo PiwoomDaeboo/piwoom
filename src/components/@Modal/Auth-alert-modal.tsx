@@ -16,7 +16,7 @@ export default function AuthAlertModal({
   return (
     <ModalBasis
       isOpen={isOpen}
-      visibleCloseButton={false}
+      visibleCloseButton={true}
       onClose={onClose}
       size={'sm'}
       body={

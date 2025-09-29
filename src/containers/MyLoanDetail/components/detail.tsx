@@ -14,6 +14,8 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
+import { LOAN_STATUS } from '@/constants/loan'
+import { useLoanRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
 import { CaretLeftIcon } from '@/generated/icons/MyIcons'
 
 import { SAMPLE_LOAN_DATA, getFormattedDetailData } from '../consts'
@@ -23,6 +25,15 @@ export default function Detail() {
 
   const detailData = getFormattedDetailData(SAMPLE_LOAN_DATA)
 
+  const { data: loanRetrieveData } = useLoanRetrieveQuery({
+    variables: {
+      id: Number(router.query.id),
+    },
+    options: {
+      enabled: !!router.query.id,
+    },
+  })
+  console.log(loanRetrieveData)
   return (
     <Flex flexDir={'column'} w={'100%'}>
       <Flex
@@ -61,10 +72,14 @@ export default function Detail() {
                   계약번호
                 </Text>
                 <Text textStyle={'pre-heading-3'} color={'primary.3'}>
-                  {SAMPLE_LOAN_DATA.contractNumber}
+                  {loanRetrieveData?.no || '-'}
                 </Text>
               </HStack>
-              <Badge variant={'subtle_primary'}>대출 중</Badge>
+              <Badge variant={'subtle_primary'}>
+                {LOAN_STATUS.find(
+                  (status) => status.value === loanRetrieveData?.status,
+                )?.label || '-'}
+              </Badge>
             </Flex>
           </VStack>
         </HStack>

@@ -41,13 +41,14 @@ import ApplyLoanStep1 from './components/apply-loan-step1'
 import ApplyLoanStep2 from './components/apply-loan-step2'
 import ApplyLoanStep3 from './components/apply-loan-step3'
 import ApplyLoanStep4 from './components/apply-loan-step4'
+import { useApplyLoanForm } from './hooks/useApplyLoanForms'
 
 function ApplyLoan() {
   const [isLoading, setIsLoading] = useState(false)
 
   const router = useRouter()
   const { step, type } = router.query
-  const methods = useForm<LoanRequestType>()
+  const methods = useApplyLoanForm()
 
   // type query는 현재 화면 렌더링에 영향을 주지 않음
   // step query에 따라 화면이 결정됨

@@ -327,10 +327,13 @@ const ApplyLoanStep1 = () => {
           <Button
             variant={'solid-primary'}
             w={'160px'}
-            isDisabled={!isButtonEnabled()}
-            onClick={() =>
+            onClick={() => {
+              if (!isButtonEnabled()) {
+                onAlertOpen()
+                return
+              }
               router.push('/apply-loan?step=2&type=' + router.query.type)
-            }
+            }}
           >
             다음
           </Button>
@@ -343,7 +346,7 @@ const ApplyLoanStep1 = () => {
       />
       <ModalBasis
         isOpen={isAlertOpen}
-        visibleCloseButton={false}
+        visibleCloseButton={true}
         onClose={isAlertClose}
         size={'sm'}
         body={

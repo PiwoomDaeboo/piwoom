@@ -60,7 +60,7 @@ function DocumentAgreeModal({
   return (
     <ModalBasis
       isOpen={isOpen}
-      visibleCloseButton={false}
+      visibleCloseButton={true}
       onClose={handleClose}
       size={{ base: 'full', sm: 'md' }}
       header={
