@@ -31,7 +31,10 @@ import {
 } from '@/generated/apis/Gov/Gov.query'
 import { useWetaxLoginCreateMutation } from '@/generated/apis/Wetax/Wetax.query'
 import {
+  AuthUserIcon,
   CaretRightIcon,
+  DeviceMobile1Icon,
+  DeviceMobileIcon,
   KakaoAuthenticationIcon,
   KbAuthenticationIcon,
   Loan1Icon,
@@ -42,7 +45,6 @@ import {
   XCircleFillIcon,
   XIcon,
 } from '@/generated/icons/MyIcons'
-import { useQueryEffects } from '@/hooks/useQueryEffect'
 import { useSessionStorage } from '@/stores/session/state'
 import { extractUserInfoFromJWT } from '@/utils/jwt'
 
@@ -73,7 +75,7 @@ function UntactDocumentApplyModal({
   const [selectedAuth, setSelectedAuth] = useState<string | null>(null)
   const [selectedPassType, setSelectedPassType] = useState<string>('')
   const [govRetrieveId, setGovRetrieveId] = useState<number | null>(null)
-  const { setValue } = useFormContext()
+  const { setValue, trigger } = useFormContext()
   const [loadingProcess, setLoadingProcess] = useState<number>(0)
   const [userInfo, setUserInfo] = useState<{
     name?: string
@@ -106,20 +108,12 @@ function UntactDocumentApplyModal({
           setLoadingProcess(1)
           setGovRetrieveId(data?.id)
           setGovData(data)
-          console.log(data)
         },
         onError: (error) => {
           console.error(error)
         },
       },
     })
-
-  console.log('[govQuery] enabled check:', {
-    govRetrieveId,
-    loadingProcess,
-    shouldPoll,
-    enabled: !!govRetrieveId && loadingProcess === 2 && shouldPoll,
-  })
 
   const govQuery = useGovRetrieveQuery({
     variables: {
@@ -163,105 +157,112 @@ function UntactDocumentApplyModal({
       },
     })
 
-  useQueryEffects(govQuery, {
-    onSuccess: (data) => {
-      console.log('[useQueryEffects onSuccess] data:', data)
-      console.log('[useQueryEffects onSuccess] current status:', data.status)
+  // 실제 API 응답을 처리하는 useEffect
+  useEffect(() => {
+    const data = govQuery.data
+    if (!data) return
 
-      // 상태 업데이트
-      if (data.status) {
-        setCurrentStatus(data.status)
+    // 상태 업데이트
+    if (data.status) {
+      setCurrentStatus(data.status)
+    }
+
+    let completedCount = 0
+
+    if (data.logSet && Array.isArray(data.logSet)) {
+      completedCount = data.logSet.filter((logItem) => logItem.file).length
+    }
+
+    setCompletedDocuments(completedCount)
+
+    if (data.logSet && Array.isArray(data.logSet)) {
+      data.logSet.forEach((logItem) => {
         console.log(
-          '[useQueryEffects onSuccess] setCurrentStatus called with:',
-          data.status,
+          '[setValue] Setting field:',
+          logItem.kind,
+          'value:',
+          logItem.file || logItem.address,
         )
-      }
+        switch (logItem.kind) {
+          case 'INCOME_CERTIFICATE':
+            setValue('incomeCertificate', logItem.file, {
+              shouldValidate: true,
+              shouldDirty: true,
+            })
+            break
+          case 'RESIDENT_REGISTRATION_COPY':
+            setValue('residentRegistrationCopy', logItem.address, {
+              shouldValidate: true,
+              shouldDirty: true,
+            })
+            break
+          case 'HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION':
+            setValue('healthInsuranceEligibilityConfirmation', logItem.file, {
+              shouldValidate: true,
+              shouldDirty: true,
+            })
+            break
+          case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION':
+            setValue('healthInsurancePaymentConfirmation', logItem.file, {
+              shouldValidate: true,
+              shouldDirty: true,
+            })
+            break
+          case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2':
+            setValue('healthInsurancePaymentConfirmation2', logItem.file, {
+              shouldValidate: true,
+              shouldDirty: true,
+            })
+            break
+          default:
+            console.warn('Unknown document kind:', logItem.kind)
+        }
+      })
 
-      let completedCount = 0
+      setTimeout(() => {
+        trigger()
+      }, 100)
+    }
 
-      if (data.logSet && Array.isArray(data.logSet)) {
-        completedCount = data.logSet.filter((logItem) => logItem.file).length
-      }
+    if (data.status === 'SUCCESS') {
+      console.log('[Real API] SUCCESS detected, stopping polling')
+      setShouldPoll(false)
+      toast({
+        title: '서류 제출 완료',
+        description: '모든 서류가 성공적으로 제출되었습니다.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
+    } else if (data.status === 'FAILED') {
+      console.log('[Real API] FAILED detected, stopping polling')
+      setShouldPoll(false)
+      toast({
+        title: '서류 제출 실패',
+        description: data.failedReason || '서류 제출 중 오류가 발생했습니다.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+  }, [govQuery.data, setValue, trigger, toast])
 
-      console.log(
-        '[useQueryEffects] status:',
-        data.status,
-        'logSet:',
-        data.logSet,
-        'completedCount:',
-        completedCount,
-      )
-      setCompletedDocuments(completedCount)
-
-      // 각 문서를 폼에 설정
-      if (data.logSet && Array.isArray(data.logSet)) {
-        data.logSet.forEach((logItem) => {
-          switch (logItem.kind) {
-            case 'INCOME_CERTIFICATE':
-              setValue('incomeCertificate', logItem.file)
-              break
-            case 'RESIDENT_REGISTRATION_COPY':
-              setValue('residentRegistrationCopy', logItem.address)
-              break
-            case 'HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION':
-              setValue('healthInsuranceEligibilityConfirmation', logItem.file)
-              break
-            case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION':
-              setValue('healthInsurancePaymentConfirmation', logItem.file)
-              break
-            case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2':
-              setValue('healthInsurancePaymentConfirmation2', logItem.file)
-              break
-            default:
-              console.warn('Unknown document kind:', logItem.kind)
-          }
-        })
-      }
-
-      // 상태에 따른 토스트 메시지 및 polling 중단
-      if (data.status === 'SUCCESS') {
-        console.log('[useQueryEffects] SUCCESS detected, stopping polling')
-        setShouldPoll(false)
-        toast({
-          title: '서류 제출 완료',
-          description: '모든 서류가 성공적으로 제출되었습니다.',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        })
-      } else if (data.status === 'FAILED') {
-        console.log('[useQueryEffects] FAILED detected, stopping polling')
-        setShouldPoll(false)
-        toast({
-          title: '서류 제출 실패',
-          description: data.failedReason || '서류 제출 중 오류가 발생했습니다.',
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-        })
-      }
-
-      console.log('[onSuccess]:', data)
-    },
-    onError: (error: any) => {
-      console.error('[onError]:', error)
+  // 실제 API 에러 처리
+  useEffect(() => {
+    if (govQuery.error) {
+      console.error('[Real API onError]:', govQuery.error)
       setShouldPoll(false)
       setCurrentStatus('FAILED')
 
       toast({
         title: '서류 제출 실패',
-        description:
-          error?.response?.data?.nonField[0] ||
-          '서류 제출 중 오류가 발생했습니다.',
+        description: '서류 제출 중 오류가 발생했습니다.',
         status: 'error',
         duration: 5000,
         isClosable: true,
       })
-    },
-    onSettled: (data, error) => {
-      console.log('[onSettled]:', data, error)
-    },
-  })
+    }
+  }, [govQuery.error, toast])
 
   const handleClose = () => {
     setLoadingProcess(0)
@@ -369,7 +370,7 @@ function UntactDocumentApplyModal({
   return (
     <ModalBasis
       isOpen={isOpen}
-      visibleCloseButton={false}
+      visibleCloseButton={true}
       onClose={handleClose}
       size={{ base: 'full', sm: 'xl' }}
       header={
@@ -459,7 +460,11 @@ const SubmittingAuthProcess = () => {
           앱에서 인증을 진행해 주세요.
         </Text>
       </VStack>
-      <Flex gap={'5px'} alignItems={'center'}>
+      <Flex
+        flexDir={{ base: 'column', sm: 'row' }}
+        gap={'5px'}
+        alignItems={'center'}
+      >
         <VStack spacing={'6px'} alignItems={'center'}>
           <Flex
             border={'1px solid'}
@@ -470,7 +475,7 @@ const SubmittingAuthProcess = () => {
             alignItems={'center'}
             w={'94px'}
           >
-            <Loan1Icon boxSize={'24px'} />
+            <DeviceMobile1Icon boxSize={'24px'} />
           </Flex>
           <Flex flexDir={'column'} alignItems={'center'}>
             <Text textStyle={'pre-caption-1'} color={'primary.4'}>
@@ -488,7 +493,10 @@ const SubmittingAuthProcess = () => {
             <Text textStyle={'pre-body-68'} color={'grey.9'}></Text>
           </Flex>
         </VStack>
-        <CaretRightIcon boxSize={'24px'} />
+        <CaretRightIcon
+          display={{ base: 'none', sm: 'block' }}
+          boxSize={'24px'}
+        />
         <VStack
           spacing={'6px'}
           alignItems={'center'}
@@ -503,7 +511,7 @@ const SubmittingAuthProcess = () => {
             alignItems={'center'}
             w={'94px'}
           >
-            <Loan1Icon boxSize={'24px'} />
+            <AuthUserIcon boxSize={'24px'} />
           </Flex>
           <Flex flexDir={'column'} alignItems={'center'}>
             <Text textStyle={'pre-caption-1'} color={'primary.4'}>
@@ -523,7 +531,10 @@ const SubmittingAuthProcess = () => {
             ></Text>
           </Flex>
         </VStack>
-        <CaretRightIcon boxSize={'24px'} />
+        <CaretRightIcon
+          display={{ base: 'none', sm: 'block' }}
+          boxSize={'24px'}
+        />
         <VStack spacing={'6px'} alignItems={'center'}>
           <Flex
             border={'1px solid'}
@@ -534,7 +545,7 @@ const SubmittingAuthProcess = () => {
             alignItems={'center'}
             w={'94px'}
           >
-            <Loan1Icon boxSize={'24px'} />
+            <DeviceMobileIcon boxSize={'24px'} />
           </Flex>
           <Flex flexDir={'column'} alignItems={'center'}>
             <Text textStyle={'pre-caption-1'} color={'primary.4'}>
@@ -565,10 +576,6 @@ const SubmittingProcess = ({
   totalDocuments: number
   currentStatus: string
 }) => {
-  console.log('[SubmittingProcess] currentStatus:', currentStatus)
-  console.log('[SubmittingProcess] completedDocuments:', completedDocuments)
-  console.log('[SubmittingProcess] totalDocuments:', totalDocuments)
-
   const getStatusText = () => {
     switch (currentStatus) {
       case 'PENDING':

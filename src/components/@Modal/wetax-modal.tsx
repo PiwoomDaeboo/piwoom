@@ -242,7 +242,7 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
   return (
     <ModalBasis
       isOpen={isOpen}
-      visibleCloseButton={false}
+      visibleCloseButton={true}
       onClose={handleClose}
       size={{ base: 'full', sm: 'xl' }}
       header={

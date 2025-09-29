@@ -47,7 +47,7 @@ import {
   EMPLOYMENT_TYPE,
   JOP_TYPE,
   REPAYMENT_TYPE,
-} from '../const/const'
+} from '../../../constants/loan'
 import { useSelectButtonGroup } from '../hooks/useSelectButtonGroup'
 
 interface Company {
@@ -60,7 +60,14 @@ interface Company {
 
 const ApplyLoanStep4 = () => {
   const router = useRouter()
-  const { register, setValue, control, handleSubmit, watch } = useFormContext()
+  const {
+    register,
+    setValue,
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useFormContext()
   const watchAll = watch()
   console.log('watchAll', watchAll)
   const loanAmount = useWatch({ control, name: 'loanAmount' })
@@ -174,7 +181,7 @@ const ApplyLoanStep4 = () => {
   const handleUploadButtonClick = () => {
     fileInputRef.current?.click()
   }
-
+  console.log('errors', errors)
   const onSubmit = (data: any) => {
     console.log('전체 폼 데이터:', data)
 

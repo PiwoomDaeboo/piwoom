@@ -258,7 +258,7 @@ const ApplyLoanStep2 = () => {
                   •
                 </Text>
               </Text>
-              <Input disabled placeholder="이메일" />
+              <Input {...methods.register('email')} placeholder="이메일" />
             </VStack>
           </SimpleGrid>
         )}
@@ -274,7 +274,9 @@ const ApplyLoanStep2 = () => {
             variant={'solid-primary'}
             w={'160px'}
             isDisabled={!isPhoneCertification}
-            onClick={() => router.push('/apply-loan?step=3')}
+            onClick={() =>
+              router.replace('/apply-loan?step=3&type=' + router.query.type)
+            }
           >
             다음
           </Button>

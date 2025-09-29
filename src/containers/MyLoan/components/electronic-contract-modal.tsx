@@ -24,7 +24,7 @@ function ElectronicContractModal({
   return (
     <ModalBasis
       isOpen={isOpen}
-      visibleCloseButton={false}
+      visibleCloseButton={true}
       onClose={onClose}
       size={{ base: 'full', sm: 'lg' }}
       header={

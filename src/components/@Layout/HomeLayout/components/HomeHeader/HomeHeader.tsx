@@ -39,22 +39,22 @@ const HomeHeader = ({
   ...props
 }: HomeHeaderProps) => {
   const router = useRouter()
-  const [isLoanHovered, setIsLoanHovered] = useState(false)
+  const [hoveredMenuIndex, setHoveredMenuIndex] = useState<number | null>(null)
   const [isHeaderVisible, setIsHeaderVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = (menuIndex: number) => {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current)
       hoverTimeoutRef.current = null
     }
-    setIsLoanHovered(true)
+    setHoveredMenuIndex(menuIndex)
   }
 
   const handleMouseLeave = () => {
     hoverTimeoutRef.current = setTimeout(() => {
-      setIsLoanHovered(false)
+      setHoveredMenuIndex(null)
     }, 200)
   }
 
@@ -157,7 +157,7 @@ const HomeHeader = ({
                 key={index}
                 px={'25px'}
                 position={'relative'}
-                onMouseEnter={() => item.hasSubmenu && handleMouseEnter()}
+                onMouseEnter={() => item.hasSubmenu && handleMouseEnter(index)}
                 onMouseLeave={() => item.hasSubmenu && handleMouseLeave()}
               >
                 <Link
@@ -209,43 +209,50 @@ const HomeHeader = ({
       </Container>
 
       {/* 전체 너비 서브메뉴 바 */}
-      {isLoanHovered && (
-        <Box
-          w={'100%'}
-          h={'80px'}
-          bg={'white'}
-          borderTop={'1px solid'}
-          borderTopColor={'grey.2'}
-          position={'absolute'}
-          top={'100%'}
-          left={'0'}
-          zIndex={999}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <Container h={'100%'}>
-            <Flex
-              alignItems={'center'}
-              justifyContent={'center'}
-              h={'100%'}
-              gap={'40px'}
-            >
-              {MENU_ITEMS[0].submenuItems?.map((subItem, subIndex) => (
-                <Link key={subIndex} href={subItem.href} variant={'unstyled'}>
-                  <Text
-                    textStyle={'pre-body-3'}
-                    color={'grey.10'}
-                    _hover={{ color: 'primary.4' }}
-                    cursor={'pointer'}
-                  >
-                    {subItem.label}
-                  </Text>
-                </Link>
-              ))}
-            </Flex>
-          </Container>
-        </Box>
-      )}
+      {hoveredMenuIndex !== null &&
+        MENU_ITEMS[hoveredMenuIndex]?.submenuItems && (
+          <Box
+            w={'100%'}
+            h={'80px'}
+            bg={'white'}
+            borderTop={'1px solid'}
+            borderTopColor={'grey.2'}
+            position={'absolute'}
+            top={'100%'}
+            left={'0'}
+            zIndex={999}
+            onMouseEnter={() => handleMouseEnter(hoveredMenuIndex)}
+            onMouseLeave={handleMouseLeave}
+          >
+            <Container h={'100%'}>
+              <Flex
+                alignItems={'center'}
+                justifyContent={'center'}
+                h={'100%'}
+                gap={'40px'}
+              >
+                {MENU_ITEMS[hoveredMenuIndex].submenuItems?.map(
+                  (subItem, subIndex) => (
+                    <Link
+                      key={subIndex}
+                      href={subItem.href}
+                      variant={'unstyled'}
+                    >
+                      <Text
+                        textStyle={'pre-body-3'}
+                        color={'grey.10'}
+                        _hover={{ color: 'primary.4' }}
+                        cursor={'pointer'}
+                      >
+                        {subItem.label}
+                      </Text>
+                    </Link>
+                  ),
+                )}
+              </Flex>
+            </Container>
+          </Box>
+        )}
 
       <HomeHeaderDrawer isOpen={isDrawerOpen} onClose={onDrawerClose} />
     </Flex>

@@ -11,37 +11,44 @@ import {
 import * as PortOne from '@portone/browser-sdk/v2'
 
 import ImageAsNext from '@/components/ImageAsNext'
-import { useUserIdentityVerificationCreateMutation } from '@/generated/apis/User/User.query'
+import { ENV } from '@/configs/env'
+import {
+  useUserIdentityVerificationCreateMutation,
+  useUserLoginCreateMutation,
+} from '@/generated/apis/User/User.query'
 import { MY_IMAGES } from '@/generated/path/images'
+import { useLocalStorage } from '@/stores/local/state'
 import { cookieStorage } from '@/utils/cookie-storage'
 
 const MyLoanStep1 = () => {
   const router = useRouter()
-  const { mutateAsync: userIdentityVerificationCreate } =
-    useUserIdentityVerificationCreateMutation({
-      options: {
-        onSuccess: (data) => {
-          // cookie에 직접 저장
-          cookieStorage.setItem(
-            'identityVerificationToken',
-            data.identityVerificationToken,
-          )
-          router.push(`/my-loan?step=2`)
-        },
+  const { set } = useLocalStorage()
+
+  const { mutateAsync: userLoginCreate } = useUserLoginCreateMutation({
+    options: {
+      onSuccess: (data) => {
+        set({
+          token: {
+            access_token: data.accessToken,
+            refresh_token: data.refreshToken,
+          },
+        })
+        router.push(`/my-loan?step=2`)
       },
-    })
+    },
+  })
   const handleAuthentication = async () => {
     const response = await PortOne.requestIdentityVerification({
-      storeId: 'store-5fcf48f2-05d3-43e2-9abe-c09b3f461e2d',
+      storeId: ENV.PORTONE_STORE_ID || '',
       identityVerificationId: crypto.randomUUID(),
-      channelKey: 'channel-key-1e7295f0-e634-4e2b-9da5-2402b97e7a63',
-      redirectUrl: `${window.location.origin}/my-loan?step=2`,
+      channelKey: ENV.PORTONE_CHANNEL_KEY || '',
+      redirectUrl: `${window.location.origin}/my-loan-status`,
     })
     if (response?.code !== undefined) {
       return alert(response?.message)
     }
 
-    userIdentityVerificationCreate({
+    userLoginCreate({
       data: {
         identityVerificationId: response?.identityVerificationId || '',
       },

@@ -25,7 +25,7 @@ function LoanTermsModal({ isOpen, onClose, type }: LoanTermsModalProps) {
   return (
     <ModalBasis
       isOpen={isOpen}
-      visibleCloseButton={false}
+      visibleCloseButton={true}
       onClose={handleClose}
       size={'xl'}
       header={

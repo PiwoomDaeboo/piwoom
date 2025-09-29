@@ -17,6 +17,7 @@ import {
   Textarea,
   VStack,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
@@ -24,7 +25,7 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import ModalBasis from '@/components/@Modal/ModalBasis'
 import CommonSelect from '@/components/CommonSelect'
 import InputForm from '@/components/InputForm'
-import { InfoFillIcon } from '@/generated/icons/MyIcons'
+import { InfoFillIcon, XCircleFillIcon } from '@/generated/icons/MyIcons'
 import { useSessionStorage } from '@/stores/session/state'
 import { extractUserInfoFromJWT } from '@/utils/jwt'
 
@@ -35,11 +36,20 @@ import {
   LOAN_PURPOSE_OPTIONS,
   REPAYMENT_METHOD_OPTIONS,
   TOTAL_ASSET_OPTIONS,
-} from '../const/const'
+} from '../../../constants/loan'
 
 const ApplyLoanStep3 = () => {
-  const { register, control, watch, setValue } = useFormContext()
+  const {
+    register,
+    control,
+    watch,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useFormContext()
   const router = useRouter()
+  const toast = useToast()
+  console.log('errors', errors)
   const [userInfo, setUserInfo] = useState<{
     name?: string
     phone?: string
@@ -51,7 +61,7 @@ const ApplyLoanStep3 = () => {
   const annualIncome = useWatch({ control, name: 'annualIncome' })
   const debtScale = useWatch({ control, name: 'debtScale' })
   const repaymentMethod = useWatch({ control, name: 'repaymentMethod' })
-  const loanPurpose = useWatch({ control, name: 'loanPurpose' })
+  const loanPurpose = useWatch({ control, name: 'purpose' })
   const monthlyIncome = useWatch({ control, name: 'monthlyIncome' })
   const creditScore = useWatch({ control, name: 'creditScore' })
   const safeKey = useWatch({ control, name: 'safeKey' })
@@ -86,13 +96,15 @@ const ApplyLoanStep3 = () => {
     e.preventDefault()
     const pastedText = e.clipboardData.getData('text')
 
-    const numbersOnly = pastedText.replace(/[^0-9]/g, '')
+    const numbersAndDecimal = pastedText.replace(/[^0-9.]/g, '')
+    const cleanNumber = numbersAndDecimal.replace(/\.(?=.*\.)/g, '') // 중복 소수점 제거
 
     const target = e.target as HTMLInputElement
     const fieldName = target.name
 
-    if (fieldName && numbersOnly) {
-      setValue(fieldName, parseInt(numbersOnly) || 0)
+    if (fieldName && cleanNumber) {
+      const numericValue = parseFloat(cleanNumber) || 0
+      setValue(fieldName, numericValue)
     }
   }
 
@@ -114,13 +126,60 @@ const ApplyLoanStep3 = () => {
     return true
   }
 
-  // 다음 버튼 클릭 핸들러
-  const handleNextClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    console.log('다음 버튼 클릭됨')
-    router.push('/apply-loan?step=4&type=' + router.query.type)
+  // handleSubmit을 사용하므로 수동 검증 함수는 더 이상 필요하지 않음
+
+  // Step3 성공 시 실행될 함수
+  const onStep3Submit = (data: any) => {
+    console.log('Step3 폼 데이터:', data)
+
+    if (!checkLoanEligibility()) {
+      return
+    }
+
+    router.replace('/apply-loan?step=4&type=' + router.query.type)
   }
+
+  const onStep3Error = (errors: any) => {
+    console.log('Step3 폼 에러:', errors)
+    toast({
+      render: () => (
+        <Box
+          borderRadius={'10px'}
+          color="white"
+          p={'12px'}
+          bg="rgba(27, 28, 29, 0.80)"
+        >
+          <HStack spacing={'24px'} alignItems={'center'}>
+            <XCircleFillIcon boxSize={'24px'} />
+            <Text textStyle={'pre-body-68'} color={'grey.0'}>
+              필수 항목을 입력해주세요.
+            </Text>
+          </HStack>
+        </Box>
+      ),
+      duration: 5000,
+      isClosable: true,
+    })
+    const firstErrorField = Object.keys(errors)[0]
+    const errorElement =
+      document.querySelector(`[name="${firstErrorField}"]`) ||
+      document.querySelector(`[data-field="${firstErrorField}"]`)
+
+    if (errorElement) {
+      errorElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+      if (errorElement instanceof HTMLElement) {
+        errorElement.focus()
+      }
+    }
+  }
+
+  // 다음 버튼 클릭 핸들러 (handleSubmit 사용)
+  const handleNextClick = handleSubmit(onStep3Submit, onStep3Error)
+
+  console.log('Form errors:', errors)
 
   const getUserInfo = () => {
     const extractedUserInfo = extractUserInfoFromJWT(
@@ -153,41 +212,41 @@ const ApplyLoanStep3 = () => {
     }
   }, [])
 
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      console.log('=== Message Event Received ===')
-      console.log('Origin:', event.origin)
+  // useEffect(() => {
+  //   const handleMessage = (event: MessageEvent) => {
+  //     console.log('=== Message Event Received ===')
+  //     console.log('Origin:', event.origin)
 
-      console.log('Data:', event.data)
-      console.log('Data type:', typeof event.data)
-      console.log('Data length:', event.data?.length)
-      console.log('Data constructor:', event.data?.constructor?.name)
+  //     console.log('Data:', event.data)
+  //     console.log('Data type:', typeof event.data)
+  //     console.log('Data length:', event.data?.length)
+  //     console.log('Data constructor:', event.data?.constructor?.name)
 
-      // Origin 검증 없이 모든 메시지 처리
-      if (typeof event.data === 'string' && event.data.trim()) {
-        console.log('✅ safeKey received:', event.data)
-        setValue('safeKey', event.data)
-      } else if (
-        event.data &&
-        typeof event.data === 'object' &&
-        event.data.safeKey
-      ) {
-        console.log('✅ safeKey from object:', event.data.safeKey)
-        setValue('safeKey', event.data.safeKey)
-      } else {
-        console.log('❌ No valid safeKey found')
-        console.log('Raw data:', JSON.stringify(event.data))
-      }
-    }
+  //     // Origin 검증 없이 모든 메시지 처리
+  //     if (typeof event.data === 'string' && event.data.trim()) {
+  //       console.log('✅ safeKey received:', event.data)
+  //       setValue('safeKey', event.data)
+  //     } else if (
+  //       event.data &&
+  //       typeof event.data === 'object' &&
+  //       event.data.safeKey
+  //     ) {
+  //       console.log('✅ safeKey from object:', event.data.safeKey)
+  //       setValue('safeKey', event.data.safeKey)
+  //     } else {
+  //       console.log('❌ No valid safeKey found')
+  //       console.log('Raw data:', JSON.stringify(event.data))
+  //     }
+  //   }
 
-    console.log('Adding message event listener...')
-    window.addEventListener('message', handleMessage)
+  //   console.log('Adding message event listener...')
+  //   window.addEventListener('message', handleMessage)
 
-    return () => {
-      console.log('Removing message event listener...')
-      window.removeEventListener('message', handleMessage)
-    }
-  }, [setValue])
+  //   return () => {
+  //     console.log('Removing message event listener...')
+  //     window.removeEventListener('message', handleMessage)
+  //   }
+  // }, [setValue])
 
   return (
     <Container>
@@ -209,10 +268,10 @@ const ApplyLoanStep3 = () => {
 
         <InputForm label="대출용도">
           <Flex w={'100%'} gap={'16px'}>
-            <VStack w={'50%'}>
+            <VStack w={'49%'}>
               <Box w={'100%'}>
                 <Controller
-                  name="loanPurpose"
+                  name="purpose"
                   control={control}
                   render={({ field }) => (
                     <CommonSelect
@@ -225,6 +284,7 @@ const ApplyLoanStep3 = () => {
                       onChange={(selectedOption) =>
                         field.onChange(selectedOption?.value || '')
                       }
+                      data-field="purpose"
                     />
                   )}
                 />
@@ -234,11 +294,17 @@ const ApplyLoanStep3 = () => {
                 <Input
                   placeholder="대출 용도 직접입력"
                   {...register('purposeDetail')}
+                  data-field="purposeDetail"
                 />
               )}
             </VStack>
             <Box />
           </Flex>
+          {errors?.purpose && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.purpose?.message as string}
+            </Text>
+          )}
         </InputForm>
         <InputForm label="총 자산 규모" w={'100%'}>
           <SimpleGrid w={'100%'} gap={'16px'} columns={{ base: 2, sm: 4 }}>
@@ -259,6 +325,11 @@ const ApplyLoanStep3 = () => {
               </Button>
             ))}
           </SimpleGrid>
+          {errors.totalAsset && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.totalAsset?.message as string}
+            </Text>
+          )}
         </InputForm>
         <InputForm label="연 소득">
           <SimpleGrid w={'100%'} gap={'16px'} columns={{ base: 2, sm: 4 }}>
@@ -279,6 +350,11 @@ const ApplyLoanStep3 = () => {
               </Button>
             ))}
           </SimpleGrid>
+          {errors?.annualIncome && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.annualIncome?.message as string}
+            </Text>
+          )}
         </InputForm>
         <Flex gap={'16px'}>
           <InputForm label="월 실수령액 또는 월 수입">
@@ -287,17 +363,28 @@ const ApplyLoanStep3 = () => {
                 placeholder="0"
                 type="number"
                 textAlign="right"
-                dir="rtl"
                 pr="50px"
                 onPaste={handlePaste}
                 {...register('monthlyIncome', {
-                  valueAsNumber: true,
+                  setValueAs: (value) => {
+                    if (value === '' || value === null || value === undefined) {
+                      return undefined
+                    }
+                    const num = Number(value)
+                    return isNaN(num) ? undefined : num
+                  },
                 })}
+                data-field="monthlyIncome"
               />
               <InputRightElement>
                 <Text>만원</Text>
               </InputRightElement>
             </InputGroup>
+            {errors?.monthlyIncome && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.monthlyIncome?.message as string}
+              </Text>
+            )}
           </InputForm>
           <InputForm label="월 고정 지출">
             <InputGroup>
@@ -306,16 +393,27 @@ const ApplyLoanStep3 = () => {
                 type="number"
                 onPaste={handlePaste}
                 textAlign="right"
-                dir="rtl"
                 pr="50px"
                 {...register('monthlyFixedExpense', {
-                  valueAsNumber: true,
+                  setValueAs: (value) => {
+                    if (value === '' || value === null || value === undefined) {
+                      return undefined
+                    }
+                    const num = Number(value)
+                    return isNaN(num) ? undefined : num
+                  },
                 })}
+                data-field="monthlyFixedExpense"
               />
               <InputRightElement>
                 <Text>만원</Text>
               </InputRightElement>
             </InputGroup>
+            {errors?.monthlyFixedExpense && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.monthlyFixedExpense?.message as string}
+              </Text>
+            )}
           </InputForm>
         </Flex>
 
@@ -338,6 +436,11 @@ const ApplyLoanStep3 = () => {
               </Button>
             ))}
           </SimpleGrid>
+          {errors?.debtScale && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.debtScale?.message as string}
+            </Text>
+          )}
         </InputForm>
         <Flex gap={'16px'}>
           <InputForm label="변제방법 (자금원천)">
@@ -364,9 +467,15 @@ const ApplyLoanStep3 = () => {
               <Box w={'100%'}>
                 <Input
                   placeholder="변제방법(자급원천) 입력"
-                  {...register('customRepaymentMethod')}
+                  {...register('repaymentDetail')}
+                  data-field="repaymentDetail"
                 />
               </Box>
+            )}
+            {errors?.repaymentMethod && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.repaymentMethod?.message as string}
+              </Text>
             )}
           </InputForm>
           <InputForm label="신용평가점수 (NICE 기준)">
@@ -400,6 +509,11 @@ const ApplyLoanStep3 = () => {
                 신용점수 조회하기
               </Button>
             </>
+            {errors?.creditScore && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.creditScore?.message as string}
+              </Text>
+            )}
           </InputForm>
         </Flex>
         <InputForm
@@ -416,6 +530,11 @@ const ApplyLoanStep3 = () => {
           >
             제출
           </Button>
+          {errors?.safeKey && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.safeKey?.message as string}
+            </Text>
+          )}
         </InputForm>
         <VStack
           alignItems={'flex-start'}
@@ -468,8 +587,14 @@ const ApplyLoanStep3 = () => {
               // placeholder="(예시) 자녀 출산으로 인해 산후 조리원 비용이 예상보다 많이 나왔습니다. <br/>오백만원만 빌리면, 3개월 동안 월급을 모아서 상환할 수 있습니다."
               placeholder="(예시) 서울시 성동구에 위치한 10억원짜리 아파트를 사게 되었습니다. 잔금이 2개월 후라, 잔금일에 아파트 2순위 담보로 2억원을 빌리고 싶습니다. 참고로 1순위 은행 대출은 4억원입니다. 연 소득이 6000만원이기 때문에 매월 대출 이자 납부에는 문제가 없으며, 대출 기간 3년 동안 월급을 열심히 모아서 원금 일부는 상환하고 나머지는 은행 신용대출로 대환할 계획입니다."
               {...register('purposeAndRepaymentPlan')}
+              data-field="purposeAndRepaymentPlan"
             />
           </Flex>
+          {errors?.purposeAndRepaymentPlan && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.purposeAndRepaymentPlan?.message as string}
+            </Text>
+          )}
         </InputForm>
         <Flex
           w={'100%'}
@@ -489,7 +614,7 @@ const ApplyLoanStep3 = () => {
       </Flex>
       <ModalBasis
         isOpen={isLoanAlertOpen}
-        visibleCloseButton={false}
+        visibleCloseButton={true}
         onClose={onLoanAlertClose}
         size={'sm'}
         body={
@@ -522,7 +647,7 @@ const ApplyLoanStep3 = () => {
 
       <ModalBasis
         isOpen={isLoanRejectOpen}
-        visibleCloseButton={false}
+        visibleCloseButton={true}
         onClose={onLoanRejectClose}
         size={'sm'}
         body={

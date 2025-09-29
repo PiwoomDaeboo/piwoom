@@ -1,0 +1,122 @@
+import { useMemo } from 'react'
+
+import { yupResolver } from '@hookform/resolvers/yup'
+
+import { UseFormProps, useForm } from 'react-hook-form'
+import * as yup from 'yup'
+
+import { LoanRequestType } from '@/generated/apis/@types/data-contracts'
+
+export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
+  const signUpFormSchema = useMemo(() => {
+    return yup.object().shape({
+      // Step1 fields
+      kind: yup.mixed().optional(),
+      email: yup.string().email().optional(),
+
+      // Step2 fields
+      jobType: yup.mixed().optional(),
+      postcode: yup.string().optional(),
+      baseAddress: yup.string().optional(),
+      detailAddress: yup.string().optional(),
+      housingType: yup.mixed().optional(),
+      residenceType: yup.mixed().optional(),
+      assetPostcode: yup.string().optional(),
+      assetBaseAddress: yup.string().optional(),
+      assetDetailAddress: yup.string().optional(),
+
+      // Step3 fields (required for step3 validation)
+      purpose: yup.string().required('필수 항목 입니다.'),
+      totalAsset: yup.string().required('필수 항목 입니다.'),
+      annualIncome: yup.string().required('필수 항목 입니다.'),
+      monthlyIncome: yup.number().min(0).required('필수 항목 입니다.'),
+      monthlyFixedExpense: yup.number().min(0).required('필수 항목 입니다.'),
+      debtScale: yup.string().required('필수 항목 입니다.'),
+      repaymentMethod: yup.string().required('필수 항목 입니다.'),
+      creditScore: yup.string().required('필수 항목 입니다.'),
+      purposeAndRepaymentPlan: yup.string().required('필수 항목 입니다.'),
+      safeKey: yup.string().nullable().optional(),
+
+      // Step4 fields
+      loanAmount: yup.number().min(0).optional(),
+      repaymentType: yup.mixed().optional(),
+      interestPaymentDate: yup.mixed().optional(),
+      loanPeriod: yup.number().min(0).optional(),
+      bank: yup.mixed().optional(),
+      accountNumber: yup.string().optional(),
+      accountHolder: yup.string().optional(),
+      accountHolderSsn: yup.string().optional(),
+      incomeCertificate: yup.string().optional(),
+      residentRegistrationCopy: yup.string().optional(),
+      healthInsuranceEligibilityConfirmation: yup.string().optional(),
+      healthInsurancePaymentConfirmation: yup.string().optional(),
+      healthInsurancePaymentConfirmation2: yup.string().optional(),
+      identityCard: yup.string().optional(),
+      fileSet: yup.mixed().optional(),
+
+      // Optional fields
+      purposeDetail: yup.string().optional(),
+      repaymentDetail: yup.string().optional(),
+      electronicDocumentConsent: yup.boolean().optional(),
+      companyName: yup.string().max(100).optional(),
+      companyAddress: yup.string().optional(),
+      companyBusinessNumber: yup.string().max(20).optional(),
+      employmentType: yup.mixed().optional(),
+      hireYear: yup.number().min(0).nullable().optional(),
+      hireMonth: yup.number().min(0).nullable().optional(),
+      rrcAddress: yup.string().max(500).optional(),
+    })
+  }, [])
+
+  return useForm<LoanRequestType>({
+    resolver: yupResolver(signUpFormSchema) as any,
+    mode: 'onChange',
+    ...options,
+  })
+}
+
+// Step3 전용 폼 훅
+export const useApplyLoanStep3Form = (
+  options?: UseFormProps<LoanRequestType>,
+) => {
+  const step3Schema = useMemo(() => {
+    return yup.object().shape({
+      // Step3 필드들만 필수로 설정
+      purpose: yup.string().required('대출용도를 선택해주세요.'),
+      totalAsset: yup.string().required('총 자산 규모를 선택해주세요.'),
+      annualIncome: yup.string().required('연 소득을 선택해주세요.'),
+      monthlyIncome: yup.string().required('월 실수령액을 입력해주세요.'),
+      monthlyFixedExpense: yup
+        .string()
+        .required('월 고정 지출을 입력해주세요.'),
+      debtScale: yup.string().required('부채규모를 선택해주세요.'),
+      repaymentMethod: yup.string().required('변제방법을 선택해주세요.'),
+      creditScore: yup.string().required('신용평가점수를 선택해주세요.'),
+      purposeAndRepaymentPlan: yup
+        .string()
+        .required('대출 용도 및 상환 계획을 입력해주세요.'),
+      // safeKey: yup
+      //   .string()
+      //   .min(1, '신용정보 제출이 필요합니다.')
+      //   .required('신용정보 제출이 필요합니다.'),
+      safeKey: yup.string().nullable().optional(),
+      // 조건부 필드들
+      purposeDetail: yup.string().when('purpose', {
+        is: 'DIRECT_INPUT',
+        then: (schema) => schema.required('대출 용도를 입력해주세요.'),
+        otherwise: (schema) => schema.optional(),
+      }),
+      repaymentDetail: yup.string().when('repaymentMethod', {
+        is: 'DIRECT_INPUT',
+        then: (schema) => schema.required('변제방법을 입력해주세요.'),
+        otherwise: (schema) => schema.optional(),
+      }),
+    })
+  }, [])
+
+  return useForm<LoanRequestType>({
+    resolver: yupResolver(step3Schema) as any,
+    mode: 'onChange',
+    ...options,
+  })
+}

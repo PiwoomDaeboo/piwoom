@@ -72,7 +72,7 @@ function AddressModal({ isOpen, onClose, type }: AddressModalProps) {
   return (
     <ModalBasis
       isOpen={isOpen}
-      visibleCloseButton={false}
+      visibleCloseButton={true}
       onClose={handleClose}
       size={{ base: 'full', sm: 'xl' }}
       header={
