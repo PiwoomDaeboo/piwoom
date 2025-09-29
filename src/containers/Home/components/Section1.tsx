@@ -29,15 +29,15 @@ const Section1 = () => {
     {
       icon: Loan1Icon,
       title: '월급 대출',
-      description: '월급 직장인을 위한',
+      description: '직장인을 위한 대출',
       badges: ['#최대 6개월치 월급', '#최저 월 1% ~', '#최대 1500만원 까지'],
       href: '/loan?type=salary',
     },
     {
       icon: Loan2Icon,
       title: '신용 대출',
-      description: '피움 자체 신용도 평가 시스템으로',
-      badges: ['#DSR 미적용', '#신용점수 영향X', '#서류 제출X'],
+      description: '피움 자체 신용도 평가',
+      badges: ['#DSR 미적용', '#신용점수 영향 X', '#서류 제출 X'],
       href: '/loan?type=credit',
     },
     {
@@ -68,6 +68,15 @@ const Section1 = () => {
   return (
     <Flex w="100%" justifyContent="center" py={'80px'}>
       <Container>
+        <Box mb={{ base: '32px', md: '36px' }}>
+          <Text textStyle={'pre-heading-1'}>
+            쉽고 빠른{' '}
+            <Box as={'span'} color={'primary.4'}>
+              비대면 대출 서비스
+            </Box>
+            를 시작해보세요
+          </Text>
+        </Box>
         <SimpleGrid
           display={{ base: 'none', md: 'grid' }}
           columns={3}

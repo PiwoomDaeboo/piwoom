@@ -575,20 +575,21 @@ const LoanTermsTable = () => {
 
 const LoanStandardTerms = () => {
   return (
-    <VStack spacing={'16px'}>
+    <VStack w={'100%'} spacing={'16px'} alignItems={'flex-start'}>
       <Text textStyle={'pre-body-68'}>
-        제1조(목적) 이 약관은 대부업자와 채무자간의 대부거래에 있어서 권리와
-        의무를 명확히 하고 공정하며 건전한 금전소비대차를 하는 것을 목적으로
-        한다.
+        <strong>제1조(목적)</strong> 이 약관은 대부업자와 채무자간의 대부거래에
+        있어서 권리와 의무를 명확히 하고 공정하며 건전한 금전소비대차를 하는
+        것을 목적으로 한다.
       </Text>
       <Text textStyle={'pre-body-68'}>
-        제2조(적용범위) 이 약관은 대부업자와 채무자 사이의 가계 또는 기업의
-        자금대부 또는 그 중개 및 어음할인 등의 금전의 대부와 관련된 대부업자와
-        채무자 사이의 모든 거래에 적용된다.
+        <strong>제2조(적용범위)</strong> 이 약관은 대부업자와 채무자 사이의 가계
+        또는 기업의 자금대부 또는 그 중개 및 어음할인 등의 금전의 대부와 관련된
+        대부업자와 채무자 사이의 모든 거래에 적용된다.
       </Text>
-      <VStack spacing={'10px'}>
+      <VStack w={'100%'} spacing={'10px'} alignItems={'flex-start'}>
         <Text textStyle={'pre-body-68'}>
-          제3조(용어의 정의) 이 약관에서 사용하는 용어의 정의는 다음과 같다.
+          <strong>제3조(용어의 정의)</strong> 이 약관에서 사용하는 용어의 정의는
+          다음과 같다.
         </Text>
         <Text textStyle={'pre-body-68'}>
           1. “대부업”이라 함은 금전의 대부 또는 그 중개, 금전의 대부와 관련한

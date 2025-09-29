@@ -19,6 +19,7 @@ import {
   CaretRightIcon,
   InstagramIcon,
   NaverIcon,
+  NoticeIcon,
   Sectionicon1Icon,
 } from '@/generated/icons/MyIcons'
 
@@ -116,7 +117,7 @@ function Section5() {
                 <CaretRightIcon boxSize={'16px'} />
               </Button>
             </VStack>
-            <Sectionicon1Icon boxSize={'100px'} />
+            <NoticeIcon boxSize={'100px'} />
           </Flex>
           <Flex
             p={'32px 28px'}

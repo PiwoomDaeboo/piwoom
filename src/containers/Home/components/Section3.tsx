@@ -70,14 +70,15 @@ function Section3() {
     >
       <Flex
         flexDir={{ base: 'column', sm: 'row' }}
-        alignItems={'center'}
+        alignItems={'flex-end'}
         px={'16px'}
       >
         <Text textStyle={'pre-display-4'} textAlign={'center'}>
           피움의 대출, 이런 분들께
           <Box as={'br'} display={{ base: 'block', sm: 'none' }} /> 도움이 될
-          거예요 <LeafIcon boxSize={'24px'} />
+          거예요
         </Text>
+        <LeafIcon boxSize={'24px'} mb={'4px'} />
       </Flex>
 
       <Box w="100%" overflow="hidden" py={'45px'} position="relative">

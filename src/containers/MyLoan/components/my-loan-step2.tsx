@@ -97,7 +97,8 @@ const MyLoanStep2 = () => {
                 123-45678-911
               </Text>
               <Button
-                onClick={onElectronicContractModalOpen}
+                // onClick={onElectronicContractModalOpen}
+                onClick={() => router.push('/my-loan?step=3')}
                 variant={'solid-primary'}
               >
                 전자계약서 작성
