@@ -87,7 +87,7 @@ function Section3() {
           gap={'32px'}
           animation={{
             base: 'scrollLeft 5s linear infinite',
-            md: 'scrollLeft 30s linear infinite',
+            sm: 'scrollLeft 10s linear infinite',
           }}
           sx={{
             '@keyframes scrollLeft': {

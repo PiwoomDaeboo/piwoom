@@ -274,9 +274,10 @@ const ApplyLoanStep2 = () => {
             variant={'solid-primary'}
             w={'160px'}
             isDisabled={!isPhoneCertification}
-            onClick={() =>
+            onClick={() => {
+              methods.setValue('kind', router.query.type as string)
               router.replace('/apply-loan?step=3&type=' + router.query.type)
-            }
+            }}
           >
             다음
           </Button>

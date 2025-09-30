@@ -74,6 +74,7 @@ const HomeHeaderDrawer = ({
               <HStack gap={'10px'}>
                 <Button variant={'black-primary'}>대출 신청</Button>
                 <IconButton
+                  border={0}
                   size={'lg'}
                   icon={<MenuIcon w="24px" h="24px" color={'grey.10'} />}
                   onClick={onClose}

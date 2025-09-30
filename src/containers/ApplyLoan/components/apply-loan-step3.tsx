@@ -44,6 +44,7 @@ const ApplyLoanStep3 = () => {
     control,
     watch,
     setValue,
+    trigger,
     handleSubmit,
     formState: { errors },
   } = useFormContext()
@@ -90,6 +91,7 @@ const ApplyLoanStep3 = () => {
 
   const handleButtonSelect = (field: string, value: string) => {
     setValue(`${field}`, value)
+    trigger(field) // 해당 필드의 유효성 검사를 다시 트리거하여 에러 메시지 업데이트
   }
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -176,8 +178,44 @@ const ApplyLoanStep3 = () => {
     }
   }
 
-  // 다음 버튼 클릭 핸들러 (handleSubmit 사용)
-  const handleNextClick = handleSubmit(onStep3Submit, onStep3Error)
+  // Step3 관련 필드들만 검증하는 함수
+  const validateStep3Fields = async () => {
+    const step3Fields = [
+      'purpose',
+      'totalAsset',
+      'annualIncome',
+      'monthlyIncome',
+      'monthlyFixedExpense',
+      'debtScale',
+      'repaymentMethod',
+      'creditScore',
+      'purposeAndRepaymentPlan',
+    ]
+
+    // 조건부 필드들도 추가
+    if (loanPurpose === 'DIRECT_INPUT') {
+      step3Fields.push('purposeDetail')
+    }
+    if (repaymentMethod === 'DIRECT_INPUT') {
+      step3Fields.push('repaymentDetail')
+    }
+
+    // step3 필드들만 검증
+    const isValid = await trigger(step3Fields)
+    return isValid
+  }
+
+  // 다음 버튼 클릭 핸들러
+  const handleNextClick = async () => {
+    const isValid = await validateStep3Fields()
+
+    if (isValid) {
+      const formData = watch()
+      onStep3Submit(formData)
+    } else {
+      onStep3Error(errors)
+    }
+  }
 
   console.log('Form errors:', errors)
 

@@ -7,20 +7,21 @@ const Section4 = () => {
     <>
       <Container
         display={{ base: 'none', md: 'block' }}
-        pb={{ base: '56px', sm: '64px' }}
+        pb={{ base: '56px', sm: '96px' }}
       >
         <Flex
           py={'56px'}
           bgImage={MY_IMAGES.CONSULTING_IMAGE.src}
+          objectFit={'contain'}
           bgSize={'cover'}
           borderRadius={'20px'}
           px={'80px'}
         >
           <VStack alignItems={'flex-start'}>
-            <Text textStyle={'pre-heading-1'}>
+            <Text textStyle={'pre-heading-1'} color={'grey.9'}>
               법인 대출 혹은 사업자 대출이 필요한 경우
             </Text>
-            <Text textStyle={'pre-body-3'}>
+            <Text textStyle={'pre-body-3'} color={'grey.8'}>
               성장 기회를 포착하셨나요? 지금 바로 상담을 신청해보세요.
             </Text>
             <Button
@@ -50,7 +51,7 @@ const Section4 = () => {
             <Text textStyle={'pre-heading-1'} color={'grey.9'}>
               법인 대출 혹은 사업자 대출이 필요한 경우
             </Text>
-            <Text textStyle={'pre-body-3'}>
+            <Text textStyle={'pre-body-3'} color={'grey.8'}>
               성장 기회를 포착하셨나요? 지금 바로 상담을 신청해보세요.
             </Text>
             <Button
