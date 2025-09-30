@@ -71,12 +71,15 @@ const HomeHeaderDrawer = ({
             <Flex
               alignItems={'center'}
               justifyContent={'space-between'}
-              py={'20px'}
-              h={'80px'}
+              py={'8px'}
+              h={'64px'}
             >
-              <HeaderlogoIcon boxSize={'127px'} h={'25px'} />
+              <Link variant={'unstyled'} href={ROUTES.MAIN}>
+                <HeaderlogoIcon boxSize={'107px'} h={'20px'} />
+              </Link>
               <HStack gap={'10px'}>
                 <Button
+                  w={'83px'}
                   variant={'black-primary'}
                   onClick={() => router.push('/apply-loan')}
                 >

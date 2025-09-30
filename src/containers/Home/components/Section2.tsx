@@ -28,7 +28,10 @@ function Section2() {
           justifyContent={{ base: 'space-between', md: 'space-between' }}
           alignItems={{ base: 'flex-start', md: 'center' }}
         >
-          <VStack mb={{ base: '48px', sm: '48px', md: '0px' }}>
+          <VStack
+            mb={{ base: '48px', sm: '48px', md: '0px' }}
+            alignItems={'flex-start'}
+          >
             <Text textStyle={'pre-display-4'} color={'grey.10'}>
               피움만의 비대면 대출
             </Text>

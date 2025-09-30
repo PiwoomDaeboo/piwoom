@@ -152,11 +152,15 @@ const HomeHeader = ({
         <Flex
           alignItems={'center'}
           justifyContent={'space-between'}
-          py={'20px'}
-          h={'80px'}
+          py={{ base: '8px', md: '20px' }}
+          // p={{ base: '8px 24px 8px 40px', md: '20px' }}
+          h={{ base: '64px', md: '80px' }}
         >
           <Link variant={'unstyled'} href={ROUTES.MAIN}>
-            <HeaderlogoIcon boxSize={'174px'} h={'25px'} />
+            <HeaderlogoIcon
+              boxSize={{ base: '107px', sm: '127px', md: '174px' }}
+              h={'20px'}
+            />
           </Link>
           <HStack
             gap={'10px'}
@@ -212,7 +216,8 @@ const HomeHeader = ({
               대출 신청
             </Button>
             <IconButton
-              size={'lg'}
+              p={0}
+              m={0}
               border={0}
               icon={<MenuIcon w="24px" h="24px" color={'grey.10'} />}
               onClick={isDrawerOpen ? onDrawerClose : onDrawerOpen}

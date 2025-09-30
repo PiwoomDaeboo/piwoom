@@ -62,7 +62,7 @@ const HomeLayout = ({
         flexDirection="column"
         justifyContent={'center'}
         alignItems={'center'}
-        pt={{ base: '160px', md: '130px' }} // 헤더 높이만큼 padding-top 추가
+        pt={{ base: '130px', sm: '114px', md: '130px' }} // 헤더 높이만큼 padding-top 추가
         {...containerProps}
       >
         {content}
