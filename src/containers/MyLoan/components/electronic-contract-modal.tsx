@@ -3,24 +3,39 @@ import React, { useEffect, useState } from 'react'
 import { Box, Button, Flex, Text } from '@chakra-ui/react'
 
 import ModalBasis from '@/components/@Modal/ModalBasis'
-import {
-  KakaoAuthenticationIcon,
-  KbAuthenticationIcon,
-  NaverAuthenticationIcon,
-  PassAuthenticationIcon,
-  ShinhanAuthenticationIcon,
-  TossAuthenticationIcon,
-} from '@/generated/icons/MyIcons'
+import { useLoanSignCreateMutation } from '@/generated/apis/Loan/Loan.query'
 
 interface ElectronicContractModalProps {
   isOpen: boolean
   onClose: () => void
+  contractId?: number
 }
 
 function ElectronicContractModal({
   isOpen,
   onClose,
+  contractId = 1,
 }: ElectronicContractModalProps) {
+  const [contractSignature, setContractSignature] = useState<string | null>(
+    null,
+  )
+  const { mutate: createContractSignature } = useLoanSignCreateMutation({
+    options: {
+      onSuccess: (data) => {
+        setContractSignature(data.signUrl)
+        console.log('createContractSignature', data)
+      },
+      onError: (error) => {
+        console.error('createContractSignature', error)
+      },
+    },
+  })
+  useEffect(() => {
+    createContractSignature({
+      id: contractId,
+    })
+  }, [contractId])
+
   return (
     <ModalBasis
       isOpen={isOpen}
@@ -51,9 +66,7 @@ function ElectronicContractModal({
               overflowY: 'scroll',
               maxHeight: '100%',
             }}
-            src={
-              'https://app.modusign.co.kr/embedded-participant?di=bc615c10-92d2-11f0-b573-dd5faac0c738&pi=bccf8730-92d2-11f0-b573-dd5faac0c738&ci=MDEwOTc5Nzk3NDY&sm=SECURE_LINK&token=sha256.GjhqbFrTXWZsJ7T9t6OPQTXRIfZHDS1wLlShhRy4Yi4&expiry=1758532991884&redirectUrl=http%3A%2F%2Fapi.piwoom.com%2Fv1%2Floan%2F1%2Fsign_callback%2F'
-            }
+            src={contractSignature || ''}
           ></iframe>
         </Box>
       }
@@ -71,6 +84,7 @@ function ElectronicContractModal({
             <Button
               variant={'solid-primary'}
               w={'100%'}
+              // onClick={}
               // onClick={handleOtpWetax}
             >
               인증완료

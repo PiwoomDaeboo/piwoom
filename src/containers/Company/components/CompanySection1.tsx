@@ -96,7 +96,7 @@ function CompanySection1() {
                 transform: 'translateX(0)',
               },
               '100%': {
-                transform: 'translateX(-50%)',
+                transform: 'translateX(-100%)',
               },
             },
           }}
@@ -107,7 +107,7 @@ function CompanySection1() {
               key={`${data.src}-${index}`}
               ratio={512 / 380}
               borderRadius={'20px'}
-              minW="512px"
+              minW={{ base: '280px', sm: '320px', md: '400px', lg: '512px' }}
               flexShrink={0}
             >
               <ImageAsNext

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import { useRouter } from 'next/router'
+
 import { Box, Button, Flex, HStack, Input, Text } from '@chakra-ui/react'
 
 import ModalBasis from '@/components/@Modal/ModalBasis'
@@ -11,13 +13,14 @@ interface CustomerInfoModalProps {
 
 function CustomerInfoModal({ isOpen, onClose }: CustomerInfoModalProps) {
   const [code, setCode] = useState('')
-
+  const router = useRouter()
   const handleConfirm = () => {
-    onClose()
+    router.push('/my-loan?step=3')
   }
 
   const handleClose = () => {
-    onClose()
+    router.push('/my-loan')
+    window.open('http://pf.kakao.com/_xkxoben/chat', '_blank')
   }
 
   return (

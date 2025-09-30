@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 
 export const formatDate = ({
   date,
-  format = 'YYYY.MM.DD HH:mm:ss',
+  format = 'YYYY.MM.DD',
 }: {
   date?: Date
   format?: string

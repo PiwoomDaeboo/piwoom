@@ -20,7 +20,8 @@ export const CHECKBOX_STYLES = {
   '.chakra-checkbox__control': {
     borderRadius: '50%',
     border: '1px solid',
-    borderColor: 'border.basic.1',
+    borderColor: 'border.basic.2',
+
     _checked: {
       bg: 'primary.3',
       borderColor: 'primary.3',
@@ -38,7 +39,7 @@ export const SQUARE_CHECKBOX_STYLES = {
   '.chakra-checkbox__control': {
     borderRadius: '4px',
     border: '1px solid',
-    borderColor: 'border.basic.1',
+    borderColor: 'border.basic.2',
     _checked: {
       bg: 'primary.3',
       borderRadius: '4px',

@@ -28,7 +28,7 @@ const baseStyle = definePartsStyle({
   control: {
     borderRadius: '3px',
     ...defineStyle({
-      border: 'content.6',
+      border: 'grey.4',
       bg: 'transparent',
     }),
     _indeterminate: {

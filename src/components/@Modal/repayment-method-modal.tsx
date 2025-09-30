@@ -34,7 +34,7 @@ function RepaymentMethodModal({ isOpen, onClose }: RepaymentMethodModalProps) {
       isOpen={isOpen}
       visibleCloseButton={true}
       onClose={handleClose}
-      size={{ base: 'full', sm: 'sm' }}
+      size={{ base: 'full', sm: 'md' }}
       header={
         <Box
           pb={'16px'}
@@ -69,19 +69,80 @@ function RepaymentMethodModal({ isOpen, onClose }: RepaymentMethodModalProps) {
             </Text>
 
             <Box>
-              <AspectRatio ratio={335 / 141}>
-                <ImageAsNext
-                  src={MY_IMAGES.LUMP_SUM.src}
-                  alt={MY_IMAGES.LUMP_SUM.alt}
-                />
-              </AspectRatio>
+              <SimpleGrid
+                maxW={'336px'}
+                columns={4}
+                spacing={2}
+                h={'120px'}
+                alignItems={'flex-end'}
+              >
+                <Flex flexDir="column" gap={'5px'}>
+                  <Flex
+                    borderRadius={'4px'}
+                    bg={'accent.blue1'}
+                    justifyContent="center"
+                    alignItems="center"
+                    h={'39px'}
+                    p={'10px 12px'}
+                  >
+                    <Text textStyle={'pre-caption-1'} color={'primary.4'}>
+                      이자
+                    </Text>
+                  </Flex>
+                  <Box h={'16px'}></Box>
+                </Flex>
+                <Flex flexDir="column" gap={'5px'}>
+                  <Flex
+                    borderRadius={'6px'}
+                    bg={'accent.blue1'}
+                    justifyContent="center"
+                    alignItems="center"
+                    h={'39px'}
+                    p={'10px 12px'}
+                  ></Flex>
+                  <Box h={'16px'}></Box>
+                </Flex>
+                <Flex flexDir="column" gap={'5px'}>
+                  <Flex
+                    borderRadius={'6px'}
+                    bg={'accent.blue1'}
+                    justifyContent="center"
+                    alignItems="center"
+                    h={'39px'}
+                    p={'10px 12px'}
+                  ></Flex>
+                  <Box h={'16px'}></Box>
+                </Flex>
+                <Flex
+                  flexDir="column"
+                  alignItems={'center'}
+                  gap={'5px'}
+                  h={'100%'}
+                  w={'100%'}
+                >
+                  <Flex
+                    borderRadius={'6px'}
+                    bg={'primary.3'}
+                    justifyContent="center"
+                    alignItems="center"
+                    h={'100%'}
+                    w={'100%'}
+                    p={'10px 12px'}
+                  />
+                  <Text h={'16px'} textStyle={'pre-caption-4'} color={'grey.8'}>
+                    대출 만기일
+                  </Text>
+                </Flex>
+              </SimpleGrid>
+
               <Flex
+                mt={'16px'}
                 p={'3px'}
                 justifyContent={'center'}
                 alignItems={'center'}
                 w={'100%'}
                 bg={'grey.1'}
-                borderRadius={'4px'}
+                borderRadius={'6px'}
               >
                 <Text
                   textStyle={'pre-caption-1'}
@@ -115,19 +176,94 @@ function RepaymentMethodModal({ isOpen, onClose }: RepaymentMethodModalProps) {
             </Text>
 
             <Box>
-              <AspectRatio ratio={335 / 141}>
+              <SimpleGrid maxW={'336px'} columns={4} spacing={2} h={'120px'}>
+                <Flex flexDir="column" borderRadius={'6px'}>
+                  <Flex
+                    borderTopRadius={'4px'}
+                    bg={'accent.blue1'}
+                    justifyContent="center"
+                    alignItems="center"
+                    h={'40%'}
+                  >
+                    <Text textStyle={'pre-caption-1'} color={'primary.4'}>
+                      이자
+                    </Text>
+                  </Flex>
+                  <Flex
+                    borderBottomRadius={'4px'}
+                    bg={'primary.3'}
+                    justifyContent="center"
+                    alignItems="center"
+                    h={'60%'}
+                  >
+                    <Text textStyle={'pre-caption-1'} color={'grey.0'}>
+                      원금
+                    </Text>
+                  </Flex>
+                </Flex>
+                <Flex flexDir="column" borderRadius={'6px'}>
+                  <Flex
+                    borderTopRadius={'4px'}
+                    bg={'accent.blue1'}
+                    justifyContent="center"
+                    alignItems="center"
+                    h={'35%'}
+                  ></Flex>
+                  <Flex
+                    borderBottomRadius={'4px'}
+                    bg={'primary.3'}
+                    justifyContent="center"
+                    alignItems="center"
+                    h={'65%'}
+                  ></Flex>
+                </Flex>
+                <Flex flexDir="column" borderRadius={'6px'}>
+                  <Flex
+                    borderTopRadius={'4px'}
+                    bg={'accent.blue1'}
+                    justifyContent="center"
+                    alignItems="center"
+                    h={'25%'}
+                  ></Flex>
+                  <Flex
+                    borderBottomRadius={'4px'}
+                    bg={'primary.3'}
+                    justifyContent="center"
+                    alignItems="center"
+                    h={'75%'}
+                  ></Flex>
+                </Flex>
+                <Flex flexDir="column" borderRadius={'6px'}>
+                  <Flex
+                    borderTopRadius={'4px'}
+                    bg={'accent.blue1'}
+                    justifyContent="center"
+                    alignItems="center"
+                    h={'15%'}
+                  ></Flex>
+                  <Flex
+                    borderBottomRadius={'4px'}
+                    bg={'primary.3'}
+                    justifyContent="center"
+                    alignItems="center"
+                    h={'85%'}
+                  ></Flex>
+                </Flex>
+              </SimpleGrid>
+              {/* <AspectRatio ratio={345 / 121}>
                 <ImageAsNext
                   src={MY_IMAGES.EQUAL_INSTALLMENT.src}
                   alt={MY_IMAGES.EQUAL_INSTALLMENT.alt}
                 />
-              </AspectRatio>
+              </AspectRatio> */}
               <Flex
+                mt={'16px'}
                 p={'3px'}
                 justifyContent={'center'}
                 alignItems={'center'}
                 w={'100%'}
                 bg={'grey.1'}
-                borderRadius={'4px'}
+                borderRadius={'6px'}
               >
                 <Text
                   textStyle={'pre-caption-1'}

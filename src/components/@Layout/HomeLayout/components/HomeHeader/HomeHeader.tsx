@@ -205,7 +205,12 @@ const HomeHeader = ({
             </Button>
           </HStack>
           <HStack display={{ base: 'flex', md: 'none' }}>
-            <Button variant={'black-primary'}>대출 신청</Button>
+            <Button
+              variant={'black-primary'}
+              onClick={() => router.push('/apply-loan')}
+            >
+              대출 신청
+            </Button>
             <IconButton
               size={'lg'}
               border={0}

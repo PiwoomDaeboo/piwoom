@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router'
+
 import { Link } from '@chakra-ui/next-js'
 import {
   Accordion,
@@ -22,6 +24,7 @@ import {
   HeaderlogoIcon,
   MenuIcon,
 } from '@/generated/icons/MyIcons'
+import { ROUTES } from '@/generated/path/routes'
 
 import { MENU_ITEMS } from '../../consts/menu'
 
@@ -35,6 +38,7 @@ const HomeHeaderDrawer = ({
   onClose,
   ...props
 }: HomeHeaderDrawerProps) => {
+  const router = useRouter()
   return (
     <DrawerBasis
       isOpen={isOpen}
@@ -72,7 +76,12 @@ const HomeHeaderDrawer = ({
             >
               <HeaderlogoIcon boxSize={'127px'} h={'25px'} />
               <HStack gap={'10px'}>
-                <Button variant={'black-primary'}>대출 신청</Button>
+                <Button
+                  variant={'black-primary'}
+                  onClick={() => router.push('/apply-loan')}
+                >
+                  대출 신청
+                </Button>
                 <IconButton
                   border={0}
                   size={'lg'}
