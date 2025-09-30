@@ -200,11 +200,22 @@ const ApplyLoanStep4 = () => {
   })
   const { identityVerificationToken } = useSessionStorage()
 
-  // Step4 성공 시 실행될 함수
+  const { type } = router.query
+  const typeConvert = (type: string) => {
+    if (type === 'salary') {
+      return 'A'
+    } else if (type === 'credit') {
+      return 'B'
+    } else if (type === 'mortgage') {
+      return 'C'
+    } else {
+      return 'A'
+    }
+  }
+
   const onStep4Submit = (data: any) => {
-    console.log('Step4 폼 데이터:', data)
     const requestData = {
-      kind: 'A',
+      kind: typeConvert(type as string) || 'A',
       identityVerificationToken: identityVerificationToken,
       incomeCertificate: '',
       residentRegistrationCopy: '',
@@ -215,7 +226,6 @@ const ApplyLoanStep4 = () => {
         name: 'bb',
         path: 'bb',
       },
-
       safeKey: 'bbb',
       accountHolder: 'bb',
       accountHolderSsn: 'bb',
