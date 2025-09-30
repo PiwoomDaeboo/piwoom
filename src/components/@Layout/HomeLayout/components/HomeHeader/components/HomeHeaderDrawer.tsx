@@ -103,51 +103,90 @@ const HomeHeaderDrawer = ({
       body={
         <Container px={'0px'}>
           <VStack alignItems={'flex-start'} spacing={'0px'} px={'0px'}>
-            {MENU_ITEMS.map((item) => (
-              <Accordion key={item.label} allowToggle w={'100%'} px={'0px'}>
-                <AccordionItem
-                  border={'none'}
-                  borderBottom={'1px solid'}
-                  borderColor={'grey.2'}
-                >
-                  <AccordionButton py={'10px'} px={'0px'}>
-                    <Box as="span" flex="1" textAlign="left">
+            {MENU_ITEMS.map((item) => {
+              // submenuItems가 없는 경우 바로 링크로 이동
+              if (!item.submenuItems || item.submenuItems.length === 0) {
+                return (
+                  <Box
+                    key={item.label}
+                    w={'100%'}
+                    borderBottom={'1px solid'}
+                    borderColor={'grey.2'}
+                    py={'10px'}
+                    px={'0px'}
+                    _hover={{
+                      bg: 'primary.1',
+                    }}
+                  >
+                    <Link href={item.href || '#'}>
                       <HStack alignItems={'center'} gap={'10px'}>
                         <Text textStyle={'pre-body-3'} color={'grey.10'}>
                           {item.label}
                         </Text>
                       </HStack>
-                    </Box>
-                    <CaretDownIcon
-                      boxSize={'24px'}
-                      color={'grey.8'}
-                      ml={'20px'}
-                    />
-                  </AccordionButton>
+                    </Link>
+                  </Box>
+                )
+              }
 
-                  <AccordionPanel py={'12px'} bg={'grey.0'}>
-                    <Flex flexDir={'column'} gap={'10px'}>
-                      {item.submenuItems?.map((subItem) => (
-                        <Box
-                          key={subItem.label}
-                          p={'12px 16px'}
-                          borderRadius={'16px'}
-                          textStyle={'pre-body-4'}
-                          color={'grey.10'}
-                          _hover={{
-                            bg: 'primary.1',
-                            color: 'primary.4',
-                            textStyle: 'pre-body-3',
-                          }}
-                        >
-                          <Link href={subItem.href}>{subItem.label}</Link>
-                        </Box>
-                      ))}
-                    </Flex>
-                  </AccordionPanel>
-                </AccordionItem>
-              </Accordion>
-            ))}
+              // submenuItems가 있는 경우 Accordion 사용
+              return (
+                <Accordion key={item.label} allowToggle w={'100%'} px={'0px'}>
+                  <AccordionItem
+                    border={'none'}
+                    borderBottom={'1px solid'}
+                    borderColor={'grey.2'}
+                  >
+                    <AccordionButton
+                      py={'10px'}
+                      px={'0px'}
+                      _expanded={{
+                        '& > svg': {
+                          transform: 'rotate(180deg)',
+                        },
+                      }}
+                    >
+                      <Box as="span" flex="1" textAlign="left">
+                        <HStack alignItems={'center'} gap={'10px'}>
+                          <Text textStyle={'pre-body-3'} color={'grey.10'}>
+                            {item.label}
+                          </Text>
+                        </HStack>
+                      </Box>
+
+                      <CaretDownIcon
+                        boxSize={'24px'}
+                        color={'grey.8'}
+                        ml={'20px'}
+                        transform={'rotate(0deg)'}
+                        transition={'transform 0.2s ease-in-out'}
+                      />
+                    </AccordionButton>
+
+                    <AccordionPanel py={'12px'} bg={'grey.0'}>
+                      <Flex flexDir={'column'} gap={'10px'}>
+                        {item.submenuItems?.map((subItem) => (
+                          <Box
+                            key={subItem.label}
+                            p={'12px 16px'}
+                            borderRadius={'16px'}
+                            textStyle={'pre-body-4'}
+                            color={'grey.10'}
+                            _hover={{
+                              bg: 'primary.1',
+                              color: 'primary.4',
+                              textStyle: 'pre-body-3',
+                            }}
+                          >
+                            <Link href={subItem.href}>{subItem.label}</Link>
+                          </Box>
+                        ))}
+                      </Flex>
+                    </AccordionPanel>
+                  </AccordionItem>
+                </Accordion>
+              )
+            })}
           </VStack>
         </Container>
       }
