@@ -25,11 +25,7 @@ import ElectronicContractModal from './electronic-contract-modal'
 const MyLoanStep2 = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const router = useRouter()
-  const {
-    isOpen: isElectronicContractModalOpen,
-    onOpen: onElectronicContractModalOpen,
-    onClose: onElectronicContractModalClose,
-  } = useDisclosure()
+
   //  <iframe
   //           src={
   //             'https://app.modusign.co.kr/embedded-participant?di=bc615c10-92d2-11f0-b573-dd5faac0c738&pi=bccf8730-92d2-11f0-b573-dd5faac0c738&ci=MDEwOTc5Nzk3NDY&sm=SECURE_LINK&token=sha256.GjhqbFrTXWZsJ7T9t6OPQTXRIfZHDS1wLlShhRy4Yi4&expiry=1758532991884&redirectUrl=http%3A%2F%2Fapi.piwoom.com%2Fv1%2Floan%2F1%2Fsign_callback%2F'
@@ -49,10 +45,7 @@ const MyLoanStep2 = () => {
   return (
     <Container>
       <CustomerInfoModal isOpen={isOpen} onClose={onClose} />
-      <ElectronicContractModal
-        isOpen={isElectronicContractModalOpen}
-        onClose={onElectronicContractModalClose}
-      />
+
       <Flex
         pt={{ base: '40px', sm: '48px', md: '80px' }}
         pb={'120px'}
@@ -98,7 +91,8 @@ const MyLoanStep2 = () => {
               </Text>
               <Button
                 // onClick={onElectronicContractModalOpen}
-                onClick={() => router.push('/my-loan?step=3')}
+                onClick={onOpen}
+                // onClick={() => router.push('/my-loan?step=3')}
                 variant={'solid-primary'}
               >
                 전자계약서 작성
@@ -110,7 +104,6 @@ const MyLoanStep2 = () => {
               bg={'background.basic.2'}
               borderRadius={'10px'}
               gap={'2px'}
-              onClick={onOpen}
             >
               <HStack justifyContent={'flex-start'} alignItems={'center'}>
                 <Text textStyle={'pre-body-7'} color={'grey.9'}>
@@ -242,7 +235,7 @@ const MyLoanStep2 = () => {
             </SimpleGrid>
           </Flex>
 
-          <Flex
+          {/* <Flex
             w={'100%'}
             justifyContent={'center'}
             pt={'40px'}
@@ -256,7 +249,7 @@ const MyLoanStep2 = () => {
             >
               다음
             </Button>
-          </Flex>
+          </Flex> */}
         </VStack>
       </Flex>
     </Container>

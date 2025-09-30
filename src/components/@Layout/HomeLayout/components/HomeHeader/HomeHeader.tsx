@@ -120,15 +120,26 @@ const HomeHeader = ({
             >
               피움대부 주식회사
             </Text>
-            <Flex flexDir={{ base: 'column', md: 'row' }}>
+            <Flex
+              flexDir={{ base: 'column', sm: 'row' }}
+              gap={{ base: '0px', sm: '6px' }}
+            >
               <Text
-                textStyle={{ base: 'pre-body-7', md: 'pre-heading-2' }}
+                textStyle={{
+                  base: 'pre-body-7',
+                  sm: 'pre-heading-5',
+                  md: 'pre-heading-2',
+                }}
                 color={'grey.0'}
               >
                 2023-창원의창-0003[대부업]
               </Text>
               <Text
-                textStyle={{ base: 'pre-body-7', md: 'pre-heading-2' }}
+                textStyle={{
+                  base: 'pre-body-7',
+                  sm: 'pre-heading-5',
+                  md: 'pre-heading-2',
+                }}
                 color={'grey.0'}
               >
                 2023-창원의창-0004[대부중개업]
@@ -194,9 +205,15 @@ const HomeHeader = ({
             </Button>
           </HStack>
           <HStack display={{ base: 'flex', md: 'none' }}>
-            <Button variant={'black-primary'}>대출 신청</Button>
+            <Button
+              variant={'black-primary'}
+              onClick={() => router.push('/apply-loan')}
+            >
+              대출 신청
+            </Button>
             <IconButton
               size={'lg'}
+              border={0}
               icon={<MenuIcon w="24px" h="24px" color={'grey.10'} />}
               onClick={isDrawerOpen ? onDrawerClose : onDrawerOpen}
               cursor="pointer"

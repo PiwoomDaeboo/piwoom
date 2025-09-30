@@ -15,15 +15,6 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       email: yup.string().email().optional(),
 
       // Step2 fields
-      jobType: yup.mixed().optional(),
-      postcode: yup.string().optional(),
-      baseAddress: yup.string().optional(),
-      detailAddress: yup.string().optional(),
-      housingType: yup.mixed().optional(),
-      residenceType: yup.mixed().optional(),
-      assetPostcode: yup.string().optional(),
-      assetBaseAddress: yup.string().optional(),
-      assetDetailAddress: yup.string().optional(),
 
       // Step3 fields (required for step3 validation)
       purpose: yup.string().required('필수 항목 입니다.'),
@@ -38,20 +29,35 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       safeKey: yup.string().nullable().optional(),
 
       // Step4 fields
-      loanAmount: yup.number().min(0).optional(),
-      repaymentType: yup.mixed().optional(),
-      interestPaymentDate: yup.mixed().optional(),
-      loanPeriod: yup.number().min(0).optional(),
-      bank: yup.mixed().optional(),
-      accountNumber: yup.string().optional(),
-      accountHolder: yup.string().optional(),
-      accountHolderSsn: yup.string().optional(),
-      incomeCertificate: yup.string().optional(),
-      residentRegistrationCopy: yup.string().optional(),
-      healthInsuranceEligibilityConfirmation: yup.string().optional(),
-      healthInsurancePaymentConfirmation: yup.string().optional(),
-      healthInsurancePaymentConfirmation2: yup.string().optional(),
-      identityCard: yup.string().optional(),
+      loanAmount: yup.string().required('필수 항목 입니다.'),
+      repaymentType: yup.string().required('필수 항목 입니다.'),
+      interestPaymentDate: yup.string().required('필수 항목 입니다.'),
+      loanPeriod: yup.string().required('필수 항목 입니다.'),
+      bank: yup.string().required('필수 항목 입니다.'),
+      accountNumber: yup.string().required('필수 항목 입니다.'),
+      // accountHolder: yup.string().required('필수 항목 입니다.'),
+      // accountHolderSsn: yup.string().required('필수 항목 입니다.'),
+      accountHolder: yup.string().nullable().optional(),
+      accountHolderSsn: yup.string().nullable().optional(),
+      jobType: yup.string().required('필수 항목 입니다.'),
+      postcode: yup.string().required('필수 항목 입니다.'),
+      baseAddress: yup.string().required('필수 항목 입니다.'),
+      detailAddress: yup.string().required('필수 항목 입니다.'),
+      housingType: yup.string().required('필수 항목 입니다.'),
+      residenceType: yup.string().required('필수 항목 입니다.'),
+      assetPostcode: yup.string().required('필수 항목 입니다.'),
+      assetBaseAddress: yup.string().required('필수 항목 입니다.'),
+      assetDetailAddress: yup.string().required('필수 항목 입니다.'),
+      incomeCertificate: yup.string().nullable().optional(),
+      residentRegistrationCopy: yup.string().nullable().optional(),
+      healthInsuranceEligibilityConfirmation: yup
+        .string()
+        .nullable()
+        .optional(),
+      employmentType: yup.string().required('필수 항목 입니다.'),
+      healthInsurancePaymentConfirmation: yup.string().nullable().optional(),
+      healthInsurancePaymentConfirmation2: yup.string().nullable().optional(),
+      identityCard: yup.string().nullable().optional(),
       fileSet: yup.mixed().optional(),
 
       // Optional fields
@@ -61,7 +67,6 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       companyName: yup.string().max(100).optional(),
       companyAddress: yup.string().optional(),
       companyBusinessNumber: yup.string().max(20).optional(),
-      employmentType: yup.mixed().optional(),
       hireYear: yup.number().min(0).nullable().optional(),
       hireMonth: yup.number().min(0).nullable().optional(),
       rrcAddress: yup.string().max(500).optional(),

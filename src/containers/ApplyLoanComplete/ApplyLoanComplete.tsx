@@ -59,6 +59,7 @@ function ApplyLoanComplete() {
           alignItems={'center'}
           flexDir={{ base: 'column', sm: 'row' }}
           position={'relative'}
+          gap={'20px'}
         >
           <LoancompletepersonIcon boxSize={'100px'} />
           <Box position={'relative'}>

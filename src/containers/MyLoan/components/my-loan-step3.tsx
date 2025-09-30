@@ -28,6 +28,7 @@ import {
   SQUARE_CHECKBOX_STYLES,
 } from '../const/consts'
 import CustomerInfoModal from './customer-info-modal'
+import ElectronicContractModal from './electronic-contract-modal'
 import MyLoanTermsModal from './my-loan-terms-modal'
 
 const MyLoanStep3 = () => {
@@ -68,6 +69,11 @@ const MyLoanStep3 = () => {
     onTermsOpen()
     setTermsNumber(termsNumber)
   }
+  const {
+    isOpen: isElectronicContractModalOpen,
+    onOpen: onElectronicContractModalOpen,
+    onClose: onElectronicContractModalClose,
+  } = useDisclosure()
   return (
     <Container>
       <MyLoanTermsModal
@@ -75,7 +81,12 @@ const MyLoanStep3 = () => {
         onClose={onTermsClose}
         termsNumber={termsNumber}
       />
+
       <AuthAlertModal isOpen={isAuthAlertOpen} onClose={onAuthAlertClose} />
+      <ElectronicContractModal
+        isOpen={isElectronicContractModalOpen}
+        onClose={onElectronicContractModalClose}
+      />
       <Flex
         pt={{ base: '40px', sm: '48px', md: '80px' }}
         pb={'120px'}
@@ -295,7 +306,8 @@ const MyLoanStep3 = () => {
             variant={'solid-primary'}
             w={'160px'}
             isDisabled={!isAgree}
-            onClick={() => router.push('/my-loan?step=4')}
+            onClick={onElectronicContractModalOpen}
+            // onClick={() => router.push('/my-loan?step=4')}
           >
             전자서명 진행
           </Button>

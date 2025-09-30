@@ -29,7 +29,7 @@ const CompanySection6 = () => {
         <Container>
           <Flex w={'100%'} justifyContent={'flex-end'} alignItems={'flex-end'}>
             <VStack alignItems={'flex-start'} w={'40%'}>
-              <Text textStyle={'pre-body-2'} color={'grey.10'}>
+              <Text textStyle={'pre-body-6'} color={'grey.10'}>
                 본 웹사이트는 AWS(Amazon Web Services) 인프라를 기반으로
                 안정적으로 운영되고 있습니다.
                 <br />

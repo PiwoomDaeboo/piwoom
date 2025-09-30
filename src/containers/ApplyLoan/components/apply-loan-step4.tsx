@@ -18,6 +18,7 @@ import {
   Textarea,
   VStack,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
@@ -28,12 +29,15 @@ import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
 import { useAccountVerifyCreateMutation } from '@/generated/apis/Account/Account.query'
 import { useGovRetrieveQuery } from '@/generated/apis/Gov/Gov.query'
+import { useLoanCreateMutation } from '@/generated/apis/Loan/Loan.query'
 import {
   CaretRightIcon,
   FolderIcon,
   InfoFillIcon,
+  XCircleFillIcon,
 } from '@/generated/icons/MyIcons'
 import { useQueryEffects } from '@/hooks/useQueryEffect'
+import { useSessionStorage } from '@/stores/session/state'
 
 import AddressModal from '../../../components/@Modal/address-modal'
 import DocumentAgreeModal from '../../../components/@Modal/document-agree-modal'
@@ -60,6 +64,7 @@ interface Company {
 
 const ApplyLoanStep4 = () => {
   const router = useRouter()
+  const toast = useToast()
   const {
     register,
     setValue,
@@ -182,12 +187,85 @@ const ApplyLoanStep4 = () => {
     fileInputRef.current?.click()
   }
   console.log('errors', errors)
-  const onSubmit = (data: any) => {
-    console.log('전체 폼 데이터:', data)
 
-    // TODO: API 호출 및 성공 시 formvalues 초기화 및 성공 페이지로 이동
+  const { mutate: loanCreateMutation } = useLoanCreateMutation({
+    options: {
+      onSuccess: (data) => {
+        console.log('loanCreateMutation', data)
+      },
+      onError: (error) => {
+        console.error('loanCreateMutation', error)
+      },
+    },
+  })
+  const { identityVerificationToken } = useSessionStorage()
+
+  // Step4 성공 시 실행될 함수
+  const onStep4Submit = (data: any) => {
+    console.log('Step4 폼 데이터:', data)
+    const requestData = {
+      kind: 'A',
+      identityVerificationToken: identityVerificationToken,
+      incomeCertificate: '',
+      residentRegistrationCopy: '',
+      healthInsuranceEligibilityConfirmation: '',
+      healthInsurancePaymentConfirmation: '',
+      healthInsurancePaymentConfirmation2: '',
+      fileSet: {
+        name: 'bb',
+        path: 'bb',
+      },
+
+      safeKey: 'bbb',
+      accountHolder: 'bb',
+      accountHolderSsn: 'bb',
+      ...data,
+    }
+    loanCreateMutation({
+      data: requestData,
+    }) // TODO: API 호출 및 성공 시 formvalues 초기화 및 성공 페이지로 이동
     // router.push('/apply-loan-complete')
   }
+
+  const onStep4Error = (errors: any) => {
+    console.log('Step4 폼 에러:', errors)
+    toast({
+      render: () => (
+        <Box
+          borderRadius={'10px'}
+          color="white"
+          p={'12px'}
+          bg="rgba(27, 28, 29, 0.80)"
+        >
+          <HStack spacing={'24px'} alignItems={'center'}>
+            <XCircleFillIcon boxSize={'24px'} />
+            <Text textStyle={'pre-body-68'} color={'grey.0'}>
+              필수 항목을 입력해주세요.
+            </Text>
+          </HStack>
+        </Box>
+      ),
+      duration: 5000,
+      isClosable: true,
+    })
+    const firstErrorField = Object.keys(errors)[0]
+    const errorElement =
+      document.querySelector(`[name="${firstErrorField}"]`) ||
+      document.querySelector(`[data-field="${firstErrorField}"]`)
+
+    if (errorElement) {
+      errorElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+      if (errorElement instanceof HTMLElement) {
+        errorElement.focus()
+      }
+    }
+  }
+
+  // 대출신청 버튼 클릭 핸들러 (handleSubmit 사용)
+  const handleSubmitClick = handleSubmit(onStep4Submit, onStep4Error)
 
   const handleCompanySelect = (company: Company) => {
     setValue('companyName', company.name)
@@ -210,7 +288,23 @@ const ApplyLoanStep4 = () => {
     const fieldName = target.name
 
     if (fieldName && numbersOnly) {
-      setValue(fieldName, parseInt(numbersOnly) || 0)
+      let value = parseInt(numbersOnly) || 0
+
+      // 대출 기간 필드의 경우 1~60 범위로 제한
+      if (fieldName === 'loanPeriod') {
+        value = Math.min(Math.max(value, 1), 60)
+      }
+
+      setValue(fieldName, value)
+    }
+  }
+
+  const handleLoanPeriodChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value) || 0
+    const clampedValue = Math.min(Math.max(value, 0), 60)
+
+    if (value !== clampedValue) {
+      setValue('loanPeriod', clampedValue)
     }
   }
 
@@ -336,11 +430,11 @@ const ApplyLoanStep4 = () => {
                 type="number"
                 onPaste={handlePaste}
                 textAlign="right"
-                dir="rtl"
                 pr="50px"
                 {...register('loanAmount', {
                   valueAsNumber: true,
                 })}
+                data-field="loanAmount"
               />
               <InputRightElement>
                 <Text>만원</Text>
@@ -389,6 +483,11 @@ const ApplyLoanStep4 = () => {
               </Button>
             </Flex>
           </>
+          {errors?.loanAmount && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.loanAmount?.message as string}
+            </Text>
+          )}
         </InputForm>
         <InputForm
           label="상환방식"
@@ -412,10 +511,16 @@ const ApplyLoanStep4 = () => {
                   onChange={(selectedOption) =>
                     field.onChange(selectedOption?.value || '')
                   }
+                  data-field="interestPaymentDate"
                 />
               )}
             />
           </Box>
+          {errors?.interestPaymentDate && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.interestPaymentDate?.message as string}
+            </Text>
+          )}
         </InputForm>
         <InputForm label="대출기간">
           <VStack alignItems={'flex-start'} spacing={'8px'} w={'100%'}>
@@ -423,13 +528,16 @@ const ApplyLoanStep4 = () => {
               <Input
                 placeholder="0"
                 type="number"
+                min={0}
+                max={60}
                 onPaste={handlePaste}
                 textAlign="right"
-                dir="rtl"
                 pr="50px"
                 {...register('loanPeriod', {
                   valueAsNumber: true,
+                  onChange: handleLoanPeriodChange,
                 })}
+                data-field="loanPeriod"
               />
               <InputRightElement>
                 <Text>개월</Text>
@@ -473,6 +581,11 @@ const ApplyLoanStep4 = () => {
               </Button>
             </Flex>
           </VStack>
+          {errors?.loanPeriod && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.loanPeriod?.message as string}
+            </Text>
+          )}
         </InputForm>
         <Flex gap={'16px'}>
           <InputForm label="입금은행">
@@ -490,17 +603,29 @@ const ApplyLoanStep4 = () => {
                     onChange={(selectedOption) =>
                       field.onChange(selectedOption?.value || '')
                     }
+                    data-field="bank"
                   />
                 )}
               />
             </Box>
+            {errors?.bank && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.bank?.message as string}
+              </Text>
+            )}
           </InputForm>
           <InputForm label="계좌번호">
             <Input
               placeholder="계좌번호"
               onPaste={handlePaste}
               {...register('accountNumber')}
+              data-field="accountNumber"
             />
+            {errors?.accountNumber && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.accountNumber?.message as string}
+              </Text>
+            )}
           </InputForm>
         </Flex>
         <InputForm label="예금주 실명조회">
@@ -541,10 +666,16 @@ const ApplyLoanStep4 = () => {
                     onChange={(selectedOption) =>
                       field.onChange(selectedOption?.value || '')
                     }
+                    data-field="jobType"
                   />
                 )}
               />
             </Box>
+            {errors?.jobType && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.jobType?.message as string}
+              </Text>
+            )}
           </InputForm>
           <InputForm label="직장명">
             <Flex w={'100%'} gap={'8px'}>
@@ -553,6 +684,7 @@ const ApplyLoanStep4 = () => {
                 w={'100%'}
                 {...register('companyName')}
                 readOnly
+                data-field="companyName"
               />
               <Button
                 variant={'solid-primary'}
@@ -562,6 +694,11 @@ const ApplyLoanStep4 = () => {
                 직장명 검색
               </Button>
             </Flex>
+            {errors?.companyName && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.companyName?.message as string}
+              </Text>
+            )}
           </InputForm>
         </Flex>
         {companyBusinessNumber && (
@@ -571,7 +708,13 @@ const ApplyLoanStep4 = () => {
               // onPaste={handlePaste}
               {...register('companyBusinessNumber')}
               readOnly
+              data-field="companyBusinessNumber"
             />
+            {errors?.companyBusinessNumber && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.companyBusinessNumber?.message as string}
+              </Text>
+            )}
           </InputForm>
         )}
         <InputForm isRequired label="주소">
@@ -581,8 +724,14 @@ const ApplyLoanStep4 = () => {
               w={'100%'}
               value={baseAddress || ''}
               readOnly
+              data-field="baseAddress"
             />
           </VStack>
+          {errors?.baseAddress && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.baseAddress?.message as string}
+            </Text>
+          )}
         </InputForm>
         <InputForm label="고용구분">
           <EmploymentTypeButtons />
@@ -595,11 +744,11 @@ const ApplyLoanStep4 = () => {
                 type="number"
                 onPaste={handlePaste}
                 textAlign="right"
-                dir="rtl"
                 pr="40px"
                 {...register('hireYear', {
                   valueAsNumber: true,
                 })}
+                data-field="hireYear"
               />
               <InputRightElement>
                 <Text>년</Text>
@@ -611,17 +760,27 @@ const ApplyLoanStep4 = () => {
                 type="number"
                 onPaste={handlePaste}
                 textAlign="right"
-                dir="rtl"
                 pr="40px"
                 {...register('hireMonth', {
                   valueAsNumber: true,
                 })}
+                data-field="hireMonth"
               />
               <InputRightElement>
                 <Text>월</Text>
               </InputRightElement>
             </InputGroup>
           </Flex>
+          {errors?.hireYear && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.hireYear?.message as string}
+            </Text>
+          )}
+          {errors?.hireMonth && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.hireMonth?.message as string}
+            </Text>
+          )}
         </InputForm>
 
         <Box w={'100%'} h={'1px'} bg={'border.basic.1'} my={'48px'} />
@@ -637,6 +796,7 @@ const ApplyLoanStep4 = () => {
                 w={'100%'}
                 value={baseAddress || ''}
                 readOnly
+                data-field="baseAddress"
               />
               <Button
                 variant={'solid-primary'}
@@ -650,8 +810,14 @@ const ApplyLoanStep4 = () => {
               placeholder="상세주소"
               w={'100%'}
               {...register('detailAddress')}
+              data-field="detailAddress"
             />
           </VStack>
+          {errors?.detailAddress && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.detailAddress?.message as string}
+            </Text>
+          )}
         </InputForm>
 
         <InputForm label="주거종류">
@@ -690,6 +856,11 @@ const ApplyLoanStep4 = () => {
               그 외
             </Button>
           </Flex>
+          {errors?.housingType && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.housingType?.message as string}
+            </Text>
+          )}
         </InputForm>
         <InputForm label="주거소유형태">
           <Flex flexWrap={'wrap'} gap={'8px'}>
@@ -727,6 +898,11 @@ const ApplyLoanStep4 = () => {
               월세
             </Button>
           </Flex>
+          {errors?.residenceType && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.residenceType?.message as string}
+            </Text>
+          )}
         </InputForm>
         <Box w={'100%'} h={'1px'} bg={'border.basic.1'} my={'48px'} />
         <Text textStyle={'pre-heading-3'} color={'primary.4'}>
@@ -741,6 +917,7 @@ const ApplyLoanStep4 = () => {
                 w={'100%'}
                 value={assetBaseAddress || ''}
                 readOnly
+                data-field="assetBaseAddress"
               />
               <Button
                 variant={'solid-primary'}
@@ -754,8 +931,19 @@ const ApplyLoanStep4 = () => {
               placeholder="상세주소"
               w={'100%'}
               {...register('assetDetailAddress')}
+              data-field="assetDetailAddress"
             />
           </VStack>
+          {errors?.assetBaseAddress && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.assetBaseAddress?.message as string}
+            </Text>
+          )}
+          {errors?.assetDetailAddress && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.assetDetailAddress?.message as string}
+            </Text>
+          )}
         </InputForm>
         <InputForm label="비대면 서류제출">
           <Button
@@ -940,6 +1128,11 @@ const ApplyLoanStep4 = () => {
           >
             신분증 업로드
           </Button>
+          {errors?.identityCard && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.identityCard?.message as string}
+            </Text>
+          )}
         </InputForm>
 
         <Flex
@@ -952,7 +1145,7 @@ const ApplyLoanStep4 = () => {
           <Button
             variant={'solid-primary'}
             w={'160px'}
-            onClick={handleSubmit(onSubmit)}
+            onClick={handleSubmitClick}
           >
             대출신청
           </Button>

@@ -42,6 +42,8 @@ import {
   ShinhanAuthenticationIcon,
   TossAuthenticationIcon,
 } from '@/generated/icons/MyIcons'
+import { useSessionStorage } from '@/stores/session/state'
+import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 interface WetaxModalProps {
   isOpen: boolean
@@ -68,7 +70,21 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
   const [loadingProcess, setLoadingProcess] = useState<number>(0)
   const [wetaxData, setWetaxData] = useState<WetaxLoginType | null>(null)
   const toast = useToast()
-
+  const { identityVerificationToken } = useSessionStorage()
+  const [userInfo, setUserInfo] = useState<{
+    name?: string
+    phone?: string
+    birth?: string
+    gender_code?: string
+  } | null>(null)
+  useEffect(() => {
+    const extractedUserInfo = extractUserInfoFromJWT(
+      identityVerificationToken as string,
+    )
+    if (extractedUserInfo) {
+      setUserInfo(extractedUserInfo)
+    }
+  }, [])
   const { mutate: otpWetax, isPending: isOtpPending } =
     useWetaxOtpCreateMutation({
       options: {
@@ -123,9 +139,9 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
     loginWetax({
       data: {
         method: selectedAuth as WetaxLoginRequestMethodEnumType,
-        name: '',
-        birth: '',
-        phone: '',
+        name: userInfo?.name || '',
+        birth: userInfo?.birth || '',
+        phone: userInfo?.phone || '',
         agency: selectedPassType as WetaxLoginRequestAgencyEnumType,
       },
     })
