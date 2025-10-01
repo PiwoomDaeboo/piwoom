@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
-import { Center, Spinner } from '@chakra-ui/react'
+import { Center, Spinner, useDisclosure } from '@chakra-ui/react'
 
+import SessionExpiredModal from '@/components/@Modal/session-expired-modal'
 import { useAuth } from '@/hooks/useAuth'
+import { useIdleTimer } from '@/hooks/useIdleTimer'
 
 import MyLoanProcess from './components/my-loan-process'
 import MyLoanStep1 from './components/my-loan-step1'
@@ -16,9 +18,15 @@ function MyLoan() {
   const [isLoading, setIsLoading] = useState(false)
   const { isLogin } = useAuth()
   const router = useRouter()
-
+  const { isIdle, setIsIdle } = useIdleTimer({ timeout: 10 * 60 * 1000 }) // 5분 테스트
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const { step } = router.query
-  console.log('isLogin', isLogin)
+  useEffect(() => {
+    if (isIdle) {
+      onOpen()
+    }
+  }, [isIdle, router])
+  console.log('isIdle', isIdle)
   useEffect(() => {
     setIsLoading(true)
     setTimeout(() => {
@@ -39,6 +47,11 @@ function MyLoan() {
   }
   return (
     <>
+      <SessionExpiredModal
+        isOpen={isOpen}
+        onClose={onClose}
+        setIsIdle={setIsIdle}
+      />
       <MyLoanProcess step={(step as string) || '1'} />
       {(step === undefined || step === '1') && <MyLoanStep1 />}
       {step === '2' && <MyLoanStep2 />}

@@ -6,6 +6,7 @@ import {
   AspectRatio,
   Box,
   Button,
+  Center,
   Checkbox,
   Container,
   Flex,
@@ -14,6 +15,7 @@ import {
   InputGroup,
   InputRightElement,
   SimpleGrid,
+  Spinner,
   Text,
   Textarea,
   VStack,
@@ -23,7 +25,10 @@ import {
 
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
 
-import { useUploadFileToS3Mutation } from '@/apis/s3-file-uploader/S3FileUploaderApi.query'
+import {
+  useUploadFileToS3Mutation,
+  useUploadFilesToS3Mutation,
+} from '@/apis/s3-file-uploader/S3FileUploaderApi.query'
 import CommonSelect from '@/components/CommonSelect'
 import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
@@ -32,9 +37,11 @@ import { useGovRetrieveQuery } from '@/generated/apis/Gov/Gov.query'
 import { useLoanCreateMutation } from '@/generated/apis/Loan/Loan.query'
 import {
   CaretRightIcon,
+  DocumenticonIcon,
   FolderIcon,
   InfoFillIcon,
   XCircleFillIcon,
+  XIcon,
 } from '@/generated/icons/MyIcons'
 import { useQueryEffects } from '@/hooks/useQueryEffect'
 import { useSessionStorage } from '@/stores/session/state'
@@ -68,6 +75,7 @@ const ApplyLoanStep4 = () => {
   const {
     register,
     setValue,
+    getValues,
     control,
     handleSubmit,
     watch,
@@ -83,6 +91,7 @@ const ApplyLoanStep4 = () => {
     control,
     name: 'companyBusinessNumber',
   })
+
   const baseAddress = useWatch({ control, name: 'baseAddress' })
   const detailAddress = useWatch({ control, name: 'detailAddress' })
   const assetBaseAddress = useWatch({ control, name: 'assetBaseAddress' })
@@ -119,6 +128,9 @@ const ApplyLoanStep4 = () => {
     onClose: onUntactDocumentApplyModalClose,
   } = useDisclosure()
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null)
+  const [fileUploadedFileName, setFileUploadedFileName] = useState<
+    string[] | null
+  >([])
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
   const [shouldExecuteGovQuery, setShouldExecuteGovQuery] = useState(false)
   const [isDocumentSubmissionCompleted, setIsDocumentSubmissionCompleted] =
@@ -127,6 +139,7 @@ const ApplyLoanStep4 = () => {
     'normal' | 'real-estate'
   >('normal')
   const [isBankAccountVerified, setIsBankAccountVerified] = useState(false)
+  const idCardInputRef = useRef<HTMLInputElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const bankWatchValue = useWatch({ control, name: 'bank' })
   const accountNumberWatchValue = useWatch({ control, name: 'accountNumber' })
@@ -143,6 +156,52 @@ const ApplyLoanStep4 = () => {
         },
       },
     })
+  const { mutate: uploadFile, isPending: isFileUploading } =
+    useUploadFilesToS3Mutation({
+      options: {
+        onSuccess: (data) => {
+          // 모든 업로드된 파일 처리
+          const uploadedFileNames =
+            data?.fulfilled?.map(
+              (file) =>
+                file?.fields?.key?.split('/').pop() || file?.fields?.key,
+            ) || []
+
+          const uploadedKeys =
+            data?.fulfilled?.map(
+              (file) =>
+                file?.fields?.key?.split('/').pop() || file?.fields?.key,
+            ) || []
+          const uploadedPaths =
+            data?.fulfilled?.map((file) => file?.fields?.key) || []
+
+          // 기존 값 가져오기
+          const currentNames = getValues('fileSet.name') as any
+          const currentPaths = getValues('fileSet.path') as any
+
+          // 배열로 변환 (단일 값이면 배열로 감싸기)
+          const existingNames =
+            Array.isArray(currentNames) ? currentNames
+            : currentNames ? [currentNames]
+            : []
+          const existingPaths =
+            Array.isArray(currentPaths) ? currentPaths
+            : currentPaths ? [currentPaths]
+            : []
+
+          // 새 파일들 추가
+          setFileUploadedFileName([
+            ...(fileUploadedFileName || []),
+            ...uploadedFileNames,
+          ])
+          setValue('fileSet.name', [...existingNames, ...uploadedKeys] as any)
+          setValue('fileSet.path', [...existingPaths, ...uploadedPaths] as any)
+        },
+        onError: (error) => {
+          console.error('파일 업로드 실패:', error)
+        },
+      },
+    })
   const {
     mutate: accountVerifyMutation,
     isPending: isAccountVerifyMutationLoading,
@@ -152,8 +211,19 @@ const ApplyLoanStep4 = () => {
         // setValue('accountHolderSsn', true)
         console.log('ownerNameSearch', data)
         setIsBankAccountVerified(true)
+        setValue('accountHolder', data?.holder)
       },
-      onError: (error) => {
+      onError: (error: any) => {
+        toast({
+          title: '계좌 검증 실패',
+          description:
+            error.response.data.nonField[0] ||
+            '계좌 검증 중 오류가 발생했습니다.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+        setIsBankAccountVerified(false)
         console.error('ownerNameSearch', error)
       },
     },
@@ -175,16 +245,33 @@ const ApplyLoanStep4 = () => {
       fieldChoice: 'loan.Loan.identity_card',
     })
   }
+  const handleUploadFile = (files: File[]) => {
+    uploadFile(
+      files.map((file) => ({
+        file,
+        fieldChoice: 'loan.File.path',
+      })),
+    )
+  }
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleIdCardSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
       handleUploadIdCard(file)
     }
   }
-
-  const handleUploadButtonClick = () => {
+  const handleFileUploadButtonClick = () => {
     fileInputRef.current?.click()
+  }
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
+    if (files && files.length > 0) {
+      handleUploadFile(Array.from(files))
+    }
+  }
+
+  const handleIdCardUploadButtonClick = () => {
+    idCardInputRef.current?.click()
   }
   console.log('errors', errors)
 
@@ -200,22 +287,10 @@ const ApplyLoanStep4 = () => {
   })
   const { identityVerificationToken } = useSessionStorage()
 
-  const { type } = router.query
-  const typeConvert = (type: string) => {
-    if (type === 'salary') {
-      return 'A'
-    } else if (type === 'credit') {
-      return 'B'
-    } else if (type === 'mortgage') {
-      return 'C'
-    } else {
-      return 'A'
-    }
-  }
-
   const onStep4Submit = (data: any) => {
     const requestData = {
-      kind: typeConvert(type as string) || 'A',
+      // kind: typeConvert(type as string) || 'A',
+      // kind: 'A',
       identityVerificationToken: identityVerificationToken,
       incomeCertificate: '',
       residentRegistrationCopy: '',
@@ -287,6 +362,44 @@ const ApplyLoanStep4 = () => {
   const handleAddressModalOpen = (type: 'normal' | 'real-estate') => {
     setAddressModalType(type)
     onAddressModalOpen()
+  }
+
+  const handleFileDelete = (fileName: string) => {
+    // 삭제할 파일의 인덱스 찾기
+    const deleteIndex = fileUploadedFileName?.indexOf(fileName) ?? -1
+
+    if (deleteIndex === -1) return
+
+    // 파일명 배열에서 제거
+    setFileUploadedFileName(
+      fileUploadedFileName?.filter((file) => file !== fileName) || [],
+    )
+
+    // fileSet.name과 fileSet.path에서도 해당 인덱스의 항목 제거
+    const currentNames = getValues('fileSet.name') as any
+    const currentPaths = getValues('fileSet.path') as any
+
+    const namesArray =
+      Array.isArray(currentNames) ? currentNames
+      : currentNames ? [currentNames]
+      : []
+    const pathsArray =
+      Array.isArray(currentPaths) ? currentPaths
+      : currentPaths ? [currentPaths]
+      : []
+
+    // 해당 인덱스 제거
+    const updatedNames = namesArray.filter((_, idx) => idx !== deleteIndex)
+    const updatedPaths = pathsArray.filter((_, idx) => idx !== deleteIndex)
+
+    setValue(
+      'fileSet.name',
+      updatedNames.length > 0 ? updatedNames : ('' as any),
+    )
+    setValue(
+      'fileSet.path',
+      updatedPaths.length > 0 ? updatedPaths : ('' as any),
+    )
   }
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -1010,6 +1123,8 @@ const ApplyLoanStep4 = () => {
         </VStack>
         <InputForm label="추가 서류 제출" isOptional w={'100%'}>
           <Flex
+            onClick={handleFileUploadButtonClick}
+            cursor={'pointer'}
             justifyContent={'center'}
             alignItems={'center'}
             p={'20px 16px'}
@@ -1017,26 +1132,85 @@ const ApplyLoanStep4 = () => {
             bg={'background.basic.2'}
             gap={'16px'}
           >
-            <Flex
-              justifyContent={'center'}
-              alignItems={'center'}
-              border={'1px solid'}
-              borderColor={'border.basic.1'}
-              borderRadius={'50%'}
-              w={'60px'}
-              h={'60px'}
-            >
-              <FolderIcon boxSize={'32px'} />
-            </Flex>
-            <Text textStyle={'pre-body-6'} color={'grey.8'}>
-              추가할 서류가 있다면
-              <br />
-              <Box as="span" color={'primary.4'}>
-                업로드
-              </Box>
-              해 주세요.
-            </Text>
+            <Input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileSelect}
+              accept="image/*"
+              multiple
+              display="none"
+            />
+            {isFileUploading ?
+              <Flex
+                justifyContent={'center'}
+                alignItems={'center'}
+                gap={'10px'}
+              >
+                <Spinner color={'primary.4'} />
+                <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                  업로드 중...
+                </Text>
+              </Flex>
+            : <>
+                <Flex
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  border={'1px solid'}
+                  borderColor={'border.basic.1'}
+                  borderRadius={'50%'}
+                  w={'60px'}
+                  h={'60px'}
+                >
+                  <FolderIcon boxSize={'32px'} />
+                </Flex>
+                <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                  추가할 서류가 있다면
+                  <br />
+                  <Box as="span" color={'primary.4'}>
+                    업로드
+                  </Box>
+                  해 주세요.
+                </Text>
+              </>
+            }
           </Flex>
+
+          {fileUploadedFileName?.length && fileUploadedFileName?.length > 0 && (
+            <Flex gap={'8px'} flexWrap={'wrap'}>
+              {fileUploadedFileName?.map((fileName) => (
+                <Flex
+                  gap={'12px'}
+                  p={'8px 12px'}
+                  key={fileName}
+                  alignItems={'center'}
+                >
+                  <HStack gap={'4px'}>
+                    <Center
+                      bg={'primary.1'}
+                      borderRadius={'50%'}
+                      w={'28px'}
+                      h={'28px'}
+                      justifyContent={'center'}
+                      alignItems={'center'}
+                      // p={'4px'}
+                    >
+                      <DocumenticonIcon boxSize={'16px'} />
+                    </Center>
+                    <Text textStyle={'pre-body-68'} color={'grey.8'}>
+                      {fileName}
+                    </Text>
+                  </HStack>
+                  <Box
+                    p={0}
+                    cursor={'pointer'}
+                    onClick={() => handleFileDelete(fileName)}
+                  >
+                    <XIcon boxSize={'16px'} />
+                  </Box>
+                </Flex>
+              ))}
+            </Flex>
+          )}
         </InputForm>
         {router.query.type === 'mortgage' && (
           <VStack
@@ -1105,8 +1279,8 @@ const ApplyLoanStep4 = () => {
           >
             <Input
               type="file"
-              ref={fileInputRef}
-              onChange={handleFileSelect}
+              ref={idCardInputRef}
+              onChange={handleIdCardSelect}
               accept="image/*"
               display="none"
             />
@@ -1132,7 +1306,7 @@ const ApplyLoanStep4 = () => {
             textStyle={'pre-body-5'}
             color={'grey.8'}
             w={'209px'}
-            onClick={handleUploadButtonClick}
+            onClick={handleIdCardUploadButtonClick}
             isLoading={isIdCardUploading}
             loadingText="업로드 중..."
           >

@@ -27,7 +27,7 @@ function CustomerInfoModal({ isOpen, onClose }: CustomerInfoModalProps) {
     <ModalBasis
       isOpen={isOpen}
       visibleCloseButton={true}
-      onClose={handleClose}
+      onClose={onClose}
       size={{ base: 'full', sm: 'xl' }}
       header={
         <Box
