@@ -120,7 +120,8 @@ function UntactDocumentApplyModal({
       id: govRetrieveId || 0,
     },
     options: {
-      enabled: !!govRetrieveId && loadingProcess === 2 && shouldPoll,
+      enabled:
+        (!!govRetrieveId && loadingProcess === 2 && shouldPoll) || !!isOpen,
       refetchInterval: shouldPoll ? 5000 : false,
       refetchIntervalInBackground: true,
       refetchOnWindowFocus: true,
@@ -635,22 +636,8 @@ const SubmittingProcess = ({
       {/* 진행률 표시 */}
       <VStack spacing={'8px'} alignItems={'center'}>
         <Text textStyle={'pre-body-5'} color={'primary.4'}>
-          {completedDocuments}/{totalDocuments} 완료
+          {completedDocuments}/{totalDocuments} 진행중 ..
         </Text>
-        <Box
-          w={'200px'}
-          h={'8px'}
-          bg={'grey.3'}
-          borderRadius={'4px'}
-          overflow={'hidden'}
-        >
-          <Box
-            w={`${(completedDocuments / totalDocuments) * 100}%`}
-            h={'100%'}
-            bg={currentStatus === 'FAILED' ? 'red.500' : 'primary.4'}
-            transition={'width 0.3s ease'}
-          />
-        </Box>
       </VStack>
 
       {/* 로딩 애니메이션 - 실패 시에는 숨김 */}

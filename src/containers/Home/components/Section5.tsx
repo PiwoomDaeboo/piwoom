@@ -46,10 +46,10 @@ const FAQItem = ({
     overflow="hidden"
   >
     <Flex alignItems="center" gap="8px">
-      <Text as="span" color="primary.3" fontSize="18px" fontWeight="bold">
+      <Text as="span" color="primary.3" textStyle="pre-heading-3">
         Q.
       </Text>
-      <Text textStyle="pre-heading-3" flex="1">
+      <Text color={'grey.10'} textStyle="pre-heading-3" flex="1">
         {item.question}
       </Text>
     </Flex>
@@ -101,6 +101,7 @@ function Section5() {
               w={'100%'}
               alignItems={'flex-start'}
               justifyContent={'space-between'}
+              gap={'28px'}
             >
               <VStack alignItems={'flex-start'}>
                 <Text textStyle={'pre-heading-1'}>공지사항</Text>
@@ -193,7 +194,13 @@ function Section5() {
               <CaretRightIcon boxSize={'24px'} />
             </Button>
           </Flex>
-          <VStack w={'100%'} gap={'20px'} maxH={'360px'} overflowY={'auto'}>
+          <VStack
+            w={'100%'}
+            gap={'20px'}
+            maxH={'360px'}
+            overflowY={'auto'}
+            p={'4px'}
+          >
             {faqList?.results?.map((item) => (
               <FAQItem
                 key={item.id}

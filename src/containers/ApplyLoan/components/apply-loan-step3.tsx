@@ -65,19 +65,9 @@ const ApplyLoanStep3 = () => {
   const loanPurpose = useWatch({ control, name: 'purpose' })
   const monthlyIncome = useWatch({ control, name: 'monthlyIncome' })
   const creditScore = useWatch({ control, name: 'creditScore' })
-  const safeKey = useWatch({ control, name: 'safeKey' })
+  const safeKeyWatchValue = useWatch({ control, name: 'safeKey' })
   const [popupWindow, setPopupWindow] = useState<Window | null>(null)
 
-  const handleApplyCreditInfoSubmit = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-
-    const popup = window.open(
-      `https://api.piwoom.com/v1/nice/?name=${userInfo?.name}&birth=${userInfo?.birth}&gender=${userInfo?.gender_code}`,
-      'popupChk',
-      'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
-    )
-  }
   const {
     isOpen: isLoanAlertOpen,
     onOpen: onLoanAlertOpen,
@@ -94,20 +84,17 @@ const ApplyLoanStep3 = () => {
     trigger(field) // 해당 필드의 유효성 검사를 다시 트리거하여 에러 메시지 업데이트
   }
 
-  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    e.preventDefault()
-    const pastedText = e.clipboardData.getData('text')
+  const formatNumberWithCommas = (
+    value: number | string | undefined,
+  ): string => {
+    if (!value) return ''
+    const numbers = String(value).replace(/[^0-9]/g, '')
+    return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
 
-    const numbersAndDecimal = pastedText.replace(/[^0-9.]/g, '')
-    const cleanNumber = numbersAndDecimal.replace(/\.(?=.*\.)/g, '') // 중복 소수점 제거
-
-    const target = e.target as HTMLInputElement
-    const fieldName = target.name
-
-    if (fieldName && cleanNumber) {
-      const numericValue = parseFloat(cleanNumber) || 0
-      setValue(fieldName, numericValue)
-    }
+  const parseNumberFromFormatted = (value: string): number | undefined => {
+    const numbers = value.replace(/[^0-9]/g, '')
+    return numbers === '' ? undefined : Number(numbers)
   }
 
   const checkLoanEligibility = () => {
@@ -240,6 +227,18 @@ const ApplyLoanStep3 = () => {
   //   )
   // }
 
+  const [niceIframeUrl, setNiceIframeUrl] = useState<string>('')
+
+  const handleApplyCreditInfoSubmit = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    window.open(
+      `https://api.piwoom.com/v1/nice/?name=${userInfo?.name}&birth=${userInfo?.birth}&gender=${userInfo?.gender_code}`,
+      'popupChk',
+      'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
+    )
+  }
+
   useEffect(() => {
     const extractedUserInfo = extractUserInfoFromJWT(
       identityVerificationToken as string,
@@ -250,41 +249,22 @@ const ApplyLoanStep3 = () => {
     }
   }, [])
 
-  // useEffect(() => {
-  //   const handleMessage = (event: MessageEvent) => {
-  //     console.log('=== Message Event Received ===')
-  //     console.log('Origin:', event.origin)
-
-  //     console.log('Data:', event.data)
-  //     console.log('Data type:', typeof event.data)
-  //     console.log('Data length:', event.data?.length)
-  //     console.log('Data constructor:', event.data?.constructor?.name)
-
-  //     // Origin 검증 없이 모든 메시지 처리
-  //     if (typeof event.data === 'string' && event.data.trim()) {
-  //       console.log('✅ safeKey received:', event.data)
-  //       setValue('safeKey', event.data)
-  //     } else if (
-  //       event.data &&
-  //       typeof event.data === 'object' &&
-  //       event.data.safeKey
-  //     ) {
-  //       console.log('✅ safeKey from object:', event.data.safeKey)
-  //       setValue('safeKey', event.data.safeKey)
-  //     } else {
-  //       console.log('❌ No valid safeKey found')
-  //       console.log('Raw data:', JSON.stringify(event.data))
-  //     }
-  //   }
-
-  //   console.log('Adding message event listener...')
-  //   window.addEventListener('message', handleMessage)
-
-  //   return () => {
-  //     console.log('Removing message event listener...')
-  //     window.removeEventListener('message', handleMessage)
-  //   }
-  // }, [setValue])
+  const {
+    isOpen: isNiceIframeOpen,
+    onOpen: onNiceIframeOpen,
+    onClose: onNiceIframeClose,
+  } = useDisclosure()
+  const { set, safeKey } = useSessionStorage()
+  console.log('safeKeyWatchValue', safeKey)
+  useEffect(() => {
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'popup_status') {
+        console.log(e)
+        set('safeKey', e.newValue)
+        setValue('safeKey', safeKey)
+      }
+    })
+  }, [setValue])
 
   return (
     <Container>
@@ -396,28 +376,31 @@ const ApplyLoanStep3 = () => {
         </InputForm>
         <Flex gap={'16px'}>
           <InputForm label="월 실수령액 또는 월 수입">
-            <InputGroup>
-              <Input
-                placeholder="0"
-                type="number"
-                textAlign="right"
-                pr="50px"
-                onPaste={handlePaste}
-                {...register('monthlyIncome', {
-                  setValueAs: (value) => {
-                    if (value === '' || value === null || value === undefined) {
-                      return undefined
-                    }
-                    const num = Number(value)
-                    return isNaN(num) ? undefined : num
-                  },
-                })}
-                data-field="monthlyIncome"
-              />
-              <InputRightElement>
-                <Text>만원</Text>
-              </InputRightElement>
-            </InputGroup>
+            <Controller
+              name="monthlyIncome"
+              control={control}
+              render={({ field }) => (
+                <InputGroup>
+                  <Input
+                    placeholder="0"
+                    type="text"
+                    textAlign="right"
+                    pr="50px"
+                    value={formatNumberWithCommas(field.value)}
+                    onChange={(e) => {
+                      const numericValue = parseNumberFromFormatted(
+                        e.target.value,
+                      )
+                      field.onChange(numericValue)
+                    }}
+                    data-field="monthlyIncome"
+                  />
+                  <InputRightElement>
+                    <Text>만원</Text>
+                  </InputRightElement>
+                </InputGroup>
+              )}
+            />
             {errors?.monthlyIncome && (
               <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
                 {errors?.monthlyIncome?.message as string}
@@ -425,28 +408,31 @@ const ApplyLoanStep3 = () => {
             )}
           </InputForm>
           <InputForm label="월 고정 지출">
-            <InputGroup>
-              <Input
-                placeholder="0"
-                type="number"
-                onPaste={handlePaste}
-                textAlign="right"
-                pr="50px"
-                {...register('monthlyFixedExpense', {
-                  setValueAs: (value) => {
-                    if (value === '' || value === null || value === undefined) {
-                      return undefined
-                    }
-                    const num = Number(value)
-                    return isNaN(num) ? undefined : num
-                  },
-                })}
-                data-field="monthlyFixedExpense"
-              />
-              <InputRightElement>
-                <Text>만원</Text>
-              </InputRightElement>
-            </InputGroup>
+            <Controller
+              name="monthlyFixedExpense"
+              control={control}
+              render={({ field }) => (
+                <InputGroup>
+                  <Input
+                    placeholder="0"
+                    type="text"
+                    textAlign="right"
+                    pr="50px"
+                    value={formatNumberWithCommas(field.value)}
+                    onChange={(e) => {
+                      const numericValue = parseNumberFromFormatted(
+                        e.target.value,
+                      )
+                      field.onChange(numericValue)
+                    }}
+                    data-field="monthlyFixedExpense"
+                  />
+                  <InputRightElement>
+                    <Text>만원</Text>
+                  </InputRightElement>
+                </InputGroup>
+              )}
+            />
             {errors?.monthlyFixedExpense && (
               <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
                 {errors?.monthlyFixedExpense?.message as string}
@@ -568,11 +554,16 @@ const ApplyLoanStep3 = () => {
           >
             제출
           </Button>
-          {errors?.safeKey && (
+          {safeKey && (
+            <Text textStyle={'pre-body-7'} color={'accent.green2'}>
+              신용정보가 제출되었어요.
+            </Text>
+          )}
+          {/* {errors?.safeKey && (
             <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
               {errors?.safeKey?.message as string}
             </Text>
-          )}
+          )} */}
         </InputForm>
         <VStack
           alignItems={'flex-start'}
