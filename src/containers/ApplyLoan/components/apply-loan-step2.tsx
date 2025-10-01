@@ -21,91 +21,21 @@ import { useFormContext } from 'react-hook-form'
 
 import LoanTermsModal from '@/components/@Modal/LoanTermsModal'
 import ModalBasis from '@/components/@Modal/ModalBasis'
+import { ENV } from '@/configs/env'
 import { useUserIdentityVerificationCreateMutation } from '@/generated/apis/User/User.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
 import { useSessionStorage } from '@/stores/session/state'
 import { extractUserInfoFromJWT } from '@/utils/jwt'
 
-const CHECKBOX_STYLES = {
-  '.chakra-checkbox__control': {
-    borderRadius: '50%',
-    border: '1px solid',
-    borderColor: 'border.basic.1',
-    _checked: {
-      bg: 'primary.3',
-      borderColor: 'primary.3',
-      borderRadius: '50%',
-    },
-  },
-  '.chakra-checkbox__control[data-checked]': {
-    bg: 'primary.3',
-    borderColor: 'primary.3',
-    borderRadius: '50%',
-  },
-}
-
-const AGREEMENT_ITEMS = [
-  {
-    key: 'privacy',
-    label: '개인(신용)정보 조회 동의',
-  },
-  {
-    key: 'collection',
-    label: '개인(신용)정보 수집 · 이용 동의',
-  },
-  {
-    key: 'provision',
-    label: '개인(신용)정보 제공 동의서',
-  },
-]
-
-const CONFIRMATION_ITEMS = [
-  {
-    key: 'question1',
-    question:
-      '금융회사 직원이라는 사람으로부터 전화나 문자를 받아 대출 신청을 진행하고 계시나요?',
-  },
-  {
-    key: 'question2',
-    question:
-      '신용등급 상향, 대출보증비 등의 수수료라며 돈을 먼저 입금하라고 요청받으셨습니까?',
-  },
-  {
-    key: 'question3',
-    question:
-      '고금리 대출을 받고, 상환하면 저금리로 대출이 가능하다는 이야기를 들었습니까?',
-  },
-  {
-    key: 'question4',
-    question:
-      '개인회생이나 신용회복위원회를 통한 채무조정을 진행하고 있으신가요?',
-  },
-  {
-    key: 'question5',
-    question: '햇살론 등 저금리의 서민지원대출로 바꿔준다는 제안을 받으셨나요?',
-  },
-]
 const ApplyLoanStep2 = () => {
-  const methods = useFormContext()
-  console.log(methods.getValues())
+  const {
+    register,
+    formState: { errors },
+    setValue,
+  } = useFormContext()
+
   const router = useRouter()
-  const [agreements, setAgreements] = useState({
-    all: false,
-    privacy: false,
-    collection: false,
-    provision: false,
-  })
 
-  // 확인사항 상태 관리
-  const [confirmations, setConfirmations] = useState({
-    question1: null as 'yes' | 'no' | null,
-    question2: null as 'yes' | 'no' | null,
-    question3: null as 'yes' | 'no' | null,
-    question4: null as 'yes' | 'no' | null,
-    question5: null as 'yes' | 'no' | null,
-  })
-
-  // 사용자 정보 상태 관리
   const [userInfo, setUserInfo] = useState<{
     name?: string
     phone?: string
@@ -113,15 +43,6 @@ const ApplyLoanStep2 = () => {
     gender_code?: string
   } | null>(null)
 
-  // 전체 동의 핸들러
-  const handleAllAgreement = (checked: boolean) => {
-    setAgreements({
-      all: checked,
-      privacy: checked,
-      collection: checked,
-      provision: checked,
-    })
-  }
   const { set } = useSessionStorage()
   const { mutateAsync: userIdentityVerificationCreate } =
     useUserIdentityVerificationCreateMutation({
@@ -140,16 +61,15 @@ const ApplyLoanStep2 = () => {
           }
 
           setIsPhoneCertification(true)
-          // router.push(`/apply-loan?step=2`)
         },
       },
     })
   const handleAuthentication = async () => {
     const response = await PortOne.requestIdentityVerification({
-      storeId: 'store-5fcf48f2-05d3-43e2-9abe-c09b3f461e2d',
+      storeId: ENV.PORTONE_STORE_ID || '',
       identityVerificationId: crypto.randomUUID(),
-      channelKey: 'channel-key-1e7295f0-e634-4e2b-9da5-2402b97e7a63',
-      redirectUrl: `${window.location.origin}/my-loan?step=2`,
+      channelKey: ENV.PORTONE_CHANNEL_KEY || '',
+      redirectUrl: `${window.location.origin}/apply-loan?step=2`,
     })
     if (response?.code !== undefined) {
       return alert(response?.message)
@@ -160,37 +80,20 @@ const ApplyLoanStep2 = () => {
         identityVerificationId: response?.identityVerificationId || '',
       },
     })
-    //TODO: 인증 후 개인정보를 가져와서 사용자 정보 표기하기
   }
 
-  // 개별 동의 핸들러
-  const handleIndividualAgreement = (key: string, checked: boolean) => {
-    const newAgreements = { ...agreements, [key]: checked }
-
-    const allIndividualChecked = AGREEMENT_ITEMS.every(
-      (item) => newAgreements[item.key as keyof typeof newAgreements],
-    )
-    newAgreements.all = allIndividualChecked
-
-    setAgreements(newAgreements)
+  const typeConvert = (type: string) => {
+    if (type === 'salary') {
+      return 'A'
+    } else if (type === 'credit') {
+      return 'B'
+    } else if (type === 'mortgage') {
+      return 'C'
+    } else {
+      return 'A'
+    }
   }
 
-  const handleConfirmation = (key: string, answer: 'yes' | 'no') => {
-    setConfirmations((prev) => ({
-      ...prev,
-      [key]: answer,
-    }))
-  }
-
-  const isButtonEnabled = () => {
-    const allAgreed = agreements.all
-
-    const allAnsweredNo = CONFIRMATION_ITEMS.every(
-      (item) => confirmations[item.key as keyof typeof confirmations] === 'no',
-    )
-
-    return allAgreed && allAnsweredNo
-  }
   const [isPhoneCertification, setIsPhoneCertification] = useState(false)
   return (
     <Container>
@@ -258,7 +161,12 @@ const ApplyLoanStep2 = () => {
                   •
                 </Text>
               </Text>
-              <Input {...methods.register('email')} placeholder="이메일" />
+              <Input {...register('email')} placeholder="이메일" />
+              {errors.email && (
+                <Text textStyle={'pre-body-6'} color={'red.10'}>
+                  {errors.email.message as string}
+                </Text>
+              )}
             </VStack>
           </SimpleGrid>
         )}
@@ -275,7 +183,7 @@ const ApplyLoanStep2 = () => {
             w={'160px'}
             isDisabled={!isPhoneCertification}
             onClick={() => {
-              methods.setValue('kind', router.query.type as string)
+              setValue('kind', typeConvert(router.query.type as string))
               router.replace('/apply-loan?step=3&type=' + router.query.type)
             }}
           >

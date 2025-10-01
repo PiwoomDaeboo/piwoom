@@ -8,6 +8,7 @@ import { TodoType } from './types'
 
 export type SessionStorage = {
   identityVerificationToken: string | null
+  safeKey: string | null
 }
 
 /**
@@ -24,6 +25,7 @@ export const useSessionStorage = create(
     withSetter(
       immer<SessionStorage>(() => ({
         identityVerificationToken: null,
+        safeKey: null,
       })),
     ),
     {

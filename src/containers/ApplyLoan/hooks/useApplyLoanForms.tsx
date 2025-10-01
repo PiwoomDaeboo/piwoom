@@ -11,8 +11,8 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
   const signUpFormSchema = useMemo(() => {
     return yup.object().shape({
       // Step1 fields
-      kind: yup.mixed().optional(),
-      email: yup.string().email().optional(),
+      kind: yup.string().optional(),
+      email: yup.string().email().required('필수 항목 입니다.'),
 
       // Step2 fields
 
@@ -20,8 +20,20 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       purpose: yup.string().required('필수 항목 입니다.'),
       totalAsset: yup.string().required('필수 항목 입니다.'),
       annualIncome: yup.string().required('필수 항목 입니다.'),
-      monthlyIncome: yup.number().min(0).required('필수 항목 입니다.'),
-      monthlyFixedExpense: yup.number().min(0).required('필수 항목 입니다.'),
+      monthlyIncome: yup
+        .number()
+        .typeError('숫자만 입력 가능합니다.')
+        .integer()
+        .positive()
+        .min(0)
+        .required('필수 항목 입니다.'),
+      monthlyFixedExpense: yup
+        .number()
+        .typeError('숫자만 입력 가능합니다.')
+        .integer()
+        .positive()
+        .min(0)
+        .required('필수 항목 입니다.'),
       debtScale: yup.string().required('필수 항목 입니다.'),
       repaymentMethod: yup.string().required('필수 항목 입니다.'),
       creditScore: yup.string().required('필수 항목 입니다.'),
@@ -29,7 +41,13 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       safeKey: yup.string().nullable().optional(),
 
       // Step4 fields
-      loanAmount: yup.string().required('필수 항목 입니다.'),
+      loanAmount: yup
+        .number()
+        .typeError('숫자만 입력 가능합니다.')
+        .integer()
+        .positive()
+        .min(0)
+        .required('필수 항목 입니다.'),
       repaymentType: yup.string().required('필수 항목 입니다.'),
       interestPaymentDate: yup.string().required('필수 항목 입니다.'),
       loanPeriod: yup.string().required('필수 항목 입니다.'),
@@ -58,7 +76,7 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       healthInsurancePaymentConfirmation: yup.string().nullable().optional(),
       healthInsurancePaymentConfirmation2: yup.string().nullable().optional(),
       identityCard: yup.string().nullable().optional(),
-      fileSet: yup.mixed().optional(),
+      fileSet: yup.mixed().nullable().optional(),
 
       // Optional fields
       purposeDetail: yup.string().optional(),
@@ -67,8 +85,19 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       companyName: yup.string().max(100).optional(),
       companyAddress: yup.string().optional(),
       companyBusinessNumber: yup.string().max(20).optional(),
-      hireYear: yup.number().min(0).nullable().optional(),
-      hireMonth: yup.number().min(0).nullable().optional(),
+      hireYear: yup
+        .number()
+        .typeError('숫자만 입력 가능합니다.')
+        .min(0)
+        .nullable()
+        .optional(),
+      hireMonth: yup
+        .number()
+        .typeError('숫자만 입력 가능합니다.')
+        .min(1, '1월부터 12월까지 입력해주세요.')
+        .max(12, '1월부터 12월까지 입력해주세요.')
+        .nullable()
+        .optional(),
       rrcAddress: yup.string().max(500).optional(),
     })
   }, [])

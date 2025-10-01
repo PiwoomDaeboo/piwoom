@@ -16,7 +16,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 
-import AuthAlertModal from '@/components/@Modal/Auth-alert-modal'
+import AuthAlertModal from '@/components/@Modal/auth-alert-modal'
 import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'

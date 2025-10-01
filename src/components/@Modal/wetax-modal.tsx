@@ -36,7 +36,6 @@ import {
   DeviceMobileIcon,
   KakaoAuthenticationIcon,
   KbAuthenticationIcon,
-  Loan1Icon,
   NaverAuthenticationIcon,
   PassAuthenticationIcon,
   ShinhanAuthenticationIcon,
@@ -241,19 +240,6 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
         return <SubmittingProcess />
     }
   }
-
-  useEffect(() => {
-    window.addEventListener('message', (event: any) => {
-      // event가 true or false.
-      // event 값에 따라 성공 실패 처리
-
-      if (event.data.success) {
-        console.log('성공')
-      } else {
-        console.log('실패')
-      }
-    })
-  }, [])
 
   return (
     <ModalBasis

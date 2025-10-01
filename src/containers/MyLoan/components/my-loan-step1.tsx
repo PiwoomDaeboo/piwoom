@@ -7,6 +7,7 @@ import {
   Flex,
   Text,
   VStack,
+  useToast,
 } from '@chakra-ui/react'
 import * as PortOne from '@portone/browser-sdk/v2'
 
@@ -23,7 +24,7 @@ import { cookieStorage } from '@/utils/cookie-storage'
 const MyLoanStep1 = () => {
   const router = useRouter()
   const { set } = useLocalStorage()
-
+  const toast = useToast()
   const { mutateAsync: userLoginCreate } = useUserLoginCreateMutation({
     options: {
       onSuccess: (data) => {
@@ -34,6 +35,14 @@ const MyLoanStep1 = () => {
           },
         })
         router.push(`/my-loan?step=2`)
+      },
+      onError: (error: any) => {
+        router.push(`/my-loan-status`)
+        toast({
+          title: error?.response?.data?.nonField[0],
+          status: 'error',
+          duration: 5000,
+        })
       },
     },
   })

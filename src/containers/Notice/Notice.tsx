@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -23,23 +23,63 @@ import { formatDate } from '@/utils/date-format'
 
 function Notice() {
   const router = useRouter()
-  const [currentPage, setCurrentPage] = useState(1)
+  const { page = '1', search_keyword = '' } = router.query
+  const [searchInput, setSearchInput] = useState('')
+
+  const currentPage = Number(page)
   const postsPerPage = 5
-  const { data: noticeList } = useNoticeListQuery({
+
+  const { data: pinnedNoticeList } = useNoticeListQuery({
     variables: {
       query: {
         q: '',
         is_pinned: true,
-        limit: (currentPage - 1) * postsPerPage,
-        offset: 0,
+        limit: postsPerPage,
+        offset: (currentPage - 1) * postsPerPage,
+      },
+    },
+  })
+  const { data: noticeList } = useNoticeListQuery({
+    variables: {
+      query: {
+        q: String(search_keyword),
+        is_pinned: false,
+        limit: postsPerPage,
+        offset: (currentPage - 1) * postsPerPage,
       },
     },
   })
 
+  useEffect(() => {
+    setSearchInput(String(search_keyword))
+  }, [search_keyword])
+
   const startIndex = (currentPage - 1) * postsPerPage
   const endIndex = startIndex + postsPerPage
 
-  const totalPages = Math.ceil(noticeList?.count || 0 / postsPerPage)
+  const totalPages = Math.ceil((noticeList?.count || 0) / postsPerPage)
+
+  const handlePageChange = (newPage: number) => {
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        page: newPage,
+      },
+    })
+  }
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      router.push({
+        pathname: router.pathname,
+        query: {
+          page: 1,
+          search_keyword: searchInput,
+        },
+      })
+    }
+  }
 
   return (
     <>
@@ -62,12 +102,52 @@ function Notice() {
               <InputLeftElement pointerEvents="none" pl={'12px'}>
                 <MagnifyingGlassIcon color="grey.8" boxSize={'20px'} />
               </InputLeftElement>
-              <Input placeholder="검색어를 입력해 주세요." pl={'48px'} />
+              <Input
+                placeholder="검색어를 입력해 주세요."
+                pl={'48px'}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={handleSearch}
+              />
             </InputGroup>
           </Flex>
 
-          {noticeList?.count === 0 && <NonData />}
+          {/* {noticeList?.count === 0 && <NonData />} */}
           <Box w={'100%'} minH={'400px'}>
+            {pinnedNoticeList?.results?.map((item, index) => (
+              <Flex
+                key={item.id}
+                borderTop={'1px solid'}
+                borderColor={'grey.2'}
+                px={{ base: '0px', sm: '28px', md: '40px' }}
+                py={{ base: '27px', sm: '30px' }}
+                w={'100%'}
+                justifyContent={'space-between'}
+                _hover={{ bg: 'grey.1' }}
+                cursor={'pointer'}
+                onClick={() => router.push(`/notice/${item.id}`)}
+              >
+                <HStack gap={'32px'}>
+                  <Badge bg="primary.4" color={'white'}>
+                    공지사항
+                  </Badge>
+                  <Text
+                    display={{ base: 'none', sm: 'block' }}
+                    w={'36px'}
+                    textStyle={'pre-body-6'}
+                    color={'grey.7'}
+                  >
+                    {index + 1}
+                  </Text>
+                  <Text
+                    textStyle={item.title ? 'pre-body-3' : 'pre-body-4'}
+                    color={'grey.10'}
+                  >
+                    {item.title}
+                  </Text>
+                </HStack>
+              </Flex>
+            ))}
             {noticeList?.results?.map((item, index) => (
               <Flex
                 key={item.id}
@@ -109,13 +189,15 @@ function Notice() {
               </Flex>
             ))}
           </Box>
-          <Flex justifyContent={'center'} mt={'48px'}>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
-          </Flex>
+          {(noticeList?.count ?? 0) > 0 && (
+            <Flex justifyContent={'center'} mt={'48px'}>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </Flex>
+          )}
         </Flex>
       </Container>
     </>

@@ -14,6 +14,7 @@ import Slider from 'react-slick'
 
 import YoutubeVideoModal from '@/components/@Modal/YoutubeVideoModal'
 import {
+  Call1332Icon,
   Slider1Icon,
   Slider2Icon,
   Slider3Icon,
@@ -74,9 +75,12 @@ const SliderItem = ({ item, onOpen }: { item: any; onOpen: () => void }) => (
         <Text textStyle={'pre-heading-1'} color={'grey.9'}>
           {item.title}
         </Text>
-        <Text textStyle={'pre-body-4'} color={'grey.8'}>
-          {item.subtitle}
-        </Text>
+        <HStack gap={'12px'}>
+          <Text textStyle={'pre-body-4'} color={'grey.8'}>
+            {item.subtitle}
+          </Text>
+          {item.id === 1 && <Call1332Icon boxSize={'79px'} h={'28px'} />}
+        </HStack>
       </VStack>
 
       <Box
@@ -104,6 +108,8 @@ function Section6() {
     slidesToScroll: 1,
     adaptiveHeight: false,
     arrows: false,
+    autoplay: true,
+    autoplaySpeed: 3000,
 
     variableWidth: false,
     beforeChange: (oldIndex: number, newIndex: number) => {

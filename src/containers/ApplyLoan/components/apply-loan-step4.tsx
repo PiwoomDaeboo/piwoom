@@ -6,6 +6,7 @@ import {
   AspectRatio,
   Box,
   Button,
+  Center,
   Checkbox,
   Container,
   Flex,
@@ -14,6 +15,7 @@ import {
   InputGroup,
   InputRightElement,
   SimpleGrid,
+  Spinner,
   Text,
   Textarea,
   VStack,
@@ -23,7 +25,10 @@ import {
 
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
 
-import { useUploadFileToS3Mutation } from '@/apis/s3-file-uploader/S3FileUploaderApi.query'
+import {
+  useUploadFileToS3Mutation,
+  useUploadFilesToS3Mutation,
+} from '@/apis/s3-file-uploader/S3FileUploaderApi.query'
 import CommonSelect from '@/components/CommonSelect'
 import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
@@ -32,9 +37,11 @@ import { useGovRetrieveQuery } from '@/generated/apis/Gov/Gov.query'
 import { useLoanCreateMutation } from '@/generated/apis/Loan/Loan.query'
 import {
   CaretRightIcon,
+  DocumenticonIcon,
   FolderIcon,
   InfoFillIcon,
   XCircleFillIcon,
+  XIcon,
 } from '@/generated/icons/MyIcons'
 import { useQueryEffects } from '@/hooks/useQueryEffect'
 import { useSessionStorage } from '@/stores/session/state'
@@ -53,6 +60,8 @@ import {
   REPAYMENT_TYPE,
 } from '../../../constants/loan'
 import { useSelectButtonGroup } from '../hooks/useSelectButtonGroup'
+import AdditionalFileUpload from './additional-file-upload'
+import IdcardUpload from './idcard-upload'
 
 interface Company {
   no: string
@@ -68,6 +77,7 @@ const ApplyLoanStep4 = () => {
   const {
     register,
     setValue,
+    getValues,
     control,
     handleSubmit,
     watch,
@@ -83,6 +93,7 @@ const ApplyLoanStep4 = () => {
     control,
     name: 'companyBusinessNumber',
   })
+
   const baseAddress = useWatch({ control, name: 'baseAddress' })
   const detailAddress = useWatch({ control, name: 'detailAddress' })
   const assetBaseAddress = useWatch({ control, name: 'assetBaseAddress' })
@@ -118,7 +129,9 @@ const ApplyLoanStep4 = () => {
     onOpen: onUntactDocumentApplyModalOpen,
     onClose: onUntactDocumentApplyModalClose,
   } = useDisclosure()
-  const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null)
+  const [fileUploadedFileName, setFileUploadedFileName] = useState<
+    string[] | null
+  >([])
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
   const [shouldExecuteGovQuery, setShouldExecuteGovQuery] = useState(false)
   const [isDocumentSubmissionCompleted, setIsDocumentSubmissionCompleted] =
@@ -127,22 +140,11 @@ const ApplyLoanStep4 = () => {
     'normal' | 'real-estate'
   >('normal')
   const [isBankAccountVerified, setIsBankAccountVerified] = useState(false)
+  const idCardInputRef = useRef<HTMLInputElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const bankWatchValue = useWatch({ control, name: 'bank' })
   const accountNumberWatchValue = useWatch({ control, name: 'accountNumber' })
 
-  const { mutate: uploadIdCard, isPending: isIdCardUploading } =
-    useUploadFileToS3Mutation({
-      options: {
-        onSuccess: (data) => {
-          setUploadedFileUrl(`${data.url}/${data?.fields?.key}`)
-          setValue('identityCard', `${data?.fields?.key}`)
-        },
-        onError: (error) => {
-          console.error('파일 업로드 실패:', error)
-        },
-      },
-    })
   const {
     mutate: accountVerifyMutation,
     isPending: isAccountVerifyMutationLoading,
@@ -152,8 +154,19 @@ const ApplyLoanStep4 = () => {
         // setValue('accountHolderSsn', true)
         console.log('ownerNameSearch', data)
         setIsBankAccountVerified(true)
+        setValue('accountHolder', data?.holder)
       },
-      onError: (error) => {
+      onError: (error: any) => {
+        toast({
+          title: '계좌 검증 실패',
+          description:
+            error.response.data.nonField[0] ||
+            '계좌 검증 중 오류가 발생했습니다.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+        setIsBankAccountVerified(false)
         console.error('ownerNameSearch', error)
       },
     },
@@ -169,23 +182,6 @@ const ApplyLoanStep4 = () => {
     options: REPAYMENT_TYPE,
   })
 
-  const handleUploadIdCard = (file: File) => {
-    uploadIdCard({
-      file,
-      fieldChoice: 'loan.Loan.identity_card',
-    })
-  }
-
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      handleUploadIdCard(file)
-    }
-  }
-
-  const handleUploadButtonClick = () => {
-    fileInputRef.current?.click()
-  }
   console.log('errors', errors)
 
   const { mutate: loanCreateMutation } = useLoanCreateMutation({
@@ -200,22 +196,10 @@ const ApplyLoanStep4 = () => {
   })
   const { identityVerificationToken } = useSessionStorage()
 
-  const { type } = router.query
-  const typeConvert = (type: string) => {
-    if (type === 'salary') {
-      return 'A'
-    } else if (type === 'credit') {
-      return 'B'
-    } else if (type === 'mortgage') {
-      return 'C'
-    } else {
-      return 'A'
-    }
-  }
-
   const onStep4Submit = (data: any) => {
     const requestData = {
-      kind: typeConvert(type as string) || 'A',
+      // kind: typeConvert(type as string) || 'A',
+      // kind: 'A',
       identityVerificationToken: identityVerificationToken,
       incomeCertificate: '',
       residentRegistrationCopy: '',
@@ -287,6 +271,19 @@ const ApplyLoanStep4 = () => {
   const handleAddressModalOpen = (type: 'normal' | 'real-estate') => {
     setAddressModalType(type)
     onAddressModalOpen()
+  }
+
+  const formatNumberWithCommas = (
+    value: number | string | undefined,
+  ): string => {
+    if (!value) return ''
+    const numbers = String(value).replace(/[^0-9]/g, '')
+    return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
+
+  const parseNumberFromFormatted = (value: string): number | undefined => {
+    const numbers = value.replace(/[^0-9]/g, '')
+    return numbers === '' ? undefined : Number(numbers)
   }
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -434,22 +431,31 @@ const ApplyLoanStep4 = () => {
 
         <InputForm label="대출신청 금액">
           <>
-            <InputGroup>
-              <Input
-                placeholder="0"
-                type="number"
-                onPaste={handlePaste}
-                textAlign="right"
-                pr="50px"
-                {...register('loanAmount', {
-                  valueAsNumber: true,
-                })}
-                data-field="loanAmount"
-              />
-              <InputRightElement>
-                <Text>만원</Text>
-              </InputRightElement>
-            </InputGroup>
+            <Controller
+              name="loanAmount"
+              control={control}
+              render={({ field }) => (
+                <InputGroup>
+                  <Input
+                    placeholder="0"
+                    type="text"
+                    textAlign="right"
+                    pr="50px"
+                    value={formatNumberWithCommas(field.value)}
+                    onChange={(e) => {
+                      const numericValue = parseNumberFromFormatted(
+                        e.target.value,
+                      )
+                      field.onChange(numericValue)
+                    }}
+                    data-field="loanAmount"
+                  />
+                  <InputRightElement>
+                    <Text>만원</Text>
+                  </InputRightElement>
+                </InputGroup>
+              )}
+            />
             <Flex gap={'8px'} flexWrap={'wrap'}>
               <Button
                 variant={
@@ -1008,143 +1014,9 @@ const ApplyLoanStep4 = () => {
             추후 대출 현황 조회에서 서류를 업데이트 부탁드립니다.
           </Text>
         </VStack>
-        <InputForm label="추가 서류 제출" isOptional w={'100%'}>
-          <Flex
-            justifyContent={'center'}
-            alignItems={'center'}
-            p={'20px 16px'}
-            w={'100%'}
-            bg={'background.basic.2'}
-            gap={'16px'}
-          >
-            <Flex
-              justifyContent={'center'}
-              alignItems={'center'}
-              border={'1px solid'}
-              borderColor={'border.basic.1'}
-              borderRadius={'50%'}
-              w={'60px'}
-              h={'60px'}
-            >
-              <FolderIcon boxSize={'32px'} />
-            </Flex>
-            <Text textStyle={'pre-body-6'} color={'grey.8'}>
-              추가할 서류가 있다면
-              <br />
-              <Box as="span" color={'primary.4'}>
-                업로드
-              </Box>
-              해 주세요.
-            </Text>
-          </Flex>
-        </InputForm>
-        {router.query.type === 'mortgage' && (
-          <VStack
-            alignItems={'flex-start'}
-            p={'24px 20px'}
-            borderRadius={'20px'}
-            border={'1px solid'}
-            borderColor={'border.basic.1'}
-            gap={'24px'}
-          >
-            <HStack>
-              <InfoFillIcon boxSize={'24px'} />
-              <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                유의사항
-              </Text>
-            </HStack>
-            <Text textStyle={'pre-body-68'} color={'grey.8'}>
-              신규로 부동산을 매입하시려는 경우 매매계약서 사본을 제출해주시면
-              보다 빠른 대출 심사가 가능합니다.
-            </Text>
-            <Text textStyle={'pre-body-68'} color={'grey.8'}>
-              (매매계약서 제출 시 매도인 및 매수인 등의 주민등록번호 뒷자리는 꼭
-              가려 주셔야 하며, 만약 가리지 않고 업로드하실 경우 보안 정책에
-              따라 해당 자료는 파기됩니다.)
-            </Text>
-          </VStack>
-        )}
+        <AdditionalFileUpload />
         <Box w={'100%'} h={'1px'} bg={'border.basic.1'} my={'48px'} />
-        <Text textStyle={'pre-heading-3'} color={'primary.4'}>
-          신분증 업로드
-        </Text>
-
-        <VStack
-          alignItems={'flex-start'}
-          p={'24px 20px'}
-          borderRadius={'20px'}
-          border={'1px solid'}
-          borderColor={'border.basic.1'}
-          gap={'24px'}
-        >
-          <HStack>
-            <InfoFillIcon boxSize={'24px'} />
-            <Text textStyle={'pre-body-7'} color={'grey.9'}>
-              유의사항
-            </Text>
-          </HStack>
-          <Text textStyle={'pre-body-6'} color={'grey.8'}>
-            고객님의 소중한 개인정보 보호를 위해,{' '}
-            <Box as="span" color={'accent.red2'}>
-              신분증 촬영 시 주민등록번호 뒤 6자리는 꼭 가려 주세요.
-            </Box>
-            <br />
-            만약 가리지 않고 업로드하실 경우, 보안 정책에 따라 이미지가 파기되며
-            대출 신청이 정상적으로 진행되지 않을 수 있습니다. <br /> 또한,
-            정상적인 대출 진행을 위해 마스킹 처리된 신분증 사본의 재제출을
-            요청드릴 수 있습니다.
-          </Text>
-          <Flex
-            justifyContent={'center'}
-            alignItems={'center'}
-            p={'20px 16px'}
-            w={'100%'}
-            h={'200px'}
-            borderRadius={'20px'}
-            bg={'background.basic.2'}
-          >
-            <Input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileSelect}
-              accept="image/*"
-              display="none"
-            />
-            {uploadedFileUrl ?
-              <AspectRatio ratio={237 / 145}>
-                <ImageAsNext
-                  w={'100%'}
-                  h={'100%'}
-                  fill
-                  src={uploadedFileUrl ?? '-'}
-                  alt="신분증"
-                />
-              </AspectRatio>
-            : <Text textStyle={'pre-body-6'} color={'grey.6'}>
-                파일을 선택해주세요
-              </Text>
-            }
-          </Flex>
-        </VStack>
-        <InputForm label="신분증" isRequired>
-          <Button
-            variant={'outline-primary'}
-            textStyle={'pre-body-5'}
-            color={'grey.8'}
-            w={'209px'}
-            onClick={handleUploadButtonClick}
-            isLoading={isIdCardUploading}
-            loadingText="업로드 중..."
-          >
-            신분증 업로드
-          </Button>
-          {errors?.identityCard && (
-            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
-              {errors?.identityCard?.message as string}
-            </Text>
-          )}
-        </InputForm>
-
+        <IdcardUpload />
         <Flex
           w={'100%'}
           justifyContent={'center'}
