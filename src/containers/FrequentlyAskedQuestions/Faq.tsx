@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -19,8 +19,6 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
-import { debounce } from 'lodash'
-
 import NonData from '@/components/NonData'
 import { Pagination } from '@/components/pagination'
 import { useFaqListQuery } from '@/generated/apis/Faq/Faq.query'
@@ -28,41 +26,52 @@ import { CaretDownIcon, MagnifyingGlassIcon } from '@/generated/icons/MyIcons'
 
 function Faq() {
   const router = useRouter()
-  const [currentPage, setCurrentPage] = useState(1)
+  const { page = '1', search_keyword = '' } = router.query
+  const [searchInput, setSearchInput] = useState('')
+
+  const currentPage = Number(page)
   const postsPerPage = 10
-
-  const startIndex = (currentPage - 1) * postsPerPage
-  const endIndex = startIndex + postsPerPage
-
-  const [search, setSearch] = useState('')
-  const [debouncedSearch, setDebouncedSearch] = useState('')
-
-  const debouncedSetSearch = useCallback(
-    debounce((value: string) => {
-      setDebouncedSearch(value)
-    }, 300),
-    [],
-  )
-
-  const handleSearchChange = useCallback(
-    (value: string) => {
-      setSearch(value)
-      debouncedSetSearch(value)
-      setCurrentPage(1)
-    },
-    [debouncedSetSearch],
-  )
 
   const { data: faqList } = useFaqListQuery({
     variables: {
       query: {
-        q: debouncedSearch,
+        q: String(search_keyword),
         limit: postsPerPage,
         offset: (currentPage - 1) * postsPerPage,
       },
     },
   })
+
+  useEffect(() => {
+    setSearchInput(String(search_keyword))
+  }, [search_keyword])
+
+  const startIndex = (currentPage - 1) * postsPerPage
+  const endIndex = startIndex + postsPerPage
+
   const totalPages = Math.ceil((faqList?.count || 0) / postsPerPage)
+
+  const handlePageChange = (newPage: number) => {
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        page: newPage,
+      },
+    })
+  }
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      router.push({
+        pathname: router.pathname,
+        query: {
+          page: 1,
+          search_keyword: searchInput,
+        },
+      })
+    }
+  }
   return (
     <>
       <Flex w={'100%'} h={'100%'} py={'60px'} bg={'primary.1'}>
@@ -86,8 +95,9 @@ function Faq() {
               </InputLeftElement>
               <Input
                 placeholder="검색어를 입력해 주세요."
-                value={search}
-                onChange={(e) => handleSearchChange(e.target.value)}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={handleSearch}
                 pl={'48px'}
               />
               <InputRightElement></InputRightElement>
@@ -145,7 +155,7 @@ function Faq() {
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
-                onPageChange={setCurrentPage}
+                onPageChange={handlePageChange}
               />
             </Flex>
           )}
