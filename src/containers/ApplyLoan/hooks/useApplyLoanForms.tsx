@@ -37,7 +37,7 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       debtScale: yup.string().required('필수 항목 입니다.'),
       repaymentMethod: yup.string().required('필수 항목 입니다.'),
       creditScore: yup.string().required('필수 항목 입니다.'),
-      purposeAndRepaymentPlan: yup.string().required('필수 항목 입니다.'),
+      purposeAndRepaymentPlan: yup.string().optional(),
       safeKey: yup.string().nullable().optional(),
 
       // Step4 fields

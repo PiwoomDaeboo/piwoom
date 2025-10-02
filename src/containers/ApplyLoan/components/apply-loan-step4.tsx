@@ -458,6 +458,9 @@ const ApplyLoanStep4 = () => {
             />
             <Flex gap={'8px'} flexWrap={'wrap'}>
               <Button
+                textStyle={'pre-body-5'}
+                fontWeight={600}
+                bg={loanAmount === 300 ? 'primary.1' : 'grey.0'}
                 variant={
                   loanAmount === 300 ? 'outline-primary' : 'outline-secondary'
                 }
@@ -466,6 +469,9 @@ const ApplyLoanStep4 = () => {
                 300
               </Button>
               <Button
+                textStyle={'pre-body-5'}
+                fontWeight={600}
+                bg={loanAmount === 600 ? 'primary.1' : 'grey.0'}
                 variant={
                   loanAmount === 600 ? 'outline-primary' : 'outline-secondary'
                 }
@@ -474,6 +480,9 @@ const ApplyLoanStep4 = () => {
                 600
               </Button>
               <Button
+                textStyle={'pre-body-5'}
+                fontWeight={600}
+                bg={loanAmount === 900 ? 'primary.1' : 'grey.0'}
                 variant={
                   loanAmount === 900 ? 'outline-primary' : 'outline-secondary'
                 }
@@ -482,6 +491,9 @@ const ApplyLoanStep4 = () => {
                 900
               </Button>
               <Button
+                textStyle={'pre-body-5'}
+                fontWeight={600}
+                bg={loanAmount === 1200 ? 'primary.1' : 'grey.0'}
                 variant={
                   loanAmount === 1200 ? 'outline-primary' : 'outline-secondary'
                 }
@@ -490,6 +502,9 @@ const ApplyLoanStep4 = () => {
                 1200
               </Button>
               <Button
+                textStyle={'pre-body-5'}
+                fontWeight={600}
+                bg={loanAmount === 1500 ? 'primary.1' : 'grey.0'}
                 variant={
                   loanAmount === 1500 ? 'outline-primary' : 'outline-secondary'
                 }
@@ -564,6 +579,8 @@ const ApplyLoanStep4 = () => {
             </Text>
             <Flex gap={'8px'} flexWrap={'wrap'}>
               <Button
+                textStyle={'pre-body-5'}
+                fontWeight={600}
                 variant={
                   loanPeriod === 6 ? 'outline-primary' : 'outline-secondary'
                 }
@@ -572,6 +589,7 @@ const ApplyLoanStep4 = () => {
                 6개월
               </Button>
               <Button
+                fontWeight={600}
                 variant={
                   loanPeriod === 12 ? 'outline-primary' : 'outline-secondary'
                 }
@@ -580,6 +598,7 @@ const ApplyLoanStep4 = () => {
                 12개월
               </Button>
               <Button
+                fontWeight={600}
                 variant={
                   loanPeriod === 24 ? 'outline-primary' : 'outline-secondary'
                 }
@@ -588,6 +607,7 @@ const ApplyLoanStep4 = () => {
                 24개월
               </Button>
               <Button
+                fontWeight={600}
                 variant={
                   loanPeriod === 36 ? 'outline-primary' : 'outline-secondary'
                 }
@@ -648,6 +668,7 @@ const ApplyLoanStep4 = () => {
           <Button
             variant={'outline-secondary'}
             textStyle={'pre-body-5'}
+            fontWeight={600}
             color={'grey.8'}
             isLoading={isAccountVerifyMutationLoading}
             disabled={isAccountVerifyMutationLoading || isBankAccountVerified}

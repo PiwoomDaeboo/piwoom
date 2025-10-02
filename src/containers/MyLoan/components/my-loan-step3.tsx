@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -14,11 +14,13 @@ import {
   Text,
   VStack,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 
 import AuthAlertModal from '@/components/@Modal/auth-alert-modal'
 import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
+import { useLoanSignCreateMutation } from '@/generated/apis/Loan/Loan.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
 import { MY_IMAGES } from '@/generated/path/images'
 
@@ -28,7 +30,6 @@ import {
   SQUARE_CHECKBOX_STYLES,
 } from '../const/consts'
 import CustomerInfoModal from './customer-info-modal'
-import ElectronicContractModal from './electronic-contract-modal'
 import MyLoanTermsModal from './my-loan-terms-modal'
 
 const MyLoanStep3 = () => {
@@ -44,8 +45,10 @@ const MyLoanStep3 = () => {
     onOpen: onAuthAlertOpen,
     onClose: onAuthAlertClose,
   } = useDisclosure()
+  const toast = useToast()
   const [isAgree, setIsAgree] = useState(false)
   const [termsNumber, setTermsNumber] = useState(1)
+  const [signUrl, setSignUrl] = useState('')
   const [agreements, setAgreements] = useState({
     all: false,
     privacy: false,
@@ -69,11 +72,51 @@ const MyLoanStep3 = () => {
     onTermsOpen()
     setTermsNumber(termsNumber)
   }
-  const {
-    isOpen: isElectronicContractModalOpen,
-    onOpen: onElectronicContractModalOpen,
-    onClose: onElectronicContractModalClose,
-  } = useDisclosure()
+  const { mutate: createContractSignature } = useLoanSignCreateMutation({
+    options: {
+      onSuccess: (data) => {
+        const url = data?.signUrl
+        setSignUrl(url)
+        if (url) {
+          handleApplyCreditInfoSubmit(url)
+        } else {
+          toast({
+            title: '전자계약서 URL 오류',
+            description: '전자계약서 URL을 가져오는데 실패했습니다.',
+            status: 'error',
+            duration: 5000,
+          })
+        }
+      },
+      onError: (error) => {
+        toast({
+          title: '전자계약서 작성 실패',
+          description: '전자계약서 작성에 실패했습니다.',
+          status: 'error',
+          duration: 5000,
+        })
+        console.error('createContractSignature', error)
+      },
+    },
+  })
+  const handleApplyCreditInfoSubmit = (url: string) => {
+    if (!url) return
+
+    window.open(
+      url,
+      'popupChk',
+      'width=800, height=600, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
+    )
+  }
+  useEffect(() => {
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'popup_status') {
+        console.log(e)
+        router.replace('/my-loan?step=4')
+      }
+    })
+  }, [router])
+
   return (
     <Container>
       <MyLoanTermsModal
@@ -83,10 +126,7 @@ const MyLoanStep3 = () => {
       />
 
       <AuthAlertModal isOpen={isAuthAlertOpen} onClose={onAuthAlertClose} />
-      <ElectronicContractModal
-        isOpen={isElectronicContractModalOpen}
-        onClose={onElectronicContractModalClose}
-      />
+
       <Flex
         pt={{ base: '40px', sm: '48px', md: '80px' }}
         pb={'120px'}
@@ -306,7 +346,7 @@ const MyLoanStep3 = () => {
             variant={'solid-primary'}
             w={'160px'}
             isDisabled={!isAgree}
-            onClick={onElectronicContractModalOpen}
+            onClick={() => createContractSignature({ id: 1 })}
             // onClick={() => router.push('/my-loan?step=4')}
           >
             전자서명 진행

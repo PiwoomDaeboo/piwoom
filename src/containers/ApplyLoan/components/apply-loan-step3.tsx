@@ -249,11 +249,12 @@ const ApplyLoanStep3 = () => {
     }
   }, [])
 
-  const {
-    isOpen: isNiceIframeOpen,
-    onOpen: onNiceIframeOpen,
-    onClose: onNiceIframeClose,
-  } = useDisclosure()
+  const placeholderData = {
+    mortgage:
+      '(예시) 서울시 성동구에 위치한 10억원짜리 아파트를 사게 되었습니다. \n잔금이 2개월 후라, 잔금일에 아파트 2순위 담보로 2억원을 빌리고 싶습니다.\n참고로 1순위 은행 대출은 4억원입니다.\n연 소득이 6000만원이기 때문에 매월 대출 이자 납부에는 문제가 없으며, 대출 기간 3년 동안 월급을 열심히 모아서 원금 일부는 상환하고 나머지는 은행 신용대출로 대환할 계획입니다.',
+    normal:
+      '(예시) 자녀 출산으로 인해 산후 조리원 비용이 예상보다 많이 나왔습니다. \n오백만원만 빌리면, 3개월 동안 월급을 모아서 상환할 수 있습니다.',
+  }
   const { set, safeKey } = useSessionStorage()
   console.log('safeKeyWatchValue', safeKey)
   useEffect(() => {
@@ -335,6 +336,7 @@ const ApplyLoanStep3 = () => {
                   : 'outline-secondary'
                 }
                 textStyle={'pre-body-5'}
+                bg={totalAsset === option.value ? 'primary.1' : 'grey.0'}
                 color={totalAsset === option.value ? 'primary.3' : 'grey.8'}
                 w={'100%'}
                 onClick={() => handleButtonSelect('totalAsset', option.value)}
@@ -359,6 +361,7 @@ const ApplyLoanStep3 = () => {
                     'outline-primary'
                   : 'outline-secondary'
                 }
+                bg={annualIncome === option.value ? 'primary.1' : 'grey.0'}
                 textStyle={'pre-body-5'}
                 color={annualIncome === option.value ? 'primary.3' : 'grey.8'}
                 w={'100%'}
@@ -451,6 +454,7 @@ const ApplyLoanStep3 = () => {
                     'outline-primary'
                   : 'outline-secondary'
                 }
+                bg={debtScale === option.value ? 'primary.1' : 'grey.0'}
                 textStyle={'pre-body-5'}
                 color={debtScale === option.value ? 'primary.3' : 'grey.8'}
                 w={'100%'}
@@ -602,7 +606,7 @@ const ApplyLoanStep3 = () => {
             본인은 본 개인정보 처리 업무의 위탁에 동의합니다.
           </Text>
         </VStack>
-        <InputForm label="대출 용도 및 상환 계획" w={'100%'}>
+        <InputForm label="대출 용도 및 상환 계획" isRequired={false} w={'100%'}>
           <Flex flexDir={'column'} gap={'12px'} w={'100%'}>
             <Text textStyle={'pre-caption-2'} color={'grey.7'}>
               *대출금 사용 용도 및 예상 상환 방법을 구체적으로 기재하시면 심사에
@@ -613,8 +617,16 @@ const ApplyLoanStep3 = () => {
               h={'200px'}
               p={'10px'}
               maxLength={2000}
-              // placeholder="(예시) 자녀 출산으로 인해 산후 조리원 비용이 예상보다 많이 나왔습니다. <br/>오백만원만 빌리면, 3개월 동안 월급을 모아서 상환할 수 있습니다."
-              placeholder="(예시) 서울시 성동구에 위치한 10억원짜리 아파트를 사게 되었습니다. 잔금이 2개월 후라, 잔금일에 아파트 2순위 담보로 2억원을 빌리고 싶습니다. 참고로 1순위 은행 대출은 4억원입니다. 연 소득이 6000만원이기 때문에 매월 대출 이자 납부에는 문제가 없으며, 대출 기간 3년 동안 월급을 열심히 모아서 원금 일부는 상환하고 나머지는 은행 신용대출로 대환할 계획입니다."
+              placeholder={
+                placeholderData[
+                  router.query.type === 'mortgage' ? 'mortgage' : 'normal'
+                ]
+              }
+              _placeholder={{
+                whiteSpace: 'pre-wrap',
+                textStyle: 'pre-body-6',
+                color: 'grey.5',
+              }}
               {...register('purposeAndRepaymentPlan')}
               data-field="purposeAndRepaymentPlan"
             />

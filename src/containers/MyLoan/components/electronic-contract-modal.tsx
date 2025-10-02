@@ -1,47 +1,31 @@
 import React, { useEffect, useState } from 'react'
 
+import { useRouter } from 'next/router'
+
 import { Box, Button, Flex, Text } from '@chakra-ui/react'
 
 import ModalBasis from '@/components/@Modal/ModalBasis'
-import { useLoanSignCreateMutation } from '@/generated/apis/Loan/Loan.query'
 
 interface ElectronicContractModalProps {
   isOpen: boolean
   onClose: () => void
-  contractId?: number
+
+  signUrl?: string
 }
 
 function ElectronicContractModal({
   isOpen,
   onClose,
-  contractId = 1,
+  signUrl = '',
 }: ElectronicContractModalProps) {
-  const [contractSignature, setContractSignature] = useState<string | null>(
-    null,
-  )
-  const { mutate: createContractSignature } = useLoanSignCreateMutation({
-    options: {
-      onSuccess: (data) => {
-        setContractSignature(data.signUrl)
-        console.log('createContractSignature', data)
-      },
-      onError: (error) => {
-        console.error('createContractSignature', error)
-      },
-    },
-  })
-  useEffect(() => {
-    createContractSignature({
-      id: contractId,
-    })
-  }, [contractId])
+  const router = useRouter()
 
   return (
     <ModalBasis
       isOpen={isOpen}
       visibleCloseButton={true}
       onClose={onClose}
-      size={{ base: 'full', sm: 'lg' }}
+      size={{ base: 'full', sm: 'xl' }}
       header={
         <Box
           pb={'16px'}
@@ -66,31 +50,9 @@ function ElectronicContractModal({
               overflowY: 'scroll',
               maxHeight: '100%',
             }}
-            src={contractSignature || ''}
+            src={signUrl || ''}
           ></iframe>
         </Box>
-      }
-      footer={
-        <>
-          <Flex
-            w={'100%'}
-            justifyContent={'center'}
-            alignItems={'center'}
-            gap={'10px'}
-          >
-            <Button variant={'outline-secondary'} w={'100%'} onClick={onClose}>
-              취소
-            </Button>
-            <Button
-              variant={'solid-primary'}
-              w={'100%'}
-              // onClick={}
-              // onClick={handleOtpWetax}
-            >
-              인증완료
-            </Button>
-          </Flex>
-        </>
       }
     ></ModalBasis>
   )

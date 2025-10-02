@@ -34,12 +34,11 @@ export const useSelectButtonGroup = ({
 
             return (
               <Button
-                variant={'outline-secondary'}
-                sx={{
-                  bgColor: isSelected ? 'primary.1' : undefined,
-                  color: isSelected ? 'primary.4' : undefined,
-                  borderColor: isSelected ? 'primary.4' : undefined,
-                }}
+                // variant={'outline-secondary'}
+                variant={isSelected ? 'outline-primary' : 'outline-secondary'}
+                textStyle={'pre-body-5'}
+                bg={isSelected ? 'primary.1' : 'grey.0'}
+                fontWeight={600}
                 key={option.value}
                 w={'209px'}
                 onClick={() => {

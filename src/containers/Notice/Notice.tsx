@@ -146,6 +146,13 @@ function Notice() {
                     {item.title}
                   </Text>
                 </HStack>
+                <Text
+                  display={{ base: 'none', sm: 'block' }}
+                  textStyle={'pre-body-8'}
+                  color={'grey.10'}
+                >
+                  {formatDate({ date: new Date(item.createdAt) })}
+                </Text>
               </Flex>
             ))}
             {noticeList?.results?.map((item, index) => (

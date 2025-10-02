@@ -200,7 +200,7 @@ const HomeHeader = ({
               </Text>
             </Button>
             <Button
-              onClick={() => router.push(ROUTES.LOAN_MAIN)}
+              onClick={() => router.push('/loan?type=credit')}
               variant={'black-primary'}
             >
               <Text textStyle={'pre-body-7'} color={'grey.0'}>
@@ -211,7 +211,7 @@ const HomeHeader = ({
           <HStack display={{ base: 'flex', md: 'none' }}>
             <Button
               variant={'black-primary'}
-              onClick={() => router.push('/apply-loan')}
+              onClick={() => router.push('/loan?type=credit')}
             >
               대출 신청
             </Button>
