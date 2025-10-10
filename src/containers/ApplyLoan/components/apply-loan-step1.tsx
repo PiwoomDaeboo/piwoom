@@ -97,9 +97,14 @@ const ApplyLoanStep1 = () => {
     onOpen: onTermsOpen,
   } = useDisclosure()
   const {
-    isOpen: isAlertOpen,
-    onClose: isAlertClose,
-    onOpen: onAlertOpen,
+    isOpen: isVoicePhishingAlertOpen,
+    onClose: isVoicePhishingAlertClose,
+    onOpen: onVoicePhishingAlertOpen,
+  } = useDisclosure()
+  const {
+    isOpen: isAgreementAlertOpen,
+    onClose: isAgreementAlertClose,
+    onOpen: onAgreementAlertOpen,
   } = useDisclosure()
 
   const [confirmations, setConfirmations] = useState({
@@ -151,14 +156,25 @@ const ApplyLoanStep1 = () => {
     }))
   }
 
-  const isButtonEnabled = () => {
+  const handleNextClick = () => {
+    // 1. 필수 동의사항 체크
     const allAgreed = agreements.all
+    if (!allAgreed) {
+      onAgreementAlertOpen()
+      return
+    }
 
-    const allAnsweredYes = CONFIRMATION_ITEMS.every(
-      (item) => confirmations[item.key as keyof typeof confirmations] === 'no',
+    // 2. 확인사항 체크 (하나라도 "예"가 있으면 보이스피싱 의심)
+    const hasYesAnswer = CONFIRMATION_ITEMS.some(
+      (item) => confirmations[item.key as keyof typeof confirmations] === 'yes',
     )
+    if (hasYesAnswer) {
+      onVoicePhishingAlertOpen()
+      return
+    }
 
-    return allAgreed && allAnsweredYes
+    // 3. 모두 통과하면 다음 페이지로
+    router.push('/apply-loan?step=2&type=' + router.query.type)
   }
   return (
     <Container>
@@ -327,13 +343,7 @@ const ApplyLoanStep1 = () => {
           <Button
             variant={'solid-primary'}
             w={'160px'}
-            onClick={() => {
-              if (!isButtonEnabled()) {
-                onAlertOpen()
-                return
-              }
-              router.push('/apply-loan?step=2&type=' + router.query.type)
-            }}
+            onClick={handleNextClick}
           >
             다음
           </Button>
@@ -344,10 +354,11 @@ const ApplyLoanStep1 = () => {
         onClose={isTermsClose}
         type={termsType}
       />
+      {/* 필수 동의사항 미체크 알림 모달 */}
       <ModalBasis
-        isOpen={isAlertOpen}
+        isOpen={isAgreementAlertOpen}
         visibleCloseButton={true}
-        onClose={isAlertClose}
+        onClose={isAgreementAlertClose}
         size={'sm'}
         body={
           <Flex
@@ -357,7 +368,40 @@ const ApplyLoanStep1 = () => {
             alignItems={'center'}
           >
             <Text textStyle={'pre-heading-4'}>알림</Text>
-            <Text textStyle={'pre-body-6'}>
+            <Text textStyle={'pre-body-6'} textAlign={'center'}>
+              필수 동의사항을 체크하지 않았기 때문에
+              <br />
+              대출 신청이 어렵습니다.
+            </Text>
+          </Flex>
+        }
+        footer={
+          <Flex w="100%" gap="12px">
+            <Button
+              w="100%"
+              variant={'solid-primary'}
+              onClick={isAgreementAlertClose}
+            >
+              확인
+            </Button>
+          </Flex>
+        }
+      ></ModalBasis>
+      {/* 보이스피싱 의심 알림 모달 */}
+      <ModalBasis
+        isOpen={isVoicePhishingAlertOpen}
+        visibleCloseButton={true}
+        onClose={isVoicePhishingAlertClose}
+        size={'sm'}
+        body={
+          <Flex
+            flexDir={'column'}
+            gap={'12px'}
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
+            <Text textStyle={'pre-heading-4'}>알림</Text>
+            <Text textStyle={'pre-body-6'} textAlign={'center'}>
               현재는 보이스피싱이 의심되어
               <br />
               대출 신청이 어렵습니다.
@@ -366,7 +410,11 @@ const ApplyLoanStep1 = () => {
         }
         footer={
           <Flex w="100%" gap="12px">
-            <Button w="100%" variant={'solid-primary'} onClick={isAlertClose}>
+            <Button
+              w="100%"
+              variant={'solid-primary'}
+              onClick={isVoicePhishingAlertClose}
+            >
               확인
             </Button>
           </Flex>

@@ -1,13 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { useRouter } from 'next/router'
-
-import { Box, Button, Container, Flex, Text, VStack } from '@chakra-ui/react'
+import { Button, Container, Flex, Text, VStack } from '@chakra-ui/react'
 
 import { BluecheckIcon } from '@/generated/icons/MyIcons'
 
 function MyLoanStep4() {
-  const router = useRouter()
+  useEffect(() => {
+    const is_sign = localStorage.getItem('is_sign')
+    if (is_sign) {
+      localStorage.removeItem('is_sign')
+    }
+  }, [])
 
   return (
     <Container maxW={'768px'}>

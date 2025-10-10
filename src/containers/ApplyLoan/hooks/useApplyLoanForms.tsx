@@ -12,7 +12,10 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
     return yup.object().shape({
       // Step1 fields
       kind: yup.string().optional(),
-      email: yup.string().email().required('필수 항목 입니다.'),
+      email: yup
+        .string()
+        .email('이메일 양식을 확인해주세요.')
+        .required('필수 항목 입니다.'),
 
       // Step2 fields
 
@@ -37,7 +40,7 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       debtScale: yup.string().required('필수 항목 입니다.'),
       repaymentMethod: yup.string().required('필수 항목 입니다.'),
       creditScore: yup.string().required('필수 항목 입니다.'),
-      purposeAndRepaymentPlan: yup.string().required('필수 항목 입니다.'),
+      purposeAndRepaymentPlan: yup.string().optional(),
       safeKey: yup.string().nullable().optional(),
 
       // Step4 fields

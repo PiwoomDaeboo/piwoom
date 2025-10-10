@@ -163,7 +163,7 @@ const ApplyLoanStep2 = () => {
               </Text>
               <Input {...register('email')} placeholder="이메일" />
               {errors.email && (
-                <Text textStyle={'pre-body-6'} color={'red.10'}>
+                <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
                   {errors.email.message as string}
                 </Text>
               )}
@@ -181,7 +181,7 @@ const ApplyLoanStep2 = () => {
           <Button
             variant={'solid-primary'}
             w={'160px'}
-            isDisabled={!isPhoneCertification}
+            isDisabled={!isPhoneCertification || !!errors.email}
             onClick={() => {
               setValue('kind', typeConvert(router.query.type as string))
               router.replace('/apply-loan?step=3&type=' + router.query.type)

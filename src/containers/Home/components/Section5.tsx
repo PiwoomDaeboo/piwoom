@@ -37,13 +37,13 @@ const FAQItem = ({
     p="24px 28px"
     bg="grey.0"
     borderRadius="20px"
-    boxShadow="0 4px 24px 0 rgba(0, 46, 114, 0.06)"
     w="100%"
     flexDir="column"
     cursor="pointer"
     onClick={onToggle}
     transition="all 0.3s ease"
     overflow="hidden"
+    boxShadow="0 4px 24px 0 rgba(0, 46, 114, 0.06)"
   >
     <Flex alignItems="center" gap="8px">
       <Text as="span" color="primary.3" textStyle="pre-heading-3">
@@ -55,7 +55,7 @@ const FAQItem = ({
     </Flex>
 
     <Box
-      maxH={isOpen ? '200px' : '0'}
+      h={isOpen ? '138px' : '0'}
       opacity={isOpen ? 1 : 0}
       overflow="hidden"
       transition="all 0.3s ease"
@@ -63,7 +63,7 @@ const FAQItem = ({
       pt={isOpen ? '16px' : '0'}
     >
       <Box ml="28px" textStyle="pre-body-6" color="grey.8">
-        {item.answer}
+        <Text noOfLines={2}>{item.answer.slice(0, 74)}</Text>
       </Box>
     </Box>
   </Flex>
@@ -200,6 +200,7 @@ function Section5() {
             maxH={'360px'}
             overflowY={'auto'}
             p={'4px'}
+            boxShadow="0 4px 24px 0 rgba(0, 46, 114, 0.06)"
           >
             {faqList?.results?.map((item) => (
               <FAQItem
