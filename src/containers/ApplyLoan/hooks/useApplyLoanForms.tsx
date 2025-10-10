@@ -12,7 +12,10 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
     return yup.object().shape({
       // Step1 fields
       kind: yup.string().optional(),
-      email: yup.string().email().required('필수 항목 입니다.'),
+      email: yup
+        .string()
+        .email('이메일 양식을 확인해주세요.')
+        .required('필수 항목 입니다.'),
 
       // Step2 fields
 

@@ -35,6 +35,7 @@ import InputForm from '@/components/InputForm'
 import { useAccountVerifyCreateMutation } from '@/generated/apis/Account/Account.query'
 import { useGovRetrieveQuery } from '@/generated/apis/Gov/Gov.query'
 import { useLoanCreateMutation } from '@/generated/apis/Loan/Loan.query'
+import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
 import {
   CaretRightIcon,
   DocumenticonIcon,
@@ -83,6 +84,7 @@ const ApplyLoanStep4 = () => {
     watch,
     formState: { errors },
   } = useFormContext()
+
   const watchAll = watch()
   console.log('watchAll', watchAll)
   const loanAmount = useWatch({ control, name: 'loanAmount' })
@@ -144,7 +146,11 @@ const ApplyLoanStep4 = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const bankWatchValue = useWatch({ control, name: 'bank' })
   const accountNumberWatchValue = useWatch({ control, name: 'accountNumber' })
-
+  const { data: settingData } = useSettingRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
   const {
     mutate: accountVerifyMutation,
     isPending: isAccountVerifyMutationLoading,
@@ -346,6 +352,8 @@ const ApplyLoanStep4 = () => {
   const handleUntactDocumentApplyModalOpen = () => {
     onUntactDocumentApplyModalOpen()
   }
+
+  const employmentTypeWatchValue = useWatch({ control, name: 'employmentType' })
 
   return (
     <Container>
@@ -581,6 +589,7 @@ const ApplyLoanStep4 = () => {
               <Button
                 textStyle={'pre-body-5'}
                 fontWeight={600}
+                bg={loanPeriod === 6 ? 'primary.1' : 'grey.0'}
                 variant={
                   loanPeriod === 6 ? 'outline-primary' : 'outline-secondary'
                 }
@@ -590,6 +599,7 @@ const ApplyLoanStep4 = () => {
               </Button>
               <Button
                 fontWeight={600}
+                bg={loanPeriod === 12 ? 'primary.1' : 'grey.0'}
                 variant={
                   loanPeriod === 12 ? 'outline-primary' : 'outline-secondary'
                 }
@@ -599,6 +609,7 @@ const ApplyLoanStep4 = () => {
               </Button>
               <Button
                 fontWeight={600}
+                bg={loanPeriod === 24 ? 'primary.1' : 'grey.0'}
                 variant={
                   loanPeriod === 24 ? 'outline-primary' : 'outline-secondary'
                 }
@@ -608,6 +619,7 @@ const ApplyLoanStep4 = () => {
               </Button>
               <Button
                 fontWeight={600}
+                bg={loanPeriod === 36 ? 'primary.1' : 'grey.0'}
                 variant={
                   loanPeriod === 36 ? 'outline-primary' : 'outline-secondary'
                 }
@@ -724,6 +736,10 @@ const ApplyLoanStep4 = () => {
                 data-field="companyName"
               />
               <Button
+                disabled={
+                  employmentTypeWatchValue === 'HOUSEWIFE' ||
+                  employmentTypeWatchValue === 'UNEMPLOYED'
+                }
                 variant={'solid-primary'}
                 size={'lg'}
                 onClick={onOfficeAddressModalOpen}
@@ -770,9 +786,14 @@ const ApplyLoanStep4 = () => {
             </Text>
           )}
         </InputForm>
+        {/* {employmentTypeWatchValue !== 'HOUSEWIFE' ||
+          (employmentTypeWatchValue !== 'UNEMPLOYED' && ( */}
         <InputForm label="고용구분">
           <EmploymentTypeButtons />
         </InputForm>
+        {/* ))} */}
+        {/* {employmentTypeWatchValue !== 'HOUSEWIFE' ||
+          (employmentTypeWatchValue !== 'UNEMPLOYED' && ( */}
         <InputForm label="입사년월 또는 창업시기">
           <Flex gap={'16px'}>
             <InputGroup>
@@ -819,6 +840,7 @@ const ApplyLoanStep4 = () => {
             </Text>
           )}
         </InputForm>
+        {/* ))} */}
 
         <Box w={'100%'} h={'1px'} bg={'border.basic.1'} my={'48px'} />
         <Text textStyle={'pre-heading-3'} color={'primary.4'}>
@@ -860,6 +882,7 @@ const ApplyLoanStep4 = () => {
         <InputForm label="주거종류">
           <Flex flexWrap={'wrap'} gap={'8px'}>
             <Button
+              bg={housingType === 'APARTMENT' ? 'primary.1' : 'grey.0'}
               variant={
                 housingType === 'APARTMENT' ? 'outline-primary' : (
                   'outline-secondary'
@@ -871,6 +894,7 @@ const ApplyLoanStep4 = () => {
               아파트/주상복합
             </Button>
             <Button
+              bg={housingType === 'MULTI_FAMILY' ? 'primary.1' : 'grey.0'}
               variant={
                 housingType === 'MULTI_FAMILY' ? 'outline-primary' : (
                   'outline-secondary'
@@ -882,6 +906,7 @@ const ApplyLoanStep4 = () => {
               연립/다세대/다가구
             </Button>
             <Button
+              bg={housingType === 'OTHER' ? 'primary.1' : 'grey.0'}
               variant={
                 housingType === 'OTHER' ? 'outline-primary' : (
                   'outline-secondary'
@@ -902,6 +927,7 @@ const ApplyLoanStep4 = () => {
         <InputForm label="주거소유형태">
           <Flex flexWrap={'wrap'} gap={'8px'}>
             <Button
+              bg={residenceType === 'OWNED' ? 'primary.1' : 'grey.0'}
               variant={
                 residenceType === 'OWNED' ? 'outline-primary' : (
                   'outline-secondary'
@@ -913,6 +939,7 @@ const ApplyLoanStep4 = () => {
               자가
             </Button>
             <Button
+              bg={residenceType === 'JEONSE' ? 'primary.1' : 'grey.0'}
               variant={
                 residenceType === 'JEONSE' ? 'outline-primary' : (
                   'outline-secondary'
@@ -924,6 +951,7 @@ const ApplyLoanStep4 = () => {
               전세
             </Button>
             <Button
+              bg={residenceType === 'MONTHLY_RENT' ? 'primary.1' : 'grey.0'}
               variant={
                 residenceType === 'MONTHLY_RENT' ? 'outline-primary' : (
                   'outline-secondary'
@@ -986,6 +1014,7 @@ const ApplyLoanStep4 = () => {
           <Button
             textStyle={'pre-body-5'}
             w={'209px'}
+            disabled={!settingData?.isGov}
             isDisabled={isDocumentSubmissionCompleted}
             onClick={handleUntactDocumentApplyModalOpen}
           >
@@ -994,6 +1023,11 @@ const ApplyLoanStep4 = () => {
           {isDocumentSubmissionCompleted && (
             <Text textStyle={'pre-body-6'} color={'grey.8'}>
               비대면 서류제출이 완료됐어요.
+            </Text>
+          )}
+          {!settingData?.isGov && (
+            <Text textStyle={'pre-body-6'} color={'accent.red2'}>
+              비대면 서류제출 기능이 비활성화되어 있어요.
             </Text>
           )}
         </InputForm>

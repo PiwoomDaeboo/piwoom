@@ -53,18 +53,18 @@ function AddressModal({ isOpen, onClose, type }: AddressModalProps) {
     if (type === 'normal') {
       setValue('baseAddress', baseAddress)
 
-      const currentDetailAddress = getValues('detailAddress')
-      if (!currentDetailAddress && buildingInfo) {
-        setValue('detailAddress', buildingInfo)
-      }
+      // const currentDetailAddress = getValues('detailAddress')
+      // if (!currentDetailAddress && buildingInfo) {
+      //   setValue('detailAddress', buildingInfo)
+      // }
       setValue('postcode', data.zonecode)
       onClose()
     } else {
       setValue('assetBaseAddress', baseAddress)
-      const currentAssetDetailAddress = getValues('assetDetailAddress')
-      if (!currentAssetDetailAddress && buildingInfo) {
-        setValue('assetDetailAddress', buildingInfo)
-      }
+      // const currentAssetDetailAddress = getValues('assetDetailAddress')
+      // if (!currentAssetDetailAddress && buildingInfo) {
+      //   setValue('assetDetailAddress', buildingInfo)
+      // }
       setValue('assetPostcode', data.zonecode)
       onClose()
     }
