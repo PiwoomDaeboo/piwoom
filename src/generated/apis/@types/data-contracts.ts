@@ -378,8 +378,6 @@ export interface GovOtpRequestType {
 
 export interface LoanType {
   readonly id: number
-  /** 본인인증 토큰 */
-  identityVerificationToken: string
   /** 계약번호 */
   readonly no: string
   /**
@@ -715,7 +713,7 @@ export interface LoanType {
   /** 신분증 */
   identityCard: string
   /** 파일 */
-  fileSet: LoanFileType
+  fileSet: LoanFileType[]
 }
 
 export interface LoanErrorMessageType {
@@ -766,7 +764,7 @@ export interface LoanErrorMessageType {
   healthInsurancePaymentConfirmation?: string[]
   healthInsurancePaymentConfirmation2?: string[]
   identityCard?: string[]
-  fileSet?: LoanFileValidationErrorType
+  fileSet?: string[]
 }
 
 export interface LoanFileType {
@@ -791,11 +789,6 @@ export interface LoanFileRequestType {
    * @minLength 1
    */
   path: string
-}
-
-export interface LoanFileValidationErrorType {
-  name?: string[]
-  path?: string[]
 }
 
 export interface LoanRequestType {
@@ -1140,7 +1133,7 @@ export interface LoanRequestType {
   /** 신분증 */
   identityCard: string
   /** 파일 */
-  fileSet: LoanFileRequestType
+  fileSet: LoanFileRequestType[]
 }
 
 export interface LoanSignType {
@@ -1266,6 +1259,12 @@ export interface SettingType {
   isGov?: boolean
   /** 위텍스 제출 활성화 */
   isWetax?: boolean
+  /**
+   * 대출 신청 가능 신용 점수
+   * @min 0
+   * @max 2147483647
+   */
+  minCreditScore?: number
 }
 
 export interface UsebAccessTokenType {

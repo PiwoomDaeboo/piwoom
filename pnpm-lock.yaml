@@ -153,6 +153,9 @@ importers:
       '@toktokhan-dev/cli-plugin-gen-route-pages':
         specifier: ^0.0.12
         version: 0.0.12(esbuild@0.25.8)
+      '@toktokhan-dev/cli-plugin-gen-sitemap-next-page':
+        specifier: ^0.0.11
+        version: 0.0.11(esbuild@0.25.8)
       '@toktokhan-dev/cli-plugin-gen-source':
         specifier: ^0.0.1
         version: 0.0.1(esbuild@0.25.8)
@@ -1474,6 +1477,9 @@ packages:
   '@toktokhan-dev/cli-plugin-gen-route-pages@0.0.12':
     resolution: {integrity: sha512-Pes/0iK1YSvtcozlPdtx4wmxfSyuPhz3VODRRr2uXynWvnJNGnOP61mvqcWSg/Lxu6/XeIPBx0HPxTnfikPdmQ==}
 
+  '@toktokhan-dev/cli-plugin-gen-sitemap-next-page@0.0.11':
+    resolution: {integrity: sha512-KyUyWmZug6O9Ea0wz7tZIGjPHRI4XHz8wy/dDWGnxAFfGyhZbjlvB40zcAQ2c6/nVtZgHF2tMQuioPXuG2Glbw==}
+
   '@toktokhan-dev/cli-plugin-gen-source@0.0.1':
     resolution: {integrity: sha512-lKgrXx32cgGp028eBrMbx9lDYzUkeOkZEeJwApdNvtYprXUdHxYpuie4PdcicNXyrZrKxT8xIxn9tgFpsuILUA==}
 
@@ -2413,6 +2419,10 @@ packages:
   escape-string-regexp@4.0.0:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
+
+  escape-string-regexp@5.0.0:
+    resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
+    engines: {node: '>=12'}
 
   escodegen@2.1.0:
     resolution: {integrity: sha512-2NlIDTwUWJN0mRPQOdtQBzbUHvdGY2P1VXSyU83Q3xKxM7WHX2Ql8dKq782Q9TgQUNOLEzEYu9bzLNj1q88I5w==}
@@ -3406,6 +3416,10 @@ packages:
 
   makeerror@1.0.12:
     resolution: {integrity: sha512-JmqCvUhmt43madlpFzG4BQzG2Z3m6tvQDNKdClZnO3VbIudJYmxsT0FNJMeiB2+JTSlTQTSbU8QdesVmwJcmLg==}
+
+  matcher@5.0.0:
+    resolution: {integrity: sha512-s2EMBOWtXFc8dgqvoAzKJXxNHibcdJMV0gwqKUaw9E2JBJuGUK7DrNKrA6g/i+v72TT16+6sVm5mS3thaMLQUw==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
@@ -6352,6 +6366,17 @@ snapshots:
     transitivePeerDependencies:
       - esbuild
 
+  '@toktokhan-dev/cli-plugin-gen-sitemap-next-page@0.0.11(esbuild@0.25.8)':
+    dependencies:
+      '@toktokhan-dev/cli': 0.0.11(esbuild@0.25.8)
+      '@toktokhan-dev/node': 0.0.10
+      '@toktokhan-dev/universal': 0.0.8
+      globby: 13.2.2
+      lodash: 4.17.21
+      matcher: 5.0.0
+    transitivePeerDependencies:
+      - esbuild
+
   '@toktokhan-dev/cli-plugin-gen-source@0.0.1(esbuild@0.25.8)':
     dependencies:
       '@toktokhan-dev/cli': 0.0.11(esbuild@0.25.8)
@@ -7536,6 +7561,8 @@ snapshots:
   escape-string-regexp@2.0.0: {}
 
   escape-string-regexp@4.0.0: {}
+
+  escape-string-regexp@5.0.0: {}
 
   escodegen@2.1.0:
     dependencies:
@@ -8774,6 +8801,10 @@ snapshots:
   makeerror@1.0.12:
     dependencies:
       tmpl: 1.0.5
+
+  matcher@5.0.0:
+    dependencies:
+      escape-string-regexp: 5.0.0
 
   math-intrinsics@1.1.0: {}
 

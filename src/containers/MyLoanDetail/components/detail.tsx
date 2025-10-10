@@ -33,7 +33,7 @@ export default function Detail() {
       enabled: !!router.query.id,
     },
   })
-  console.log(loanRetrieveData)
+
   return (
     <Flex flexDir={'column'} w={'100%'}>
       <Flex

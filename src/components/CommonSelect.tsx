@@ -66,6 +66,16 @@ export const CommonSelect: SelectComponent = ({
             },
           },
         }),
+        groupHeading: (provided) => ({
+          ...provided,
+          // bg: 'gray.50',
+          // color: 'gray.600',
+          // fontWeight: 'semibold',
+          // fontSize: 'xs',
+          textStyle: 'pre-caption-1',
+          color: 'grey.5',
+          textTransform: 'uppercase',
+        }),
         dropdownIndicator: (provided) => ({
           ...provided,
           bg: 'transparent',

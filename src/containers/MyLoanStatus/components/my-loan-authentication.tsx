@@ -23,6 +23,14 @@ function MyLoanAuthentication() {
         })
         router.push(`/my-loan-status`)
       },
+      onError: (error: any) => {
+        if (error?.response?.data?.status === 400) {
+          router.push(`/my-loan-status`)
+        } else {
+          console.error('userLoginCreate', error)
+        }
+        console.error('userLoginCreate', error)
+      },
     },
   })
   const handleAuthentication = async () => {

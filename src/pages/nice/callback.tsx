@@ -4,18 +4,18 @@ import { NextSeo } from 'next-seo'
 import { useSearchParams } from 'next/navigation'
 
 import HomeLayout from '@/components/@Layout/HomeLayout'
+import { useLocalStorage } from '@/stores/local/state'
 import { useSessionStorage } from '@/stores/session/state'
 
 function NiceCallback() {
   const searchParams = useSearchParams()
   const safe_key = searchParams.get('safe_key')
-  console.log('safe_key', safe_key)
-  const { set } = useSessionStorage()
+  const { set } = useLocalStorage()
+
   useEffect(() => {
     if (safe_key) {
-      localStorage.setItem('popup_status', safe_key)
-      sessionStorage.setItem('popup_status', safe_key)
-      // 팝업 창 닫기
+      set('popup_status', safe_key)
+
       setTimeout(() => {
         window.close()
       }, 500)

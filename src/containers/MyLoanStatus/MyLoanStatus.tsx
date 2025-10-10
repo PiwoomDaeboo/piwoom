@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -70,6 +70,9 @@ function MyLoanStatus() {
       params: {
         paramsSerializer: paramsSerializerBy({ _default: 'comma' }),
       },
+    },
+    options: {
+      enabled: !!isLogin,
     },
   })
   const totalPages = Math.ceil(loanList?.count || 0 / postsPerPage)

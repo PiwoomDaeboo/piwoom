@@ -86,7 +86,7 @@ export default function Document() {
     e.preventDefault()
     e.stopPropagation()
 
-    const popup = window.open(
+    window.open(
       `https://api.piwoom.com/v1/nice/?name=${userInfo?.name}&birth=${userInfo?.birth}&gender=${userInfo?.gender_code}`,
       'popupChk',
       'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
@@ -104,14 +104,6 @@ export default function Document() {
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      console.log('=== Message Event Received ===')
-      console.log('Origin:', event.origin)
-
-      console.log('Data:', event.data)
-      console.log('Data type:', typeof event.data)
-      console.log('Data length:', event.data?.length)
-      console.log('Data constructor:', event.data?.constructor?.name)
-
       // Origin 검증 없이 모든 메시지 처리
       if (typeof event.data === 'string' && event.data.trim()) {
         console.log('✅ safeKey received:', event.data)
@@ -124,16 +116,13 @@ export default function Document() {
         console.log('✅ safeKey from object:', event.data.safeKey)
         methods.setValue('safeKey', event.data.safeKey)
       } else {
-        console.log('❌ No valid safeKey found')
         console.log('Raw data:', JSON.stringify(event.data))
       }
     }
 
-    console.log('Adding message event listener...')
     window.addEventListener('message', handleMessage)
 
     return () => {
-      console.log('Removing message event listener...')
       window.removeEventListener('message', handleMessage)
     }
   }, [methods.setValue])

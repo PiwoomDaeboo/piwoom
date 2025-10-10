@@ -45,6 +45,7 @@ import {
   XIcon,
 } from '@/generated/icons/MyIcons'
 import { useQueryEffects } from '@/hooks/useQueryEffect'
+import { useLocalStorage } from '@/stores/local/state'
 import { useSessionStorage } from '@/stores/session/state'
 
 import AddressModal from '../../../components/@Modal/address-modal'
@@ -141,6 +142,8 @@ const ApplyLoanStep4 = () => {
   const [addressModalType, setAddressModalType] = useState<
     'normal' | 'real-estate'
   >('normal')
+  const { identityVerificationToken } = useSessionStorage()
+  const { popup_status: safeKey, reset } = useLocalStorage()
   const [isBankAccountVerified, setIsBankAccountVerified] = useState(false)
   const idCardInputRef = useRef<HTMLInputElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -192,15 +195,15 @@ const ApplyLoanStep4 = () => {
 
   const { mutate: loanCreateMutation } = useLoanCreateMutation({
     options: {
-      onSuccess: (data) => {
+      onSuccess: (data: any) => {
         console.log('loanCreateMutation', data)
       },
-      onError: (error) => {
+      onError: (error: any) => {
+        reset('popup_status')
         console.error('loanCreateMutation', error)
       },
     },
   })
-  const { identityVerificationToken } = useSessionStorage()
 
   const onStep4Submit = (data: any) => {
     const requestData = {
@@ -208,17 +211,22 @@ const ApplyLoanStep4 = () => {
       // kind: 'A',
       identityVerificationToken: identityVerificationToken,
       incomeCertificate: '',
+
       residentRegistrationCopy: '',
       healthInsuranceEligibilityConfirmation: '',
       healthInsurancePaymentConfirmation: '',
       healthInsurancePaymentConfirmation2: '',
-      fileSet: {
-        name: 'bb',
-        path: 'bb',
-      },
-      safeKey: 'bbb',
+      // fileSet: [
+      //   {
+      //     name: 'bb',
+      //     path: 'bb',
+      //   },
+      // ],
+      // safeKey: 'bbb',
+      safeKey: safeKey,
       accountHolder: 'bb',
       accountHolderSsn: 'bb',
+      // purposeAndRepaymentPlan: 'bb',
       ...data,
     }
     loanCreateMutation({
@@ -645,7 +653,7 @@ const ApplyLoanStep4 = () => {
                   <CommonSelect
                     options={BANK_DATA}
                     placeholder="선택"
-                    value={BANK_DATA.find(
+                    value={BANK_DATA.flatMap((group) => group.options).find(
                       (option) => option.value === field.value,
                     )}
                     onChange={(selectedOption) =>

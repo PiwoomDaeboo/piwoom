@@ -65,7 +65,6 @@ function RepaymentApplication() {
                 placeholder="0"
                 type="number"
                 textAlign="right"
-                dir="rtl"
                 pr="50px"
               />
               <InputRightElement>

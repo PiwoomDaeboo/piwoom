@@ -26,6 +26,7 @@ import ModalBasis from '@/components/@Modal/ModalBasis'
 import CommonSelect from '@/components/CommonSelect'
 import InputForm from '@/components/InputForm'
 import { InfoFillIcon, XCircleFillIcon } from '@/generated/icons/MyIcons'
+import { useLocalStorage } from '@/stores/local/state'
 import { useSessionStorage } from '@/stores/session/state'
 import { extractUserInfoFromJWT } from '@/utils/jwt'
 
@@ -51,6 +52,7 @@ const ApplyLoanStep3 = () => {
   const router = useRouter()
   const toast = useToast()
   console.log('errors', errors)
+  console.log('watch', watch())
   const [userInfo, setUserInfo] = useState<{
     name?: string
     phone?: string
@@ -255,13 +257,15 @@ const ApplyLoanStep3 = () => {
     normal:
       '(예시) 자녀 출산으로 인해 산후 조리원 비용이 예상보다 많이 나왔습니다. \n오백만원만 빌리면, 3개월 동안 월급을 모아서 상환할 수 있습니다.',
   }
-  const { set, safeKey } = useSessionStorage()
+  // const { set, safeKey } = useSessionStorage()
+
+  const { popup_status: safeKey } = useLocalStorage()
   console.log('safeKeyWatchValue', safeKey)
   useEffect(() => {
     window.addEventListener('storage', (e) => {
       if (e.key === 'popup_status') {
         console.log(e)
-        set('safeKey', e.newValue)
+        // set('safeKey', e.newValue)
         setValue('safeKey', safeKey)
       }
     })
@@ -555,6 +559,7 @@ const ApplyLoanStep3 = () => {
             color={'grey.8'}
             onClick={handleApplyCreditInfoSubmit}
             w={'209px'}
+            // isDisabled={safeKey !== null}
           >
             제출
           </Button>
