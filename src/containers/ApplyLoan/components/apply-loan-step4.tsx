@@ -1019,7 +1019,7 @@ const ApplyLoanStep4 = () => {
             variant={'outline-primary'}
             textStyle={'pre-body-5'}
             w={'209px'}
-            // disabled={!settingData?.isGov}
+            disabled={!settingData?.isGov}
             isDisabled={isDocumentSubmissionCompleted}
             onClick={handleUntactDocumentApplyModalOpen}
           >
