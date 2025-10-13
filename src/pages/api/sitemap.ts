@@ -1,3 +1,6 @@
+import fs from 'fs'
+import path from 'path'
+
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import { ENV } from '@/configs/env'
@@ -5,19 +8,20 @@ import { ENV } from '@/configs/env'
 /* eslint-disable @typescript-eslint/no-var-requires */
 const prettier = require('prettier')
 
-const axios = require('axios')
-
 export default async function Sitemap(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   try {
-    // 요청 헤더에서 호스트를 가져오거나, 환경 변수 또는 기본값 사용
-    const protocol = req.headers.host?.includes('localhost') ? 'http' : 'https'
-    const host = req.headers.host || ENV.DOMAIN || 'piwoom.com'
-    const DOMAIN = `${protocol}://${host}`
+    // 파일 시스템에서 sitemap.json 읽기
+    const filePath = path.join(process.cwd(), 'public', 'sitemap.json')
+    const fileContents = fs.readFileSync(filePath, 'utf8')
+    const localRoutes = JSON.parse(fileContents)
 
-    const { data: localRoutes } = await axios.get(`${DOMAIN}/sitemap.json`)
+    // 도메인 설정
+    const protocol = req.headers.host?.includes('localhost') ? 'http' : 'https'
+    const host = 'piwoom.com'
+    const DOMAIN = `${protocol}://${host}`
 
     /**
      * externalRoutes: 백엔드 서버로 부터 받아옵니다.
