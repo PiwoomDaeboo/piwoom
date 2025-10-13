@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { AxiosError } from 'axios'
 
@@ -10,7 +10,12 @@ import {
   UserLoginErrorMessageType,
   UserRefreshErrorMessageType,
 } from '../@types/data-contracts'
-import { MutationHookParams } from '../@types/react-query-type'
+import {
+  MutationHookParams,
+  Parameter,
+  QueryHookParams,
+  RequestFnReturn,
+} from '../@types/react-query-type'
 import { UserApi } from './User.api'
 
 /**
@@ -36,6 +41,8 @@ export const QUERY_KEY_USER_API = {
   IDENTITY_VERIFICATION_CREATE: () => ['USER_IDENTITY_VERIFICATION_CREATE'],
   LOGIN_CREATE: () => ['USER_LOGIN_CREATE'],
   REFRESH_CREATE: () => ['USER_REFRESH_CREATE'],
+  TEST_RETRIEVE: (variables?: Parameter<typeof userApi.userTestRetrieve>) =>
+    ['USER_TEST_RETRIEVE', variables].filter(isDefined),
 }
 
 /**
@@ -103,6 +110,31 @@ export const useUserRefreshCreateMutation = (
   return useMutation({
     mutationKey,
     mutationFn: userApi.userRefreshCreate,
+    ...params?.options,
+  })
+}
+
+/**
+ * No description
+ *
+ * @tags user
+ * @name UserTestRetrieve
+ * @request GET:/v1/user/test/
+ * @secure    */
+
+export const useUserTestRetrieveQuery = <
+  TData = RequestFnReturn<typeof userApi.userTestRetrieve>,
+>(
+  params?: QueryHookParams<
+    typeof userApi.userTestRetrieve,
+    AxiosError<CommonErrorType>,
+    TData
+  >,
+) => {
+  const queryKey = QUERY_KEY_USER_API.TEST_RETRIEVE(params?.variables)
+  return useQuery({
+    queryKey,
+    queryFn: () => userApi.userTestRetrieve(params?.variables),
     ...params?.options,
   })
 }

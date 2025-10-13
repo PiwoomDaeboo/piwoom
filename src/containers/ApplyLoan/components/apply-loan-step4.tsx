@@ -45,6 +45,7 @@ import {
   XIcon,
 } from '@/generated/icons/MyIcons'
 import { useQueryEffects } from '@/hooks/useQueryEffect'
+import { useLocalStorage } from '@/stores/local/state'
 import { useSessionStorage } from '@/stores/session/state'
 
 import AddressModal from '../../../components/@Modal/address-modal'
@@ -141,6 +142,8 @@ const ApplyLoanStep4 = () => {
   const [addressModalType, setAddressModalType] = useState<
     'normal' | 'real-estate'
   >('normal')
+  const { identityVerificationToken } = useSessionStorage()
+  const { popup_status: safeKey, reset } = useLocalStorage()
   const [isBankAccountVerified, setIsBankAccountVerified] = useState(false)
   const idCardInputRef = useRef<HTMLInputElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -190,35 +193,36 @@ const ApplyLoanStep4 = () => {
 
   console.log('errors', errors)
 
-  const { mutate: loanCreateMutation } = useLoanCreateMutation({
-    options: {
-      onSuccess: (data) => {
-        console.log('loanCreateMutation', data)
+  const { mutate: loanCreateMutation, isPending: isLoanCreateMutationPending } =
+    useLoanCreateMutation({
+      options: {
+        onSuccess: (data: any) => {
+          console.log('loanCreateMutation', data)
+          reset('popup_status')
+          router.replace('/apply-loan-complete')
+        },
+        onError: (error: any) => {
+          console.error('loanCreateMutation', error)
+        },
       },
-      onError: (error) => {
-        console.error('loanCreateMutation', error)
-      },
-    },
-  })
-  const { identityVerificationToken } = useSessionStorage()
+    })
 
   const onStep4Submit = (data: any) => {
     const requestData = {
-      // kind: typeConvert(type as string) || 'A',
-      // kind: 'A',
       identityVerificationToken: identityVerificationToken,
-      incomeCertificate: '',
-      residentRegistrationCopy: '',
-      healthInsuranceEligibilityConfirmation: '',
-      healthInsurancePaymentConfirmation: '',
-      healthInsurancePaymentConfirmation2: '',
-      fileSet: {
-        name: 'bb',
-        path: 'bb',
-      },
-      safeKey: 'bbb',
-      accountHolder: 'bb',
-      accountHolderSsn: 'bb',
+      incomeCertificate: getValues('incomeCertificate') || '',
+      residentRegistrationCopy: getValues('residentRegistrationCopy') || '',
+      healthInsuranceEligibilityConfirmation:
+        getValues('healthInsuranceEligibilityConfirmation') || '',
+      healthInsurancePaymentConfirmation:
+        getValues('healthInsurancePaymentConfirmation') || '',
+      healthInsurancePaymentConfirmation2:
+        getValues('healthInsurancePaymentConfirmation2') || '',
+      fileSet: getValues('fileSet') || [],
+      safeKey: safeKey,
+      accountHolder: getValues('accountHolder') || '',
+      accountHolderSsn: getValues('accountHolderSsn') || '',
+      purposeAndRepaymentPlan: getValues('purposeAndRepaymentPlan') || '',
       ...data,
     }
     loanCreateMutation({
@@ -645,7 +649,7 @@ const ApplyLoanStep4 = () => {
                   <CommonSelect
                     options={BANK_DATA}
                     placeholder="선택"
-                    value={BANK_DATA.find(
+                    value={BANK_DATA.flatMap((group) => group.options).find(
                       (option) => option.value === field.value,
                     )}
                     onChange={(selectedOption) =>
@@ -1012,6 +1016,7 @@ const ApplyLoanStep4 = () => {
         </InputForm>
         <InputForm label="비대면 서류제출">
           <Button
+            variant={'outline-primary'}
             textStyle={'pre-body-5'}
             w={'209px'}
             disabled={!settingData?.isGov}
@@ -1082,6 +1087,7 @@ const ApplyLoanStep4 = () => {
           <Button
             variant={'solid-primary'}
             w={'160px'}
+            isLoading={isLoanCreateMutationPending}
             onClick={handleSubmitClick}
           >
             대출신청

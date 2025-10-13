@@ -8,6 +8,7 @@ import {
   LoanSignType,
   LoanType,
   PaginatedLoanListType,
+  PatchedLoanRequestType,
 } from '../@types/data-contracts'
 import { DeepOmitReadOnly } from '../@types/util-types'
 import { paramsSerializerBy } from '../@utils/param-serializer-by'
@@ -34,7 +35,8 @@ export class LoanApi<
     query?: {
       /**
        * * `UNDER_REVIEW` - 심사 중
-       * * `CONTRACTING` - 계약 중
+       * * `CONTRACTING` - 계약서 작성 중
+       * * `REMITTING` - 송금 중
        * * `IN_PROGRESS` - 대출 중
        * * `OVERDUE` - 연체 중
        * * `EARLY_REPAYMENT_COMPLETED` - 중도 상환 완료
@@ -104,19 +106,19 @@ export class LoanApi<
    * No description
    *
    * @tags loan
-   * @name LoanUpdate
+   * @name LoanPartialUpdate
    * @summary 대출 수정
-   * @request PUT:/v1/loan/{id}/
+   * @request PATCH:/v1/loan/{id}/
    * @secure
    */
-  loanUpdate = (variables: {
+  loanPartialUpdate = (variables: {
     id: number
-    data: DeepOmitReadOnly<LoanRequestType>
+    data: DeepOmitReadOnly<PatchedLoanRequestType>
     params?: RequestParams
   }) =>
     this.request<LoanType, LoanErrorMessageType | CommonErrorType>({
       path: `/v1/loan/${variables.id}/`,
-      method: 'PUT',
+      method: 'PATCH',
       body: variables.data,
       secure: true,
       type: ContentType.Json,

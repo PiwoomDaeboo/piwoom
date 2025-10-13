@@ -3,19 +3,18 @@ import React, { useEffect } from 'react'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 
-import HomeLayout from '@/components/@Layout/HomeLayout'
-import { useSessionStorage } from '@/stores/session/state'
+import { useLocalStorage } from '@/stores/local/state'
 
 function ModusignCallback() {
   const router = useRouter()
   const is_sign = router.query.is_sign as string | undefined
   console.log('is_sign', is_sign)
-
+  const { set } = useLocalStorage()
   useEffect(() => {
     if (!router.isReady) return
 
     if (is_sign) {
-      localStorage.setItem('popup_status', is_sign)
+      set('popup_status', is_sign)
 
       setTimeout(() => {
         window.close()

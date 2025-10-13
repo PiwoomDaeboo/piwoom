@@ -10,6 +10,7 @@ import { withStorageDOMEvents } from './utils/withStorageDOMEvents'
 export type LocalStorage = {
   token: TokenType | null
   count: number
+  popup_status: string | null
 }
 
 /**
@@ -26,6 +27,7 @@ export const useLocalStorage = create(
       immer<LocalStorage>(() => ({
         token: null,
         count: 0,
+        popup_status: null,
       })),
     ),
     {

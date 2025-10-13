@@ -6,42 +6,28 @@ import {
   Badge,
   Box,
   Button,
+  Center,
   Container,
   Flex,
   HStack,
   Skeleton,
+  Spinner,
   Text,
   VStack,
 } from '@chakra-ui/react'
 
+import { useAuth } from '@/hooks/useAuth'
+
 import Detail from './components/detail'
 import Document from './components/document'
 import Schedule from './components/schedule'
-import {
-  BUTTON_DATA,
-  LoanDetailApiData,
-  SAMPLE_LOAN_DATA,
-  getFormattedDetailData,
-} from './consts'
-
-// const LOAN_TYPE_MAP = {
-//   detail: 0, // detail
-//   schedule: 1, // schedule
-// }
-
-const LOAN_TYPE_QUERY_MAP = {
-  0: 'detail',
-  1: 'schedule',
-  2: 'document',
-}
+import { BUTTON_DATA, LoanDetailApiData, SAMPLE_LOAN_DATA } from './consts'
 
 function MyLoanDetail() {
   const router = useRouter()
   const { detailMenu } = router.query
-  const [activeButtonIndex, setActiveButtonIndex] = useState<number>(0)
-  const [showProcedure, setShowProcedure] = useState<boolean>(false)
   const [isDetailMenu, setIsDetailMenu] = useState<string>('detail')
-
+  const { isLogin } = useAuth()
   const [loanData, setLoanData] = useState<LoanDetailApiData>(SAMPLE_LOAN_DATA)
 
   useEffect(() => {
@@ -50,6 +36,18 @@ function MyLoanDetail() {
     }
   }, [detailMenu])
 
+  // useEffect(() => {
+  //   if (!isLogin) {
+  //     router.replace(`/my-loan-status`)
+  //   }
+  // }, [isLogin])
+  if (!isLogin) {
+    return (
+      <Center h={'100vh'}>
+        <Spinner />
+      </Center>
+    )
+  }
   return (
     <>
       <Container

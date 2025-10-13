@@ -12,8 +12,11 @@ import {
   Skeleton,
   Text,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react'
 
+import LoanImpossibleModal from '@/components/@Modal/loan-impossible-modal'
+import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
 import {
   Loan1Icon,
   Loan2Icon,
@@ -74,6 +77,18 @@ function Loan() {
   const router = useRouter()
   const [activeButtonIndex, setActiveButtonIndex] = useState<number>(0)
   const [showProcedure, setShowProcedure] = useState<boolean>(false)
+  const {
+    isOpen: isLoanImpossibleOpen,
+    onOpen: onLoanImpossibleOpen,
+    onClose: onLoanImpossibleClose,
+  } = useDisclosure()
+  const { data: settingData } = useSettingRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
+
+  console.log(settingData)
 
   useEffect(() => {
     const { type } = router.query
@@ -112,6 +127,10 @@ function Loan() {
     router.push('/loan?type=procedure', undefined, { shallow: true })
   }
   const handleApplyLoanClick = () => {
+    if (settingData?.isLoan === false) {
+      onLoanImpossibleOpen()
+      return
+    }
     router.push(
       '/apply-loan?step=1&type=' +
         LOAN_TYPE_QUERY_MAP[
@@ -384,6 +403,10 @@ function Loan() {
               )}
           </Flex>
         </Flex>
+        <LoanImpossibleModal
+          isOpen={isLoanImpossibleOpen}
+          onClose={onLoanImpossibleClose}
+        />
       </Container>
     </>
   )

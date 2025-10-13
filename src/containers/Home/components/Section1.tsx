@@ -81,7 +81,7 @@ const Section1 = () => {
         <SimpleGrid
           display={{ base: 'none', sm: 'grid' }}
           columns={3}
-          gap={'36px'}
+          gap={{ sm: '12px', md: '32px' }}
         >
           {cardData.map((card, index) => {
             const IconComponent = card.icon
@@ -92,6 +92,7 @@ const Section1 = () => {
                 onClick={() => router.push(card.href)}
                 flexDir={'column'}
                 justifyContent={'center'}
+                position={{ sm: 'relative', md: 'static' }}
                 alignItems={'center'}
                 onMouseEnter={() => handleMouseEnter(index)}
                 onMouseLeave={() => handleMouseLeave(index)}
@@ -112,6 +113,11 @@ const Section1 = () => {
                     {card.title}
                   </Text>
                   <Flex
+                    position={{ sm: 'absolute', md: 'static' }}
+                    top={{ sm: '20px', md: 'auto' }}
+                    right={{ sm: '20px', md: 'auto' }}
+                    bottom={{ sm: 'auto', md: 'auto' }}
+                    left={{ sm: 'auto', md: 'auto' }}
                     bg={'primary.4'}
                     borderRadius={'99px'}
                     justifyContent={'center'}
@@ -144,44 +150,34 @@ const Section1 = () => {
         </SimpleGrid>
         <SimpleGrid
           display={{ base: 'grid', sm: 'none' }}
-          columns={{ base: 1, sm: 3 }}
-          gap={'36px'}
+          columns={1}
+          gap={'12px'}
         >
           {cardData.map((card, index) => {
-            const IconComponent = card.icon
             return (
               <Card
                 key={index}
                 flexDir={'column'}
                 justifyContent={'space-between'}
                 alignItems={'stretch'}
-                onMouseEnter={() => handleMouseEnter(index)}
-                onMouseLeave={() => handleMouseLeave(index)}
-                bg={hoverStates[index] ? 'primary.2' : 'grey.0'}
               >
                 <HStack justifyContent={'space-between'}>
-                  <Box
-                    w={'70px'}
-                    h={'70px'}
-                    display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    flexShrink={0}
-                    position={'relative'}
-                    bg={'primary.1'}
-                    borderRadius={'12px'}
-                  >
-                    <IconComponent boxSize={'70px'} w={'70px'} h={'70px'} />
-                  </Box>
+                  <HStack>
+                    <Image
+                      src={`/icons/loan${index + 1}.svg`}
+                      alt={card.title}
+                      boxSize={'70px'}
+                    />
 
-                  <VStack alignItems={'flex-start'} justifyContent={'center'}>
-                    <Text textStyle={'pre-heading-2'} color={'grey.10'}>
-                      {card.title}
-                    </Text>
-                    <Text textStyle={'pre-body-6'} color={'grey.8'}>
-                      {card.description}
-                    </Text>
-                  </VStack>
+                    <VStack alignItems={'flex-start'} justifyContent={'center'}>
+                      <Text textStyle={'pre-heading-2'} color={'grey.10'}>
+                        {card.title}
+                      </Text>
+                      <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                        {card.description}
+                      </Text>
+                    </VStack>
+                  </HStack>
                   <Flex alignItems={'flex-end'} h={'100%'}>
                     <Flex
                       bg={'primary.4'}

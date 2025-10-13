@@ -42,7 +42,7 @@ export const QUERY_KEY_LOAN_API = {
   CREATE: () => ['LOAN_CREATE'],
   RETRIEVE: (variables?: Parameter<typeof loanApi.loanRetrieve>) =>
     ['LOAN_RETRIEVE', variables].filter(isDefined),
-  UPDATE: () => ['LOAN_UPDATE'],
+  PARTIAL_UPDATE: () => ['LOAN_PARTIAL_UPDATE'],
   SIGN_CREATE: () => ['LOAN_SIGN_CREATE'],
 }
 
@@ -125,21 +125,21 @@ export const useLoanRetrieveQuery = <
  * No description
  *
  * @tags loan
- * @name LoanUpdate
+ * @name LoanPartialUpdate
  * @summary 대출 수정
- * @request PUT:/v1/loan/{id}/
+ * @request PATCH:/v1/loan/{id}/
  * @secure  */
 
-export const useLoanUpdateMutation = (
+export const useLoanPartialUpdateMutation = (
   params: MutationHookParams<
-    typeof loanApi.loanUpdate,
+    typeof loanApi.loanPartialUpdate,
     AxiosError<LoanErrorMessageType | CommonErrorType>
   >,
 ) => {
-  const mutationKey = QUERY_KEY_LOAN_API.UPDATE()
+  const mutationKey = QUERY_KEY_LOAN_API.PARTIAL_UPDATE()
   return useMutation({
     mutationKey,
-    mutationFn: loanApi.loanUpdate,
+    mutationFn: loanApi.loanPartialUpdate,
     ...params?.options,
   })
 }

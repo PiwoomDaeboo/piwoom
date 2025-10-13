@@ -9,13 +9,18 @@ import ModalBasis from '@/components/@Modal/ModalBasis'
 interface CustomerInfoModalProps {
   isOpen: boolean
   onClose: () => void
+  userId: number
 }
 
-function CustomerInfoModal({ isOpen, onClose }: CustomerInfoModalProps) {
+function CustomerInfoModal({
+  isOpen,
+  onClose,
+  userId,
+}: CustomerInfoModalProps) {
   const [code, setCode] = useState('')
   const router = useRouter()
   const handleConfirm = () => {
-    router.push('/my-loan?step=3')
+    router.push(`/my-loan?step=3&userId=${userId}`)
   }
 
   const handleClose = () => {

@@ -25,7 +25,9 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import ModalBasis from '@/components/@Modal/ModalBasis'
 import CommonSelect from '@/components/CommonSelect'
 import InputForm from '@/components/InputForm'
+import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
 import { InfoFillIcon, XCircleFillIcon } from '@/generated/icons/MyIcons'
+import { useLocalStorage } from '@/stores/local/state'
 import { useSessionStorage } from '@/stores/session/state'
 import { extractUserInfoFromJWT } from '@/utils/jwt'
 
@@ -51,6 +53,7 @@ const ApplyLoanStep3 = () => {
   const router = useRouter()
   const toast = useToast()
   console.log('errors', errors)
+  console.log('watch', watch())
   const [userInfo, setUserInfo] = useState<{
     name?: string
     phone?: string
@@ -67,7 +70,11 @@ const ApplyLoanStep3 = () => {
   const creditScore = useWatch({ control, name: 'creditScore' })
   const safeKeyWatchValue = useWatch({ control, name: 'safeKey' })
   const [popupWindow, setPopupWindow] = useState<Window | null>(null)
-
+  const { data: settingData } = useSettingRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
   const {
     isOpen: isLoanAlertOpen,
     onOpen: onLoanAlertOpen,
@@ -97,6 +104,21 @@ const ApplyLoanStep3 = () => {
     return numbers === '' ? undefined : Number(numbers)
   }
 
+  // 신용점수 문자열을 숫자로 변환하는 함수
+  const getCreditScoreValue = (score: string): number => {
+    const scoreMap: { [key: string]: number } = {
+      UNDER_650: 0,
+      RANGE_650_700: 650,
+      RANGE_700_750: 700,
+      RANGE_750_800: 750,
+      RANGE_800_850: 800,
+      RANGE_850_900: 850,
+      RANGE_900_950: 900,
+      OVER_950: 950,
+    }
+    return scoreMap[score] || 0
+  }
+
   const checkLoanEligibility = () => {
     const isNoIncome = annualIncome === 'NO_INCOME'
 
@@ -105,7 +127,10 @@ const ApplyLoanStep3 = () => {
       monthlyIncome === null ||
       monthlyIncome === undefined
 
-    const isLowCreditScore = creditScore === 'UNDER_650'
+    // settingData의 minCreditScore와 비교
+    const minCreditScore = settingData?.minCreditScore || 650
+    const currentCreditScore = getCreditScoreValue(creditScore)
+    const isLowCreditScore = currentCreditScore < minCreditScore
 
     if (isNoIncome || isZeroMonthlyIncome || isLowCreditScore) {
       onLoanRejectOpen()
@@ -204,8 +229,6 @@ const ApplyLoanStep3 = () => {
     }
   }
 
-  console.log('Form errors:', errors)
-
   const getUserInfo = () => {
     const extractedUserInfo = extractUserInfoFromJWT(
       identityVerificationToken as string,
@@ -255,13 +278,15 @@ const ApplyLoanStep3 = () => {
     normal:
       '(예시) 자녀 출산으로 인해 산후 조리원 비용이 예상보다 많이 나왔습니다. \n오백만원만 빌리면, 3개월 동안 월급을 모아서 상환할 수 있습니다.',
   }
-  const { set, safeKey } = useSessionStorage()
+  // const { set, safeKey } = useSessionStorage()
+
+  const { popup_status: safeKey } = useLocalStorage()
   console.log('safeKeyWatchValue', safeKey)
   useEffect(() => {
     window.addEventListener('storage', (e) => {
       if (e.key === 'popup_status') {
         console.log(e)
-        set('safeKey', e.newValue)
+        // set('safeKey', e.newValue)
         setValue('safeKey', safeKey)
       }
     })
@@ -555,6 +580,7 @@ const ApplyLoanStep3 = () => {
             color={'grey.8'}
             onClick={handleApplyCreditInfoSubmit}
             w={'209px'}
+            // isDisabled={safeKey !== null}
           >
             제출
           </Button>

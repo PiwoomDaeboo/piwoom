@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { useRouter } from 'next/router'
 
 import {
@@ -15,6 +17,11 @@ import {
 
 import { AuthRedirectLoader } from '@/components/AuthRedirectLoader'
 import ImageAsNext from '@/components/ImageAsNext'
+import {
+  LOAN_KIND_OPTIONS,
+  LOAN_STATUS,
+  REPAYMENT_TYPE,
+} from '@/constants/loan'
 import { useLoanListQuery } from '@/generated/apis/Loan/Loan.query'
 import { MY_IMAGES } from '@/generated/path/images'
 import { useAuthRedirect } from '@/hooks/useAuthRedirect'
@@ -24,27 +31,27 @@ import ElectronicContractModal from './electronic-contract-modal'
 
 const MyLoanStep2 = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [userId, setUserId] = useState<number | null>(null)
   const router = useRouter()
 
-  //  <iframe
-  //           src={
-  //             'https://app.modusign.co.kr/embedded-participant?di=bc615c10-92d2-11f0-b573-dd5faac0c738&pi=bccf8730-92d2-11f0-b573-dd5faac0c738&ci=MDEwOTc5Nzk3NDY&sm=SECURE_LINK&token=sha256.GjhqbFrTXWZsJ7T9t6OPQTXRIfZHDS1wLlShhRy4Yi4&expiry=1758532991884&redirectUrl=http%3A%2F%2Fapi.piwoom.com%2Fv1%2Floan%2F1%2Fsign_callback%2F'
-  //           }
-  //         ></iframe>
-
-  const { data: loanList } = useLoanListQuery({
+  const { data: loanList, isLoading } = useLoanListQuery({
     variables: {
       query: {
-        // status_in: [],
-        limit: 10,
+        limit: 50,
         offset: 0,
+        status_in: ['UNDER_REVIEW', 'CONTRACTING'],
       },
     },
-    options: {},
   })
+  console.log('loanList', loanList)
+
   return (
     <Container>
-      <CustomerInfoModal isOpen={isOpen} onClose={onClose} />
+      <CustomerInfoModal
+        isOpen={isOpen}
+        onClose={onClose}
+        userId={userId as number}
+      />
 
       <Flex
         pt={{ base: '40px', sm: '48px', md: '80px' }}
@@ -68,172 +75,101 @@ const MyLoanStep2 = () => {
           <Text textStyle={'pre-heading-2'} color={'primary.4'}>
             고객님은 총{' '}
             <Box as="span" color={'primary.4'}>
-              1건
+              {loanList?.count}건
             </Box>
             의 대출계약이 있습니다.
           </Text>
           <Text textStyle={'pre-body-6'} color={'grey.7'} textAlign={'center'}>
             전자계약서 작성 버튼을 클릭하여 계약서 작성을 진행해 주세요.
           </Text>
-          <Flex
-            mt={'24px'}
-            w={'100%'}
-            flexDir={'column'}
-            p={{ base: '20px', sm: '20px 32px' }}
-            bg={'background.basic.1'}
-            borderRadius={'20px'}
-            gap={'24px'}
-            boxShadow={'0 8px 50px 0 rgba(0, 46, 114, 0.10)'}
-          >
-            <HStack justifyContent={'space-between'} spacing={'6px'}>
-              <Text textStyle={'pre-heading-4'} color={'primary.3'}>
-                123-45678-911
-              </Text>
-              <Button
-                // onClick={onElectronicContractModalOpen}
-                onClick={onOpen}
-                // onClick={() => router.push('/my-loan?step=3')}
-                variant={'solid-primary'}
+          {loanList?.results &&
+            loanList.results.length > 0 &&
+            loanList?.results?.map((item, index) => (
+              <Flex
+                key={item?.no}
+                mt={'24px'}
+                w={'100%'}
+                flexDir={'column'}
+                p={{ base: '20px', sm: '20px 32px' }}
+                bg={'background.basic.1'}
+                borderRadius={'20px'}
+                gap={'24px'}
+                boxShadow={'0 8px 50px 0 rgba(0, 46, 114, 0.10)'}
               >
-                전자계약서 작성
-              </Button>
-            </HStack>
-            <SimpleGrid
-              columns={{ base: 1, sm: 2 }}
-              p={'10px 20px'}
-              bg={'background.basic.2'}
-              borderRadius={'10px'}
-              gap={'2px'}
-            >
-              <HStack justifyContent={'flex-start'} alignItems={'center'}>
-                <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                  • 채무자:
-                </Text>
-                <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                  홍길동
-                </Text>
-              </HStack>
-              <HStack justifyContent={'flex-start'} alignItems={'center'}>
-                <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                  • 대출원금:
-                </Text>
-                <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                  홍길동
-                </Text>
-              </HStack>
-              <HStack justifyContent={'flex-start'} alignItems={'center'}>
-                <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                  • 대출종류:
-                </Text>
-                <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                  홍길동
-                </Text>
-              </HStack>
-              <HStack justifyContent={'flex-start'} alignItems={'center'}>
-                <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                  • 대출만기:
-                </Text>
-                <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                  홍길동
-                </Text>
-              </HStack>
-              <HStack justifyContent={'flex-start'} alignItems={'center'}>
-                <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                  • 상환방식:
-                </Text>
-                <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                  홍길동
-                </Text>
-              </HStack>
-              <HStack justifyContent={'flex-start'} alignItems={'center'}>
-                <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                  • 상환방식:
-                </Text>
-                <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                  이자율
-                </Text>
-              </HStack>
-            </SimpleGrid>
-          </Flex>
-          <Box w={'100%'} h={'1px'} bg={'border.basic.1'} my={'32px'} />
-
-          <Text textStyle={'pre-heading-2'} color={'primary.4'}>
-            대출 심사 중
-          </Text>
-          <Text textStyle={'pre-body-6'} color={'grey.7'}>
-            심사 완료 후 전자계약 체결이 가능해요.
-          </Text>
-          <Flex
-            mt={'24px'}
-            w={'100%'}
-            flexDir={'column'}
-            p={'20px 32px'}
-            borderRadius={'20px'}
-            gap={'24px'}
-            bg={'grey.2'}
-          >
-            <HStack
-              justifyContent={'space-between'}
-              spacing={'6px'}
-              mb={'24px'}
-            >
-              <Text textStyle={'pre-heading-4'} color={'grey.5'}>
-                대출 신청 조건
-              </Text>
-              <Button variant={'solid-primary'} isDisabled={true}>
-                전자계약서 작성
-              </Button>
-            </HStack>
-            <SimpleGrid
-              columns={{ base: 1, sm: 2 }}
-              p={'10px 20px'}
-              //   bg={'background.basic.2'}
-              bg={'rgba(27, 28, 29, 0.05)'}
-              borderRadius={'10px'}
-              gap={'2px'}
-            >
-              <HStack justifyContent={'flex-start'} alignItems={'center'}>
-                <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                  • 채무자:
-                </Text>
-                <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                  홍길동
-                </Text>
-              </HStack>
-              <HStack justifyContent={'flex-start'} alignItems={'center'}>
-                <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                  • 대출원금:
-                </Text>
-                <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                  홍길동
-                </Text>
-              </HStack>
-              <HStack justifyContent={'flex-start'} alignItems={'center'}>
-                <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                  • 대출종류:
-                </Text>
-                <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                  홍길동
-                </Text>
-              </HStack>
-              <HStack justifyContent={'flex-start'} alignItems={'center'}>
-                <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                  • 대출만기:
-                </Text>
-                <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                  홍길동
-                </Text>
-              </HStack>
-              <HStack justifyContent={'flex-start'} alignItems={'center'}>
-                <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                  • 상환방식:
-                </Text>
-                <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                  홍길동
-                </Text>
-              </HStack>
-            </SimpleGrid>
-          </Flex>
+                <HStack justifyContent={'space-between'} spacing={'6px'}>
+                  <Text textStyle={'pre-heading-4'} color={'primary.3'}>
+                    {item.no}
+                  </Text>
+                  <Button
+                    onClick={() => {
+                      setUserId(item?.id)
+                      onOpen()
+                    }}
+                    variant={'solid-primary'}
+                  >
+                    전자계약서 작성
+                  </Button>
+                </HStack>
+                <SimpleGrid
+                  columns={{ base: 1, sm: 2 }}
+                  p={'10px 20px'}
+                  bg={'background.basic.2'}
+                  borderRadius={'10px'}
+                  gap={'2px'}
+                >
+                  <HStack justifyContent={'flex-start'} alignItems={'center'}>
+                    <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                      • 채무자:
+                    </Text>
+                    <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                      {item?.accountHolder || '-'}
+                    </Text>
+                  </HStack>
+                  <HStack justifyContent={'flex-start'} alignItems={'center'}>
+                    <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                      • 대출원금:
+                    </Text>
+                    <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                      {item.loanAmount?.toLocaleString()}만원
+                    </Text>
+                  </HStack>
+                  <HStack justifyContent={'flex-start'} alignItems={'center'}>
+                    <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                      • 대출종류:
+                    </Text>
+                    <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                      {LOAN_KIND_OPTIONS.find(
+                        (status) => status.value === item?.kind,
+                      )?.label + '대출' || '-'}
+                    </Text>
+                  </HStack>
+                  <HStack justifyContent={'flex-start'} alignItems={'center'}>
+                    <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                      • 대출만기:
+                    </Text>
+                    <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                      {item.loanPeriod}개월
+                    </Text>
+                  </HStack>
+                  <HStack justifyContent={'flex-start'} alignItems={'center'}>
+                    <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                      • 상환방식:
+                    </Text>
+                    <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                      {REPAYMENT_TYPE.find(
+                        (type) => type.value === item?.repaymentType,
+                      )?.label || '-'}
+                    </Text>
+                  </HStack>
+                  <HStack justifyContent={'flex-start'} alignItems={'center'}>
+                    <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                      • 이자율:
+                    </Text>
+                    <Text textStyle={'pre-body-6'} color={'grey.9'}></Text>
+                  </HStack>
+                </SimpleGrid>
+              </Flex>
+            ))}
 
           {/* <Flex
             w={'100%'}

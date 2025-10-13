@@ -49,40 +49,21 @@ export default function AdditionalFileUpload() {
     useUploadFilesToS3Mutation({
       options: {
         onSuccess: (data) => {
-          const uploadedFileNames =
-            data?.fulfilled?.map(
-              (file) =>
-                file?.fields?.key?.split('/').pop() || file?.fields?.key,
-            ) || []
+          const newFiles =
+            data?.fulfilled?.map((file) => ({
+              name: file?.fields?.key?.split('/').pop() || file?.fields?.key,
+              path: file?.fields?.key,
+            })) || []
 
-          const uploadedKeys =
-            data?.fulfilled?.map(
-              (file) =>
-                file?.fields?.key?.split('/').pop() || file?.fields?.key,
-            ) || []
-          const uploadedPaths =
-            data?.fulfilled?.map((file) => file?.fields?.key) || []
+          const currentFileSet = (getValues('fileSet') as any) || []
 
-          // 기존 값 가져오기
-          const currentNames = getValues('fileSet.name') as any
-          const currentPaths = getValues('fileSet.path') as any
-
-          // 배열로 변환 (단일 값이면 배열로 감싸기)
-          const existingNames =
-            Array.isArray(currentNames) ? currentNames
-            : currentNames ? [currentNames]
-            : []
-          const existingPaths =
-            Array.isArray(currentPaths) ? currentPaths
-            : currentPaths ? [currentPaths]
-            : []
+          const uploadedFileNames = newFiles.map((file) => file.name)
 
           setFileUploadedFileName([
             ...(fileUploadedFileName || []),
             ...uploadedFileNames,
           ])
-          setValue('fileSet.name', [...existingNames, ...uploadedKeys] as any)
-          setValue('fileSet.path', [...existingPaths, ...uploadedPaths] as any)
+          setValue('fileSet', [...currentFileSet, ...newFiles] as any)
         },
         onError: (error) => {
           console.error('파일 업로드 실패:', error)
@@ -108,28 +89,15 @@ export default function AdditionalFileUpload() {
       fileUploadedFileName?.filter((file) => file !== fileName) || [],
     )
 
-    const currentNames = getValues('fileSet.name') as any
-    const currentPaths = getValues('fileSet.path') as any
+    const currentFileSet = (getValues('fileSet') as any) || []
 
-    const namesArray =
-      Array.isArray(currentNames) ? currentNames
-      : currentNames ? [currentNames]
-      : []
-    const pathsArray =
-      Array.isArray(currentPaths) ? currentPaths
-      : currentPaths ? [currentPaths]
-      : []
-
-    const updatedNames = namesArray.filter((_, idx) => idx !== deleteIndex)
-    const updatedPaths = pathsArray.filter((_, idx) => idx !== deleteIndex)
-
-    setValue(
-      'fileSet.name',
-      updatedNames.length > 0 ? updatedNames : ('' as any),
+    const updatedFileSet = currentFileSet.filter(
+      (_: any, idx: number) => idx !== deleteIndex,
     )
+
     setValue(
-      'fileSet.path',
-      updatedPaths.length > 0 ? updatedPaths : ('' as any),
+      'fileSet',
+      updatedFileSet.length > 0 ? updatedFileSet : ([] as any),
     )
   }
 
