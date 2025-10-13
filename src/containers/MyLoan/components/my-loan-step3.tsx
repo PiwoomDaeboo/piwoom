@@ -17,10 +17,14 @@ import {
   useToast,
 } from '@chakra-ui/react'
 
-import AuthAlertModal from '@/components/@Modal/auth-alert-modal'
+import AuthAlertModal from '@/components/@Modal/auth-alert-modal'
 import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
-import { useLoanSignCreateMutation } from '@/generated/apis/Loan/Loan.query'
+import { REPAYMENT_TYPE } from '@/constants/loan'
+import {
+  useLoanRetrieveQuery,
+  useLoanSignCreateMutation,
+} from '@/generated/apis/Loan/Loan.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
 import { MY_IMAGES } from '@/generated/path/images'
 
@@ -34,6 +38,16 @@ import MyLoanTermsModal from './my-loan-terms-modal'
 
 const MyLoanStep3 = () => {
   const router = useRouter()
+  const { userId } = router.query
+  const { data: userLoanData } = useLoanRetrieveQuery({
+    variables: {
+      id: Number(userId),
+    },
+    options: {
+      enabled: !!userId,
+    },
+  })
+  console.log('userLoanData', userLoanData)
 
   const {
     isOpen: isTermsOpen,
@@ -150,7 +164,7 @@ const MyLoanStep3 = () => {
                 대부금액
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                10,000,000원
+                {userLoanData?.loanAmount?.toLocaleString()}원
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -158,7 +172,9 @@ const MyLoanStep3 = () => {
                 상환방식
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                만기일시상환 or 원리금균등분할상환
+                {REPAYMENT_TYPE.find(
+                  (type) => type.value === userLoanData?.repaymentType,
+                )?.label || '-'}
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -198,7 +214,7 @@ const MyLoanStep3 = () => {
                 대출 갚는 날
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                매월 0일
+                매월 {userLoanData?.interestPaymentDate || '-'}일
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -232,31 +248,44 @@ const MyLoanStep3 = () => {
               justifyContent={'space-between'}
               borderRadius={'20px'}
               border={'1px solid'}
-              borderColor={'border.basic.2'}
-              cursor={'pointer'}
+              borderColor={
+                agreements[item.key as keyof typeof agreements] ?
+                  'border.basic.1'
+                : 'border.basic.2'
+              }
               bg={
                 agreements[item.key as keyof typeof agreements] ?
-                  'background.basic.2'
+                  'primary.1'
                 : 'transparent'
               }
-              onClick={() => {
-                handleTermsOpen(item.id)
-                handleIndividualAgreement(
-                  item.key,
-                  !agreements[item.key as keyof typeof agreements],
-                )
-              }}
             >
               <HStack w={'100%'} spacing={3}>
                 <Checkbox
                   isChecked={agreements[item.key as keyof typeof agreements]}
                   sx={CHECKBOX_STYLES}
+                  onChange={(e) => {
+                    handleIndividualAgreement(item.key, e.target.checked)
+                  }}
                 />
-                <Text textStyle={'pre-body-5'} color={'grey.10'}>
+                <Text
+                  textStyle={'pre-body-5'}
+                  color={'grey.10'}
+                  cursor={'pointer'}
+                  onClick={() => {
+                    handleIndividualAgreement(
+                      item.key,
+                      !agreements[item.key as keyof typeof agreements],
+                    )
+                  }}
+                >
                   {item.label}
                 </Text>
               </HStack>
-              <Box onClick={onTermsOpen} cursor={'pointer'} p={'4px'}>
+              <Box
+                onClick={() => handleTermsOpen(item.id)}
+                cursor={'pointer'}
+                p={'4px'}
+              >
                 <CaretRightIcon boxSize={'24px'} />
               </Box>
             </Flex>
@@ -345,7 +374,9 @@ const MyLoanStep3 = () => {
           <Button
             variant={'solid-primary'}
             w={'160px'}
-            isDisabled={!isAgree}
+            isDisabled={
+              !isAgree || !agreements.privacy || !agreements.collection
+            }
             onClick={() => createContractSignature({ id: 1 })}
             // onClick={() => router.push('/my-loan?step=4')}
           >

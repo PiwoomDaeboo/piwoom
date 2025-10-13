@@ -4,15 +4,15 @@ import { Button } from '@chakra-ui/react'
 
 import ModalBasis from '@/components/@Modal/ModalBasis'
 
-interface LoanDelayModalProps {
+interface LoanImpossibleModalProps {
   isOpen: boolean
   onClose: () => void
 }
 
-export default function LoanDelayModal({
+export default function LoanImpossibleModal({
   isOpen,
   onClose,
-}: LoanDelayModalProps) {
+}: LoanImpossibleModalProps) {
   return (
     <ModalBasis
       isOpen={isOpen}
@@ -30,15 +30,16 @@ export default function LoanDelayModal({
             알림
           </Text>
           <Text textAlign={'center'} textStyle={'pre-body-68'} color={'grey.7'}>
-            현재 대출이 연체되어 웹사이트를 통한 중도상환 신청이 불가능합니다.
-            전화 상담 또는 카카오톡 상담을 통해 문의해 주시기 바랍니다.
+            현재 시스템 점검 등으로 인해 일시적으로 대출 신청이 불가능합니다.
+            카카오톡 상담하기를 통해 성함과 연락처를 남겨주시면 빠르게
+            연락드리겠습니다.
           </Text>
         </Flex>
       }
       footer={
         <Flex w="100%" gap="12px">
           <Button w="100%" variant={'text-primary'} onClick={onClose}>
-            닫기
+            취소
           </Button>
           <Button
             w="100%"

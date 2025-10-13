@@ -129,7 +129,6 @@ const HomeHeaderDrawer = ({
                 )
               }
 
-              // submenuItems가 있는 경우 Accordion 사용
               return (
                 <Accordion key={item.label} allowToggle w={'100%'} px={'0px'}>
                   <AccordionItem

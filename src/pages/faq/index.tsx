@@ -4,7 +4,6 @@ import { NextSeo } from 'next-seo'
 
 import HomeLayout from '@/components/@Layout/HomeLayout'
 import Faq from '@/containers/FrequentlyAskedQuestions'
-import Notice from '@/containers/Notice'
 
 function FaqPage() {
   return (

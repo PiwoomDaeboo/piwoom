@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -6,10 +6,12 @@ import {
   Badge,
   Box,
   Button,
+  Center,
   Container,
   Flex,
   HStack,
   SimpleGrid,
+  Spinner,
   Tab,
   TabList,
   TabPanel,
@@ -19,93 +21,119 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import * as PortOne from '@portone/browser-sdk/v2'
 
 import NonData from '@/components/NonData'
 import { Pagination } from '@/components/pagination'
+import { LOAN_STATUS } from '@/constants/loan'
 import { LoanListParamsStatusInEnumType } from '@/generated/apis/@types/data-contracts'
 import { paramsSerializerBy } from '@/generated/apis/@utils/param-serializer-by'
+// import { paramsSerializerBy } from '@/generated/apis/@utils/param-serializer-by'
 import { useLoanListQuery } from '@/generated/apis/Loan/Loan.query'
-import {
-  useUserIdentityVerificationCreateMutation,
-  useUserLoginCreateMutation,
-} from '@/generated/apis/User/User.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
 import { useAuth } from '@/hooks/useAuth'
-import { useLocalStorage } from '@/stores/local/state'
 
-import AdditionalDocumentModal from '../../components/@Modal/addtional-document-modal'
+import AdditionalDocumentModal from '../../components/@Modal/additional-document-modal'
 import LoanDelayModal from '../../components/@Modal/loan-delay-modal'
 import MyLoanAuthentication from './components/my-loan-authentication'
+import MyLoanList from './components/my-loan-list'
 
 function MyLoanStatus() {
   const router = useRouter()
   const postsPerPage = 10
-  const [status, setStatus] = useState<LoanListParamsStatusInEnumType[]>([
-    'UNDER_REVIEW',
-    'CONTRACTING',
-    'IN_PROGRESS',
-    'OVERDUE',
-  ])
-  const [currentPage, setCurrentPage] = useState(1)
   const { isLogin } = useAuth()
-  const {
-    isOpen: isLoanDelayOpen,
-    onOpen: onLoanDelayOpen,
-    onClose: onLoanDelayClose,
-  } = useDisclosure()
+  const { isOpen: isLoanDelayOpen, onClose: onLoanDelayClose } = useDisclosure()
   const {
     isOpen: isAdditionalDocumentOpen,
     onOpen: onAdditionalDocumentOpen,
     onClose: onAdditionalDocumentClose,
   } = useDisclosure()
 
-  const { data: loanList } = useLoanListQuery({
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+
+  // router.query에서 tab과 page 읽기
+  const selectedTab = useMemo(() => {
+    const tabQuery = router.query.tab
+    if (typeof tabQuery === 'string') {
+      const tab = parseInt(tabQuery, 10)
+      return isNaN(tab) ? 0 : Math.max(0, Math.min(2, tab))
+    }
+    return 0
+  }, [router.query.tab])
+
+  const currentPage = useMemo(() => {
+    const pageQuery = router.query.page
+    if (typeof pageQuery === 'string') {
+      const page = parseInt(pageQuery, 10)
+      return isNaN(page) ? 1 : Math.max(1, page)
+    }
+    return 1
+  }, [router.query.page])
+
+  const status = useMemo<LoanListParamsStatusInEnumType[]>(() => {
+    if (selectedTab === 0) {
+      return ['UNDER_REVIEW', 'CONTRACTING', 'IN_PROGRESS', 'OVERDUE']
+    } else if (selectedTab === 1) {
+      return ['EARLY_REPAYMENT_COMPLETED', 'MATURITY_REPAYMENT_COMPLETED']
+    } else {
+      return ['REJECTED']
+    }
+  }, [selectedTab])
+
+  const { data: loanList, isLoading } = useLoanListQuery({
     variables: {
       query: {
         limit: postsPerPage,
         offset: (currentPage - 1) * postsPerPage,
-        status_in: status,
-      },
-      params: {
-        paramsSerializer: paramsSerializerBy({ _default: 'comma' }),
+        status_in: status as LoanListParamsStatusInEnumType[],
       },
     },
     options: {
       enabled: !!isLogin,
     },
   })
-  const totalPages = Math.ceil(loanList?.count || 0 / postsPerPage)
-
-  const [selectedTab, setSelectedTab] = useState(0)
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const totalPages = Math.ceil((loanList?.count || 0) / postsPerPage)
 
   const handleTabChange = (index: number) => {
-    setSelectedTab(index)
-    if (index === 0) {
-      setStatus(['UNDER_REVIEW', 'CONTRACTING', 'IN_PROGRESS', 'OVERDUE'])
-    } else if (index === 1) {
-      setStatus(['EARLY_REPAYMENT_COMPLETED', 'MATURITY_REPAYMENT_COMPLETED'])
-    } else if (index === 2) {
-      setStatus(['REJECTED'])
-    }
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, tab: index, page: 1 },
+      },
+      undefined,
+      { shallow: true },
+    )
   }
 
-  const getBadgeStyle = (status: string) => {
-    switch (status) {
-      case 'IN_PROGRESS':
-        return { color: 'accent.yellow2', bg: 'accent.yellow1' }
-      case 'OVERDUE':
-        return { color: 'accent.red2', bg: 'accent.red1' }
-      case 'EARLY_REPAYMENT_COMPLETED':
-        return { color: 'accent.green2', bg: 'accent.green1' }
-      // case '송금중':
-      //   return { color: 'accent.pink2', bg: 'accent.pink1' }
-      case 'MATURITY_REPAYMENT_COMPLETED':
-        return { color: 'accent.violet2', bg: 'accent.violet1' }
-      case 'REJECTED':
-        return { color: 'grey.7', bg: 'grey.2' }
+  const handlePageChange = (page: number) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, page },
+      },
+      undefined,
+      { shallow: true },
+    )
+  }
+
+  useEffect(() => {
+    if (router.isReady && !router.query.tab && !router.query.page) {
+      router.replace(
+        {
+          pathname: router.pathname,
+          query: { tab: 0, page: 1 },
+        },
+        undefined,
+        { shallow: true },
+      )
     }
+  }, [router.isReady])
+
+  if (isLoading) {
+    return (
+      <Center h={'100vh'}>
+        <Spinner />
+      </Center>
+    )
   }
 
   return (
@@ -161,153 +189,38 @@ function MyLoanStatus() {
 
               <TabPanels p={'0px'}>
                 <TabPanel p={'36px 0px 48px 0px'}>
-                  <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} gap={'20px'}>
-                    {Array.from({ length: 10 }).map((item: any, index) => (
-                      <Flex
-                        key={index}
-                        flexDirection={'column'}
-                        p={'24px 32px'}
-                        borderRadius={'32px'}
-                        boxShadow={'0 8px 50px 0 rgba(0, 46, 114, 0.10)'}
-                      >
-                        <HStack
-                          w={'100%'}
-                          justifyContent={'space-between'}
-                          alignItems={'flex-start'}
-                        >
-                          <VStack alignItems={'flex-start'}>
-                            <Badge
-                              variant={'subtle_primary'}
-                              style={getBadgeStyle('IN_PROGRESS')}
-                            >
-                              대출 중
-                            </Badge>
-                            <Text>
-                              계약번호{' '}
-                              <Box as="span" ml={'8px'} color={'primary.4'}>
-                                12345678
-                              </Box>
-                            </Text>
-                          </VStack>
-                          <Flex
-                            justifyContent={'center'}
-                            alignItems={'center'}
-                            w={'40px'}
-                            h={'40px'}
-                            borderRadius={'50%'}
-                            border={'1px solid'}
-                            borderColor={'primary.4'}
-                            onClick={() =>
-                              router.push(`/my-loan-status/${index}`)
-                            }
-                          >
-                            <CaretRightIcon
-                              boxSize={'24px'}
-                              color={'primary.4'}
-                            />
-                          </Flex>
-                        </HStack>
-                        <Flex
-                          flexDirection={'column'}
-                          w={'100%'}
-                          gap={'6px'}
-                          mt={'20px'}
-                        >
-                          <HStack justifyContent={'space-between'}>
-                            <Text textStyle={'pre-body-6'} color={'grey.10'}>
-                              대출 금액
-                            </Text>
-                            <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                              100,000,000원
-                            </Text>
-                          </HStack>
-                          <HStack justifyContent={'space-between'}>
-                            <Text textStyle={'pre-body-6'} color={'grey.10'}>
-                              대출 갚는날
-                            </Text>
-                            <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                              2025년 9월 25일
-                            </Text>
-                          </HStack>
-                          <HStack justifyContent={'space-between'}>
-                            <Text textStyle={'pre-body-6'} color={'grey.10'}>
-                              대출 갚을 금액
-                            </Text>
-                            <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                              100,000원
-                            </Text>
-                          </HStack>
-                        </Flex>
-
-                        <SimpleGrid
-                          // visibility={'hidden'}
-                          visibility={'visible'}
-                          columns={2}
-                          gap={'8px'}
-                          mt={'20px'}
-                        >
-                          <Button variant={'outline-secondary'}>
-                            <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                              상환 스케줄 확인하기
-                            </Text>
-                          </Button>
-                          <Button
-                            variant={'outline-secondary'}
-                            // onClick={onLoanDelayOpen}
-                            onClick={() => {
-                              router.push(`/my-loan-status/repayment/${index}`)
-                            }}
-                          >
-                            <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                              중도 상환 신청하기
-                            </Text>
-                          </Button>
-                          <Button variant={'outline-secondary'}>
-                            <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                              계약서 다운로드
-                            </Text>
-                          </Button>
-                          <Button variant={'outline-secondary'}>
-                            <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                              기타서류 발급 요청하기
-                            </Text>
-                          </Button>
-                        </SimpleGrid>
-                        <Button
-                          mt={'10px'}
-                          variant={'outline-secondary'}
-                          w={'100%'}
-                          onClick={() => {
-                            setSelectedIndex(index)
-                            router.push(
-                              `/my-loan-status/${item?.id || 1}?detailMenu=document`,
-                            )
-                          }}
-                        >
-                          <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                            추가서류 제출
-                          </Text>
-                        </Button>
-                      </Flex>
-                    ))}
-                  </SimpleGrid>
+                  {loanList?.results && loanList.results.length > 0 ?
+                    <MyLoanList loanList={loanList.results} />
+                  : <NonData variant="loan" />}
                 </TabPanel>
                 <TabPanel>
-                  <NonData variant="loan" />
+                  {loanList?.results && loanList.results.length > 0 ?
+                    <MyLoanList loanList={loanList.results} />
+                  : <NonData variant="loan" />}
                 </TabPanel>
-                <TabPanel></TabPanel>
+                <TabPanel>
+                  {loanList?.results && loanList.results.length > 0 ?
+                    <MyLoanList loanList={loanList.results} />
+                  : <NonData variant="loan" />}
+                </TabPanel>
               </TabPanels>
             </Tabs>
-
-            <Flex w={'100%'} justifyContent={'center'} h={'fit-content'}>
-              <Flex justifyContent={'center'}>
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={setCurrentPage}
-                />
+            {totalPages > 0 && (
+              <Flex
+                w={'100%'}
+                justifyContent={'center'}
+                h={'fit-content'}
+                mt={'48px'}
+              >
+                <Flex justifyContent={'center'}>
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                </Flex>
               </Flex>
-            </Flex>
+            )}
           </>
         : <MyLoanAuthentication />}
       </Container>

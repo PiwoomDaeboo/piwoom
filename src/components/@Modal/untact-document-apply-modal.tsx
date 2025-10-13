@@ -117,11 +117,12 @@ function UntactDocumentApplyModal({
 
   const govQuery = useGovRetrieveQuery({
     variables: {
-      id: govRetrieveId || 0,
+      id: govRetrieveId as number,
     },
     options: {
       enabled:
-        (!!govRetrieveId && loadingProcess === 2 && shouldPoll) || !!isOpen,
+        govRetrieveId !== null &&
+        ((loadingProcess === 2 && shouldPoll) || !!isOpen),
       refetchInterval: shouldPoll ? 5000 : false,
       refetchIntervalInBackground: true,
       refetchOnWindowFocus: true,

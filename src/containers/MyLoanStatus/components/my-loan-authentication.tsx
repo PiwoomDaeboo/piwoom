@@ -1,16 +1,25 @@
 import { useRouter } from 'next/router'
 
-import { Button, Container, Flex, Text, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  Container,
+  Flex,
+  Text,
+  VStack,
+  useToast,
+} from '@chakra-ui/react'
 import PortOne from '@portone/browser-sdk/v2'
 
 import { useUserLoginCreateMutation } from '@/generated/apis/User/User.query'
 import { SecurityIcon } from '@/generated/icons/MyIcons'
 import { useAuth } from '@/hooks/useAuth'
 import { useLocalStorage } from '@/stores/local/state'
+import { handleErrorToast } from '@/utils/error-handler'
 
 function MyLoanAuthentication() {
   const { set } = useLocalStorage()
   const router = useRouter()
+  const toast = useToast()
 
   const { mutateAsync: userLoginCreate } = useUserLoginCreateMutation({
     options: {
@@ -25,7 +34,11 @@ function MyLoanAuthentication() {
       },
       onError: (error: any) => {
         if (error?.response?.data?.status === 400) {
-          router.push(`/my-loan-status`)
+          toast(
+            handleErrorToast(error, {
+              title: '대출조회 실패',
+            }),
+          )
         } else {
           console.error('userLoginCreate', error)
         }
@@ -49,7 +62,6 @@ function MyLoanAuthentication() {
         identityVerificationId: response?.identityVerificationId || '',
       },
     })
-    //TODO: 인증 후 개인정보를 가져와서 사용자 정보 표기하기
   }
   return (
     <Container px={{ base: 0, md: '190px' }}>

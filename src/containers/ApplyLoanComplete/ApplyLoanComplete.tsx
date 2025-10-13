@@ -7,16 +7,19 @@ import {
   Button,
   Container,
   Flex,
+  HStack,
   Text,
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
 
+import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
 import {
   BluecheckIcon,
   InfoIcon,
   Loan1Icon,
   LoancompletepersonIcon,
+  WarningCircleIcon,
 } from '@/generated/icons/MyIcons'
 
 import WetaxModal from '../../components/@Modal/wetax-modal'
@@ -24,6 +27,11 @@ import WetaxModal from '../../components/@Modal/wetax-modal'
 function ApplyLoanComplete() {
   const router = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { data: settingData } = useSettingRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
 
   return (
     <Container>
@@ -106,9 +114,37 @@ function ApplyLoanComplete() {
                 <br />
                 아래 버튼을 눌러 세금 납부 내역을 제출해보세요!
               </Text>
-              <Button variant={'solid-primary'} onClick={onOpen}>
+              <Button
+                variant={'solid-primary'}
+                onClick={onOpen}
+                isDisabled={!settingData?.isWetax}
+              >
                 세금 납부 내역 제출
               </Button>
+              {!settingData?.isWetax && (
+                <Flex
+                  p={'12px 14px'}
+                  borderRadius={'12px'}
+                  justifyContent={'center'}
+                  alignItems={'flex-start'}
+                  flexDir={'column'}
+                  maxW={'262px'}
+                  gap={'10px'}
+                  bg={'rgba(255, 255, 255, 0.70)'}
+                >
+                  <HStack>
+                    <WarningCircleIcon boxSize={'24px'} />
+                    <Text textStyle={'pre-caption-1'} color={'grey.9'}>
+                      유의사항
+                    </Text>
+                  </HStack>
+                  <Text textStyle={'pre-caption-2'} color={'grey.8'}>
+                    서버 점검 등 사유로 인해 세급 납부 내역 제출을 진행하지 않을
+                    수 있습니다. 추후 대출 현황 조회에서 서류를 업데이트
+                    부탁드립니다.
+                  </Text>
+                </Flex>
+              )}
             </VStack>
           </Box>
         </Flex>

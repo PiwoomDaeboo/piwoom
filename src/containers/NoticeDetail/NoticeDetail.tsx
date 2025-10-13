@@ -22,7 +22,6 @@ function NoticeDetail() {
       id: Number(id),
     },
   })
-  console.log(noticeDetail)
 
   const handleFileDownload = (file: { name: string; path: string }) => {
     if (!file.path) {
@@ -38,6 +37,7 @@ function NoticeDetail() {
     link.click()
     document.body.removeChild(link)
   }
+
   return (
     <>
       <Container>

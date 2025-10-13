@@ -25,6 +25,7 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import ModalBasis from '@/components/@Modal/ModalBasis'
 import CommonSelect from '@/components/CommonSelect'
 import InputForm from '@/components/InputForm'
+import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
 import { InfoFillIcon, XCircleFillIcon } from '@/generated/icons/MyIcons'
 import { useLocalStorage } from '@/stores/local/state'
 import { useSessionStorage } from '@/stores/session/state'
@@ -69,7 +70,11 @@ const ApplyLoanStep3 = () => {
   const creditScore = useWatch({ control, name: 'creditScore' })
   const safeKeyWatchValue = useWatch({ control, name: 'safeKey' })
   const [popupWindow, setPopupWindow] = useState<Window | null>(null)
-
+  const { data: settingData } = useSettingRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
   const {
     isOpen: isLoanAlertOpen,
     onOpen: onLoanAlertOpen,
@@ -99,6 +104,21 @@ const ApplyLoanStep3 = () => {
     return numbers === '' ? undefined : Number(numbers)
   }
 
+  // 신용점수 문자열을 숫자로 변환하는 함수
+  const getCreditScoreValue = (score: string): number => {
+    const scoreMap: { [key: string]: number } = {
+      UNDER_650: 0,
+      RANGE_650_700: 650,
+      RANGE_700_750: 700,
+      RANGE_750_800: 750,
+      RANGE_800_850: 800,
+      RANGE_850_900: 850,
+      RANGE_900_950: 900,
+      OVER_950: 950,
+    }
+    return scoreMap[score] || 0
+  }
+
   const checkLoanEligibility = () => {
     const isNoIncome = annualIncome === 'NO_INCOME'
 
@@ -107,7 +127,10 @@ const ApplyLoanStep3 = () => {
       monthlyIncome === null ||
       monthlyIncome === undefined
 
-    const isLowCreditScore = creditScore === 'UNDER_650'
+    // settingData의 minCreditScore와 비교
+    const minCreditScore = settingData?.minCreditScore || 650
+    const currentCreditScore = getCreditScoreValue(creditScore)
+    const isLowCreditScore = currentCreditScore < minCreditScore
 
     if (isNoIncome || isZeroMonthlyIncome || isLowCreditScore) {
       onLoanRejectOpen()
@@ -205,8 +228,6 @@ const ApplyLoanStep3 = () => {
       onStep3Error(errors)
     }
   }
-
-  console.log('Form errors:', errors)
 
   const getUserInfo = () => {
     const extractedUserInfo = extractUserInfoFromJWT(

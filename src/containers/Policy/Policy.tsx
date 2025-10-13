@@ -20,7 +20,6 @@ import { useDisclaimerRetrieveQuery } from '@/generated/apis/Disclaimer/Disclaim
 function Policy() {
   const { query } = useRouter()
   const { type } = query
-  console.log(type)
 
   const typeString = Array.isArray(type) ? type[0] : type
   const kind = typeString?.toUpperCase() as DisclaimerRetrieveParamsEnumType

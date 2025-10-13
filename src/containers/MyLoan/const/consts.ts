@@ -21,17 +21,24 @@ export const CHECKBOX_STYLES = {
     borderRadius: '50%',
     border: '1px solid',
     borderColor: 'border.basic.2',
-
+    color: '#4e5053',
     _checked: {
       bg: 'primary.3',
       borderColor: 'primary.3',
       borderRadius: '50%',
     },
   },
+  '.chakra-checkbox__control svg': {
+    opacity: 1,
+    color: '#4e5053',
+  },
   '.chakra-checkbox__control[data-checked]': {
     bg: 'primary.3',
     borderColor: 'primary.3',
     borderRadius: '50%',
+  },
+  '.chakra-checkbox__control[data-checked] svg': {
+    color: 'white',
   },
 }
 

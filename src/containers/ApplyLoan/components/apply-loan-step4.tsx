@@ -193,40 +193,36 @@ const ApplyLoanStep4 = () => {
 
   console.log('errors', errors)
 
-  const { mutate: loanCreateMutation } = useLoanCreateMutation({
-    options: {
-      onSuccess: (data: any) => {
-        console.log('loanCreateMutation', data)
+  const { mutate: loanCreateMutation, isPending: isLoanCreateMutationPending } =
+    useLoanCreateMutation({
+      options: {
+        onSuccess: (data: any) => {
+          console.log('loanCreateMutation', data)
+          reset('popup_status')
+          router.replace('/apply-loan-complete')
+        },
+        onError: (error: any) => {
+          console.error('loanCreateMutation', error)
+        },
       },
-      onError: (error: any) => {
-        reset('popup_status')
-        console.error('loanCreateMutation', error)
-      },
-    },
-  })
+    })
 
   const onStep4Submit = (data: any) => {
     const requestData = {
-      // kind: typeConvert(type as string) || 'A',
-      // kind: 'A',
       identityVerificationToken: identityVerificationToken,
-      incomeCertificate: '',
-
-      residentRegistrationCopy: '',
-      healthInsuranceEligibilityConfirmation: '',
-      healthInsurancePaymentConfirmation: '',
-      healthInsurancePaymentConfirmation2: '',
-      // fileSet: [
-      //   {
-      //     name: 'bb',
-      //     path: 'bb',
-      //   },
-      // ],
-      // safeKey: 'bbb',
+      incomeCertificate: getValues('incomeCertificate') || '',
+      residentRegistrationCopy: getValues('residentRegistrationCopy') || '',
+      healthInsuranceEligibilityConfirmation:
+        getValues('healthInsuranceEligibilityConfirmation') || '',
+      healthInsurancePaymentConfirmation:
+        getValues('healthInsurancePaymentConfirmation') || '',
+      healthInsurancePaymentConfirmation2:
+        getValues('healthInsurancePaymentConfirmation2') || '',
+      fileSet: getValues('fileSet') || [],
       safeKey: safeKey,
-      accountHolder: 'bb',
-      accountHolderSsn: 'bb',
-      // purposeAndRepaymentPlan: 'bb',
+      accountHolder: getValues('accountHolder') || '',
+      accountHolderSsn: getValues('accountHolderSsn') || '',
+      purposeAndRepaymentPlan: getValues('purposeAndRepaymentPlan') || '',
       ...data,
     }
     loanCreateMutation({
@@ -1020,9 +1016,10 @@ const ApplyLoanStep4 = () => {
         </InputForm>
         <InputForm label="비대면 서류제출">
           <Button
+            variant={'outline-primary'}
             textStyle={'pre-body-5'}
             w={'209px'}
-            disabled={!settingData?.isGov}
+            // disabled={!settingData?.isGov}
             isDisabled={isDocumentSubmissionCompleted}
             onClick={handleUntactDocumentApplyModalOpen}
           >
@@ -1090,6 +1087,7 @@ const ApplyLoanStep4 = () => {
           <Button
             variant={'solid-primary'}
             w={'160px'}
+            isLoading={isLoanCreateMutationPending}
             onClick={handleSubmitClick}
           >
             대출신청

@@ -137,6 +137,12 @@ export const REPAYMENT_TYPE = [
   { label: '만기 일시상환', value: 'LUMP_SUM' },
 ]
 
+export const LOAN_KIND_OPTIONS = [
+  { label: '월급', value: 'A' },
+  { label: '신용', value: 'B' },
+  { label: '부동산 담보', value: 'C' },
+]
+
 export const LOAN_PURPOSE_OPTIONS = [
   { label: '생활자금', value: 'LIVING_EXPENSES' },
   { label: '사업자금', value: 'BUSINESS_FUNDS' },
