@@ -7,14 +7,16 @@ const prettier = require('prettier')
 
 const axios = require('axios')
 
-const DOMAIN =
-  process.env.NODE_ENV === 'production' ? ENV.DOMAIN : 'http://localhost:3000'
-
 export default async function Sitemap(
-  _req: NextApiRequest,
+  req: NextApiRequest,
   res: NextApiResponse,
 ) {
   try {
+    // 요청 헤더에서 호스트를 가져오거나, 환경 변수 또는 기본값 사용
+    const protocol = req.headers.host?.includes('localhost') ? 'http' : 'https'
+    const host = req.headers.host || ENV.DOMAIN || 'piwoom.com'
+    const DOMAIN = `${protocol}://${host}`
+
     const { data: localRoutes } = await axios.get(`${DOMAIN}/sitemap.json`)
 
     /**
