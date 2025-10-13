@@ -12,6 +12,7 @@ import {
   Text,
   VStack,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 
 import { FormProvider, useForm } from 'react-hook-form'
@@ -24,8 +25,11 @@ import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
 import AdditionalFileUpload from '@/containers/ApplyLoan/components/additional-file-upload'
 import { useGovRetrieveQuery } from '@/generated/apis/Gov/Gov.query'
+import { useLoanPartialUpdateMutation } from '@/generated/apis/Loan/Loan.query'
+import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
 import { CameraIcon, CaretLeftIcon } from '@/generated/icons/MyIcons'
 import { FolderIcon, InfoFillIcon } from '@/generated/icons/MyIcons'
+import { useLocalStorage } from '@/stores/local/state'
 import { useSessionStorage } from '@/stores/session/state'
 import { extractUserInfoFromJWT } from '@/utils/jwt'
 
@@ -33,6 +37,7 @@ import { SAMPLE_LOAN_DATA, getFormattedDetailData } from '../consts'
 
 export default function Document() {
   const router = useRouter()
+  const { id } = router.query
   const methods = useForm()
   const [userInfo, setUserInfo] = useState<{
     name?: string
@@ -40,6 +45,8 @@ export default function Document() {
     birth?: string
     gender_code?: string
   } | null>(null)
+  const toast = useToast()
+  const { popup_status: safeKey, reset } = useLocalStorage()
   const {
     isOpen: wetaxModalOpen,
     onOpen: onWetaxModalOpen,
@@ -50,7 +57,30 @@ export default function Document() {
     onOpen: onUntactDocumentApplyModalOpen,
     onClose: onUntactDocumentApplyModalClose,
   } = useDisclosure()
+
   const { identityVerificationToken } = useSessionStorage()
+  const { mutate: documentSubmitMutation, isPending: isDocumentSubmitLoading } =
+    useLoanPartialUpdateMutation({
+      options: {
+        onSuccess: () => {
+          reset('popup_status')
+          toast({
+            title: '서류 제출 완료',
+            description: '서류 제출이 완료되었습니다.',
+            status: 'success',
+            duration: 5000,
+          })
+        },
+        onError: (error) => {
+          console.error('error', error)
+        },
+      },
+    })
+  const { data: settingData } = useSettingRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { mutate: uploadIdCard, isPending: isIdCardUploading } =
@@ -102,30 +132,26 @@ export default function Document() {
     }
   }, [])
 
+  console.log('safeKeyWatchValue', safeKey)
   useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      // Origin 검증 없이 모든 메시지 처리
-      if (typeof event.data === 'string' && event.data.trim()) {
-        console.log('✅ safeKey received:', event.data)
-        methods.setValue('safeKey', event.data)
-      } else if (
-        event.data &&
-        typeof event.data === 'object' &&
-        event.data.safeKey
-      ) {
-        console.log('✅ safeKey from object:', event.data.safeKey)
-        methods.setValue('safeKey', event.data.safeKey)
-      } else {
-        console.log('Raw data:', JSON.stringify(event.data))
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'popup_status') {
+        console.log(e)
+
+        methods.setValue('safeKey', safeKey)
       }
-    }
+    })
+  }, [methods])
 
-    window.addEventListener('message', handleMessage)
-
-    return () => {
-      window.removeEventListener('message', handleMessage)
-    }
-  }, [methods.setValue])
+  const onSubmit = methods.handleSubmit((data: any) => {
+    documentSubmitMutation({
+      id: Number(id),
+      data: {
+        ...data,
+        safeKey: safeKey,
+      },
+    })
+  })
 
   return (
     <FormProvider {...methods}>
@@ -196,11 +222,38 @@ export default function Document() {
                 variant={'outline-primary'}
                 textStyle={'pre-body-5'}
                 w={'209px'}
+                disabled={!settingData?.isWetax}
                 onClick={onWetaxModalOpen}
               >
                 세금 납부 내역 제출
               </Button>
             </InputForm>
+            {!settingData?.isWetax && (
+              <VStack w={'100%'} spacing={'12px'}>
+                <VStack
+                  w={'100%'}
+                  alignItems={'flex-start'}
+                  p={'16px 20px'}
+                  borderRadius={'20px'}
+                  border={'1px solid'}
+                  borderColor={'border.basic.1'}
+                  gap={'24px'}
+                >
+                  <HStack w={'100%'}>
+                    <InfoFillIcon boxSize={'24px'} />
+                    <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                      유의사항
+                    </Text>
+                  </HStack>
+                  <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                    서버 점검 등 사유로 인해 세금납부내역 제출을 진행하지 않을
+                    수 있습니다.
+                    <br />
+                    추후 대출 현황 조회에서 서류를 업데이트 부탁드립니다.
+                  </Text>
+                </VStack>
+              </VStack>
+            )}
             <VStack w={'100%'} spacing={'12px'}>
               <InputForm label="비대면 서류제출">
                 <Button
@@ -208,48 +261,51 @@ export default function Document() {
                   textStyle={'pre-body-5'}
                   w={'209px'}
                   onClick={onUntactDocumentApplyModalOpen}
+                  disabled={!settingData?.isGov}
                 >
                   비대면 서류제출
                 </Button>
               </InputForm>
-              <VStack
-                w={'100%'}
-                alignItems={'flex-start'}
-                p={'16px 20px'}
-                borderRadius={'20px'}
-                border={'1px solid'}
-                borderColor={'border.basic.1'}
-                gap={'24px'}
-              >
-                <HStack w={'100%'}>
-                  <InfoFillIcon boxSize={'24px'} />
-                  <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                    유의사항
-                  </Text>
-                </HStack>
-                <Text textStyle={'pre-body-6'} color={'grey.8'}>
-                  정부24 회원이 아닌 경우, 먼저 회원가입을 완료하셔야 비대면
-                  서류 제출이 가능합니다. <br /> 아래 링크를 통해 정부24
-                  회원가입을 진행하신 뒤 서류 제출을 진행해 주시기 바랍니다.
-                </Text>
-                <Button
-                  variant={'text-primary'}
-                  onClick={() =>
-                    window.open(
-                      'https://plus.gov.kr/member/signUpAgree?awqf=!2f',
-                      '_blank',
-                    )
-                  }
+              {!settingData?.isGov && (
+                <VStack
+                  w={'100%'}
+                  alignItems={'flex-start'}
+                  p={'16px 20px'}
+                  borderRadius={'20px'}
+                  border={'1px solid'}
+                  borderColor={'border.basic.1'}
+                  gap={'24px'}
                 >
-                  정부24 회원가입
-                </Button>
-                <Text textStyle={'pre-body-6'} color={'grey.8'}>
-                  서버 점검 등 사유로 인해 비대면 서류 제출을 진행하지 않을 수
-                  있습니다.
-                  <br />
-                  추후 대출 현황 조회에서 서류를 업데이트 부탁드립니다.
-                </Text>
-              </VStack>
+                  <HStack w={'100%'}>
+                    <InfoFillIcon boxSize={'24px'} />
+                    <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                      유의사항
+                    </Text>
+                  </HStack>
+                  <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                    정부24 회원이 아닌 경우, 먼저 회원가입을 완료하셔야 비대면
+                    서류 제출이 가능합니다. <br /> 아래 링크를 통해 정부24
+                    회원가입을 진행하신 뒤 서류 제출을 진행해 주시기 바랍니다.
+                  </Text>
+                  <Button
+                    variant={'text-primary'}
+                    onClick={() =>
+                      window.open(
+                        'https://plus.gov.kr/member/signUpAgree?awqf=!2f',
+                        '_blank',
+                      )
+                    }
+                  >
+                    정부24 회원가입
+                  </Button>
+                  <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                    서버 점검 등 사유로 인해 비대면 서류 제출을 진행하지 않을 수
+                    있습니다.
+                    <br />
+                    추후 대출 현황 조회에서 서류를 업데이트 부탁드립니다.
+                  </Text>
+                </VStack>
+              )}
             </VStack>
             <AdditionalFileUpload />
             {/* <InputForm label="추가 서류 제출" isOptional w={'100%'}>
@@ -359,7 +415,9 @@ export default function Document() {
             <Button
               variant={'solid-primary'}
               w={'160px'}
-              onClick={() => router.replace('/my-loan-status')}
+              type={'submit'}
+              isLoading={isDocumentSubmitLoading}
+              onClick={onSubmit}
             >
               확인
             </Button>

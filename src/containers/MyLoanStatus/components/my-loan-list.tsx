@@ -10,6 +10,7 @@ import {
   Container,
   Flex,
   HStack,
+  ResponsiveValue,
   SimpleGrid,
   Spinner,
   Tab,
@@ -60,6 +61,20 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
         return { color: 'grey.7', bg: 'grey.2' }
     }
   }
+  const getLoanStatus = (status: string): boolean => {
+    if (
+      status === 'UNDER_REVIEW' ||
+      status === 'CONTRACTING' ||
+      status === 'REMITTING'
+    ) {
+      return false
+    } else return true
+  }
+  const getLoanVisiblitity = (status: string) => {
+    if (status === 'IN_PROGRESS' || status === 'OVERDUE') {
+      return 'visible'
+    } else return 'hidden'
+  }
 
   const handleRepayment = (status: string, id: number) => {
     if (status === 'OVERDUE') {
@@ -103,19 +118,21 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                   </Box>
                 </Text>
               </VStack>
-              <Flex
-                justifyContent={'center'}
-                alignItems={'center'}
-                w={'40px'}
-                h={'40px'}
-                borderRadius={'50%'}
-                border={'1px solid'}
-                borderColor={'primary.4'}
-                cursor={'pointer'}
-                onClick={() => router.push(`/my-loan-status/${item?.id}`)}
-              >
-                <CaretRightIcon boxSize={'24px'} color={'primary.4'} />
-              </Flex>
+              {getLoanStatus(item.status) && (
+                <Flex
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  w={'40px'}
+                  h={'40px'}
+                  borderRadius={'50%'}
+                  border={'1px solid'}
+                  borderColor={'primary.4'}
+                  cursor={'pointer'}
+                  onClick={() => router.push(`/my-loan-status/${item?.id}`)}
+                >
+                  <CaretRightIcon boxSize={'24px'} color={'primary.4'} />
+                </Flex>
+              )}
             </HStack>
             <Flex flexDirection={'column'} w={'100%'} gap={'6px'} mt={'20px'}>
               <HStack justifyContent={'space-between'}>
@@ -123,7 +140,9 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                   대출 금액
                 </Text>
                 <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                  {item?.loanAmount?.toLocaleString()}원
+                  {item?.contract?.amount?.toLocaleString() ||
+                    item?.loanAmount?.toLocaleString()}
+                  원
                 </Text>
               </HStack>
               <HStack justifyContent={'space-between'}>
@@ -131,15 +150,23 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                   대출 갚는날
                 </Text>
                 <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                  2025년 9월 25일
+                  매월{' '}
+                  {item?.contract?.interestPaymentDate ||
+                    item?.interestPaymentDate}
+                  일
                 </Text>
               </HStack>
               <HStack justifyContent={'space-between'}>
                 <Text textStyle={'pre-body-6'} color={'grey.10'}>
-                  대출 갚을 금액
+                  다음 갚을 금액
                 </Text>
                 <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                  100,000원
+                  {item?.contract?.amount ?
+                    (
+                      item?.contract?.amount / item?.contract?.loanPeriod
+                    ).toLocaleString()
+                  : (item?.loanAmount / item?.loanPeriod).toLocaleString()}
+                  원
                 </Text>
               </HStack>
             </Flex>
@@ -152,6 +179,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
               mt={'20px'}
             >
               <Button
+                visibility={getLoanVisiblitity(item.status)}
                 variant={'outline-secondary'}
                 onClick={() => {
                   router.push(`/my-loan-status/${item?.id}?detailMenu=schedule`)
@@ -162,6 +190,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                 </Text>
               </Button>
               <Button
+                visibility={getLoanVisiblitity(item.status)}
                 variant={'outline-secondary'}
                 onClick={() => {
                   handleRepayment(item?.status, item?.id)
@@ -171,6 +200,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                   중도 상환 신청하기
                 </Text>
               </Button>
+
               <Button variant={'outline-secondary'}>
                 <Text textStyle={'pre-body-7'} color={'grey.8'}>
                   계약서 다운로드

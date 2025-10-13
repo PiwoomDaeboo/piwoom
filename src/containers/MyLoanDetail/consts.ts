@@ -1,3 +1,5 @@
+import { REPAYMENT_TYPE } from '@/constants/loan'
+
 export const BUTTON_DATA = [
   {
     title: '상세 정보',
@@ -23,7 +25,7 @@ export interface DetailField {
 export const DETAIL_FIELDS: DetailField[] = [
   {
     title: '빌린 금액',
-    dataKey: 'borrowedAmount',
+    dataKey: 'contract.amount',
     formatter: (value: number) => `${value?.toLocaleString() || 0}원`,
   },
   {
@@ -33,17 +35,17 @@ export const DETAIL_FIELDS: DetailField[] = [
   },
   {
     title: '금리',
-    dataKey: 'interestRate',
+    dataKey: 'contract.interestRate',
     formatter: (value: number) => `연 ${value || 0}%`,
   },
   {
     title: '연체이자율',
-    dataKey: 'overdueInterestRate',
+    dataKey: 'contract.overdueInterestRate',
     formatter: (value: number) => `연 ${value || 0}%`,
   },
   {
     title: '계약일',
-    dataKey: 'contractDate',
+    dataKey: 'contract.loanDate',
     formatter: (value: string) => {
       if (!value) return '-'
       const date = new Date(value)
@@ -56,7 +58,7 @@ export const DETAIL_FIELDS: DetailField[] = [
   },
   {
     title: '만기일',
-    dataKey: 'maturityDate',
+    dataKey: 'contract.maturityDate',
     formatter: (value: string) => {
       if (!value) return '-'
       const date = new Date(value)
@@ -69,7 +71,7 @@ export const DETAIL_FIELDS: DetailField[] = [
   },
   {
     title: '대출 갚는 날',
-    dataKey: 'repaymentDay',
+    dataKey: 'contract.interestPaymentDate',
     formatter: (value: string | number) => {
       if (typeof value === 'number') {
         return `매달 ${value}일`
@@ -79,12 +81,13 @@ export const DETAIL_FIELDS: DetailField[] = [
   },
   {
     title: '갚는 방식',
-    dataKey: 'repaymentMethod',
-    formatter: (value: string) => value || '-',
+    dataKey: 'contract.repaymentType',
+    formatter: (value: string) =>
+      REPAYMENT_TYPE.find((item) => item.value === value)?.label || '-',
   },
   {
     title: '상환 입금 계좌',
-    dataKey: 'repaymentAccount',
+    dataKey: 'contract.repaymentType',
     formatter: (value: any, allData: any) => {
       // API에서 bank, accountNumber, accountHolder로 분리된 데이터를 받는 경우
       if (allData.bank && allData.accountNumber && allData.accountHolder) {
@@ -120,7 +123,7 @@ export const DETAIL_FIELDS: DetailField[] = [
   },
   {
     title: '중도상환수수료',
-    dataKey: 'earlyRepaymentFee',
+    dataKey: 'contract.prepaymentRate',
     formatter: (value: number) => `${value || 0}%`,
   },
   {
@@ -130,7 +133,7 @@ export const DETAIL_FIELDS: DetailField[] = [
   },
   {
     title: '보증 여부',
-    dataKey: 'guaranteeProvided',
+    dataKey: 'contract.isJointGuarantee',
     formatter: (value: string) => value || '해당 없음',
   },
 ]

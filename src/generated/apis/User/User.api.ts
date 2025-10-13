@@ -10,6 +10,7 @@ import {
   UserRefreshErrorMessageType,
   UserRefreshRequestType,
   UserRefreshType,
+  UserType,
 } from '../@types/data-contracts'
 import { DeepOmitReadOnly } from '../@types/util-types'
 
@@ -95,6 +96,23 @@ export class UserApi<
       type: ContentType.Json,
       format: 'json',
       ...variables.params,
+    })
+
+  /**
+   * No description
+   *
+   * @tags user
+   * @name UserTestRetrieve
+   * @request GET:/v1/user/test/
+   * @secure
+   */
+  userTestRetrieve = (variables?: { params?: RequestParams }) =>
+    this.request<UserType, CommonErrorType>({
+      path: `/v1/user/test/`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...variables?.params,
     })
 }
 

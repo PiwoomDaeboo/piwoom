@@ -1,1 +1,18 @@
-["","/auth","/social/callback"]
+[
+  "/",
+  "/apply-loan",
+  "/apply-loan-complete",
+  "/auth",
+  "/faq",
+  "/company",
+  "/loan",
+  "/login",
+  "/modusign/callback",
+  "/my-loan",
+  "/my-loan-status",
+  "/nice/callback",
+  "/notice",
+  "/policy",
+  "/social/callback",
+  "/my-loan-status/repayment/complete"
+]

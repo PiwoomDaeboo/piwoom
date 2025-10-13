@@ -36,11 +36,11 @@ function MyLoanDetail() {
     }
   }, [detailMenu])
 
-  useEffect(() => {
-    if (!isLogin) {
-      router.replace(`/my-loan-status`)
-    }
-  }, [isLogin])
+  // useEffect(() => {
+  //   if (!isLogin) {
+  //     router.replace(`/my-loan-status`)
+  //   }
+  // }, [isLogin])
   if (!isLogin) {
     return (
       <Center h={'100vh'}>
