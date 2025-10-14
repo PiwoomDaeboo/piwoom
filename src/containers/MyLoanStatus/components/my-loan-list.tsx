@@ -17,6 +17,7 @@ import {
 import LoanDelayModal from '@/components/@Modal/loan-delay-modal'
 import { LOAN_STATUS } from '@/constants/loan'
 import { LoanType } from '@/generated/apis/@types/data-contracts'
+import { useLoanContractUrlRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
 import {
   getAdditionalDocumentButtonVisibility,
@@ -38,6 +39,10 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
     onClose: onLoanDelayClose,
     onOpen: onDelayOpen,
   } = useDisclosure()
+  const [isDownloading, setIsDownloading] = useState(false)
+  const [contractDownloadId, setContractDownloadId] = useState<string | null>(
+    null,
+  )
   const getLoanStatus = (status: string): boolean => {
     if (
       status === 'UNDER_REVIEW' ||
@@ -46,6 +51,54 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
     ) {
       return false
     } else return true
+  }
+
+  const { data: contractDownloadData } = useLoanContractUrlRetrieveQuery({
+    variables: {
+      id: Number(contractDownloadId),
+    },
+    options: {
+      enabled: !!contractDownloadId && isDownloading,
+    },
+  })
+
+  useEffect(() => {
+    if (contractDownloadData?.url && isDownloading) {
+      // presigned URL에서 파일을 fetch로 받아서 다운로드
+      const downloadFile = async () => {
+        try {
+          const response = await fetch(contractDownloadData.url)
+          const blob = await response.blob()
+
+          // Blob URL 생성
+          const blobUrl = window.URL.createObjectURL(blob)
+
+          // 다운로드 링크 생성 및 클릭
+          const link = document.createElement('a')
+          link.href = blobUrl
+          link.download = `피움대부_계약서_${contractDownloadId}.pdf`
+          document.body.appendChild(link)
+          link.click()
+
+          // 정리
+          document.body.removeChild(link)
+          window.URL.revokeObjectURL(blobUrl)
+        } catch (error) {
+          console.error('파일 다운로드 실패:', error)
+        } finally {
+          // 상태 초기화
+          setIsDownloading(false)
+          setContractDownloadId(null)
+        }
+      }
+
+      downloadFile()
+    }
+  }, [contractDownloadData, isDownloading, contractDownloadId])
+
+  const handleContractDownload = (id: string) => {
+    setIsDownloading(true)
+    setContractDownloadId(id.toString())
   }
 
   const handleRepayment = (status: string, id: number) => {
@@ -159,6 +212,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
               <Button
                 visibility={getContractDownloadButtonVisibility(item.status)}
                 variant={'outline-secondary'}
+                onClick={() => handleContractDownload(item?.id.toString())}
               >
                 <Text textStyle={'pre-body-7'} color={'grey.8'}>
                   계약서 다운로드

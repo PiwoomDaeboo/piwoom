@@ -10,16 +10,32 @@ import {
 } from '@chakra-ui/react'
 import PortOne from '@portone/browser-sdk/v2'
 
-import { useUserLoginCreateMutation } from '@/generated/apis/User/User.query'
+import {
+  useUserIdentityVerificationCreateMutation,
+  useUserLoginCreateMutation,
+} from '@/generated/apis/User/User.query'
 import { SecurityIcon } from '@/generated/icons/MyIcons'
 import { useAuth } from '@/hooks/useAuth'
 import { useLocalStorage } from '@/stores/local/state'
+import { useSessionStorage } from '@/stores/session/state'
 import { handleErrorToast } from '@/utils/error-handler'
 
 function MyLoanAuthentication() {
   const { set } = useLocalStorage()
+  const { set: setSessionStorage } = useSessionStorage()
   const router = useRouter()
   const toast = useToast()
+
+  const { mutateAsync: userIdentityVerificationCreate } =
+    useUserIdentityVerificationCreateMutation({
+      options: {
+        onSuccess: (data) => {
+          setSessionStorage({
+            identityVerificationToken: data.identityVerificationToken,
+          })
+        },
+      },
+    })
 
   const { mutateAsync: userLoginCreate } = useUserLoginCreateMutation({
     options: {
@@ -58,6 +74,11 @@ function MyLoanAuthentication() {
     }
 
     userLoginCreate({
+      data: {
+        identityVerificationId: response?.identityVerificationId || '',
+      },
+    })
+    userIdentityVerificationCreate({
       data: {
         identityVerificationId: response?.identityVerificationId || '',
       },

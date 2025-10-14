@@ -39,7 +39,7 @@ const MyLoanStep2 = () => {
       query: {
         limit: 50,
         offset: 0,
-        status_in: ['UNDER_REVIEW', 'CONTRACTING'],
+        status_in: ['CONTRACTING'],
       },
     },
   })
@@ -130,7 +130,7 @@ const MyLoanStep2 = () => {
                       • 대출원금:
                     </Text>
                     <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                      {item.loanAmount?.toLocaleString()}만원
+                      {item.contract?.amount?.toLocaleString() || 0}만원
                     </Text>
                   </HStack>
                   <HStack justifyContent={'flex-start'} alignItems={'center'}>
@@ -148,7 +148,7 @@ const MyLoanStep2 = () => {
                       • 대출만기:
                     </Text>
                     <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                      {item.loanPeriod}개월
+                      {item.contract?.loanPeriod || 0}개월
                     </Text>
                   </HStack>
                   <HStack justifyContent={'flex-start'} alignItems={'center'}>
@@ -157,7 +157,7 @@ const MyLoanStep2 = () => {
                     </Text>
                     <Text textStyle={'pre-body-6'} color={'grey.9'}>
                       {REPAYMENT_TYPE.find(
-                        (type) => type.value === item?.repaymentType,
+                        (type) => type.value === item?.contract?.repaymentType,
                       )?.label || '-'}
                     </Text>
                   </HStack>
@@ -165,7 +165,9 @@ const MyLoanStep2 = () => {
                     <Text textStyle={'pre-body-7'} color={'grey.9'}>
                       • 이자율:
                     </Text>
-                    <Text textStyle={'pre-body-6'} color={'grey.9'}></Text>
+                    <Text textStyle={'pre-body-6'} color={'grey.9'}>
+                      {item.contract?.interestRate || 0}%
+                    </Text>
                   </HStack>
                 </SimpleGrid>
               </Flex>

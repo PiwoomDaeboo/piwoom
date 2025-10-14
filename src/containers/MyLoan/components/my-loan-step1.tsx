@@ -19,11 +19,13 @@ import {
 } from '@/generated/apis/User/User.query'
 import { MY_IMAGES } from '@/generated/path/images'
 import { useLocalStorage } from '@/stores/local/state'
+import { useSessionStorage } from '@/stores/session/state'
 import { cookieStorage } from '@/utils/cookie-storage'
 
 const MyLoanStep1 = () => {
   const router = useRouter()
   const { set } = useLocalStorage()
+  const { set: setSessionStorage } = useSessionStorage()
   const toast = useToast()
   const { mutateAsync: userLoginCreate } = useUserLoginCreateMutation({
     options: {
@@ -46,6 +48,17 @@ const MyLoanStep1 = () => {
       },
     },
   })
+
+  const { mutateAsync: userIdentityVerificationCreate } =
+    useUserIdentityVerificationCreateMutation({
+      options: {
+        onSuccess: (data) => {
+          setSessionStorage({
+            identityVerificationToken: data.identityVerificationToken,
+          })
+        },
+      },
+    })
   const handleAuthentication = async () => {
     const response = await PortOne.requestIdentityVerification({
       storeId: ENV.PORTONE_STORE_ID || '',
@@ -58,6 +71,11 @@ const MyLoanStep1 = () => {
     }
 
     userLoginCreate({
+      data: {
+        identityVerificationId: response?.identityVerificationId || '',
+      },
+    })
+    userIdentityVerificationCreate({
       data: {
         identityVerificationId: response?.identityVerificationId || '',
       },

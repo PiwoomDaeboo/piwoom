@@ -110,6 +110,7 @@ export const getAdditionalDocumentButtonVisibility = (
 ): 'visible' | 'hidden' => {
   switch (status) {
     case 'UNDER_REVIEW':
+    case 'IN_PROGRESS':
     case 'EARLY_REPAYMENT_COMPLETED':
     case 'MATURITY_REPAYMENT_COMPLETED':
     case 'REJECTED':
