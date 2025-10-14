@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -28,12 +28,13 @@ import { useFormContext } from 'react-hook-form'
 import { useUploadFileToS3Mutation } from '@/apis/s3-file-uploader/S3FileUploaderApi.query'
 import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
-import { InfoFillIcon } from '@/generated/icons/MyIcons'
+import { CameraIcon, InfoFillIcon } from '@/generated/icons/MyIcons'
 
 export default function IdCardUpload() {
   const router = useRouter()
   const idCardInputRef = useRef<HTMLInputElement>(null)
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
   const {
     register,
@@ -64,6 +65,15 @@ export default function IdCardUpload() {
   const handleIdCardSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
+      // 기존 미리보기 URL 정리
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl)
+      }
+
+      // 새로운 미리보기 URL 생성
+      const newPreviewUrl = URL.createObjectURL(file)
+      setPreviewUrl(newPreviewUrl)
+
       handleUploadIdCard(file)
     }
   }
@@ -71,6 +81,16 @@ export default function IdCardUpload() {
   const handleIdCardUploadButtonClick = () => {
     idCardInputRef.current?.click()
   }
+  console.log('previewUrl', previewUrl)
+
+  // 컴포넌트 언마운트 시 미리보기 URL 정리
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl)
+      }
+    }
+  }, [previewUrl])
   return (
     <>
       <Text textStyle={'pre-heading-3'} color={'primary.4'}>
@@ -118,16 +138,16 @@ export default function IdCardUpload() {
             accept="image/*"
             display="none"
           />
-          {uploadedFileUrl ?
-            <AspectRatio ratio={237 / 145}>
-              <ImageAsNext
-                w={'100%'}
-                h={'100%'}
-                fill
-                src={uploadedFileUrl ?? '-'}
-                alt="신분증"
-              />
-            </AspectRatio>
+          {previewUrl ?
+            <ImageAsNext
+              w={'100%'}
+              h={'100%'}
+              objectFit={'contain'}
+              fill
+              unoptimized
+              src={previewUrl}
+              alt="신분증 미리보기"
+            />
           : <Text textStyle={'pre-body-6'} color={'grey.6'}>
               파일을 선택해주세요
             </Text>
@@ -138,12 +158,13 @@ export default function IdCardUpload() {
         <Button
           variant={'outline-primary'}
           textStyle={'pre-body-5'}
-          color={'grey.8'}
           w={'209px'}
           onClick={handleIdCardUploadButtonClick}
           isLoading={isIdCardUploading}
           loadingText="업로드 중..."
+          gap={'8px'}
         >
+          <CameraIcon boxSize={'24px'} color={'primary.4'} />
           신분증 업로드
         </Button>
         {errors?.identityCard && (

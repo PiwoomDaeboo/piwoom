@@ -301,8 +301,8 @@ export default function Detail() {
               whiteSpace={'pre-line'}
               alignSelf={'flex-end'}
             >
-              {loanRetrieveData?.contract?.isJointGuarantee ?
-                '해당 없음'
+              {loanRetrieveData?.contract?.isCollateralProvided ?
+                '해당'
               : '해당 없음'}
             </Text>
           </HStack>
@@ -323,7 +323,7 @@ export default function Detail() {
               alignSelf={'flex-end'}
             >
               {loanRetrieveData?.contract?.isJointGuarantee ?
-                '해당 없음'
+                '해당'
               : '해당 없음'}
             </Text>
           </HStack>
@@ -337,17 +337,35 @@ export default function Detail() {
             <Text flexShrink={0} textStyle={'pre-body-4'} color={'grey.10'}>
               특약사항
             </Text>
-            <Text
-              textStyle={'pre-body-3'}
-              color={'grey.10'}
-              textAlign={'right'}
-              whiteSpace={'pre-line'}
-              alignSelf={'flex-end'}
-              maxW={{ base: '60%', sm: '70%' }}
-            >
-              특약사항에 기재된 내용은 띄어쓰기 포함 250자까지 노출되며,250자를
-              초과할 경우 하단에 계약서로 확인하라는 문구 추가
-            </Text>
+            <VStack alignItems={'flex-end'} maxW={{ base: '60%', sm: '70%' }}>
+              <Text
+                textStyle={'pre-body-3'}
+                color={'grey.10'}
+                textAlign={'right'}
+                whiteSpace={'pre-line'}
+                alignSelf={'flex-end'}
+              >
+                {(() => {
+                  const specialTerms =
+                    loanRetrieveData?.contract?.specialTerms || '-'
+                  if (specialTerms === '-') return specialTerms
+
+                  const isOverLimit = specialTerms.length > 250
+                  const displayText =
+                    isOverLimit ?
+                      specialTerms.substring(0, 250) + '...'
+                    : specialTerms
+
+                  return displayText
+                })()}
+              </Text>
+              {loanRetrieveData?.contract?.specialTerms &&
+                loanRetrieveData.contract.specialTerms.length > 250 && (
+                  <Text textStyle={'pre-caption-2'} color={'grey.7'} mt={'4px'}>
+                    자세한 내용은 계약서를 확인해 주세요.
+                  </Text>
+                )}
+            </VStack>
           </HStack>
         </Flex>
       </Flex>

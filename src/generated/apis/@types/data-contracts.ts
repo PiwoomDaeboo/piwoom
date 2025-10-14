@@ -754,8 +754,12 @@ export interface LoanContractType {
    * @max 2147483647
    */
   interestPaymentDate: LoanContractInterestPaymentDateEnumType
+  /** 담보제공여부 */
+  isCollateralProvided: boolean
   /** 연대보증여부 */
   isJointGuarantee: boolean
+  /** 특약사항 */
+  specialTerms?: string
   /**
    * 중도상환수수료
    * @format decimal
@@ -845,8 +849,12 @@ export interface LoanContractRequestType {
    * @max 2147483647
    */
   interestPaymentDate: LoanContractRequestInterestPaymentDateEnumType
+  /** 담보제공여부 */
+  isCollateralProvided: boolean
   /** 연대보증여부 */
   isJointGuarantee: boolean
+  /** 특약사항 */
+  specialTerms?: string
   /**
    * 중도상환수수료
    * @format decimal

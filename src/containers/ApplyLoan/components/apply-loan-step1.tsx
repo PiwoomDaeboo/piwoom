@@ -106,6 +106,11 @@ const ApplyLoanStep1 = () => {
     onClose: isAgreementAlertClose,
     onOpen: onAgreementAlertOpen,
   } = useDisclosure()
+  const {
+    isOpen: isConfirmationAlertOpen,
+    onClose: isConfirmationAlertClose,
+    onOpen: onConfirmationAlertOpen,
+  } = useDisclosure()
 
   const [confirmations, setConfirmations] = useState({
     question1: null as 'yes' | 'no' | null,
@@ -164,7 +169,16 @@ const ApplyLoanStep1 = () => {
       return
     }
 
-    // 2. 확인사항 체크 (하나라도 "예"가 있으면 보이스피싱 의심)
+    // 2. 확인사항이 모두 체크되었는지 확인
+    const allConfirmed = CONFIRMATION_ITEMS.every(
+      (item) => confirmations[item.key as keyof typeof confirmations] !== null,
+    )
+    if (!allConfirmed) {
+      onConfirmationAlertOpen()
+      return
+    }
+
+    // 3. 확인사항 체크 (하나라도 "예"가 있으면 보이스피싱 의심)
     const hasYesAnswer = CONFIRMATION_ITEMS.some(
       (item) => confirmations[item.key as keyof typeof confirmations] === 'yes',
     )
@@ -173,7 +187,7 @@ const ApplyLoanStep1 = () => {
       return
     }
 
-    // 3. 모두 통과하면 다음 페이지로
+    // 4. 모두 통과하면 다음 페이지로
     router.push('/apply-loan?step=2&type=' + router.query.type)
   }
   return (
@@ -414,6 +428,37 @@ const ApplyLoanStep1 = () => {
               w="100%"
               variant={'solid-primary'}
               onClick={isVoicePhishingAlertClose}
+            >
+              확인
+            </Button>
+          </Flex>
+        }
+      ></ModalBasis>
+      {/* 확인사항 미체크 알림 모달 */}
+      <ModalBasis
+        isOpen={isConfirmationAlertOpen}
+        visibleCloseButton={true}
+        onClose={isConfirmationAlertClose}
+        size={'sm'}
+        body={
+          <Flex
+            flexDir={'column'}
+            gap={'12px'}
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
+            <Text textStyle={'pre-heading-4'}>알림</Text>
+            <Text textStyle={'pre-body-6'} textAlign={'center'}>
+              확인사항을 모두 체크해 주세요.
+            </Text>
+          </Flex>
+        }
+        footer={
+          <Flex w="100%" gap="12px">
+            <Button
+              w="100%"
+              variant={'solid-primary'}
+              onClick={isConfirmationAlertClose}
             >
               확인
             </Button>

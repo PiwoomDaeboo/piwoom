@@ -5,12 +5,12 @@ import { apiLogger, styledConsole } from '@toktokhan-dev/react-universal'
 import axios, { AxiosError } from 'axios'
 
 import { ENV } from '@/configs/env'
-// import { AuthApi } from '@/generated/apis/Auth/Auth.api'
+import { UserApi } from '@/generated/apis/User/User.api'
 import { ROUTES } from '@/generated/path/routes'
 import { useGlobalStore } from '@/stores/global/state'
 import { useLocalStorage } from '@/stores/local/state'
 
-// import { retryRequestManager } from './retry-request-manager'
+import { retryRequestManager } from './retry-request-manager'
 
 const isDev = ENV.NODE_ENV === 'development'
 
@@ -22,8 +22,8 @@ const instance = axios.create({
   },
 })
 
-// const retry = retryRequestManager({ cleanupTimeOut: 5000 })
-// const authApi = new AuthApi({ instance })
+const retry = retryRequestManager({ cleanupTimeOut: 5000 })
+const userApi = new UserApi({ instance })
 
 instance.interceptors.request.use(
   (config) => {
@@ -59,32 +59,40 @@ instance.interceptors.response.use(
       if (isDev) apiLogger({ status, reqData, resData: error, method: 'error' })
 
       if (isExpiredToken) {
-        throw new Error('expired token: please set refresh token logic')
-        // return retry({
-        //   getToken: async () => {
-        //     const refreshToken = useLocalStorage.getState().token?.refresh_token
+        // throw new Error('expired token: please set refresh token logic')
+        return retry({
+          getToken: async () => {
+            const refresh_token =
+              useLocalStorage.getState().token?.refresh_token
 
-        //     if (!refreshToken) throw new Error('refresh token is not exist')
+            if (!refresh_token) throw new Error('refresh token is not exist')
 
-        //     const { data: token } = await authApi.refresh({
-        //       data: {
-        //         refresh_token: refreshToken,
-        //       },
-        //     })
-        //     useLocalStorage.getState().set({ token })
+            const { accessToken, refreshToken } =
+              await userApi.userRefreshCreate({
+                data: {
+                  refreshToken: refresh_token,
+                },
+              })
+            console.log('accessToken', accessToken)
+            useLocalStorage.getState().set({
+              token: {
+                access_token: accessToken,
+                refresh_token: refreshToken,
+              },
+            })
 
-        //     return token.access_token
-        //   },
-        //   onRefetch: (token) => {
-        //     if (!reqData) throw new Error('reqData is not exist')
-        //     reqData.headers.Authorization = `Bearer ${token}`
-        //     return instance.request(reqData)
-        //   },
-        //   onError: () => {
-        //     useLocalStorage.getState().reset('token')
-        //     return Promise.reject(error)
-        //   },
-        // })
+            return accessToken
+          },
+          onRefetch: (token) => {
+            if (!reqData) throw new Error('reqData is not exist')
+            reqData.headers.Authorization = `Bearer ${token}`
+            return instance.request(reqData)
+          },
+          onError: () => {
+            useLocalStorage.getState().reset('token')
+            return Promise.reject(error)
+          },
+        })
       }
 
       if (isUnAuthError) {

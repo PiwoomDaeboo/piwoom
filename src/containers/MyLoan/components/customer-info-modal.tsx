@@ -5,6 +5,9 @@ import { useRouter } from 'next/router'
 import { Box, Button, Flex, HStack, Input, Text } from '@chakra-ui/react'
 
 import ModalBasis from '@/components/@Modal/ModalBasis'
+import { useLoanRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
+import { useSessionStorage } from '@/stores/session/state'
+import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 interface CustomerInfoModalProps {
   isOpen: boolean
@@ -27,7 +30,31 @@ function CustomerInfoModal({
     router.push('/my-loan')
     window.open('http://pf.kakao.com/_xkxoben/chat', '_blank')
   }
+  const [userInfo, setUserInfo] = useState<{
+    name?: string
+    phone?: string
+    birth?: string
+    gender_code?: string
+  } | null>(null)
+  const { identityVerificationToken } = useSessionStorage()
 
+  const { data: loanData } = useLoanRetrieveQuery({
+    variables: {
+      id: Number(userId),
+    },
+    options: {
+      enabled: !!userId,
+    },
+  })
+
+  useEffect(() => {
+    const extractedUserInfo = extractUserInfoFromJWT(
+      identityVerificationToken as string,
+    )
+    if (extractedUserInfo) {
+      setUserInfo(extractedUserInfo)
+    }
+  }, [])
   return (
     <ModalBasis
       isOpen={isOpen}
@@ -57,7 +84,7 @@ function CustomerInfoModal({
               성명
             </Text>
             <Text textStyle={'pre-body-5'} color={'grey.8'}>
-              홍길동
+              {userInfo?.name || '-'}
             </Text>
           </HStack>
           <HStack
@@ -70,7 +97,7 @@ function CustomerInfoModal({
               생년월일
             </Text>
             <Text textStyle={'pre-body-5'} color={'grey.8'}>
-              홍길동
+              {userInfo?.birth || '-'}
             </Text>
           </HStack>
           <HStack
@@ -83,7 +110,7 @@ function CustomerInfoModal({
               성별
             </Text>
             <Text textStyle={'pre-body-5'} color={'grey.8'}>
-              홍길동
+              {userInfo?.gender_code || '-'}
             </Text>
           </HStack>
           <HStack
@@ -96,7 +123,7 @@ function CustomerInfoModal({
               휴대폰
             </Text>
             <Text textStyle={'pre-body-5'} color={'grey.8'}>
-              홍길동
+              {userInfo?.phone || '-'}
             </Text>
           </HStack>
           <HStack
@@ -109,7 +136,7 @@ function CustomerInfoModal({
               현재집주소(주민등본상)
             </Text>
             <Text textStyle={'pre-body-5'} color={'grey.8'}>
-              홍길동
+              {loanData?.baseAddress || '-'}
             </Text>
           </HStack>
           <Text textStyle={'pre-body-6'} color={'grey.6'}>

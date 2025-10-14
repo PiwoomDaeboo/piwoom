@@ -39,6 +39,8 @@ export default function Document() {
   const router = useRouter()
   const { id } = router.query
   const methods = useForm()
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+
   const [userInfo, setUserInfo] = useState<{
     name?: string
     phone?: string
@@ -105,6 +107,11 @@ export default function Document() {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl)
+      }
+      const newPreviewUrl = URL.createObjectURL(file)
+      setPreviewUrl(newPreviewUrl)
       handleUploadIdCard(file)
     }
   }
@@ -393,16 +400,16 @@ export default function Document() {
                     accept="image/*"
                     display="none"
                   />
-                  {uploadedFileUrl ?
-                    <AspectRatio ratio={237 / 145}>
-                      <ImageAsNext
-                        w={'100%'}
-                        h={'100%'}
-                        fill
-                        src={uploadedFileUrl ?? '-'}
-                        alt="신분증"
-                      />
-                    </AspectRatio>
+                  {previewUrl ?
+                    <ImageAsNext
+                      w={'100%'}
+                      h={'100%'}
+                      objectFit={'contain'}
+                      fill
+                      unoptimized
+                      src={previewUrl}
+                      alt="신분증 미리보기"
+                    />
                   : <Text textStyle={'pre-body-6'} color={'grey.6'}>
                       파일을 선택해주세요
                     </Text>

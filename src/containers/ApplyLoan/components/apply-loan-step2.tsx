@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 import * as PortOne from '@portone/browser-sdk/v2'
 
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import LoanTermsModal from '@/components/@Modal/LoanTermsModal'
 import ModalBasis from '@/components/@Modal/ModalBasis'
@@ -32,7 +32,10 @@ const ApplyLoanStep2 = () => {
     register,
     formState: { errors },
     setValue,
+    control,
   } = useFormContext()
+
+  const emailValue = useWatch({ control, name: 'email' })
 
   const router = useRouter()
 
@@ -181,7 +184,7 @@ const ApplyLoanStep2 = () => {
           <Button
             variant={'solid-primary'}
             w={'160px'}
-            isDisabled={!isPhoneCertification || !!errors.email}
+            isDisabled={!isPhoneCertification || !!errors.email || !emailValue}
             onClick={() => {
               setValue('kind', typeConvert(router.query.type as string))
               router.replace('/apply-loan?step=3&type=' + router.query.type)

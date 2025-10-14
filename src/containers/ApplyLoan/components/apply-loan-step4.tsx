@@ -220,9 +220,10 @@ const ApplyLoanStep4 = () => {
         getValues('healthInsurancePaymentConfirmation2') || '',
       fileSet: getValues('fileSet') || [],
       safeKey: safeKey,
-      accountHolder: getValues('accountHolder') || '',
-      accountHolderSsn: getValues('accountHolderSsn') || '',
-      purposeAndRepaymentPlan: getValues('purposeAndRepaymentPlan') || '',
+      accountHolder: getValues('accountHolder') || '-',
+      accountHolderSsn: getValues('accountHolderSsn') || '-',
+      // purposeAndRepaymentPlan: getValues('purposeAndRepaymentPlan') || '-',
+      purposeAndRepaymentPlan: '-',
       ...data,
     }
     loanCreateMutation({
