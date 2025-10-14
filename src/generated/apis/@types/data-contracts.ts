@@ -703,8 +703,9 @@ export interface LoanType {
 export interface LoanContractType {
   /**
    * 대부금액
+   * @format int64
    * @min 0
-   * @max 2147483647
+   * @max 9223372036854776000
    */
   amount: number
   /**
@@ -769,13 +770,33 @@ export interface LoanContractType {
   readonly repaymentAccountNumber: string
   /** 예금주 */
   readonly repaymentAccountHolder: string
+  /**
+   * 대출 잔액
+   * @format int64
+   * @min 0
+   * @max 9223372036854776000
+   */
+  remainingAmount: number
+  /**
+   * 다음 상환 스케줄
+   * @format date
+   */
+  nextScheduleDate?: string | null
+  /**
+   * 다음 상환액
+   * @format int64
+   * @min 0
+   * @max 9223372036854776000
+   */
+  nextScheduleAmount?: number | null
 }
 
 export interface LoanContractRequestType {
   /**
    * 대부금액
+   * @format int64
    * @min 0
-   * @max 2147483647
+   * @max 9223372036854776000
    */
   amount: number
   /**
@@ -834,6 +855,33 @@ export interface LoanContractRequestType {
   prepaymentRate: string
   /** 상환금 입금 계좌 */
   repaymentAccount: number
+  /**
+   * 대출 잔액
+   * @format int64
+   * @min 0
+   * @max 9223372036854776000
+   */
+  remainingAmount: number
+  /**
+   * 다음 상환 스케줄
+   * @format date
+   */
+  nextScheduleDate?: string | null
+  /**
+   * 다음 상환액
+   * @format int64
+   * @min 0
+   * @max 9223372036854776000
+   */
+  nextScheduleAmount?: number | null
+}
+
+export interface LoanContractUrlType {
+  /**
+   * 계약서 URL
+   * @format uri
+   */
+  url: string
 }
 
 export interface LoanErrorMessageType {
@@ -1966,6 +2014,55 @@ export interface PresignedRequestType {
   /** @minLength 1 */
   fileName: string
   isDownload: boolean
+}
+
+export interface ScheduleType {
+  /**
+   * 회차
+   * @min 0
+   * @max 2147483647
+   */
+  month: number
+  /**
+   * 상환일
+   * @format date
+   */
+  repaymentDate: string
+  /**
+   * 월납입금
+   * @format int64
+   * @min 0
+   * @max 9223372036854776000
+   */
+  monthlyAmount: number
+  /**
+   * 원금상환금액
+   * @format int64
+   * @min 0
+   * @max 9223372036854776000
+   */
+  principalAmount: number
+  /**
+   * 이자금액
+   * @format int64
+   * @min 0
+   * @max 9223372036854776000
+   */
+  interestAmount: number
+  /**
+   * 잔여원금
+   * @format int64
+   * @min 0
+   * @max 9223372036854776000
+   */
+  remainingAmount: number
+  /**
+   * 상태
+   * * `PENDING` - 대기
+   * * `PAID` - 완납
+   * * `UNPAID` - 미납
+   */
+  status?: ScheduleStatusEnumType
 }
 
 export interface SettingType {
@@ -3679,6 +3776,18 @@ export const PresignedRequestFieldChoiceEnumTypeMap = {
   'loan.Loan.income_certificate': '소득금액증명원',
   'loan.Loan.resident_registration_copy': '주민등록등본',
   'notice.File.path': '위치',
+} as const
+
+/**
+ * * `PENDING` - 대기
+ * `PAID` - 완납
+ * `UNPAID` - 미납
+ */
+export type ScheduleStatusEnumType = keyof typeof ScheduleStatusEnumTypeMap
+export const ScheduleStatusEnumTypeMap = {
+  PAID: '완납',
+  PENDING: '대기',
+  UNPAID: '미납',
 } as const
 
 /**

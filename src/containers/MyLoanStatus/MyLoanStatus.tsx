@@ -24,33 +24,18 @@ import {
 
 import NonData from '@/components/NonData'
 import { Pagination } from '@/components/pagination'
-import { LOAN_STATUS } from '@/constants/loan'
 import { LoanListParamsStatusInEnumType } from '@/generated/apis/@types/data-contracts'
-import { paramsSerializerBy } from '@/generated/apis/@utils/param-serializer-by'
-// import { paramsSerializerBy } from '@/generated/apis/@utils/param-serializer-by'
 import { useLoanListQuery } from '@/generated/apis/Loan/Loan.query'
-import { CaretRightIcon } from '@/generated/icons/MyIcons'
 import { useAuth } from '@/hooks/useAuth'
 
-import AdditionalDocumentModal from '../../components/@Modal/additional-document-modal'
-import LoanDelayModal from '../../components/@Modal/loan-delay-modal'
 import MyLoanAuthentication from './components/my-loan-authentication'
 import MyLoanList from './components/my-loan-list'
 
 function MyLoanStatus() {
   const router = useRouter()
-  const postsPerPage = 10
+  const postsPerPage = 9
   const { isLogin } = useAuth()
-  const { isOpen: isLoanDelayOpen, onClose: onLoanDelayClose } = useDisclosure()
-  const {
-    isOpen: isAdditionalDocumentOpen,
-    onOpen: onAdditionalDocumentOpen,
-    onClose: onAdditionalDocumentClose,
-  } = useDisclosure()
 
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
-
-  // router.query에서 tab과 page 읽기
   const selectedTab = useMemo(() => {
     const tabQuery = router.query.tab
     if (typeof tabQuery === 'string') {
@@ -139,12 +124,6 @@ function MyLoanStatus() {
   return (
     <>
       <Flex w={'100%'} h={'100%'} py={'60px'} bg={'primary.1'}>
-        <LoanDelayModal isOpen={isLoanDelayOpen} onClose={onLoanDelayClose} />
-        <AdditionalDocumentModal
-          isOpen={isAdditionalDocumentOpen}
-          onClose={onAdditionalDocumentClose}
-          selectedIndex={selectedIndex}
-        />
         <Container>
           <VStack alignItems={'flex-start'} spacing={'8px'}>
             <Text textStyle={'pre-display-3'} color={'grey.10'}>

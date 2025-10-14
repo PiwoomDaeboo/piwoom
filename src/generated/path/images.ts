@@ -71,6 +71,7 @@ export const MY_IMAGES = {
   },
   MODUSIGN: { src: '/images/modusign.png', alt: 'modusign' },
   NEW_OG: { src: '/images/new_og.png', alt: 'new-og' },
+  NONE_DOCUMENT: { src: '/images/none_document.png', alt: 'none-document' },
   SOCIAL_APPLE: { src: '/images/social/apple.png', alt: 'apple' },
   SOCIAL_FACEBOOK: { src: '/images/social/facebook.png', alt: 'facebook' },
   SOCIAL_GOOGLE: { src: '/images/social/google.png', alt: 'google' },

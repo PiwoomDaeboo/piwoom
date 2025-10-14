@@ -17,6 +17,7 @@ import {
 import { LOAN_STATUS, REPAYMENT_TYPE } from '@/constants/loan'
 import { useLoanRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
 import { CaretLeftIcon } from '@/generated/icons/MyIcons'
+import { getBadgeStyle } from '@/utils/style-utils'
 
 import { SAMPLE_LOAN_DATA, getFormattedDetailData } from '../consts'
 
@@ -72,7 +73,10 @@ export default function Detail() {
                   {loanRetrieveData?.no || '-'}
                 </Text>
               </HStack>
-              <Badge variant={'subtle_primary'}>
+              <Badge
+                // variant={'subtle_primary'}
+                sx={getBadgeStyle(loanRetrieveData?.status || '')}
+              >
                 {LOAN_STATUS.find(
                   (status) => status.value === loanRetrieveData?.status,
                 )?.label || '-'}

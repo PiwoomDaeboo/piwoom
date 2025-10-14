@@ -4,11 +4,12 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
-import { TodoType } from './types'
+import { PrepaymentData } from './types'
 
 export type SessionStorage = {
   identityVerificationToken: string | null
   safeKey: string | null
+  prepaymentData: PrepaymentData | null
 }
 
 /**
@@ -26,6 +27,7 @@ export const useSessionStorage = create(
       immer<SessionStorage>(() => ({
         identityVerificationToken: null,
         safeKey: null,
+        prepaymentData: null,
       })),
     ),
     {

@@ -158,7 +158,7 @@ const MyLoanStep3 = () => {
           <Text textStyle={'pre-heading-3'} color={'primary.4'}>
             계약정보
           </Text>
-          <SimpleGrid columns={{ base: 1, sm: 2 }} gap={'24px'}>
+          <SimpleGrid columns={{ base: 1, sm: 2 }} w={'100%'} gap={'24px'}>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
               <Text textStyle={'pre-body-7'} color={'grey.10'}>
                 대부금액
@@ -182,7 +182,7 @@ const MyLoanStep3 = () => {
                 이자율
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                10%
+                {userLoanData?.contract?.interestRate || 0}%
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -190,7 +190,7 @@ const MyLoanStep3 = () => {
                 연체 이자율
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                15%
+                {userLoanData?.contract?.overdueInterestRate || 0}%
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -198,7 +198,7 @@ const MyLoanStep3 = () => {
                 대출일자
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                2025년 0월 0일
+                {userLoanData?.contract?.loanDate || '-'}
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -206,7 +206,7 @@ const MyLoanStep3 = () => {
                 대출만기일자
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                2025년 0월 0일
+                {userLoanData?.contract?.maturityDate || '-'}
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -222,7 +222,7 @@ const MyLoanStep3 = () => {
                 중도상환수수료
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                3%
+                {userLoanData?.contract?.prepaymentRate || 0}%
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -230,7 +230,10 @@ const MyLoanStep3 = () => {
                 상환금 입금 계좌
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                농협은행 123-456-7890 (예금주 : 피움대부 주식회사)
+                {userLoanData?.contract?.repaymentAccountName}
+                {userLoanData?.contract?.repaymentAccountNumber}
+                {userLoanData?.contract?.repaymentAccountHolder &&
+                  `(예금주 : ${userLoanData?.contract?.repaymentAccountHolder})`}
               </Text>
             </VStack>
           </SimpleGrid>

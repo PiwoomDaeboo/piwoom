@@ -43,6 +43,9 @@ export const QUERY_KEY_LOAN_API = {
   RETRIEVE: (variables?: Parameter<typeof loanApi.loanRetrieve>) =>
     ['LOAN_RETRIEVE', variables].filter(isDefined),
   PARTIAL_UPDATE: () => ['LOAN_PARTIAL_UPDATE'],
+  CONTRACT_URL_RETRIEVE: (
+    variables?: Parameter<typeof loanApi.loanContractUrlRetrieve>,
+  ) => ['LOAN_CONTRACT_URL_RETRIEVE', variables].filter(isDefined),
   SIGN_CREATE: () => ['LOAN_SIGN_CREATE'],
 }
 
@@ -140,6 +143,32 @@ export const useLoanPartialUpdateMutation = (
   return useMutation({
     mutationKey,
     mutationFn: loanApi.loanPartialUpdate,
+    ...params?.options,
+  })
+}
+
+/**
+ * No description
+ *
+ * @tags loan
+ * @name LoanContractUrlRetrieve
+ * @summary 대출 계약서 URL 발급
+ * @request GET:/v1/loan/{id}/contract_url/
+ * @secure    */
+
+export const useLoanContractUrlRetrieveQuery = <
+  TData = RequestFnReturn<typeof loanApi.loanContractUrlRetrieve>,
+>(
+  params: QueryHookParams<
+    typeof loanApi.loanContractUrlRetrieve,
+    AxiosError<CommonErrorType>,
+    TData
+  >,
+) => {
+  const queryKey = QUERY_KEY_LOAN_API.CONTRACT_URL_RETRIEVE(params.variables)
+  return useQuery({
+    queryKey,
+    queryFn: () => loanApi.loanContractUrlRetrieve(params.variables),
     ...params?.options,
   })
 }

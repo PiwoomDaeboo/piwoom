@@ -1,6 +1,7 @@
 import { ContentType, HttpClient, RequestParams } from '../@http-client'
 import {
   CommonErrorType,
+  LoanContractUrlType,
   LoanErrorMessageType,
   LoanListParamsStatusInEnumType,
   LoanRequestType,
@@ -122,6 +123,27 @@ export class LoanApi<
       body: variables.data,
       secure: true,
       type: ContentType.Json,
+      format: 'json',
+      ...variables.params,
+    })
+
+  /**
+   * No description
+   *
+   * @tags loan
+   * @name LoanContractUrlRetrieve
+   * @summary 대출 계약서 URL 발급
+   * @request GET:/v1/loan/{id}/contract_url/
+   * @secure
+   */
+  loanContractUrlRetrieve = (variables: {
+    id: number
+    params?: RequestParams
+  }) =>
+    this.request<LoanContractUrlType, CommonErrorType>({
+      path: `/v1/loan/${variables.id}/contract_url/`,
+      method: 'GET',
+      secure: true,
       format: 'json',
       ...variables.params,
     })
