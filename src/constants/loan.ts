@@ -85,6 +85,8 @@ export const JOP_TYPE = [
 export const LOAN_STATUS = [
   { label: '심사 중', value: 'UNDER_REVIEW' },
   { label: '대출 중', value: 'IN_PROGRESS' },
+  { label: '계약서 작성 중', value: 'CONTRACTING' },
+  { label: '송금 중', value: 'REMITTING' },
   { label: '연체 중', value: 'OVERDUE' },
   { label: '중도 상환 완료', value: 'EARLY_REPAYMENT_COMPLETED' },
   { label: '만기 상환 완료', value: 'MATURITY_REPAYMENT_COMPLETED' },

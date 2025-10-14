@@ -6,31 +6,26 @@ import {
   Badge,
   Box,
   Button,
-  Center,
-  Container,
   Flex,
   HStack,
-  ResponsiveValue,
   SimpleGrid,
-  Spinner,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
   Text,
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
 
 import LoanDelayModal from '@/components/@Modal/loan-delay-modal'
-import { Pagination } from '@/components/pagination'
 import { LOAN_STATUS } from '@/constants/loan'
-import {
-  LoanType,
-  PaginatedLoanListType,
-} from '@/generated/apis/@types/data-contracts'
+import { LoanType } from '@/generated/apis/@types/data-contracts'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
+import {
+  getAdditionalDocumentButtonVisibility,
+  getBadgeStyle,
+  getContractDownloadButtonVisibility,
+  getDocumentRequestButtonVisibility,
+  getRepaymentButtonVisibility,
+  getScheduleButtonVisibility,
+} from '@/utils/style-utils'
 
 interface MyLoanListProps {
   loanList: LoanType[]
@@ -43,24 +38,6 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
     onClose: onLoanDelayClose,
     onOpen: onDelayOpen,
   } = useDisclosure()
-  const getBadgeStyle = (status: string) => {
-    switch (status) {
-      case 'UNDER_REVIEW':
-        return { color: 'accent.blue2', bg: 'accent.blue1' }
-      case 'CONTRACTING':
-        return { color: 'accent.pink2', bg: 'accent.pink1' }
-      case 'IN_PROGRESS':
-        return { color: 'accent.yellow2', bg: 'accent.yellow1' }
-      case 'OVERDUE':
-        return { color: 'accent.red2', bg: 'accent.red1' }
-      case 'EARLY_REPAYMENT_COMPLETED':
-        return { color: 'accent.green2', bg: 'accent.green1' }
-      case 'MATURITY_REPAYMENT_COMPLETED':
-        return { color: 'accent.violet2', bg: 'accent.violet1' }
-      case 'REJECTED':
-        return { color: 'grey.7', bg: 'grey.2' }
-    }
-  }
   const getLoanStatus = (status: string): boolean => {
     if (
       status === 'UNDER_REVIEW' ||
@@ -70,17 +47,12 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
       return false
     } else return true
   }
-  const getLoanVisiblitity = (status: string) => {
-    if (status === 'IN_PROGRESS' || status === 'OVERDUE') {
-      return 'visible'
-    } else return 'hidden'
-  }
 
   const handleRepayment = (status: string, id: number) => {
     if (status === 'OVERDUE') {
       onDelayOpen()
     } else {
-      router.push(`/my-loan-status/repayment/${id}`)
+      router.push(`/my-loan-status/prepayment/${id}`)
     }
   }
 
@@ -104,7 +76,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
               <VStack alignItems={'flex-start'}>
                 <Badge
                   variant={'subtle_primary'}
-                  style={getBadgeStyle(item.status)}
+                  sx={getBadgeStyle(item.status)}
                 >
                   {
                     LOAN_STATUS.find((status) => status.value === item.status)
@@ -161,12 +133,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                   다음 갚을 금액
                 </Text>
                 <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                  {item?.contract?.amount ?
-                    (
-                      item?.contract?.amount / item?.contract?.loanPeriod
-                    ).toLocaleString()
-                  : (item?.loanAmount / item?.loanPeriod).toLocaleString()}
-                  원
+                  {item?.contract?.remainingAmount?.toLocaleString() || 0}원
                 </Text>
               </HStack>
             </Flex>
@@ -179,7 +146,27 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
               mt={'20px'}
             >
               <Button
-                visibility={getLoanVisiblitity(item.status)}
+                visibility={getRepaymentButtonVisibility(item.status)}
+                variant={'outline-secondary'}
+                onClick={() => {
+                  handleRepayment(item?.status, item?.id)
+                }}
+              >
+                <Text textStyle={'pre-body-7'} color={'grey.8'}>
+                  중도 상환 신청하기
+                </Text>
+              </Button>
+              <Button
+                visibility={getContractDownloadButtonVisibility(item.status)}
+                variant={'outline-secondary'}
+              >
+                <Text textStyle={'pre-body-7'} color={'grey.8'}>
+                  계약서 다운로드
+                </Text>
+              </Button>
+
+              <Button
+                visibility={getScheduleButtonVisibility(item.status)}
                 variant={'outline-secondary'}
                 onClick={() => {
                   router.push(`/my-loan-status/${item?.id}?detailMenu=schedule`)
@@ -190,23 +177,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                 </Text>
               </Button>
               <Button
-                visibility={getLoanVisiblitity(item.status)}
-                variant={'outline-secondary'}
-                onClick={() => {
-                  handleRepayment(item?.status, item?.id)
-                }}
-              >
-                <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                  중도 상환 신청하기
-                </Text>
-              </Button>
-
-              <Button variant={'outline-secondary'}>
-                <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                  계약서 다운로드
-                </Text>
-              </Button>
-              <Button
+                visibility={getDocumentRequestButtonVisibility(item.status)}
                 variant={'outline-secondary'}
                 onClick={() => {
                   window.open('http://pf.kakao.com/_xkxoben/chat', '_blank')
@@ -218,6 +189,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
               </Button>
             </SimpleGrid>
             <Button
+              visibility={getAdditionalDocumentButtonVisibility(item.status)}
               mt={'10px'}
               variant={'outline-secondary'}
               w={'100%'}

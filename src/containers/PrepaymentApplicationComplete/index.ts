@@ -1,0 +1,3 @@
+import PrepaymentApplicationComplete from './PrepaymentApplicationComplete'
+
+export default PrepaymentApplicationComplete

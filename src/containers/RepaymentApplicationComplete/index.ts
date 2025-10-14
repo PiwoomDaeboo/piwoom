@@ -1,3 +1,0 @@
-import RepaymentApplicationComplete from './RepaymentApplicationComplete'
-
-export default RepaymentApplicationComplete

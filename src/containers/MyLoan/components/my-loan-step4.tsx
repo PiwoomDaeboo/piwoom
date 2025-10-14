@@ -3,14 +3,15 @@ import { useEffect, useState } from 'react'
 import { Button, Container, Flex, Text, VStack } from '@chakra-ui/react'
 
 import { BluecheckIcon } from '@/generated/icons/MyIcons'
+import { useLocalStorage } from '@/stores/local/state'
 
 function MyLoanStep4() {
+  const { popup_status: safeKey, reset } = useLocalStorage()
   useEffect(() => {
-    const is_sign = localStorage.getItem('is_sign')
-    if (is_sign) {
-      localStorage.removeItem('is_sign')
+    if (safeKey) {
+      reset('popup_status')
     }
-  }, [])
+  }, [safeKey])
 
   return (
     <Container maxW={'768px'}>
