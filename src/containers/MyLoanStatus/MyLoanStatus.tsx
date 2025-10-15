@@ -113,7 +113,7 @@ function MyLoanStatus() {
       )
     }
   }, [router.isReady])
-  console.log()
+  console.log(isLogin)
 
   if (isLoading) {
     return (

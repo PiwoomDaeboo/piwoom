@@ -24,6 +24,7 @@ import {
   WetaxLoginType,
   WetaxType,
 } from '@/generated/apis/@types/data-contracts'
+import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 import {
   useWetaxLoginCreateMutation,
   useWetaxOtpCreateMutation,
@@ -76,6 +77,15 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
     birth?: string
     gender_code?: string
   } | null>(null)
+  const { data: userData } = useUserRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+    options: {
+      enabled: !!identityVerificationToken,
+    },
+  })
+
   useEffect(() => {
     const extractedUserInfo = extractUserInfoFromJWT(
       identityVerificationToken as string,
@@ -138,9 +148,9 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
     loginWetax({
       data: {
         method: selectedAuth as WetaxLoginRequestMethodEnumType,
-        name: userInfo?.name || '',
-        birth: userInfo?.birth || '',
-        phone: userInfo?.phone || '',
+        name: userInfo?.name || userData?.name || '',
+        birth: userInfo?.birth || userData?.birth || '',
+        phone: userInfo?.phone || userData?.phone || '',
         agency: selectedPassType as WetaxLoginRequestAgencyEnumType,
       },
     })

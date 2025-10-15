@@ -43,6 +43,8 @@ export const QUERY_KEY_USER_API = {
   REFRESH_CREATE: () => ['USER_REFRESH_CREATE'],
   TEST_RETRIEVE: (variables?: Parameter<typeof userApi.userTestRetrieve>) =>
     ['USER_TEST_RETRIEVE', variables].filter(isDefined),
+  RETRIEVE: (variables?: Parameter<typeof userApi.userRetrieve>) =>
+    ['USER_RETRIEVE', variables].filter(isDefined),
 }
 
 /**
@@ -135,6 +137,32 @@ export const useUserTestRetrieveQuery = <
   return useQuery({
     queryKey,
     queryFn: () => userApi.userTestRetrieve(params?.variables),
+    ...params?.options,
+  })
+}
+
+/**
+ * No description
+ *
+ * @tags user
+ * @name UserRetrieve
+ * @summary 유저 상세 조회
+ * @request GET:/v1/user/{id}/
+ * @secure    */
+
+export const useUserRetrieveQuery = <
+  TData = RequestFnReturn<typeof userApi.userRetrieve>,
+>(
+  params: QueryHookParams<
+    typeof userApi.userRetrieve,
+    AxiosError<CommonErrorType>,
+    TData
+  >,
+) => {
+  const queryKey = QUERY_KEY_USER_API.RETRIEVE(params.variables)
+  return useQuery({
+    queryKey,
+    queryFn: () => userApi.userRetrieve(params.variables),
     ...params?.options,
   })
 }

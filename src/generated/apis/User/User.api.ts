@@ -114,6 +114,24 @@ export class UserApi<
       format: 'json',
       ...variables?.params,
     })
+
+  /**
+   * No description
+   *
+   * @tags user
+   * @name UserRetrieve
+   * @summary 유저 상세 조회
+   * @request GET:/v1/user/{id}/
+   * @secure
+   */
+  userRetrieve = (variables: { id: string; params?: RequestParams }) =>
+    this.request<UserType, CommonErrorType>({
+      path: `/v1/user/${variables.id}/`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...variables.params,
+    })
 }
 
 //

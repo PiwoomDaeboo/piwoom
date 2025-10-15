@@ -18,13 +18,11 @@ import {
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { useUploadFileToS3Mutation } from '@/apis/s3-file-uploader/S3FileUploaderApi.query'
-import ModalBasis from '@/components/@Modal/ModalBasis'
 import UntactDocumentApplyModal from '@/components/@Modal/untact-document-apply-modal'
 import WetaxModal from '@/components/@Modal/wetax-modal'
 import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
 import AdditionalFileUpload from '@/containers/ApplyLoan/components/additional-file-upload'
-import { useGovRetrieveQuery } from '@/generated/apis/Gov/Gov.query'
 import { useLoanPartialUpdateMutation } from '@/generated/apis/Loan/Loan.query'
 import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
 import { CameraIcon, CaretLeftIcon } from '@/generated/icons/MyIcons'
