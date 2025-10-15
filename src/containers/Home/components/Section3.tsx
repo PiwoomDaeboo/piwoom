@@ -86,8 +86,8 @@ function Section3() {
           display="flex"
           gap={'32px'}
           animation={{
-            base: 'scrollLeft 5s linear infinite',
-            sm: 'scrollLeft 10s linear infinite',
+            base: 'scrollLeft 20s linear infinite',
+            sm: 'scrollLeft 30s linear infinite',
           }}
           sx={{
             '@keyframes scrollLeft': {
@@ -95,54 +95,35 @@ function Section3() {
                 transform: 'translateX(0)',
               },
               '100%': {
-                transform: 'translateX(-50%)',
+                transform: 'translateX(calc(-100% / 3))',
               },
             },
           }}
         >
-          {sectionData.map((data, index) => (
-            <Flex
-              minH={'230px'}
-              minW={'280px'}
-              p={'32px 28px'}
-              bg={'grey.0'}
-              borderRadius={'20px'}
-              boxShadow={'0 8px 50px 0 rgba(0, 46, 114, 0.10)'}
-              key={`original-${index}`}
-              flexDir={'column'}
-              alignItems={'flex-start'}
-              justifyContent={'space-between'}
-              flexShrink={0}
-            >
-              <data.icon boxSize={'70px'} />
-              <VStack alignItems={'flex-start'}>
-                <Text textStyle={'pre-body-4'}>{data.description1}</Text>
-                <Text textStyle={'pre-body-3'}>{data.description2}</Text>
-              </VStack>
-            </Flex>
-          ))}
-
-          {sectionData.map((data, index) => (
-            <Flex
-              minH={'230px'}
-              minW={'280px'}
-              p={'32px 28px'}
-              bg={'grey.0'}
-              borderRadius={'20px'}
-              boxShadow={'0 8px 50px 0 rgba(0, 46, 114, 0.10)'}
-              key={`duplicate-${index}`}
-              flexDir={'column'}
-              alignItems={'flex-start'}
-              justifyContent={'space-between'}
-              flexShrink={0}
-            >
-              <data.icon boxSize={'70px'} />
-              <VStack alignItems={'flex-start'}>
-                <Text textStyle={'pre-body-4'}>{data.description1}</Text>
-                <Text textStyle={'pre-body-3'}>{data.description2}</Text>
-              </VStack>
-            </Flex>
-          ))}
+          {/* 3개의 동일한 세트로 무한 스크롤 구현 */}
+          {[...sectionData, ...sectionData, ...sectionData].map(
+            (data, index) => (
+              <Flex
+                minH={'230px'}
+                minW={'280px'}
+                p={'32px 28px'}
+                bg={'grey.0'}
+                borderRadius={'20px'}
+                boxShadow={'0 8px 50px 0 rgba(0, 46, 114, 0.10)'}
+                key={`${data.description1}-${index}`}
+                flexDir={'column'}
+                alignItems={'flex-start'}
+                justifyContent={'space-between'}
+                flexShrink={0}
+              >
+                <data.icon boxSize={'70px'} />
+                <VStack alignItems={'flex-start'}>
+                  <Text textStyle={'pre-body-4'}>{data.description1}</Text>
+                  <Text textStyle={'pre-body-3'}>{data.description2}</Text>
+                </VStack>
+              </Flex>
+            ),
+          )}
         </Box>
       </Box>
     </Flex>

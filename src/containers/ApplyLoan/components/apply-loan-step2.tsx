@@ -111,7 +111,7 @@ const ApplyLoanStep2 = () => {
           </Text>
           <VStack spacing={'12px'} alignItems={'flex-start'}>
             <Text textStyle={'pre-body-6'} color={'grey.10'}>
-              휴대폰 간편인증{' '}
+              휴대폰 본인인증{' '}
               <Text as="span" color={'primary.4'}>
                 •
               </Text>
@@ -123,8 +123,8 @@ const ApplyLoanStep2 = () => {
               onClick={handleAuthentication}
             >
               {isPhoneCertification ?
-                '휴대폰 간편인증 완료'
-              : '휴대폰 간편인증'}
+                '휴대폰 본인인증 완료'
+              : '휴대폰 본인인증'}
             </Button>
           </VStack>
         </VStack>

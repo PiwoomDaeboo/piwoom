@@ -10,6 +10,7 @@ import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
 import { useGovRetrieveQuery } from '@/generated/apis/Gov/Gov.query'
 import { FolderIcon, InfoFillIcon } from '@/generated/icons/MyIcons'
+import { MY_IMAGES } from '@/generated/path/images'
 
 interface AdditionalDocumentModalProps {
   isOpen: boolean
@@ -266,9 +267,13 @@ export default function AdditionalDocumentModal({
                       alt="신분증"
                     />
                   </AspectRatio>
-                : <Text textStyle={'pre-body-6'} color={'grey.6'}>
-                    파일을 선택해주세요
-                  </Text>
+                : <ImageAsNext
+                    w={'237px'}
+                    h={'145px'}
+                    fill
+                    src={MY_IMAGES.ID_CARD.src}
+                    alt="신분증"
+                  />
                 }
               </Flex>
             </VStack>

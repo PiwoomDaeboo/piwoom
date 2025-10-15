@@ -19,6 +19,14 @@ export const MENU_ITEMS = [
       { label: '나의 대출 조회', href: '/my-loan-status' },
     ],
   },
-  { label: '고객센터', href: '/notice' },
+  {
+    label: '고객센터',
+    href: '/notice',
+    hasSubmenu: true,
+    submenuItems: [
+      { label: '공지사항', href: '/notice' },
+      { label: '자주하는 질문', href: '/faq' },
+    ],
+  },
   { label: '회사 소개', href: '/company' },
 ]

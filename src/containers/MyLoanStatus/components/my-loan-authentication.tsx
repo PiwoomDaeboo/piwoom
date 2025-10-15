@@ -90,8 +90,8 @@ function MyLoanAuthentication() {
         w={'100%'}
         h={'100%'}
         p={{
-          base: '28px 32px 40px 32px',
-          sm: '28px 64px 40px 64px',
+          base: '28px 32px 36px 32px',
+          sm: '28px 64px 36px 64px',
           md: '28px 64px 48px 64px',
         }}
         justifyContent={'center'}
@@ -111,7 +111,7 @@ function MyLoanAuthentication() {
             고객님의 대출정보를 확인하기 위해 본인인증을 진행해 주세요.
           </Text>
         </VStack>
-        <Flex w={'100%'} justifyContent={'center'} mt={'24px'}>
+        <Flex w={'100%'} justifyContent={'center'}>
           <Button
             w={'200px'}
             onClick={handleAuthentication}

@@ -17,6 +17,7 @@ import {
 
 import { Select } from 'chakra-react-select'
 
+import CommonSelect from '@/components/CommonSelect'
 import {
   LoanStep1Icon,
   LoanStep2Icon,
@@ -131,8 +132,8 @@ const LoanProcedureIntroduction = () => {
     >
       <Box w={'100%'}>
         {/* 모바일 드롭다운 */}
-        <Box display={{ base: 'block', sm: 'none' }} p={4}>
-          <Select
+        <Box display={{ base: 'block', sm: 'none' }} px={4}>
+          <CommonSelect
             value={{
               label:
                 activeTab === 0 ? '월급대출 및 신용대출 절차' : (

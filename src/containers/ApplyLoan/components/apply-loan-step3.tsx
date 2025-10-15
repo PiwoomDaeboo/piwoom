@@ -369,7 +369,7 @@ const ApplyLoanStep3 = () => {
 
         <InputForm label="대출용도">
           <Flex w={'100%'} gap={'16px'}>
-            <VStack w={'50%'}>
+            <VStack w={'50%'} alignItems={'flex-start'}>
               <Box w={'100%'}>
                 <Controller
                   name="purpose"
@@ -667,7 +667,12 @@ const ApplyLoanStep3 = () => {
           )}
         </InputForm>
 
-        <InputForm label="대출 용도 및 상환 계획" isRequired={false} w={'100%'}>
+        <InputForm
+          label="대출 용도 및 상환 계획"
+          isOptional
+          isRequired={false}
+          w={'100%'}
+        >
           <Flex flexDir={'column'} gap={'12px'} w={'100%'}>
             <Text textStyle={'pre-caption-2'} color={'grey.7'}>
               *대출금 사용 용도 및 예상 상환 방법을 구체적으로 기재하시면 심사에

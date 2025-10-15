@@ -29,6 +29,7 @@ import { useUploadFileToS3Mutation } from '@/apis/s3-file-uploader/S3FileUploade
 import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
 import { CameraIcon, InfoFillIcon } from '@/generated/icons/MyIcons'
+import { MY_IMAGES } from '@/generated/path/images'
 
 export default function IdCardUpload() {
   const router = useRouter()
@@ -150,9 +151,13 @@ export default function IdCardUpload() {
               src={previewUrl}
               alt="신분증 미리보기"
             />
-          : <Text textStyle={'pre-body-6'} color={'grey.6'}>
-              파일을 선택해주세요
-            </Text>
+          : <ImageAsNext
+              w={'100%'}
+              h={'100%'}
+              fill
+              src={MY_IMAGES.ID_CARD.src}
+              alt="신분증"
+            />
           }
         </Flex>
       </VStack>

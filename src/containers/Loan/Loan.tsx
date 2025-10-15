@@ -157,7 +157,7 @@ function Loan() {
           </VStack>
         </Container>
       </Flex>
-      <Container py={'64px'}>
+      <Container py={{ base: '20px', sm: '48px', md: '64px' }}>
         <Flex
           flexDir={{ base: 'column', md: 'row' }}
           gap={{ base: '24px', md: '100px' }}
@@ -165,7 +165,7 @@ function Loan() {
           <Flex
             maxW={{ base: '100%', md: '260px' }}
             flexDirection={{ base: 'row', md: 'column' }}
-            gap={'24px'}
+            gap={{ base: '20px', md: '24px' }}
           >
             <Text
               display={{ base: 'none', md: 'block' }}
@@ -176,6 +176,8 @@ function Loan() {
             <Flex
               flexDir={{ base: 'row', md: 'column' }}
               w={{ base: '100%', md: 'fit-content' }}
+              borderBottom={'1px solid'}
+              borderColor={'border.basic.1'}
               overflowX={{ base: 'auto', md: 'visible' }}
               gap={{ base: '12px', md: '0' }}
               pb={{ base: '8px', md: '0' }}
