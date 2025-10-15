@@ -21,6 +21,11 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
 
       // Step3 fields (required for step3 validation)
       purpose: yup.string().required('필수 항목 입니다.'),
+      purposeDetail: yup.string().when('purpose', {
+        is: 'DIRECT_INPUT',
+        then: (schema) => schema.required('대출 용도를 입력해주세요.'),
+        otherwise: (schema) => schema.optional(),
+      }),
       totalAsset: yup.string().required('필수 항목 입니다.'),
       annualIncome: yup.string().required('필수 항목 입니다.'),
       monthlyIncome: yup
@@ -82,7 +87,7 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       fileSet: yup.mixed().nullable().optional(),
 
       // Optional fields
-      purposeDetail: yup.string().optional(),
+
       // repaymentDetail: yup.string().optional(),
       repaymentDetail: yup.string().when('repaymentMethod', {
         is: 'DIRECT_INPUT',
@@ -96,16 +101,16 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       hireYear: yup
         .number()
         .typeError('숫자만 입력 가능합니다.')
-        .integer()
+        .integer('네 자리 연도를 입력해주세요')
         .positive()
         .min(1900, '네 자리 연도를 입력해주세요')
-        .max(2030, '네 자리 연도를 입력해주세요')
+        .max(new Date().getFullYear(), '오늘 기준 연도까지만 입력 가능합니다')
         .nullable()
         .optional(),
       hireMonth: yup
         .number()
         .typeError('숫자만 입력 가능합니다.')
-        .integer()
+        .integer('두 자리 월을 입력해주세요')
         .positive()
         .min(1, '1월부터 12월까지 입력해주세요.')
         .max(12, '1월부터 12월까지 입력해주세요.')

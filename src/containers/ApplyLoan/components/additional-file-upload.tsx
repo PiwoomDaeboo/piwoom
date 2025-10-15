@@ -103,7 +103,13 @@ export default function AdditionalFileUpload() {
 
   return (
     <>
-      <InputForm label="추가 서류 제출" isOptional w={'100%'}>
+      <InputForm
+        label="추가 서류 제출"
+        isOptional
+        isRequired={false}
+        w={'100%'}
+        tooltipLabel="비대면서류제출을 통해 수집되는 각종 서류 및 데이터들은 고객님의 최신 소득 정보를 반영하지 못하고 있을 수 있습니다. 따라서 [갑종근로소득에대한소득세원천징수증명서], [은행급여이체내역] 또는 [근로소득원천징수영수증] 등을 추가로 제출하실 경우 대출 승인 확률 및 한도가 올라갈 수 있습니다. 추가 서류 제출은 대출 신청 이후 [나의 대출 조회 - 대출 현황 조회] 페이지 내에서도 가능합니다."
+      >
         <Flex
           onClick={handleFileUploadButtonClick}
           cursor={'pointer'}
@@ -198,7 +204,6 @@ export default function AdditionalFileUpload() {
           borderRadius={'20px'}
           border={'1px solid'}
           borderColor={'border.basic.1'}
-          gap={'24px'}
         >
           <HStack>
             <InfoFillIcon boxSize={'24px'} />
@@ -209,8 +214,7 @@ export default function AdditionalFileUpload() {
           <Text textStyle={'pre-body-68'} color={'grey.8'}>
             신규로 부동산을 매입하시려는 경우 매매계약서 사본을 제출해주시면
             보다 빠른 대출 심사가 가능합니다.
-          </Text>
-          <Text textStyle={'pre-body-68'} color={'grey.8'}>
+            <br />
             (매매계약서 제출 시 매도인 및 매수인 등의 주민등록번호 뒷자리는 꼭
             가려 주셔야 하며, 만약 가리지 않고 업로드하실 경우 보안 정책에 따라
             해당 자료는 파기됩니다.)

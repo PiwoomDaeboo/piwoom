@@ -45,6 +45,7 @@ export const MY_IMAGES = {
     src: '/images/equal_installment.png',
     alt: 'equal-installment',
   },
+  ID_CARD: { src: '/images/id_card.png', alt: 'id-card' },
   IMG_02: { src: '/images/img02.png', alt: 'img-02' },
   IMG_04: { src: '/images/img04.png', alt: 'img-04' },
   IMG_06: { src: '/images/img06.png', alt: 'img-06' },
@@ -57,6 +58,8 @@ export const MY_IMAGES = {
   INTROIMAGE_5: { src: '/images/introimage5.png', alt: 'introimage-5' },
   INTROIMAGE_6: { src: '/images/introimage6.png', alt: 'introimage-6' },
   INTROIMAGE_7: { src: '/images/introimage7.png', alt: 'introimage-7' },
+  LOGO_MO: { src: '/images/logo_mo.png', alt: 'logo-mo' },
+  LOGO_PC: { src: '/images/logo_pc.png', alt: 'logo-pc' },
   LUMP_SUM: { src: '/images/lump_sum.png', alt: 'lump-sum' },
   MAGICUBE_PROCESS: {
     src: '/images/magicube_process.png',

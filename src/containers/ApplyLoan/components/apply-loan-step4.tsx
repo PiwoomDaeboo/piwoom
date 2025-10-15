@@ -233,6 +233,9 @@ const ApplyLoanStep4 = () => {
       accountHolderSsn: getValues('accountHolderSsn') || '-',
       // purposeAndRepaymentPlan: getValues('purposeAndRepaymentPlan') || '-',
       purposeAndRepaymentPlan: '-',
+      assetBaseAddress: getValues('assetBaseAddress') || '',
+      assetDetailAddress: getValues('assetDetailAddress') || '',
+      assetPostcode: getValues('assetPostcode') || '',
       ...data,
     }
     loanCreateMutation({
@@ -989,7 +992,11 @@ const ApplyLoanStep4 = () => {
           자산 정보
         </Text>
 
-        <InputForm label="부동산 정보">
+        <InputForm
+          label="부동산 정보"
+          isRequired={router.query.type === 'mortgage' ? true : false}
+          isOptional={router.query.type === 'mortgage' ? false : true}
+        >
           <VStack w={'100%'} gap={'8px'} alignItems={'stretch'}>
             <Flex w={'100%'} gap={'8px'}>
               <Input

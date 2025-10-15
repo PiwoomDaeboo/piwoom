@@ -19,11 +19,13 @@ import {
 } from '@chakra-ui/react'
 
 import DrawerBasis from '@/components/@Drawer/DrawerBasis'
+import ImageAsNext from '@/components/ImageAsNext'
 import {
   CaretDownIcon,
   HeaderlogoIcon,
   MenuIcon,
 } from '@/generated/icons/MyIcons'
+import { MY_IMAGES } from '@/generated/path/images'
 import { ROUTES } from '@/generated/path/routes'
 
 import { MENU_ITEMS } from '../../consts/menu'
@@ -75,7 +77,8 @@ const HomeHeaderDrawer = ({
               h={'64px'}
             >
               <Link variant={'unstyled'} href={ROUTES.MAIN}>
-                <HeaderlogoIcon boxSize={'107px'} h={'20px'} />
+                <ImageAsNext src={MY_IMAGES.LOGO_MO.src} alt="logo" />
+                {/* <HeaderlogoIcon boxSize={'107px'} h={'20px'} /> */}
               </Link>
               <HStack gap={'10px'}>
                 <Button
@@ -119,7 +122,7 @@ const HomeHeaderDrawer = ({
                       bg: 'primary.1',
                     }}
                   >
-                    <Link href={item.href || '#'}>
+                    <Link href={item.href || '#'} onClick={onClose}>
                       <HStack w={'100%'} alignItems={'center'} gap={'10px'}>
                         <Text textStyle={'pre-body-3'} color={'grey.10'}>
                           {item.label}
@@ -166,29 +169,6 @@ const HomeHeaderDrawer = ({
                     <AccordionPanel py={'12px'} bg={'grey.0'}>
                       <Flex flexDir={'column'} gap={'10px'}>
                         {item.submenuItems?.map((subItem) => (
-                          // <Box
-                          //   key={subItem.label}
-                          //   as="a"
-                          //   p={'12px 16px'}
-                          //   borderRadius={'16px'}
-                          //   textStyle={'pre-body-4'}
-                          //   color={'grey.10'}
-                          //   _hover={{
-                          //     bg: 'primary.1',
-                          //     color: 'primary.4',
-                          //     textStyle: 'pre-body-3',
-                          //   }}
-                          // >
-                          //   <Link href={subItem.href}>
-                          //     <Text
-                          //       w={'100%'}
-                          //       textStyle={'pre-body-4'}
-                          //       color={'grey.10'}
-                          //     >
-                          //       {subItem.label}
-                          //     </Text>
-                          //   </Link>
-                          // </Box>
                           <Link
                             key={subItem.label}
                             href={subItem.href}
@@ -204,6 +184,7 @@ const HomeHeaderDrawer = ({
                             title={`${subItem.label} 페이지로 이동`}
                             aria-label={`${subItem.label} 서브메뉴`}
                             display="block"
+                            onClick={onClose}
                           >
                             <Text
                               w={'100%'}

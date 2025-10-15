@@ -21,6 +21,8 @@ import {
   MenuIcon,
 } from 'generated/icons/MyIcons'
 
+import ImageAsNext from '@/components/ImageAsNext'
+import { MY_IMAGES } from '@/generated/path/images'
 import { ROUTES } from '@/generated/path/routes'
 
 import { MENU_ITEMS } from '../consts/menu'
@@ -157,10 +159,16 @@ const HomeHeader = ({
           h={{ base: '64px', md: '80px' }}
         >
           <Link variant={'unstyled'} href={ROUTES.MAIN}>
-            <HeaderlogoIcon
+            <ImageAsNext
+              src={MY_IMAGES.LOGO_PC.src}
+              alt="logo"
+              width={{ base: '107px', sm: '127px', md: '127px' }}
+              height={{ base: '20px', sm: '25px', md: '25px' }}
+            />
+            {/* <HeaderlogoIcon
               width={{ base: '107px', sm: '127px', md: '127px' }}
               h={'20px'}
-            />
+            /> */}
           </Link>
           <HStack
             gap={'10px'}
