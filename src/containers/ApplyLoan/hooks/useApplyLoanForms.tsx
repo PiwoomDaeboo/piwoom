@@ -78,12 +78,17 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       employmentType: yup.string().required('필수 항목 입니다.'),
       healthInsurancePaymentConfirmation: yup.string().nullable().optional(),
       healthInsurancePaymentConfirmation2: yup.string().nullable().optional(),
-      identityCard: yup.string().nullable().optional(),
+      identityCard: yup.string().required('필수 항목 입니다.'),
       fileSet: yup.mixed().nullable().optional(),
 
       // Optional fields
       purposeDetail: yup.string().optional(),
-      repaymentDetail: yup.string().optional(),
+      // repaymentDetail: yup.string().optional(),
+      repaymentDetail: yup.string().when('repaymentMethod', {
+        is: 'DIRECT_INPUT',
+        then: (schema) => schema.required('변제방법을 입력해주세요.'),
+        otherwise: (schema) => schema.optional(),
+      }),
       electronicDocumentConsent: yup.boolean().optional(),
       companyName: yup.string().max(100).optional(),
       companyAddress: yup.string().optional(),
@@ -91,12 +96,17 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       hireYear: yup
         .number()
         .typeError('숫자만 입력 가능합니다.')
-        .min(0)
+        .integer()
+        .positive()
+        .min(1900, '네 자리 연도를 입력해주세요')
+        .max(2030, '네 자리 연도를 입력해주세요')
         .nullable()
         .optional(),
       hireMonth: yup
         .number()
         .typeError('숫자만 입력 가능합니다.')
+        .integer()
+        .positive()
         .min(1, '1월부터 12월까지 입력해주세요.')
         .max(12, '1월부터 12월까지 입력해주세요.')
         .nullable()
@@ -132,11 +142,17 @@ export const useApplyLoanStep3Form = (
       purposeAndRepaymentPlan: yup
         .string()
         .required('대출 용도 및 상환 계획을 입력해주세요.'),
-      // safeKey: yup
-      //   .string()
-      //   .min(1, '신용정보 제출이 필요합니다.')
-      //   .required('신용정보 제출이 필요합니다.'),
-      safeKey: yup.string().nullable().optional(),
+
+      safeKey: yup
+        .string()
+        .nullable()
+        .test(
+          'safeKey-required',
+          '신용정보 제출이 필요합니다.',
+          function (value) {
+            return value !== null && value !== undefined && value !== ''
+          },
+        ),
       // 조건부 필드들
       purposeDetail: yup.string().when('purpose', {
         is: 'DIRECT_INPUT',

@@ -27,6 +27,7 @@ import { Pagination } from '@/components/pagination'
 import { LoanListParamsStatusInEnumType } from '@/generated/apis/@types/data-contracts'
 import { useLoanListQuery } from '@/generated/apis/Loan/Loan.query'
 import { useAuth } from '@/hooks/useAuth'
+import { useSessionStorage } from '@/stores/session/state'
 
 import MyLoanAuthentication from './components/my-loan-authentication'
 import MyLoanList from './components/my-loan-list'
@@ -35,7 +36,7 @@ function MyLoanStatus() {
   const router = useRouter()
   const postsPerPage = 9
   const { isLogin } = useAuth()
-
+  const { identityVerificationToken } = useSessionStorage()
   const selectedTab = useMemo(() => {
     const tabQuery = router.query.tab
     if (typeof tabQuery === 'string') {
@@ -112,7 +113,7 @@ function MyLoanStatus() {
       )
     }
   }, [router.isReady])
-  console.log('isLogin', isLogin)
+  console.log()
 
   if (isLoading) {
     return (
@@ -202,7 +203,49 @@ function MyLoanStatus() {
               </Flex>
             )}
           </>
-        : <MyLoanAuthentication />}
+        : identityVerificationToken ?
+          <MyLoanAuthentication />
+        : <Tabs index={selectedTab} onChange={handleTabChange}>
+            <TabList>
+              <Tab>
+                <Text
+                  textStyle={'pre-body-3'}
+                  color={selectedTab === 0 ? 'grey.10' : 'grey.7'}
+                >
+                  진행중
+                </Text>
+              </Tab>
+              <Tab>
+                <Text
+                  textStyle={'pre-body-3'}
+                  color={selectedTab === 1 ? 'grey.10' : 'grey.7'}
+                >
+                  상환완료
+                </Text>
+              </Tab>
+              <Tab>
+                <Text
+                  textStyle={'pre-body-3'}
+                  color={selectedTab === 2 ? 'grey.10' : 'grey.7'}
+                >
+                  대출거절
+                </Text>
+              </Tab>
+            </TabList>
+
+            <TabPanels p={'0px'}>
+              <TabPanel p={'36px 0px 48px 0px'}>
+                <NonData variant="loan" />
+              </TabPanel>
+              <TabPanel>
+                <NonData variant="loan" />
+              </TabPanel>
+              <TabPanel>
+                <NonData variant="loan" />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        }
       </Container>
     </>
   )

@@ -118,6 +118,7 @@ const ApplyLoanStep2 = () => {
             </Text>
             <Button
               variant={'outline-primary'}
+              isDisabled={isPhoneCertification}
               w={'209px'}
               onClick={handleAuthentication}
             >

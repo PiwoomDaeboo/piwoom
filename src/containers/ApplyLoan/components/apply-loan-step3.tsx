@@ -48,6 +48,8 @@ const ApplyLoanStep3 = () => {
     setValue,
     trigger,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useFormContext()
   const router = useRouter()
@@ -70,6 +72,9 @@ const ApplyLoanStep3 = () => {
   const creditScore = useWatch({ control, name: 'creditScore' })
   const safeKeyWatchValue = useWatch({ control, name: 'safeKey' })
   const [popupWindow, setPopupWindow] = useState<Window | null>(null)
+
+  // safeKey 필드를 폼에 등록
+  register('safeKey')
   const { data: settingData } = useSettingRetrieveQuery({
     variables: {
       id: 'me',
@@ -88,7 +93,7 @@ const ApplyLoanStep3 = () => {
 
   const handleButtonSelect = (field: string, value: string) => {
     setValue(`${field}`, value)
-    trigger(field) // 해당 필드의 유효성 검사를 다시 트리거하여 에러 메시지 업데이트
+    trigger(field)
   }
 
   const formatNumberWithCommas = (
@@ -140,8 +145,6 @@ const ApplyLoanStep3 = () => {
     return true
   }
 
-  // handleSubmit을 사용하므로 수동 검증 함수는 더 이상 필요하지 않음
-
   // Step3 성공 시 실행될 함수
   const onStep3Submit = (data: any) => {
     console.log('Step3 폼 데이터:', data)
@@ -155,25 +158,49 @@ const ApplyLoanStep3 = () => {
 
   const onStep3Error = (errors: any) => {
     console.log('Step3 폼 에러:', errors)
-    toast({
-      render: () => (
-        <Box
-          borderRadius={'10px'}
-          color="white"
-          p={'12px'}
-          bg="rgba(27, 28, 29, 0.80)"
-        >
-          <HStack spacing={'24px'} alignItems={'center'}>
-            <XCircleFillIcon boxSize={'24px'} />
-            <Text textStyle={'pre-body-68'} color={'grey.0'}>
-              필수 항목을 입력해주세요.
-            </Text>
-          </HStack>
-        </Box>
-      ),
-      duration: 5000,
-      isClosable: true,
-    })
+
+    // safeKey 에러가 있으면 특별한 메시지 표시
+    if (errors?.safeKey) {
+      toast({
+        render: () => (
+          <Box
+            borderRadius={'10px'}
+            color="white"
+            p={'12px'}
+            bg="rgba(27, 28, 29, 0.80)"
+          >
+            <HStack spacing={'24px'} alignItems={'center'}>
+              <XCircleFillIcon boxSize={'24px'} />
+              <Text textStyle={'pre-body-68'} color={'grey.0'}>
+                신용정보 제출이 필요합니다.
+              </Text>
+            </HStack>
+          </Box>
+        ),
+        duration: 5000,
+        isClosable: true,
+      })
+    } else {
+      toast({
+        render: () => (
+          <Box
+            borderRadius={'10px'}
+            color="white"
+            p={'12px'}
+            bg="rgba(27, 28, 29, 0.80)"
+          >
+            <HStack spacing={'24px'} alignItems={'center'}>
+              <XCircleFillIcon boxSize={'24px'} />
+              <Text textStyle={'pre-body-68'} color={'grey.0'}>
+                필수 항목을 입력해주세요.
+              </Text>
+            </HStack>
+          </Box>
+        ),
+        duration: 5000,
+        isClosable: true,
+      })
+    }
     const firstErrorField = Object.keys(errors)[0]
     const errorElement =
       document.querySelector(`[name="${firstErrorField}"]`) ||
@@ -201,6 +228,7 @@ const ApplyLoanStep3 = () => {
       'debtScale',
       'repaymentMethod',
       'creditScore',
+      'safeKey',
       'purposeAndRepaymentPlan',
     ]
 
@@ -212,16 +240,28 @@ const ApplyLoanStep3 = () => {
       step3Fields.push('repaymentDetail')
     }
 
-    // step3 필드들만 검증
     const isValid = await trigger(step3Fields)
     return isValid
   }
 
   // 다음 버튼 클릭 핸들러
   const handleNextClick = async () => {
+    // safeKey 필드를 명시적으로 검증
+    const safeKeyValid = await trigger('safeKey')
     const isValid = await validateStep3Fields()
 
-    if (isValid) {
+    // safeKey가 없으면 진행하지 않음
+    if (!safeKeyWatchValue || !safeKeyValid) {
+      console.log('safeKey가 없어서 진행할 수 없습니다.')
+      // safeKey 에러를 직접 설정하여 화면에 에러 메시지 표시
+      setError('safeKey', {
+        type: 'required',
+        message: '신용정보 제출이 필요합니다.',
+      })
+      return
+    }
+
+    if (isValid && safeKeyValid) {
       const formData = watch()
       onStep3Submit(formData)
     } else {
@@ -239,27 +279,28 @@ const ApplyLoanStep3 = () => {
     }
   }
 
-  // const handleApplyCreditInfoSubmit = (e: React.MouseEvent) => {
-  //   e.preventDefault()
-  //   e.stopPropagation()
-
-  //   window.open(
-  //     `https://api.piwoom.com/v1/nice/?name=${userInfo?.name}&birth=${userInfo?.birth}&gender=${userInfo?.gender_code}`,
-  //     'popupChk',
-  //     'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
-  //   )
-  // }
-
-  const [niceIframeUrl, setNiceIframeUrl] = useState<string>('')
-
   const handleApplyCreditInfoSubmit = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    window.open(
+
+    const popup = window.open(
       `https://api.piwoom.com/v1/nice/?name=${userInfo?.name}&birth=${userInfo?.birth}&gender=${userInfo?.gender_code}`,
       'popupChk',
       'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
     )
+
+    // 팝업이 닫힌 후 검증을 트리거하기 위한 폴링
+    if (popup) {
+      const checkClosed = setInterval(() => {
+        if (popup.closed) {
+          clearInterval(checkClosed)
+          // 팝업이 닫힌 후 잠시 대기 후 검증 트리거
+          setTimeout(() => {
+            trigger('safeKey')
+          }, 500)
+        }
+      }, 1000)
+    }
   }
 
   useEffect(() => {
@@ -276,21 +317,37 @@ const ApplyLoanStep3 = () => {
     mortgage:
       '(예시) 서울시 성동구에 위치한 10억원짜리 아파트를 사게 되었습니다. \n잔금이 2개월 후라, 잔금일에 아파트 2순위 담보로 2억원을 빌리고 싶습니다.\n참고로 1순위 은행 대출은 4억원입니다.\n연 소득이 6000만원이기 때문에 매월 대출 이자 납부에는 문제가 없으며, 대출 기간 3년 동안 월급을 열심히 모아서 원금 일부는 상환하고 나머지는 은행 신용대출로 대환할 계획입니다.',
     normal:
-      '(예시) 자녀 출산으로 인해 산후 조리원 비용이 예상보다 많이 나왔습니다. \n오백만원만 빌리면, 3개월 동안 월급을 모아서 상환할 수 있습니다.',
+      '(예시) 최근 갑작스러운 수술로 병원비가 많이 발생했습니다.\n500만원을 빌리면, 매달 월급에서 일정 금액을 저축하여 5개월 안에 상환할 수 있습니다.',
   }
-  // const { set, safeKey } = useSessionStorage()
 
   const { popup_status: safeKey } = useLocalStorage()
   console.log('safeKeyWatchValue', safeKey)
+
   useEffect(() => {
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'popup_status') {
-        console.log(e)
-        // set('safeKey', e.newValue)
-        setValue('safeKey', safeKey)
+    // localStorage에서 safeKey 값이 있으면 폼에 설정
+    if (safeKey) {
+      setValue('safeKey', safeKey)
+      clearErrors('safeKey') // 에러 클리어
+      trigger('safeKey') // 폼 검증 트리거
+    }
+  }, [safeKey, setValue, trigger, clearErrors])
+
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'popup_status' && e.newValue) {
+        console.log('Storage changed:', e.newValue)
+        setValue('safeKey', e.newValue)
+        clearErrors('safeKey') // 에러 클리어
+        trigger('safeKey') // 폼 검증 트리거
       }
-    })
-  }, [setValue])
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+    }
+  }, [setValue, trigger, clearErrors])
 
   return (
     <Container>
@@ -312,7 +369,7 @@ const ApplyLoanStep3 = () => {
 
         <InputForm label="대출용도">
           <Flex w={'100%'} gap={'16px'}>
-            <VStack w={'49%'}>
+            <VStack w={'50%'}>
               <Box w={'100%'}>
                 <Controller
                   name="purpose"
@@ -340,6 +397,11 @@ const ApplyLoanStep3 = () => {
                   {...register('purposeDetail')}
                   data-field="purposeDetail"
                 />
+              )}
+              {loanPurpose === 'DIRECT_INPUT' && errors?.purposeDetail && (
+                <Text textStyle={'pre-caption-2'} color={'accent.red2'} mt={1}>
+                  {errors?.purposeDetail?.message as string}
+                </Text>
               )}
             </VStack>
             <Box />
@@ -523,6 +585,15 @@ const ApplyLoanStep3 = () => {
                   {...register('repaymentDetail')}
                   data-field="repaymentDetail"
                 />
+                {errors?.repaymentDetail && (
+                  <Text
+                    textStyle={'pre-caption-2'}
+                    color={'accent.red2'}
+                    mt={1}
+                  >
+                    {errors?.repaymentDetail?.message as string}
+                  </Text>
+                )}
               </Box>
             )}
             {errors?.repaymentMethod && (
@@ -580,58 +651,22 @@ const ApplyLoanStep3 = () => {
             color={'grey.8'}
             onClick={handleApplyCreditInfoSubmit}
             w={'209px'}
-            // isDisabled={safeKey !== null}
+            isDisabled={!!safeKeyWatchValue}
           >
             제출
           </Button>
-          {safeKey && (
+          {safeKeyWatchValue && (
             <Text textStyle={'pre-body-7'} color={'accent.green2'}>
               신용정보가 제출되었어요.
             </Text>
           )}
-          {/* {errors?.safeKey && (
+          {errors?.safeKey && (
             <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
               {errors?.safeKey?.message as string}
             </Text>
-          )} */}
+          )}
         </InputForm>
-        <VStack
-          alignItems={'flex-start'}
-          p={'24px 20px'}
-          borderRadius={'20px'}
-          border={'1px solid'}
-          borderColor={'border.basic.1'}
-          gap={'24px'}
-        >
-          <HStack>
-            <InfoFillIcon boxSize={'24px'} />
-            <Text textStyle={'pre-body-7'} color={'grey.9'}>
-              안내사항
-            </Text>
-          </HStack>
-          <Text textStyle={'pre-body-6'} color={'grey.8'}>
-            피움대부는 서비스 이행을 위해서 아래와 같이 개인정보를 위탁하여
-            운영하고 있습니다.
-            <br /> 당사의 개인정보 위탁 처리 기관 및 위탁 업무는 아래와
-            같습니다.
-          </Text>
-          <Box
-            p={'10px 20px'}
-            textStyle={'pre-body-6'}
-            color={'grey.8'}
-            bg={'background.basic.2'}
-            w={'100%'}
-            borderRadius={'10px'}
-          >
-            가. 위탁기관 : NICE 평가정보주식회사
-            <br />
-            나. 위탁업무 : 본인인증, 이용약관 및 개인정보/DI
-            수집ㆍ이용/제공ㆍ활용/조회 동의
-          </Box>
-          <Text textStyle={'pre-body-6'} color={'grey.8'}>
-            본인은 본 개인정보 처리 업무의 위탁에 동의합니다.
-          </Text>
-        </VStack>
+
         <InputForm label="대출 용도 및 상환 계획" isRequired={false} w={'100%'}>
           <Flex flexDir={'column'} gap={'12px'} w={'100%'}>
             <Text textStyle={'pre-caption-2'} color={'grey.7'}>
