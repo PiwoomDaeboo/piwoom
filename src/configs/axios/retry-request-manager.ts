@@ -50,7 +50,7 @@ export const retryRequestManager = (options?: {
       const refetched = await onRefetch(refreshed)
       return refetched
     } catch (err) {
-      onError(err)
+      return onError(err)
     } finally {
       if (timeoutId) clearTimeout(timeoutId)
       if (token) {

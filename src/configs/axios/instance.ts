@@ -23,7 +23,18 @@ const instance = axios.create({
 })
 
 const retry = retryRequestManager({ cleanupTimeOut: 5000 })
+
+// refresh token 요청용 별도 instance (interceptor 없음)
+const refreshInstance = axios.create({
+  baseURL: ENV.API_BASE_URL || 'http://localhost:5001',
+  timeout: 5000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
 const userApi = new UserApi({ instance })
+const refreshUserApi = new UserApi({ instance: refreshInstance })
 
 instance.interceptors.request.use(
   (config) => {
@@ -48,6 +59,7 @@ instance.interceptors.response.use(
   async (error: AxiosError) => {
     try {
       const { response: res, config: reqData } = error || {}
+      console.log('res', res)
       if (!res?.status) {
         throw new Error('response status is not exist')
       }
@@ -66,9 +78,11 @@ instance.interceptors.response.use(
               useLocalStorage.getState().token?.refresh_token
 
             if (!refresh_token) throw new Error('refresh token is not exist')
+            if (!reqData) throw new Error('reqData is not exist')
 
+            // 별도의 refresh instance를 사용하여 무한 루프 방지
             const { accessToken, refreshToken } =
-              await userApi.userRefreshCreate({
+              await refreshUserApi.userRefreshCreate({
                 data: {
                   refreshToken: refresh_token,
                 },
@@ -85,6 +99,7 @@ instance.interceptors.response.use(
           },
           onRefetch: (token) => {
             if (!reqData) throw new Error('reqData is not exist')
+            // 새로운 access token으로 Authorization 헤더 설정
             reqData.headers.Authorization = `Bearer ${token}`
             return instance.request(reqData)
           },
@@ -111,6 +126,7 @@ instance.interceptors.response.use(
         title: 'axios-interceptor',
         data: e,
       })
+      return Promise.reject(error)
     }
   },
 )
