@@ -73,16 +73,16 @@ const passTypes = [
 // HANA - 하나인증서
 
 const authOptions = [
-  { type: 'KAKAO', icon: KakaoAuthenticationIcon, label: '카카오' },
+  { type: 'KAKAO', icon: KakaoAuthenticationIcon, label: '카카오톡' },
   { type: 'SAMSUNG', icon: SamsungauthenticationIcon, label: '삼성패스' },
-  { type: 'KB', icon: KbAuthenticationIcon, label: 'KB' },
-  { type: 'PASS', icon: PassAuthenticationIcon, label: 'PASS' },
-  { type: 'SHINHAN', icon: ShinhanAuthenticationIcon, label: '신한' },
+  { type: 'KB', icon: KbAuthenticationIcon, label: '국민인증서' },
+  { type: 'PASS', icon: PassAuthenticationIcon, label: '통신사PASS' },
+  { type: 'SHINHAN', icon: ShinhanAuthenticationIcon, label: '신한인증서' },
   { type: 'NAVER', icon: NaverAuthenticationIcon, label: '네이버' },
   { type: 'TOSS', icon: TossAuthenticationIcon, label: '토스' },
-  { type: 'NH', icon: NhauthenticationIcon, label: 'NH' },
-  { type: 'WOORI', icon: WooriauthenticationIcon, label: '우리' },
-  { type: 'HANA', icon: HanaauthenticationIcon, label: '하나' },
+  { type: 'NH', icon: NhauthenticationIcon, label: 'NH인증서' },
+  { type: 'WOORI', icon: WooriauthenticationIcon, label: '우리인증서' },
+  { type: 'HANA', icon: HanaauthenticationIcon, label: '하나인증서' },
 ]
 
 function UntactDocumentApplyModal({
