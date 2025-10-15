@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
 
+import { useRouter } from 'next/router'
+
 import { yupResolver } from '@hookform/resolvers/yup'
 
 import { UseFormProps, useForm } from 'react-hook-form'
@@ -8,6 +10,7 @@ import * as yup from 'yup'
 import { LoanRequestType } from '@/generated/apis/@types/data-contracts'
 
 export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
+  const router = useRouter()
   const signUpFormSchema = useMemo(() => {
     return yup.object().shape({
       // Step1 fields
@@ -71,9 +74,18 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       detailAddress: yup.string().required('필수 항목 입니다.'),
       housingType: yup.string().required('필수 항목 입니다.'),
       residenceType: yup.string().required('필수 항목 입니다.'),
-      assetPostcode: yup.string().required('필수 항목 입니다.'),
-      assetBaseAddress: yup.string().required('필수 항목 입니다.'),
-      assetDetailAddress: yup.string().required('필수 항목 입니다.'),
+      assetPostcode:
+        router.query.type === 'mortgage' ?
+          yup.string().required('필수 항목 입니다.')
+        : yup.string().optional(),
+      assetBaseAddress:
+        router.query.type === 'mortgage' ?
+          yup.string().required('필수 항목 입니다.')
+        : yup.string().optional(),
+      assetDetailAddress:
+        router.query.type === 'mortgage' ?
+          yup.string().required('필수 항목 입니다.')
+        : yup.string().optional(),
       incomeCertificate: yup.string().nullable().optional(),
       residentRegistrationCopy: yup.string().nullable().optional(),
       healthInsuranceEligibilityConfirmation: yup
@@ -118,7 +130,7 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
         .optional(),
       rrcAddress: yup.string().max(500).optional(),
     })
-  }, [])
+  }, [router.query.type])
 
   return useForm<LoanRequestType>({
     resolver: yupResolver(signUpFormSchema) as any,

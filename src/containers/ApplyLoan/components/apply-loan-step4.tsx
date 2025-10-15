@@ -1108,7 +1108,7 @@ const ApplyLoanStep4 = () => {
             isLoading={isLoanCreateMutationPending}
             onClick={handleSubmitClick}
           >
-            대출신청
+            대출 신청
           </Button>
         </Flex>
       </Flex>

@@ -319,6 +319,8 @@ const SubmittingAuthProcess = () => {
       spacing={'20px'}
       alignItems={'center'}
       p={'40px'}
+      px={{ base: '10px', sm: '40px' }}
+      py={{ base: '32px', sm: '40px' }}
       bg={'grey.1'}
       w={'100%'}
       borderRadius={'10px'}
@@ -332,16 +334,22 @@ const SubmittingAuthProcess = () => {
           앱에서 인증을 진행해 주세요.
         </Text>
       </VStack>
-      <Flex gap={'5px'} alignItems={'center'}>
-        <VStack spacing={'6px'} alignItems={'center'}>
+      <Flex
+        gap={'5px'}
+        alignItems={'center'}
+        w={'100%'}
+        flexDir={{ base: 'column', sm: 'row' }}
+      >
+        <VStack w={'100%'} spacing={'6px'} alignItems={'center'}>
           <Flex
             border={'1px solid'}
             borderColor={'primary.2'}
             borderRadius={'10px'}
-            p={'16px'}
+            px={'16px'}
+            py={{ base: '9px', sm: '16px' }}
             justifyContent={'center'}
             alignItems={'center'}
-            w={'94px'}
+            w={{ base: '100%', sm: '94px' }}
           >
             <DeviceMobile1Icon boxSize={'28px'} />
           </Flex>
@@ -361,8 +369,12 @@ const SubmittingAuthProcess = () => {
             <Text textStyle={'pre-body-68'} color={'grey.9'}></Text>
           </Flex>
         </VStack>
-        <CaretRightIcon boxSize={'24px'} />
+        <CaretRightIcon
+          boxSize={'24px'}
+          display={{ base: 'none', sm: 'block' }}
+        />
         <VStack
+          w={'100%'}
           spacing={'6px'}
           alignItems={'center'}
           justifyContent={'flex-start'}
@@ -371,10 +383,11 @@ const SubmittingAuthProcess = () => {
             border={'1px solid'}
             borderColor={'primary.2'}
             borderRadius={'10px'}
-            p={'16px'}
+            px={'16px'}
+            py={{ base: '9px', sm: '16px' }}
             justifyContent={'center'}
             alignItems={'center'}
-            w={'94px'}
+            w={{ base: '100%', sm: '94px' }}
           >
             <AuthUserIcon boxSize={'28px'} />
           </Flex>
@@ -396,16 +409,20 @@ const SubmittingAuthProcess = () => {
             ></Text>
           </Flex>
         </VStack>
-        <CaretRightIcon boxSize={'24px'} />
-        <VStack spacing={'6px'} alignItems={'center'}>
+        <CaretRightIcon
+          display={{ base: 'none', sm: 'block' }}
+          boxSize={'24px'}
+        />
+        <VStack w={'100%'} spacing={'6px'} alignItems={'center'}>
           <Flex
             border={'1px solid'}
             borderColor={'primary.2'}
             borderRadius={'10px'}
-            p={'16px'}
+            px={'16px'}
+            py={{ base: '9px', sm: '16px' }}
             justifyContent={'center'}
             alignItems={'center'}
-            w={'94px'}
+            w={{ base: '100%', sm: '94px' }}
           >
             <DeviceMobileIcon boxSize={'28px'} />
           </Flex>

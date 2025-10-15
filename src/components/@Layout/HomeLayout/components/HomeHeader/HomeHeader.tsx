@@ -219,7 +219,11 @@ const HomeHeader = ({
           <HStack display={{ base: 'flex', md: 'none' }}>
             <Button
               variant={'black-primary'}
-              onClick={() => router.push('/loan?type=credit')}
+              onClick={() => {
+                isDrawerOpen && onDrawerClose
+
+                router.push('/loan?type=credit')
+              }}
             >
               대출 신청
             </Button>
