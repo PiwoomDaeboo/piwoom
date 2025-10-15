@@ -109,6 +109,7 @@ const HomeHeaderDrawer = ({
                 return (
                   <Box
                     key={item.label}
+                    as="a"
                     w={'100%'}
                     borderBottom={'1px solid'}
                     borderColor={'grey.2'}
@@ -119,7 +120,7 @@ const HomeHeaderDrawer = ({
                     }}
                   >
                     <Link href={item.href || '#'}>
-                      <HStack alignItems={'center'} gap={'10px'}>
+                      <HStack w={'100%'} alignItems={'center'} gap={'10px'}>
                         <Text textStyle={'pre-body-3'} color={'grey.10'}>
                           {item.label}
                         </Text>
@@ -165,8 +166,32 @@ const HomeHeaderDrawer = ({
                     <AccordionPanel py={'12px'} bg={'grey.0'}>
                       <Flex flexDir={'column'} gap={'10px'}>
                         {item.submenuItems?.map((subItem) => (
-                          <Box
+                          // <Box
+                          //   key={subItem.label}
+                          //   as="a"
+                          //   p={'12px 16px'}
+                          //   borderRadius={'16px'}
+                          //   textStyle={'pre-body-4'}
+                          //   color={'grey.10'}
+                          //   _hover={{
+                          //     bg: 'primary.1',
+                          //     color: 'primary.4',
+                          //     textStyle: 'pre-body-3',
+                          //   }}
+                          // >
+                          //   <Link href={subItem.href}>
+                          //     <Text
+                          //       w={'100%'}
+                          //       textStyle={'pre-body-4'}
+                          //       color={'grey.10'}
+                          //     >
+                          //       {subItem.label}
+                          //     </Text>
+                          //   </Link>
+                          // </Box>
+                          <Link
                             key={subItem.label}
+                            href={subItem.href}
                             p={'12px 16px'}
                             borderRadius={'16px'}
                             textStyle={'pre-body-4'}
@@ -176,9 +201,18 @@ const HomeHeaderDrawer = ({
                               color: 'primary.4',
                               textStyle: 'pre-body-3',
                             }}
+                            title={`${subItem.label} 페이지로 이동`}
+                            aria-label={`${subItem.label} 서브메뉴`}
+                            display="block"
                           >
-                            <Link href={subItem.href}>{subItem.label}</Link>
-                          </Box>
+                            <Text
+                              w={'100%'}
+                              textStyle={'pre-body-4'}
+                              color={'grey.10'}
+                            >
+                              {subItem.label}
+                            </Text>
+                          </Link>
                         ))}
                       </Flex>
                     </AccordionPanel>

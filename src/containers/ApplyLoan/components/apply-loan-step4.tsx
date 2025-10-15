@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -47,6 +47,7 @@ import {
 import { useQueryEffects } from '@/hooks/useQueryEffect'
 import { useLocalStorage } from '@/stores/local/state'
 import { useSessionStorage } from '@/stores/session/state'
+import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 import AddressModal from '../../../components/@Modal/address-modal'
 import DocumentAgreeModal from '../../../components/@Modal/document-agree-modal'
@@ -85,7 +86,12 @@ const ApplyLoanStep4 = () => {
     watch,
     formState: { errors },
   } = useFormContext()
-
+  const [userInfo, setUserInfo] = useState<{
+    name?: string
+    phone?: string
+    birth?: string
+    gender_code?: string
+  } | null>(null)
   const watchAll = watch()
   console.log('watchAll', watchAll)
   const loanAmount = useWatch({ control, name: 'loanAmount' })
@@ -145,10 +151,13 @@ const ApplyLoanStep4 = () => {
   const { identityVerificationToken } = useSessionStorage()
   const { popup_status: safeKey, reset } = useLocalStorage()
   const [isBankAccountVerified, setIsBankAccountVerified] = useState(false)
-  const idCardInputRef = useRef<HTMLInputElement>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
   const bankWatchValue = useWatch({ control, name: 'bank' })
   const accountNumberWatchValue = useWatch({ control, name: 'accountNumber' })
+  const employmentTypeWatchValue = useWatch({
+    control,
+    name: 'employmentType',
+  })
+
   const { data: settingData } = useSettingRetrieveQuery({
     variables: {
       id: 'me',
@@ -228,8 +237,7 @@ const ApplyLoanStep4 = () => {
     }
     loanCreateMutation({
       data: requestData,
-    }) // TODO: API 호출 및 성공 시 formvalues 초기화 및 성공 페이지로 이동
-    // router.push('/apply-loan-complete')
+    })
   }
 
   const onStep4Error = (errors: any) => {
@@ -308,7 +316,6 @@ const ApplyLoanStep4 = () => {
     if (fieldName && numbersOnly) {
       let value = parseInt(numbersOnly) || 0
 
-      // 대출 기간 필드의 경우 1~60 범위로 제한
       if (fieldName === 'loanPeriod') {
         value = Math.min(Math.max(value, 1), 60)
       }
@@ -346,11 +353,11 @@ const ApplyLoanStep4 = () => {
   const handleOwnerNameSearch = () => {
     accountVerifyMutation({
       data: {
-        bank: '0088',
+        bank: bankWatchValue,
         // || bankWatchValue,
-        number: '110220577207',
+        number: accountNumberWatchValue,
         // || accountNumberWatchValue,
-        birth: '880814',
+        birth: userInfo?.birth || '880814',
       },
     })
   }
@@ -358,7 +365,15 @@ const ApplyLoanStep4 = () => {
     onUntactDocumentApplyModalOpen()
   }
 
-  const employmentTypeWatchValue = useWatch({ control, name: 'employmentType' })
+  useEffect(() => {
+    const extractedUserInfo = extractUserInfoFromJWT(
+      identityVerificationToken as string,
+    )
+    if (extractedUserInfo) {
+      setUserInfo(extractedUserInfo)
+      console.log('Extracted user info:', extractedUserInfo)
+    }
+  }, [])
 
   return (
     <Container>
@@ -791,14 +806,9 @@ const ApplyLoanStep4 = () => {
             </Text>
           )}
         </InputForm>
-        {/* {employmentTypeWatchValue !== 'HOUSEWIFE' ||
-          (employmentTypeWatchValue !== 'UNEMPLOYED' && ( */}
         <InputForm label="고용구분">
           <EmploymentTypeButtons />
         </InputForm>
-        {/* ))} */}
-        {/* {employmentTypeWatchValue !== 'HOUSEWIFE' ||
-          (employmentTypeWatchValue !== 'UNEMPLOYED' && ( */}
         <InputForm label="입사년월 또는 창업시기">
           <Flex gap={'16px'}>
             <InputGroup>

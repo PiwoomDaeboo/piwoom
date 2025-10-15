@@ -624,13 +624,13 @@ const ApplyLoanStep3 = () => {
               </Box>
               <Button
                 variant={'text-primary'}
-                textStyle={'pre-body-5'}
-                size={'lg'}
                 onClick={() => {
                   window.open('https://campaign.naver.com/credit/', '_blank')
                 }}
               >
-                신용점수 조회하기
+                <Text color={'grey.8'} textStyle={'pre-caption-1'}>
+                  신용점수 조회하기
+                </Text>
               </Button>
             </>
             {errors?.creditScore && (
