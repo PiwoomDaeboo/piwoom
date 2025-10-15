@@ -158,7 +158,7 @@ const HomeHeader = ({
         >
           <Link variant={'unstyled'} href={ROUTES.MAIN}>
             <HeaderlogoIcon
-              boxSize={{ base: '107px', sm: '127px', md: '174px' }}
+              width={{ base: '107px', sm: '127px', md: '127px' }}
               h={'20px'}
             />
           </Link>

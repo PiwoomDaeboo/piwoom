@@ -40,6 +40,7 @@ export default function IdCardUpload() {
     register,
     formState: { errors },
     setValue,
+    clearErrors,
   } = useFormContext()
 
   const { mutate: uploadIdCard, isPending: isIdCardUploading } =
@@ -48,6 +49,7 @@ export default function IdCardUpload() {
         onSuccess: (data) => {
           setUploadedFileUrl(`${data.url}/${data?.fields?.key}`)
           setValue('identityCard', `${data?.fields?.key}`)
+          clearErrors('identityCard')
         },
         onError: (error) => {
           console.error('파일 업로드 실패:', error)

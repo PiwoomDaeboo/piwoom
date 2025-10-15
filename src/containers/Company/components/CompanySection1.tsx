@@ -82,43 +82,37 @@ function CompanySection1() {
         <br />더 건강하고, 더 편안한 금융을 제공하고자 합니다.
       </Text>
 
-      <Box w="100%" overflow="hidden" py={'45px'} position="relative">
-        <Box
-          display="flex"
-          gap={'32px'}
-          animation={{
-            base: 'scrollLeft 5s linear infinite',
-            md: 'scrollLeft 30s linear infinite',
-          }}
-          sx={{
-            '@keyframes scrollLeft': {
-              '0%': {
-                transform: 'translateX(0)',
-              },
-              '100%': {
-                transform: 'translateX(-100%)',
-              },
+      <Box
+        py={'45px'}
+        display="flex"
+        gap={'32px'}
+        animation={{
+          base: 'scrollLeft 20s linear infinite',
+          sm: 'scrollLeft 30s linear infinite',
+        }}
+        sx={{
+          '@keyframes scrollLeft': {
+            '0%': {
+              transform: 'translateX(0)',
             },
-          }}
-        >
-          {/* 이미지를 두 번 렌더링하여 무한 스크롤 효과 구현 */}
-          {[...imageData, ...imageData].map((data, index) => (
-            <AspectRatio
-              key={`${data.src}-${index}`}
-              ratio={512 / 380}
-              borderRadius={'20px'}
-              minW={{ base: '280px', sm: '320px', md: '400px', lg: '512px' }}
-              flexShrink={0}
-            >
-              <ImageAsNext
-                src={data.src}
-                alt={data.alt}
-                fill
-                objectFit="cover"
-              />
-            </AspectRatio>
-          ))}
-        </Box>
+            '100%': {
+              transform: 'translateX(calc(-100% / 3))',
+            },
+          },
+        }}
+      >
+        {/* 3개의 동일한 세트로 무한 스크롤 구현 */}
+        {[...imageData, ...imageData, ...imageData].map((data, index) => (
+          <AspectRatio
+            key={`${data.src}-${index}`}
+            ratio={512 / 380}
+            borderRadius={'20px'}
+            minW={{ base: '280px', sm: '320px', md: '400px', lg: '512px' }}
+            flexShrink={0}
+          >
+            <ImageAsNext src={data.src} alt={data.alt} fill objectFit="cover" />
+          </AspectRatio>
+        ))}
       </Box>
     </Flex>
   )

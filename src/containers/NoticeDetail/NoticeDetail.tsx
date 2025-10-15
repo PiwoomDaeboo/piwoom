@@ -86,7 +86,7 @@ function NoticeDetail() {
                     onClick={() => handleFileDownload(file)}
                   >
                     <PaperclipIcon boxSize={'16px'} />
-                    <Text>{file.name}</Text>
+                    <Text>{`${file.name}.${file.path.split('.').pop()}`}</Text>
                   </HStack>
                 ))}
               </VStack>
