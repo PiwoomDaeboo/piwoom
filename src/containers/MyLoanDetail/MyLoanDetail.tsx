@@ -16,6 +16,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
+import { useLoanRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
 import { useAuth } from '@/hooks/useAuth'
 
 import Detail from './components/detail'
@@ -28,7 +29,14 @@ function MyLoanDetail() {
   const { detailMenu } = router.query
   const [isDetailMenu, setIsDetailMenu] = useState<string>('detail')
   const { isLogin } = useAuth()
-  const [loanData, setLoanData] = useState<LoanDetailApiData>(SAMPLE_LOAN_DATA)
+  const { data: loanRetrieveData } = useLoanRetrieveQuery({
+    variables: {
+      id: Number(router.query.id),
+    },
+    options: {
+      enabled: !!router.query.id,
+    },
+  })
 
   useEffect(() => {
     if (detailMenu) {
@@ -74,7 +82,7 @@ function MyLoanDetail() {
                 계약번호
               </Text>
               <Text textStyle={'pre-heading-3'} color={'primary.3'}>
-                {loanData.contractNumber}
+                {loanRetrieveData?.no}
               </Text>
             </HStack>
             <Flex

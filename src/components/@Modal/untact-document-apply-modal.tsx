@@ -449,6 +449,8 @@ const SubmittingAuthProcess = () => {
       spacing={'20px'}
       alignItems={'center'}
       p={'40px'}
+      px={{ base: '10px', sm: '40px' }}
+      py={{ base: '32px', sm: '40px' }}
       bg={'grey.1'}
       w={'100%'}
       borderRadius={'10px'}
@@ -463,21 +465,23 @@ const SubmittingAuthProcess = () => {
         </Text>
       </VStack>
       <Flex
-        flexDir={{ base: 'column', sm: 'row' }}
         gap={'5px'}
         alignItems={'center'}
+        w={'100%'}
+        flexDir={{ base: 'column', sm: 'row' }}
       >
-        <VStack spacing={'6px'} alignItems={'center'}>
+        <VStack w={'100%'} spacing={'6px'} alignItems={'center'}>
           <Flex
             border={'1px solid'}
             borderColor={'primary.2'}
             borderRadius={'10px'}
-            p={'16px'}
+            px={'16px'}
+            py={{ base: '9px', sm: '16px' }}
             justifyContent={'center'}
             alignItems={'center'}
-            w={'94px'}
+            w={{ base: '100%', sm: '94px' }}
           >
-            <DeviceMobile1Icon boxSize={'24px'} />
+            <DeviceMobile1Icon boxSize={'28px'} />
           </Flex>
           <Flex flexDir={'column'} alignItems={'center'}>
             <Text textStyle={'pre-caption-1'} color={'primary.4'}>
@@ -496,10 +500,11 @@ const SubmittingAuthProcess = () => {
           </Flex>
         </VStack>
         <CaretRightIcon
-          display={{ base: 'none', sm: 'block' }}
           boxSize={'24px'}
+          display={{ base: 'none', sm: 'block' }}
         />
         <VStack
+          w={'100%'}
           spacing={'6px'}
           alignItems={'center'}
           justifyContent={'flex-start'}
@@ -508,12 +513,13 @@ const SubmittingAuthProcess = () => {
             border={'1px solid'}
             borderColor={'primary.2'}
             borderRadius={'10px'}
-            p={'16px'}
+            px={'16px'}
+            py={{ base: '9px', sm: '16px' }}
             justifyContent={'center'}
             alignItems={'center'}
-            w={'94px'}
+            w={{ base: '100%', sm: '94px' }}
           >
-            <AuthUserIcon boxSize={'24px'} />
+            <AuthUserIcon boxSize={'28px'} />
           </Flex>
           <Flex flexDir={'column'} alignItems={'center'}>
             <Text textStyle={'pre-caption-1'} color={'primary.4'}>
@@ -537,17 +543,18 @@ const SubmittingAuthProcess = () => {
           display={{ base: 'none', sm: 'block' }}
           boxSize={'24px'}
         />
-        <VStack spacing={'6px'} alignItems={'center'}>
+        <VStack w={'100%'} spacing={'6px'} alignItems={'center'}>
           <Flex
             border={'1px solid'}
             borderColor={'primary.2'}
             borderRadius={'10px'}
-            p={'16px'}
+            px={'16px'}
+            py={{ base: '9px', sm: '16px' }}
             justifyContent={'center'}
             alignItems={'center'}
-            w={'94px'}
+            w={{ base: '100%', sm: '94px' }}
           >
-            <DeviceMobileIcon boxSize={'24px'} />
+            <DeviceMobileIcon boxSize={'28px'} />
           </Flex>
           <Flex flexDir={'column'} alignItems={'center'}>
             <Text textStyle={'pre-caption-1'} color={'primary.4'}>
