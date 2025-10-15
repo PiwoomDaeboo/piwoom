@@ -29,21 +29,23 @@ import {
   useGovOtpCreateMutation,
   useGovRetrieveQuery,
 } from '@/generated/apis/Gov/Gov.query'
-import { useWetaxLoginCreateMutation } from '@/generated/apis/Wetax/Wetax.query'
+import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 import {
   AuthUserIcon,
   CaretRightIcon,
   DeviceMobile1Icon,
   DeviceMobileIcon,
+  HanaauthenticationIcon,
   KakaoAuthenticationIcon,
   KbAuthenticationIcon,
-  Loan1Icon,
   NaverAuthenticationIcon,
+  NhauthenticationIcon,
   PassAuthenticationIcon,
+  SamsungauthenticationIcon,
   ShinhanAuthenticationIcon,
   TossAuthenticationIcon,
+  WooriauthenticationIcon,
   XCircleFillIcon,
-  XIcon,
 } from '@/generated/icons/MyIcons'
 import { useSessionStorage } from '@/stores/session/state'
 import { extractUserInfoFromJWT } from '@/utils/jwt'
@@ -59,13 +61,28 @@ const passTypes = [
   { label: 'LGU+', value: '03' },
 ]
 
+// KAKAO - 카카오톡
+// SAMSUNG - 삼성패스
+// KB - 국민인증서
+// PASS - 통신사PASS
+// SHINHAN - 신한인증서
+// NAVER - 네이버
+// TOSS - 토스
+// NH - NH인증서
+// WOORI - 우리인증서
+// HANA - 하나인증서
+
 const authOptions = [
   { type: 'KAKAO', icon: KakaoAuthenticationIcon, label: '카카오' },
+  { type: 'SAMSUNG', icon: SamsungauthenticationIcon, label: '삼성패스' },
   { type: 'KB', icon: KbAuthenticationIcon, label: 'KB' },
   { type: 'PASS', icon: PassAuthenticationIcon, label: 'PASS' },
   { type: 'SHINHAN', icon: ShinhanAuthenticationIcon, label: '신한' },
   { type: 'NAVER', icon: NaverAuthenticationIcon, label: '네이버' },
   { type: 'TOSS', icon: TossAuthenticationIcon, label: '토스' },
+  { type: 'NH', icon: NhauthenticationIcon, label: 'NH' },
+  { type: 'WOORI', icon: WooriauthenticationIcon, label: '우리' },
+  { type: 'HANA', icon: HanaauthenticationIcon, label: '하나' },
 ]
 
 function UntactDocumentApplyModal({
@@ -92,6 +109,15 @@ function UntactDocumentApplyModal({
   const [completedDocuments, setCompletedDocuments] = useState<number>(0)
   const [totalDocuments, setTotalDocuments] = useState<number>(5) // 총 5개 문서
   const [currentStatus, setCurrentStatus] = useState<string>('PENDING')
+
+  const { data: userData } = useUserRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+    options: {
+      enabled: !!identityVerificationToken,
+    },
+  })
 
   useEffect(() => {
     const extractedUserInfo = extractUserInfoFromJWT(
@@ -285,9 +311,9 @@ function UntactDocumentApplyModal({
     govMutation({
       data: {
         method: selectedAuth as GovLoginRequestMethodEnumType,
-        name: userInfo?.name || '',
-        birth: userInfo?.birth || '',
-        phone: userInfo?.phone || '',
+        name: userInfo?.name || userData?.name || '',
+        birth: userInfo?.birth || userData?.birth || '',
+        phone: userInfo?.phone || userData?.phone || '',
         agency: selectedPassType as GovLoginRequestAgencyEnumType,
       },
     })
@@ -308,7 +334,7 @@ function UntactDocumentApplyModal({
           <VStack spacing={'20px'} align={'stretch'}>
             <SimpleGrid
               p={'20px'}
-              columns={4}
+              columns={{ base: 4, sm: 5 }}
               spacing={'26px'}
               bg={'grey.1'}
               w={'100%'}

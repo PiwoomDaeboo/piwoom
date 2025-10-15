@@ -696,6 +696,8 @@ export interface LoanType {
    * @maxLength 500
    */
   rrcAddress?: string
+  /** 신분증 존재여부 */
+  readonly isIdentityCard: boolean
   /** 계약 */
   readonly contract: LoanContractType | null
 }
@@ -2100,16 +2102,31 @@ export interface UsebAccessTokenErrorMessageType {
 export interface UserType {
   readonly id: number
   /**
-   * 이메일
-   * @format email
-   * @maxLength 254
+   * 이름
+   * @maxLength 50
    */
-  email: string
+  name: string
+  /**
+   * 생년월일
+   * @maxLength 8
+   */
+  birth: string
+  /**
+   * 성별 코드
+   * @maxLength 1
+   */
+  genderCode: string
   /**
    * 휴대폰번호
    * @maxLength 11
    */
   phone: string
+  /**
+   * 이메일
+   * @format email
+   * @maxLength 254
+   */
+  email: string
 }
 
 export interface UserIdentityVerificationType {
