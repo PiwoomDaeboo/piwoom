@@ -380,7 +380,7 @@ const MyLoanStep3 = () => {
             isDisabled={
               !isAgree || !agreements.privacy || !agreements.collection
             }
-            onClick={() => createContractSignature({ id: 1 })}
+            onClick={() => createContractSignature({ id: Number(userId) })}
             // onClick={() => router.push('/my-loan?step=4')}
           >
             전자서명 진행
