@@ -12,7 +12,7 @@ export const getBadgeStyle = (
     case 'CONTRACTING':
       return { color: 'accent.pink2', bg: 'accent.pink1' }
     case 'IN_PROGRESS':
-      return { color: 'accent.primary4', bg: 'accent.primary1' }
+      return { color: 'primary.4', bg: 'primary.1' }
     case 'REMITTING':
       return { color: 'secondary.2', bg: 'secondary.1' }
     case 'OVERDUE':
