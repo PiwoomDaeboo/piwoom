@@ -84,7 +84,7 @@ const HomeHeaderDrawer = ({
                 <Button
                   w={'83px'}
                   variant={'black-primary'}
-                  onClick={() => router.push('/loan?type=credit')}
+                  onClick={() => router.push('/apply-loan?step=1&type=credit')}
                 >
                   대출 신청
                 </Button>
