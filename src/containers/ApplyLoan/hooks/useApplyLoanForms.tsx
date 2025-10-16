@@ -94,15 +94,15 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       assetPostcode:
         router.query.type === 'mortgage' ?
           yup.string().required('필수 항목 입니다.')
-        : yup.string().optional(),
+        : yup.string().nullable().optional(),
       assetBaseAddress:
         router.query.type === 'mortgage' ?
           yup.string().required('필수 항목 입니다.')
-        : yup.string().optional(),
+        : yup.string().nullable().optional(),
       assetDetailAddress:
         router.query.type === 'mortgage' ?
           yup.string().required('필수 항목 입니다.')
-        : yup.string().optional(),
+        : yup.string().nullable().optional(),
       incomeCertificate: yup.string().nullable().optional(),
       residentRegistrationCopy: yup.string().nullable().optional(),
       healthInsuranceEligibilityConfirmation: yup

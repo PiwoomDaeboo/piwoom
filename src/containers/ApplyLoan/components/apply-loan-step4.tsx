@@ -233,9 +233,9 @@ const ApplyLoanStep4 = () => {
       accountHolderSsn: getValues('accountHolderSsn') || '-',
       // purposeAndRepaymentPlan: getValues('purposeAndRepaymentPlan') || '-',
       purposeAndRepaymentPlan: '-',
-      assetBaseAddress: getValues('assetBaseAddress') || '',
-      assetDetailAddress: getValues('assetDetailAddress') || '',
-      assetPostcode: getValues('assetPostcode') || '',
+      assetBaseAddress: getValues('assetBaseAddress') || '-',
+      assetDetailAddress: getValues('assetDetailAddress') || '-',
+      assetPostcode: getValues('assetPostcode') || '-',
       ...data,
     }
     loanCreateMutation({

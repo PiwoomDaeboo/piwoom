@@ -73,9 +73,9 @@ function MyLoanStatus() {
         status_in: status as LoanListParamsStatusInEnumType[],
       },
     },
-    options: {
-      enabled: !!isLogin,
-    },
+    // options: {
+    //   enabled: !!isLogin,
+    // },
   })
   const totalPages = Math.ceil((loanList?.count || 0) / postsPerPage)
 
@@ -138,7 +138,9 @@ function MyLoanStatus() {
         </Container>
       </Flex>
       <Container py={'64px'}>
-        {isLogin ?
+        {!identityVerificationToken && <MyLoanAuthentication />}
+
+        {isLogin && identityVerificationToken && (
           <>
             <Tabs index={selectedTab} onChange={handleTabChange}>
               <TabList>
@@ -203,49 +205,7 @@ function MyLoanStatus() {
               </Flex>
             )}
           </>
-        : identityVerificationToken ?
-          <MyLoanAuthentication />
-        : <Tabs index={selectedTab} onChange={handleTabChange}>
-            <TabList>
-              <Tab>
-                <Text
-                  textStyle={'pre-body-3'}
-                  color={selectedTab === 0 ? 'grey.10' : 'grey.7'}
-                >
-                  진행중
-                </Text>
-              </Tab>
-              <Tab>
-                <Text
-                  textStyle={'pre-body-3'}
-                  color={selectedTab === 1 ? 'grey.10' : 'grey.7'}
-                >
-                  상환완료
-                </Text>
-              </Tab>
-              <Tab>
-                <Text
-                  textStyle={'pre-body-3'}
-                  color={selectedTab === 2 ? 'grey.10' : 'grey.7'}
-                >
-                  대출거절
-                </Text>
-              </Tab>
-            </TabList>
-
-            <TabPanels p={'0px'}>
-              <TabPanel p={'36px 0px 48px 0px'}>
-                <NonData variant="loan" />
-              </TabPanel>
-              <TabPanel>
-                <NonData variant="loan" />
-              </TabPanel>
-              <TabPanel>
-                <NonData variant="loan" />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        }
+        )}
       </Container>
     </>
   )
