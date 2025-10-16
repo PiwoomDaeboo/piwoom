@@ -24,6 +24,7 @@ import ModalBasis from '@/components/@Modal/ModalBasis'
 import { ENV } from '@/configs/env'
 import { useUserIdentityVerificationCreateMutation } from '@/generated/apis/User/User.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
+import { useLocalStorage } from '@/stores/local/state'
 import { useSessionStorage } from '@/stores/session/state'
 import { extractUserInfoFromJWT } from '@/utils/jwt'
 
@@ -34,6 +35,7 @@ const ApplyLoanStep2 = () => {
     setValue,
     control,
   } = useFormContext()
+  const { popup_status: safeKey, reset } = useLocalStorage()
 
   const emailValue = useWatch({ control, name: 'email' })
 
@@ -188,6 +190,7 @@ const ApplyLoanStep2 = () => {
             isDisabled={!isPhoneCertification || !!errors.email || !emailValue}
             onClick={() => {
               setValue('kind', typeConvert(router.query.type as string))
+              reset('popup_status')
               router.replace('/apply-loan?step=3&type=' + router.query.type)
             }}
           >
