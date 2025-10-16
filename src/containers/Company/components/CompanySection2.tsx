@@ -32,7 +32,12 @@ function CompanySection2() {
         >
           <HeaderlogoIcon boxSize={'223px'} h={'44px'} />
           <Text
-            textStyle={{ base: 'pre-body-6', sm: 'pre-body-2' }}
+            textAlign={'center'}
+            textStyle={{
+              base: 'pre-body-6',
+              sm: 'pre-body-2',
+              md: 'pre-body-2',
+            }}
             color={'grey.10'}
           >
             피움대부 주식회사는 국내 사모펀드 출신의 대표이사가
@@ -40,7 +45,12 @@ function CompanySection2() {
             2023년에 설립한 지자체 등록 대부업체입니다.
           </Text>
           <Text
-            textStyle={{ base: 'pre-body-6', sm: 'pre-body-2' }}
+            textAlign={'center'}
+            textStyle={{
+              base: 'pre-body-6',
+              sm: 'pre-body-2',
+              md: 'pre-body-2',
+            }}
             color={'grey.10'}
           >
             공공정보 API, 스크래핑 기술, 피움만의 신용평가시스템(CCS)을 활용해

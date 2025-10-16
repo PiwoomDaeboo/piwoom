@@ -131,14 +131,14 @@ function Notice() {
                   <Badge bg="primary.4" color={'white'}>
                     공지사항
                   </Badge>
-                  <Text
+                  {/* <Text
                     display={{ base: 'none', sm: 'block' }}
                     w={'36px'}
                     textStyle={'pre-body-6'}
                     color={'grey.7'}
                   >
                     {index + 1}
-                  </Text>
+                  </Text> */}
                   <Text
                     textStyle={item.title ? 'pre-body-3' : 'pre-body-4'}
                     color={'grey.10'}

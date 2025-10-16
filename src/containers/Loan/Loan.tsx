@@ -174,7 +174,7 @@ function Loan() {
             <Flex
               flexDir={{ base: 'row', md: 'column' }}
               w={{ base: '100%', md: 'fit-content' }}
-              borderBottom={'1px solid'}
+              borderBottom={{ base: '1px solid', md: 'none' }}
               borderColor={'border.basic.1'}
               overflowX={{ base: 'auto', md: 'visible' }}
               gap={{ base: '12px', md: '0' }}

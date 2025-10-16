@@ -37,24 +37,22 @@ interface Company {
 interface DocumentAgreeModalProps {
   isOpen: boolean
   onClose: () => void
+  onAgree?: () => void
   onSelectCompany?: (company: Company) => void
 }
 
 function DocumentAgreeModal({
   isOpen,
   onClose,
+  onAgree,
   onSelectCompany,
 }: DocumentAgreeModalProps) {
-  const [name, setName] = useState('1')
-  const [no, setNo] = useState('')
-  const [searchType, setSearchType] = useState('name')
-  const [currentPage, setCurrentPage] = useState(1)
-  const postsPerPage = 5
   const [isAgree, setIsAgree] = useState(false)
   const handleAgree = (checked: boolean) => {
     setIsAgree(checked)
   }
   const handleConfirm = () => {
+    onAgree?.()
     onClose()
   }
 

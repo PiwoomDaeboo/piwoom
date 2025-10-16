@@ -22,7 +22,7 @@ const CHECKBOX_STYLES = {
   '.chakra-checkbox__control': {
     borderRadius: '50%',
     border: '1px solid',
-    borderColor: 'border.basic.1',
+    borderColor: 'grey.3',
     _checked: {
       bg: 'primary.3',
       borderColor: 'primary.3',
@@ -357,6 +357,14 @@ const ApplyLoanStep1 = () => {
           <Button
             variant={'solid-primary'}
             w={'160px'}
+            isDisabled={
+              !agreements.all ||
+              !CONFIRMATION_ITEMS.every(
+                (item) =>
+                  confirmations[item.key as keyof typeof confirmations] !==
+                  null,
+              )
+            }
             onClick={handleNextClick}
           >
             다음

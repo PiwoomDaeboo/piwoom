@@ -218,7 +218,7 @@ const HomeHeader = ({
               </Text>
             </Button>
             <Button
-              onClick={() => router.push('/loan?type=credit')}
+              onClick={() => router.push('/apply-loan?step=1&type=credit')}
               variant={'black-primary'}
             >
               <Text textStyle={'pre-body-7'} color={'grey.0'}>
@@ -232,7 +232,7 @@ const HomeHeader = ({
               onClick={() => {
                 isDrawerOpen && onDrawerClose
 
-                router.push('/loan?type=credit')
+                router.push('/apply-loan?step=1&type=credit')
               }}
             >
               대출 신청

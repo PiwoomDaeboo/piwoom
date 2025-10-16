@@ -45,7 +45,7 @@ const Section1 = () => {
       icon: Loan3Icon,
       title: '부동산 담보대출',
       description: '중/후순위 대출',
-      badges: ['#아파트', '##LTV 최대 90%까지', '#6억원 초과 대출 가능'],
+      badges: ['#아파트', '#LTV 최대 90%까지', '#6억원 초과 대출 가능'],
       href: '/loan?type=mortgage',
     },
   ]

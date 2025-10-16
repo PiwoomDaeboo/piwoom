@@ -117,7 +117,7 @@ function Section3() {
                 flexShrink={0}
               >
                 <data.icon boxSize={'70px'} />
-                <VStack alignItems={'flex-start'}>
+                <VStack alignItems={'flex-start'} gap={'0px'}>
                   <Text textStyle={'pre-body-4'}>{data.description1}</Text>
                   <Text textStyle={'pre-body-3'}>{data.description2}</Text>
                 </VStack>
