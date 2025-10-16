@@ -136,7 +136,7 @@ const LoanProcedureIntroduction = () => {
           <CommonSelect
             value={{
               label:
-                activeTab === 0 ? '월급대출 및 신용대출 절차' : (
+                activeTab === 0 ? '비상금 대출 및 신용대출 절차' : (
                   '부동산 담보대출 절차'
                 ),
               value: activeTab,
@@ -148,7 +148,7 @@ const LoanProcedureIntroduction = () => {
             }}
             options={[
               {
-                label: '월급대출 및 신용대출 절차',
+                label: '비상금 대출 및 신용대출 절차',
                 value: 0,
               },
               {
@@ -169,7 +169,7 @@ const LoanProcedureIntroduction = () => {
           <TabList>
             <Tab>
               <Text textStyle={'pre-body-3'} color={'grey.10'}>
-                월급대출 및 신용대출 절차
+                비상금 대출 및 신용대출 절차
               </Text>
             </Tab>
             <Tab>

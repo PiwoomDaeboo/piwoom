@@ -4,7 +4,7 @@ export const MENU_ITEMS = [
     href: '/loan',
     hasSubmenu: true,
     submenuItems: [
-      { label: '월급 대출', href: '/loan?type=salary' },
+      { label: '비상금 대출', href: '/loan?type=salary' },
       { label: '신용 대출', href: '/loan?type=credit' },
       { label: '부동산 담보대출', href: '/loan?type=mortgage' },
       { label: '대출 절차 안내', href: '/loan?type=procedure' },

@@ -165,7 +165,7 @@ function RepaymentMethodModal({ isOpen, onClose }: RepaymentMethodModalProps) {
             >
               원리금균등 분할상환이란?
             </Text>
-            <Text fontSize={'14px'} color={'grey.8'} mb={'8px'}>
+            <Text textStyle={'pre-body-6'} color={'grey.8'} mb={'8px'}>
               원금과 이자의 비율을 조정해{' '}
               <Box as={'span'} textStyle={'pre-body-5'} color={'grey.10'}>
                 매달 같은 금액을 갚는 방식

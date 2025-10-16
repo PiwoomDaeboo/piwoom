@@ -81,6 +81,7 @@ const ApplyLoanStep4 = () => {
     register,
     setValue,
     getValues,
+    clearErrors,
     control,
     handleSubmit,
     watch,
@@ -495,7 +496,10 @@ const ApplyLoanStep4 = () => {
                 variant={
                   loanAmount === 300 ? 'outline-primary' : 'outline-secondary'
                 }
-                onClick={() => handleLoanAmountSelect('300')}
+                onClick={() => {
+                  clearErrors('loanAmount')
+                  handleLoanAmountSelect('300')
+                }}
               >
                 300
               </Button>
@@ -506,7 +510,10 @@ const ApplyLoanStep4 = () => {
                 variant={
                   loanAmount === 600 ? 'outline-primary' : 'outline-secondary'
                 }
-                onClick={() => handleLoanAmountSelect('600')}
+                onClick={() => {
+                  clearErrors('loanAmount')
+                  handleLoanAmountSelect('600')
+                }}
               >
                 600
               </Button>
@@ -517,7 +524,10 @@ const ApplyLoanStep4 = () => {
                 variant={
                   loanAmount === 900 ? 'outline-primary' : 'outline-secondary'
                 }
-                onClick={() => handleLoanAmountSelect('900')}
+                onClick={() => {
+                  clearErrors('loanAmount')
+                  handleLoanAmountSelect('900')
+                }}
               >
                 900
               </Button>
@@ -528,7 +538,10 @@ const ApplyLoanStep4 = () => {
                 variant={
                   loanAmount === 1200 ? 'outline-primary' : 'outline-secondary'
                 }
-                onClick={() => handleLoanAmountSelect('1200')}
+                onClick={() => {
+                  clearErrors('loanAmount')
+                  handleLoanAmountSelect('1200')
+                }}
               >
                 1200
               </Button>
@@ -539,7 +552,10 @@ const ApplyLoanStep4 = () => {
                 variant={
                   loanAmount === 1500 ? 'outline-primary' : 'outline-secondary'
                 }
-                onClick={() => handleLoanAmountSelect('1500')}
+                onClick={() => {
+                  clearErrors('loanAmount')
+                  handleLoanAmountSelect('1500')
+                }}
               >
                 1500
               </Button>
@@ -592,6 +608,9 @@ const ApplyLoanStep4 = () => {
                 type="number"
                 min={0}
                 max={60}
+                onKeyDown={(evt) =>
+                  ['e', 'E', '+', '-'].includes(evt.key) && evt.preventDefault()
+                }
                 onPaste={handlePaste}
                 textAlign="right"
                 pr="50px"
@@ -616,7 +635,10 @@ const ApplyLoanStep4 = () => {
                 variant={
                   loanPeriod === 6 ? 'outline-primary' : 'outline-secondary'
                 }
-                onClick={() => handleLoanPeriodSelect('6개월')}
+                onClick={() => {
+                  clearErrors('loanPeriod')
+                  handleLoanPeriodSelect('6개월')
+                }}
               >
                 6개월
               </Button>
@@ -626,7 +648,10 @@ const ApplyLoanStep4 = () => {
                 variant={
                   loanPeriod === 12 ? 'outline-primary' : 'outline-secondary'
                 }
-                onClick={() => handleLoanPeriodSelect('12개월')}
+                onClick={() => {
+                  clearErrors('loanPeriod')
+                  handleLoanPeriodSelect('12개월')
+                }}
               >
                 12개월
               </Button>
@@ -636,7 +661,10 @@ const ApplyLoanStep4 = () => {
                 variant={
                   loanPeriod === 24 ? 'outline-primary' : 'outline-secondary'
                 }
-                onClick={() => handleLoanPeriodSelect('24개월')}
+                onClick={() => {
+                  clearErrors('loanPeriod')
+                  handleLoanPeriodSelect('24개월')
+                }}
               >
                 24개월
               </Button>
@@ -646,7 +674,10 @@ const ApplyLoanStep4 = () => {
                 variant={
                   loanPeriod === 36 ? 'outline-primary' : 'outline-secondary'
                 }
-                onClick={() => handleLoanPeriodSelect('36개월')}
+                onClick={() => {
+                  clearErrors('loanPeriod')
+                  handleLoanPeriodSelect('36개월')
+                }}
               >
                 36개월
               </Button>
@@ -942,7 +973,7 @@ const ApplyLoanStep4 = () => {
             </Text>
           )}
         </InputForm>
-        <InputForm label="주거소유형태">
+        <InputForm label="주거 형태">
           <Flex flexWrap={'wrap'} gap={'8px'}>
             <Button
               bg={residenceType === 'OWNED' ? 'primary.1' : 'grey.0'}

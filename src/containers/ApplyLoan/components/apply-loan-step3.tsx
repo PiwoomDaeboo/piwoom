@@ -367,7 +367,7 @@ const ApplyLoanStep3 = () => {
           </VStack>
         </VStack>
 
-        <InputForm label="대출용도">
+        <InputForm label="대출 용도">
           <Flex w={'100%'} gap={'16px'}>
             <VStack w={'50%'} alignItems={'flex-start'}>
               <Box w={'100%'}>
@@ -393,7 +393,7 @@ const ApplyLoanStep3 = () => {
 
               {loanPurpose === 'DIRECT_INPUT' && (
                 <Input
-                  placeholder="대출 용도 직접입력"
+                  placeholder="대출 용도 입력"
                   {...register('purposeDetail')}
                   data-field="purposeDetail"
                 />
