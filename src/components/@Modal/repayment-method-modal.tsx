@@ -128,7 +128,11 @@ function RepaymentMethodModal({ isOpen, onClose }: RepaymentMethodModalProps) {
                     h={'100%'}
                     w={'100%'}
                     p={'10px 12px'}
-                  />
+                  >
+                    <Text textStyle={'pre-caption-1'} color={'grey.0'}>
+                      원금
+                    </Text>
+                  </Flex>
                   <Text h={'16px'} textStyle={'pre-caption-4'} color={'grey.8'}>
                     대출 만기일
                   </Text>
