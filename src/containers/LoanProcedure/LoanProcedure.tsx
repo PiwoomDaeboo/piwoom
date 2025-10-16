@@ -101,7 +101,7 @@ function LoanProcedure() {
           <TabList>
             <Tab>
               <Text textStyle={'pre-body-3'} color={'grey.10'}>
-                월급대출 및 신용대출 절차
+                비상금 대출 및 신용대출 절차
               </Text>
             </Tab>
             <Tab>

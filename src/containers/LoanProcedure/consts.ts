@@ -1,9 +1,9 @@
-export const BUTTON_DATA = ['월급 대출', '신용 대출', '부동산 담보대출']
+export const BUTTON_DATA = ['비상금 대출', '신용 대출', '부동산 담보대출']
 
 export const CARD_DATA = [
   {
     icon: 'loan1',
-    title: '월급 대출',
+    title: '비상금 대출',
     description: '월급 직장인을 위한',
     description1: '비상금이 필요할 때',
     description2: '빠르고 간편한 비대면 대출',

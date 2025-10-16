@@ -29,7 +29,7 @@ const Section1 = () => {
   const cardData = [
     {
       icon: Loan1Icon,
-      title: '월급 대출',
+      title: '비상금 대출',
       description: '직장인을 위한 대출',
       badges: ['#최대 6개월치 월급', '#최저 월 1% ~', '#최대 1500만원 까지'],
       href: '/loan?type=salary',
@@ -134,7 +134,7 @@ const Section1 = () => {
                 <Flex
                   justifyContent={'center'}
                   alignItems={'center'}
-                  w={'100%'}
+                  w={'80%'}
                   flexWrap={'wrap'}
                   gap={'8px'}
                 >

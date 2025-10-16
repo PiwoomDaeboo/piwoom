@@ -100,8 +100,8 @@ function Section5() {
             <VStack
               w={'100%'}
               alignItems={'flex-start'}
-              justifyContent={'space-between'}
-              gap={'28px'}
+              // justifyContent={'space-between'}
+              // gap={'28px'}
             >
               <VStack alignItems={'flex-start'}>
                 <Text textStyle={'pre-heading-1'}>공지사항</Text>
@@ -109,16 +109,22 @@ function Section5() {
                   중요한 소식과 안내를 빠르게 전해드려요
                 </Text>
               </VStack>
-              <Button
-                variant={'outline-secondary'}
-                onClick={() => router.push('/notice')}
-                alignItems={'center'}
+              <HStack
+                w={'100%'}
+                justifyContent={'flex-end'}
+                alignItems={'flex-end'}
               >
-                <Text textStyle={'pre-caption-1'}>확인하기</Text>
-                <CaretRightIcon boxSize={'16px'} />
-              </Button>
+                <Button
+                  variant={'outline-secondary'}
+                  onClick={() => router.push('/notice')}
+                  alignItems={'center'}
+                >
+                  <Text textStyle={'pre-caption-1'}>확인하기</Text>
+                  <CaretRightIcon boxSize={'16px'} />
+                </Button>
+              </HStack>
             </VStack>
-            <NoticeIcon boxSize={'100px'} />
+            {/* <NoticeIcon boxSize={'100px'} /> */}
           </Flex>
           <Flex
             p={'32px 28px'}

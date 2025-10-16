@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -86,6 +86,16 @@ const HomeHeader = ({
       }
     }
   }, [lastScrollY, isDrawerOpen])
+  const hoverMenuMarginRight = useCallback((index: number) => {
+    if (index === 0) {
+      return '24px'
+    }
+    if (index === 1) {
+      return '54px'
+    }
+
+    return '0px'
+  }, [])
 
   return (
     <Flex
@@ -200,7 +210,7 @@ const HomeHeader = ({
           </HStack>
           <HStack gap={'10px'} display={{ base: 'none', md: 'flex' }}>
             <Button
-              onClick={() => router.push(ROUTES.MY_LOAN_MAIN)}
+              onClick={() => router.push(ROUTES.MY_LOAN_STATUS_MAIN)}
               variant={'outline-secondary'}
             >
               <Text textStyle={'pre-body-7'} color={'grey.8'}>
@@ -264,6 +274,8 @@ const HomeHeader = ({
                 justifyContent={'center'}
                 h={'100%'}
                 gap={'40px'}
+                mr={hoverMenuMarginRight(hoveredMenuIndex)}
+                ml={hoveredMenuIndex === 2 ? '190px' : '0px'}
               >
                 {MENU_ITEMS[hoveredMenuIndex].submenuItems?.map(
                   (subItem, subIndex) => (
@@ -273,7 +285,7 @@ const HomeHeader = ({
                       variant={'unstyled'}
                     >
                       <Text
-                        textStyle={'pre-body-3'}
+                        textStyle={'pre-body-4'}
                         color={'grey.10'}
                         _hover={{ color: 'primary.4' }}
                         cursor={'pointer'}

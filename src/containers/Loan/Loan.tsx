@@ -88,8 +88,6 @@ function Loan() {
     },
   })
 
-  console.log(settingData)
-
   useEffect(() => {
     const { type } = router.query
 
@@ -373,7 +371,16 @@ function Loan() {
                         w={'100%'}
                         py={'40px'}
                         gap="20px"
-                        borderBottom={'1px solid'}
+                        borderBottom={
+                          (
+                            sectionIndex ===
+                            CARD_DATA[activeButtonIndex].details.sections
+                              .length -
+                              1
+                          ) ?
+                            'none'
+                          : '1px solid'
+                        }
                         borderColor={'border.basic.1'}
                         flexDir={{ base: 'column', md: 'row' }}
                       >

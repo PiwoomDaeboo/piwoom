@@ -34,14 +34,14 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       monthlyIncome: yup
         .number()
         .typeError('숫자만 입력 가능합니다.')
-        .integer()
+        .integer('숫자만 입력 가능합니다.')
         .positive()
         .min(0)
         .required('필수 항목 입니다.'),
       monthlyFixedExpense: yup
         .number()
         .typeError('숫자만 입력 가능합니다.')
-        .integer()
+        .integer('숫자만 입력 가능합니다.')
         .positive()
         .min(0)
         .required('필수 항목 입니다.'),
@@ -52,16 +52,33 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       safeKey: yup.string().nullable().optional(),
 
       // Step4 fields
-      loanAmount: yup
+      loanAmount:
+        router.query.type === 'salary' ?
+          yup
+            .number()
+            .typeError('숫자만 입력 가능합니다.')
+            .integer('숫자만 입력 가능합니다.')
+            .positive()
+            .min(300, '300만원 이상 입력 가능합니다.')
+            .max(1500, '신청 금액은 최대 1,500만원까지 가능해요')
+            .required('필수 항목 입니다.')
+        : yup
+            .number()
+            .typeError('숫자만 입력 가능합니다.')
+            .integer('숫자만 입력 가능합니다.')
+            .positive()
+            .min(300, '300만원 이상 입력 가능합니다.')
+            .required('필수 항목 입니다.'),
+
+      repaymentType: yup.string().required('필수 항목 입니다.'),
+      interestPaymentDate: yup.string().required('필수 항목 입니다.'),
+      loanPeriod: yup
         .number()
         .typeError('숫자만 입력 가능합니다.')
-        .integer()
+        .integer('숫자만 입력 가능합니다.')
         .positive()
         .min(0)
         .required('필수 항목 입니다.'),
-      repaymentType: yup.string().required('필수 항목 입니다.'),
-      interestPaymentDate: yup.string().required('필수 항목 입니다.'),
-      loanPeriod: yup.string().required('필수 항목 입니다.'),
       bank: yup.string().required('필수 항목 입니다.'),
       accountNumber: yup.string().required('필수 항목 입니다.'),
       // accountHolder: yup.string().required('필수 항목 입니다.'),
@@ -146,7 +163,7 @@ export const useApplyLoanStep3Form = (
   const step3Schema = useMemo(() => {
     return yup.object().shape({
       // Step3 필드들만 필수로 설정
-      purpose: yup.string().required('대출용도를 선택해주세요.'),
+      purpose: yup.string().required('대출 용도를 선택해주세요.'),
       totalAsset: yup.string().required('총 자산 규모를 선택해주세요.'),
       annualIncome: yup.string().required('연 소득을 선택해주세요.'),
       monthlyIncome: yup.string().required('월 실수령액을 입력해주세요.'),
