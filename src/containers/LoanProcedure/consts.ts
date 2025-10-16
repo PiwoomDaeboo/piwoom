@@ -56,7 +56,7 @@ export const CARD_DATA = [
   {
     icon: 'loan2',
     title: '신용 대출',
-    description: '피움 자체 신용도 평가 시스템으로',
+    description: '피움 자체 신용도 평가',
     description1: '성장 자금이 필요할 때',
     description2: '빠르고 간편한 비대면 대출',
     badges: ['#DSR 미적용', '#신용점수 영향 X', '#서류 제출 X'],
@@ -77,7 +77,7 @@ export const CARD_DATA = [
         {
           title: '구비서류',
           type: 'text',
-          content: '신분증 / 소득증빙서류 (선택사항)',
+          content: '주민등록증 / 운전면허증 / 여권 중 택1',
         },
         {
           title: '조건',
@@ -111,7 +111,7 @@ export const CARD_DATA = [
     description: '중/후순위 대출',
     description1: '주택 구매 자금이 부족하거나 추가 담보대출이 필요할 때',
     description2: '금융권 대출 한도가 부족한 고객님을 위한 담보대출 상품',
-    badges: ['#아파트', '##LTV 최대 90%까지', '#6억원 초과 대출 가능'],
+    badges: ['#아파트', '#LTV 최대 90%까지', '#6억원 초과 대출 가능'],
     details: {
       sections: [
         {

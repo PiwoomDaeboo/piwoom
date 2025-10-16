@@ -62,7 +62,7 @@ const ApplyLoanProcess = ({ step }: { step: string }) => {
               textStyle={'pre-caption-1'}
               color={step === '3' ? 'primary.4' : 'grey.5'}
             >
-              적합성 적정성
+              적합성•적정성
             </Text>
           </HStack>
           <HStack>

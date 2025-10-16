@@ -142,12 +142,10 @@ const ApplyLoanStep4 = () => {
   const [fileUploadedFileName, setFileUploadedFileName] = useState<
     string[] | null
   >([])
-  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null)
-  const [shouldExecuteGovQuery, setShouldExecuteGovQuery] = useState(false)
   const [isDocumentSubmissionCompleted, setIsDocumentSubmissionCompleted] =
     useState(false)
   const [addressModalType, setAddressModalType] = useState<
-    'normal' | 'real-estate'
+    'normal' | 'real-estate' | 'company'
   >('normal')
   const { identityVerificationToken } = useSessionStorage()
   const { popup_status: safeKey, reset } = useLocalStorage()
@@ -158,7 +156,8 @@ const ApplyLoanStep4 = () => {
     control,
     name: 'employmentType',
   })
-
+  const companyName = useWatch({ control, name: 'companyName' })
+  const companyAddress = useWatch({ control, name: 'companyAddress' })
   const { data: settingData } = useSettingRetrieveQuery({
     variables: {
       id: 'me',
@@ -291,7 +290,9 @@ const ApplyLoanStep4 = () => {
     setValue('detailAddress', company.detailAddress || '')
   }
 
-  const handleAddressModalOpen = (type: 'normal' | 'real-estate') => {
+  const handleAddressModalOpen = (
+    type: 'normal' | 'real-estate' | 'company',
+  ) => {
     setAddressModalType(type)
     onAddressModalOpen()
   }
@@ -398,6 +399,7 @@ const ApplyLoanStep4 = () => {
       <DocumentAgreeModal
         isOpen={isDocumentAgreeModalOpen}
         onClose={onDocumentAgreeModalClose}
+        onAgree={() => setValue('electronicDocumentConsent', true)}
       />
       <RepaymentMethodModal
         isOpen={isRepaymentMethodModalOpen}
@@ -573,6 +575,11 @@ const ApplyLoanStep4 = () => {
           onClickTooltip={onRepaymentMethodModalOpen}
         >
           <RepaymentTypeButtons />
+          {errors?.repaymentType && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.repaymentType?.message as string}
+            </Text>
+          )}
         </InputForm>
         <InputForm label="이자납입일자">
           <Box w={'100%'}>
@@ -719,6 +726,9 @@ const ApplyLoanStep4 = () => {
           <InputForm label="계좌번호">
             <Input
               placeholder="계좌번호"
+              onKeyDown={(evt) =>
+                ['e', 'E', '+', '-'].includes(evt.key) && evt.preventDefault()
+              }
               onPaste={handlePaste}
               {...register('accountNumber')}
               data-field="accountNumber"
@@ -808,8 +818,12 @@ const ApplyLoanStep4 = () => {
             )}
           </InputForm>
         </Flex>
-        {companyBusinessNumber && (
-          <InputForm label="직장 사업자등록번호">
+        {companyName && (
+          <InputForm
+            label="직장 사업자등록번호"
+            isRequired={companyAddress ? true : false}
+            isOptional={companyAddress ? false : true}
+          >
             <Input
               placeholder="직장 사업자등록번호"
               // onPaste={handlePaste}
@@ -824,22 +838,83 @@ const ApplyLoanStep4 = () => {
             )}
           </InputForm>
         )}
-        <InputForm isRequired label="주소">
-          <VStack w={'100%'} gap={'8px'} alignItems={'stretch'}>
-            <Input
-              placeholder="기본주소"
-              w={'100%'}
-              value={baseAddress || ''}
-              readOnly
-              data-field="baseAddress"
-            />
-          </VStack>
-          {errors?.baseAddress && (
-            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
-              {errors?.baseAddress?.message as string}
-            </Text>
-          )}
-        </InputForm>
+
+        {!companyAddress && (
+          <InputForm label="주소">
+            <VStack w={'100%'} gap={'8px'} alignItems={'stretch'}>
+              <Flex w={'100%'} gap={'8px'}>
+                <Input
+                  placeholder="기본주소"
+                  w={'100%'}
+                  value={companyAddress || ''}
+                  readOnly
+                  data-field="companyAddress"
+                />
+                <Button
+                  variant={'solid-primary'}
+                  size={'lg'}
+                  onClick={() => handleAddressModalOpen('company')}
+                >
+                  주소검색
+                </Button>
+              </Flex>
+              <Input
+                placeholder="상세주소"
+                w={'100%'}
+                {...register('companyDetailAddress')}
+                data-field="companyDetailAddress"
+              />
+            </VStack>
+            {errors?.companyAddress && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.companyAddress?.message as string}
+              </Text>
+            )}
+            {errors?.companyDetailAddress && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.companyDetailAddress?.message as string}
+              </Text>
+            )}
+          </InputForm>
+        )}
+        {companyAddress && companyName && (
+          <InputForm isRequired label="주소">
+            <VStack w={'100%'} gap={'8px'} alignItems={'stretch'}>
+              <Flex w={'100%'} gap={'8px'}>
+                <Input
+                  placeholder="기본주소"
+                  w={'100%'}
+                  value={companyAddress || ''}
+                  readOnly
+                  data-field="companyAddress"
+                />
+                <Button
+                  variant={'solid-primary'}
+                  size={'lg'}
+                  onClick={() => handleAddressModalOpen('normal')}
+                >
+                  주소검색
+                </Button>
+              </Flex>
+              <Input
+                placeholder="상세주소"
+                w={'100%'}
+                {...register('companyDetailAddress')}
+                data-field="companyDetailAddress"
+              />
+            </VStack>
+            {errors?.companyAddress && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.companyAddress?.message as string}
+              </Text>
+            )}
+            {errors?.companyDetailAddress && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.companyDetailAddress?.message as string}
+              </Text>
+            )}
+          </InputForm>
+        )}
         <InputForm label="고용구분">
           <EmploymentTypeButtons />
         </InputForm>
@@ -852,6 +927,9 @@ const ApplyLoanStep4 = () => {
                 onPaste={handlePaste}
                 textAlign="right"
                 pr="40px"
+                onKeyDown={(evt) =>
+                  ['e', 'E', '+', '-'].includes(evt.key) && evt.preventDefault()
+                }
                 {...register('hireYear', {
                   valueAsNumber: true,
                 })}
@@ -867,6 +945,10 @@ const ApplyLoanStep4 = () => {
                 type="number"
                 onPaste={handlePaste}
                 textAlign="right"
+                onKeyDown={(evt) => {
+                  ;['e', 'E', '+', '-'].includes(evt.key) &&
+                    evt.preventDefault()
+                }}
                 pr="40px"
                 {...register('hireMonth', {
                   valueAsNumber: true,
@@ -938,7 +1020,10 @@ const ApplyLoanStep4 = () => {
                 )
               }
               w={'209px'}
-              onClick={() => handleHousingTypeSelect('APARTMENT')}
+              onClick={() => {
+                clearErrors('housingType')
+                handleHousingTypeSelect('APARTMENT')
+              }}
             >
               아파트/주상복합
             </Button>
@@ -950,7 +1035,10 @@ const ApplyLoanStep4 = () => {
                 )
               }
               w={'209px'}
-              onClick={() => handleHousingTypeSelect('MULTI_FAMILY')}
+              onClick={() => {
+                clearErrors('housingType')
+                handleHousingTypeSelect('MULTI_FAMILY')
+              }}
             >
               연립/다세대/다가구
             </Button>
@@ -962,7 +1050,10 @@ const ApplyLoanStep4 = () => {
                 )
               }
               w={'209px'}
-              onClick={() => handleHousingTypeSelect('OTHER')}
+              onClick={() => {
+                clearErrors('housingType')
+                handleHousingTypeSelect('OTHER')
+              }}
             >
               그 외
             </Button>
@@ -983,7 +1074,10 @@ const ApplyLoanStep4 = () => {
                 )
               }
               w={'209px'}
-              onClick={() => handleResidenceTypeSelect('OWNED')}
+              onClick={() => {
+                clearErrors('residenceType')
+                handleResidenceTypeSelect('OWNED')
+              }}
             >
               자가
             </Button>
@@ -995,7 +1089,10 @@ const ApplyLoanStep4 = () => {
                 )
               }
               w={'209px'}
-              onClick={() => handleResidenceTypeSelect('JEONSE')}
+              onClick={() => {
+                clearErrors('residenceType')
+                handleResidenceTypeSelect('JEONSE')
+              }}
             >
               전세
             </Button>
@@ -1007,7 +1104,10 @@ const ApplyLoanStep4 = () => {
                 )
               }
               w={'209px'}
-              onClick={() => handleResidenceTypeSelect('MONTHLY_RENT')}
+              onClick={() => {
+                clearErrors('residenceType')
+                handleResidenceTypeSelect('MONTHLY_RENT')
+              }}
             >
               월세
             </Button>
@@ -1063,7 +1163,11 @@ const ApplyLoanStep4 = () => {
             </Text>
           )}
         </InputForm>
-        <InputForm label="비대면 서류제출">
+        <Box w={'100%'} h={'1px'} bg={'border.basic.1'} my={'48px'} />
+        <Text textStyle={'pre-heading-3'} color={'primary.4'}>
+          서류 제출
+        </Text>
+        <InputForm label="" isRequired={false}>
           <Button
             variant={'outline-primary'}
             textStyle={'pre-body-5'}
@@ -1124,7 +1228,7 @@ const ApplyLoanStep4 = () => {
           </Text>
         </VStack>
         <AdditionalFileUpload />
-        <Box w={'100%'} h={'1px'} bg={'border.basic.1'} my={'48px'} />
+
         <IdcardUpload />
         <Flex
           w={'100%'}

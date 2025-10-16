@@ -28,12 +28,18 @@ import { useFormContext } from 'react-hook-form'
 import { useUploadFileToS3Mutation } from '@/apis/s3-file-uploader/S3FileUploaderApi.query'
 import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
-import { CameraIcon, InfoFillIcon } from '@/generated/icons/MyIcons'
+import {
+  CameraIcon,
+  DocumenticonIcon,
+  InfoFillIcon,
+  XIcon,
+} from '@/generated/icons/MyIcons'
 import { MY_IMAGES } from '@/generated/path/images'
 
 export default function IdCardUpload() {
   const router = useRouter()
   const idCardInputRef = useRef<HTMLInputElement>(null)
+  const [uploadedFileName, setUploadedFileName] = useState<string>('')
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
@@ -50,6 +56,10 @@ export default function IdCardUpload() {
         onSuccess: (data) => {
           setUploadedFileUrl(`${data.url}/${data?.fields?.key}`)
           setValue('identityCard', `${data?.fields?.key}`)
+          setUploadedFileName(
+            data?.fields?.key?.split('/').pop() || data?.fields?.key,
+          )
+
           clearErrors('identityCard')
         },
         onError: (error) => {
@@ -141,25 +151,43 @@ export default function IdCardUpload() {
             accept="image/*"
             display="none"
           />
-          {previewUrl ?
-            <ImageAsNext
-              w={'100%'}
-              h={'100%'}
-              objectFit={'contain'}
-              fill
-              unoptimized
-              src={previewUrl}
-              alt="신분증 미리보기"
-            />
-          : <ImageAsNext
-              w={'100%'}
-              h={'100%'}
-              fill
-              src={MY_IMAGES.ID_CARD.src}
-              alt="신분증"
-            />
-          }
+          <ImageAsNext
+            w={'100%'}
+            h={'100%'}
+            fill
+            src={MY_IMAGES.ID_CARD.src}
+            alt="신분증"
+          />
         </Flex>
+        {uploadedFileName?.length && uploadedFileName?.length > 0 && (
+          <Flex gap={'8px'} flexWrap={'wrap'}>
+            <Flex gap={'12px'} p={'8px 12px'} alignItems={'center'}>
+              <HStack gap={'4px'}>
+                <Center
+                  bg={'primary.1'}
+                  borderRadius={'50%'}
+                  w={'28px'}
+                  h={'28px'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  // p={'4px'}
+                >
+                  <DocumenticonIcon boxSize={'16px'} />
+                </Center>
+                <Text textStyle={'pre-body-68'} color={'grey.8'}>
+                  {uploadedFileName}
+                </Text>
+              </HStack>
+              <Box
+                p={0}
+                cursor={'pointer'}
+                onClick={() => setUploadedFileName('')}
+              >
+                <XIcon boxSize={'16px'} />
+              </Box>
+            </Flex>
+          </Flex>
+        )}
       </VStack>
       <InputForm label="신분증" isRequired>
         <Button
@@ -170,8 +198,12 @@ export default function IdCardUpload() {
           isLoading={isIdCardUploading}
           loadingText="업로드 중..."
           gap={'8px'}
+          isDisabled={!!uploadedFileName?.length}
         >
-          <CameraIcon boxSize={'24px'} color={'primary.4'} />
+          <CameraIcon
+            boxSize={'24px'}
+            color={uploadedFileName?.length ? '#00368640' : 'primary.4'}
+          />
           신분증 업로드
         </Button>
         {errors?.identityCard && (

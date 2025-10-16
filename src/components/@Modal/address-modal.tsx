@@ -24,7 +24,7 @@ import ModalBasis from '@/components/@Modal/ModalBasis'
 interface AddressModalProps {
   isOpen: boolean
   onClose: () => void
-  type: 'normal' | 'real-estate'
+  type: 'normal' | 'real-estate' | 'company'
 }
 
 function AddressModal({ isOpen, onClose, type }: AddressModalProps) {
@@ -59,13 +59,17 @@ function AddressModal({ isOpen, onClose, type }: AddressModalProps) {
       // }
       setValue('postcode', data.zonecode)
       onClose()
-    } else {
+    } else if (type === 'real-estate') {
       setValue('assetBaseAddress', baseAddress)
       // const currentAssetDetailAddress = getValues('assetDetailAddress')
       // if (!currentAssetDetailAddress && buildingInfo) {
       //   setValue('assetDetailAddress', buildingInfo)
       // }
       setValue('assetPostcode', data.zonecode)
+      onClose()
+    } else if (type === 'company') {
+      setValue('companyAddress', baseAddress)
+      setValue('companyDetailAddress', buildingInfo)
       onClose()
     }
   }

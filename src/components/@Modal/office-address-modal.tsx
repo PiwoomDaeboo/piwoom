@@ -15,7 +15,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
-import { Select } from 'chakra-react-select'
+import { useFormContext } from 'react-hook-form'
 
 import ModalBasis from '@/components/@Modal/ModalBasis'
 import CommonSelect from '@/components/CommonSelect'
@@ -43,7 +43,8 @@ function OfficeAddressModal({
   onClose,
   onSelectCompany,
 }: OfficeAddressModalProps) {
-  const [name, setName] = useState('1')
+  const { setValue } = useFormContext()
+  const [name, setName] = useState('')
   const [no, setNo] = useState('')
   const [searchType, setSearchType] = useState('name')
   const [currentPage, setCurrentPage] = useState(1)
@@ -70,6 +71,15 @@ function OfficeAddressModal({
   }
 
   const handleConfirm = () => {
+    onSelectCompany?.({
+      no: '',
+      name: name,
+      businessNo: '',
+      baseAddress: '',
+      detailAddress: '',
+    })
+    setName('')
+    setNo('')
     onClose()
   }
 
@@ -77,8 +87,27 @@ function OfficeAddressModal({
     onClose()
   }
 
+  // 사업자등록번호 포맷팅 함수
+  const formatBusinessNumber = (businessNo: string) => {
+    // 숫자만 추출
+    const numbers = businessNo.replace(/\D/g, '')
+
+    // 000-00-00000 형태로 포맷팅
+    if (numbers.length >= 10) {
+      return `${numbers.slice(0, 3)}-${numbers.slice(3, 5)}-${numbers.slice(5, 10)}`
+    } else if (numbers.length >= 5) {
+      return `${numbers.slice(0, 3)}-${numbers.slice(3, 5)}-${numbers.slice(5)}`
+    } else if (numbers.length >= 3) {
+      return `${numbers.slice(0, 3)}-${numbers.slice(3)}`
+    }
+    return numbers
+  }
+
   const handleCompanySelect = (company: Company) => {
-    onSelectCompany?.(company)
+    setValue('companyName', company.name)
+    setValue('companyBusinessNumber', formatBusinessNumber(company.businessNo))
+    setValue('companyAddress', company.baseAddress)
+    setValue('companyDetailAddress', company.detailAddress)
     setName('')
     onClose()
   }
@@ -94,7 +123,7 @@ function OfficeAddressModal({
         },
       },
       options: {
-        enabled: !!isOpen,
+        enabled: !!isOpen && !!name.trim(),
       },
     })
   const totalPages = Math.ceil((companyList?.count || 0) / postsPerPage)
@@ -175,7 +204,9 @@ function OfficeAddressModal({
             flex={1}
             overflowY={'auto'}
             minH={0}
-            maxH={{ base: 'calc(100vh - 100px)', md: 'none' }}
+            h={{ base: 'calc(100vh - 200px)', md: '450px' }}
+            maxH={{ base: 'calc(100vh - 200px)', md: '600px' }}
+            // maxH={{ base: 'calc(100vh - 100px)', md: 'none' }}
           >
             {isCompanyListLoading && (
               <Center h={'100%'}>
@@ -194,7 +225,9 @@ function OfficeAddressModal({
                     <br />
                     입력하신 {name}을 회사명으로 사용하시겠어요?
                   </Text>
-                  <Button variant={'outline-secondary'}>사용하기</Button>
+                  <Button variant={'outline-secondary'} onClick={handleConfirm}>
+                    사용하기
+                  </Button>
                 </VStack>
               </Center>
             )}
@@ -247,7 +280,7 @@ function OfficeAddressModal({
                       wordBreak={'break-word'}
                       whiteSpace={'normal'}
                     >
-                      {company.businessNo}
+                      {formatBusinessNumber(company.businessNo)}
                     </Text>
                   </Flex>
                   <Flex gap={'16px'} w={'100%'}>
@@ -274,7 +307,7 @@ function OfficeAddressModal({
         </Flex>
       }
       footer={
-        companyList?.count && (
+        companyList?.isNext && (
           <Flex w={'100%'} justifyContent={'center'} h={'fit-content'}>
             <Flex justifyContent={'center'}>
               <Pagination
