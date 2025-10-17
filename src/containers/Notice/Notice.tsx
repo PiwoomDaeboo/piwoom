@@ -11,6 +11,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
   Text,
   VStack,
 } from '@chakra-ui/react'
@@ -18,7 +19,7 @@ import {
 import NonData from '@/components/NonData'
 import { Pagination } from '@/components/pagination'
 import { useNoticeListQuery } from '@/generated/apis/Notice/Notice.query'
-import { MagnifyingGlassIcon } from '@/generated/icons/MyIcons'
+import { MagnifyingGlassIcon, XIcon } from '@/generated/icons/MyIcons'
 import { formatDate } from '@/utils/date-format'
 
 function Notice() {
@@ -109,10 +110,25 @@ function Notice() {
                 onChange={(e) => setSearchInput(e.target.value)}
                 onKeyDown={handleSearch}
               />
+              {searchInput.length > 0 && (
+                <InputRightElement
+                  onClick={() => {
+                    setSearchInput('')
+                    router.push({
+                      pathname: router.pathname,
+                      query: {
+                        page: 1,
+                        search_keyword: '',
+                      },
+                    })
+                  }}
+                  cursor={'pointer'}
+                >
+                  <XIcon color="grey.8" boxSize={'16px'} />
+                </InputRightElement>
+              )}
             </InputGroup>
           </Flex>
-
-          {/* {noticeList?.count === 0 && <NonData />} */}
           <Box w={'100%'} minH={'400px'}>
             {pinnedNoticeList?.results?.map((item, index) => (
               <Flex

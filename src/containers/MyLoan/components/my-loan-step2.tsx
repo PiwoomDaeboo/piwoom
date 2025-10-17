@@ -23,15 +23,14 @@ import {
   REPAYMENT_TYPE,
 } from '@/constants/loan'
 import { useLoanListQuery } from '@/generated/apis/Loan/Loan.query'
-import { MY_IMAGES } from '@/generated/path/images'
-import { useAuthRedirect } from '@/hooks/useAuthRedirect'
+import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 
 import CustomerInfoModal from './customer-info-modal'
-import ElectronicContractModal from './electronic-contract-modal'
 
 const MyLoanStep2 = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [userId, setUserId] = useState<number | null>(null)
+  const [address, setAddress] = useState<string>('')
   const router = useRouter()
 
   const { data: loanList, isLoading } = useLoanListQuery({
@@ -43,7 +42,13 @@ const MyLoanStep2 = () => {
       },
     },
   })
-  console.log('loanList', loanList)
+
+  const { data: userData } = useUserRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
+  console.log('userData', userData)
 
   return (
     <Container>
@@ -51,6 +56,7 @@ const MyLoanStep2 = () => {
         isOpen={isOpen}
         onClose={onClose}
         userId={userId as number}
+        address={address || ''}
       />
 
       <Flex
@@ -103,6 +109,7 @@ const MyLoanStep2 = () => {
                   <Button
                     onClick={() => {
                       setUserId(item?.id)
+                      setAddress(item?.baseAddress + ' ' + item?.detailAddress)
                       onOpen()
                     }}
                     variant={'solid-primary'}

@@ -22,7 +22,11 @@ import {
 import NonData from '@/components/NonData'
 import { Pagination } from '@/components/pagination'
 import { useFaqListQuery } from '@/generated/apis/Faq/Faq.query'
-import { CaretDownIcon, MagnifyingGlassIcon } from '@/generated/icons/MyIcons'
+import {
+  CaretDownIcon,
+  MagnifyingGlassIcon,
+  XIcon,
+} from '@/generated/icons/MyIcons'
 
 function Faq() {
   const router = useRouter()
@@ -100,7 +104,23 @@ function Faq() {
                 onKeyDown={handleSearch}
                 pl={'48px'}
               />
-              <InputRightElement></InputRightElement>
+              {searchInput.length > 0 && (
+                <InputRightElement
+                  onClick={() => {
+                    setSearchInput('')
+                    router.push({
+                      pathname: router.pathname,
+                      query: {
+                        page: 1,
+                        search_keyword: '',
+                      },
+                    })
+                  }}
+                  cursor={'pointer'}
+                >
+                  <XIcon color="grey.8" boxSize={'16px'} />
+                </InputRightElement>
+              )}
             </InputGroup>
           </Flex>
 

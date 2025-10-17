@@ -13,12 +13,14 @@ interface CustomerInfoModalProps {
   isOpen: boolean
   onClose: () => void
   userId: number
+  address: string
 }
 
 function CustomerInfoModal({
   isOpen,
   onClose,
   userId,
+  address,
 }: CustomerInfoModalProps) {
   const [code, setCode] = useState('')
   const router = useRouter()
@@ -136,7 +138,7 @@ function CustomerInfoModal({
               현재집주소(주민등본상)
             </Text>
             <Text textStyle={'pre-body-5'} color={'grey.8'}>
-              {loanData?.baseAddress || '-'}
+              {address || '-'}
             </Text>
           </HStack>
           <Text textStyle={'pre-body-6'} color={'grey.6'}>
