@@ -362,7 +362,7 @@ const ApplyLoanStep4 = () => {
         // || bankWatchValue,
         number: accountNumberWatchValue,
         // || accountNumberWatchValue,
-        birth: userInfo?.birth || '880814',
+        birth: userInfo?.birth ? userInfo.birth.slice(2) : '880814',
       },
     })
   }
@@ -1150,6 +1150,12 @@ const ApplyLoanStep4 = () => {
               w={'100%'}
               {...register('assetDetailAddress')}
               data-field="assetDetailAddress"
+              onChange={(e) => {
+                register('assetDetailAddress').onChange(e)
+                if (errors?.assetDetailAddress) {
+                  clearErrors('assetDetailAddress')
+                }
+              }}
             />
           </VStack>
           {errors?.assetBaseAddress && (

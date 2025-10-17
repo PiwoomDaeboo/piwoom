@@ -2,9 +2,12 @@ import { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
-import { Center, Spinner } from '@chakra-ui/react'
+import { Center, Spinner, useDisclosure } from '@chakra-ui/react'
 
 import { FormProvider } from 'react-hook-form'
+
+import SessionExpiredModal from '@/components/@Modal/session-expired-modal'
+import { useIdleTimer } from '@/hooks/useIdleTimer'
 
 import ApplyLoanProcess from './components/apply-loan-process'
 import ApplyLoanStep1 from './components/apply-loan-step1'
@@ -14,9 +17,15 @@ import ApplyLoanStep4 from './components/apply-loan-step4'
 import { useApplyLoanForm } from './hooks/useApplyLoanForms'
 
 function ApplyLoan() {
-  const [isLoading, setIsLoading] = useState(false)
-
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  // const { isOpen, onOpen, onClose } = useDisclosure()
+  // const { isIdle, setIsIdle } = useIdleTimer({ timeout: 10 * 60 * 1000 }) // 5분 테스트
+  // useEffect(() => {
+  //   if (isIdle) {
+  //     onOpen()
+  //   }
+  // }, [isIdle, router])
   const { step, type } = router.query
   const methods = useApplyLoanForm()
 
@@ -35,6 +44,12 @@ function ApplyLoan() {
   }
   return (
     <FormProvider {...methods}>
+      {/* <SessionExpiredModal
+        isOpen={isOpen}
+        onClose={onClose}
+        setIsIdle={setIsIdle}
+        routePath={'/apply-loan?step=1'}
+      /> */}
       <ApplyLoanProcess step={(step as string) || '1'} />
       {/* type query와 관계없이 step에 따라 화면이 결정됨 */}
       {(step === '1' || step === undefined) && <ApplyLoanStep1 />}

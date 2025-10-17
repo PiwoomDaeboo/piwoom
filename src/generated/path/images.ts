@@ -41,6 +41,10 @@ export const MY_IMAGES = {
     src: '/images/consulting_image_mo.png',
     alt: 'consulting-image-mo',
   },
+  CONSULTING_IMAGE_TAB: {
+    src: '/images/consulting_image_tab.png',
+    alt: 'consulting-image-tab',
+  },
   EQUAL_INSTALLMENT: {
     src: '/images/equal_installment.png',
     alt: 'equal-installment',

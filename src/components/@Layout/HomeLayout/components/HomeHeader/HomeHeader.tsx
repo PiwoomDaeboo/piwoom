@@ -11,15 +11,9 @@ import {
   HStack,
   IconButton,
   Text,
-  VStack,
 } from '@chakra-ui/react'
 
-import {
-  HeaderlogoIcon,
-  LogoIcon,
-  MagicubeIcon,
-  MenuIcon,
-} from 'generated/icons/MyIcons'
+import { MenuIcon } from 'generated/icons/MyIcons'
 
 import ImageAsNext from '@/components/ImageAsNext'
 import { MY_IMAGES } from '@/generated/path/images'
@@ -73,7 +67,6 @@ const HomeHeader = ({
           setIsHeaderVisible(true)
         }
       }
-
       setLastScrollY(currentScrollY)
     }
 

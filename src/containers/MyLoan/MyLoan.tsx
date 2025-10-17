@@ -51,6 +51,7 @@ function MyLoan() {
         isOpen={isOpen}
         onClose={onClose}
         setIsIdle={setIsIdle}
+        routePath={'/my-loan'}
       />
       <MyLoanProcess step={(step as string) || '1'} />
       {(step === undefined || step === '1') && <MyLoanStep1 />}

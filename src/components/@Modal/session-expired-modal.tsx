@@ -10,12 +10,14 @@ interface SessionExpiredModalProps {
   isOpen: boolean
   setIsIdle: (isIdle: boolean) => void
   onClose: () => void
+  routePath: string
 }
 
 export default function SessionExpiredModal({
   isOpen,
   setIsIdle,
   onClose,
+  routePath = '/my-loan',
 }: SessionExpiredModalProps) {
   const router = useRouter()
   return (
@@ -37,7 +39,7 @@ export default function SessionExpiredModal({
           <Text textAlign={'center'} textStyle={'pre-body-68'} color={'grey.7'}>
             세션이 만료되었습니다.
             <br />
-            대출 조회를 다시 진행해 주세요!
+            대출 신청(조회)을 다시 진행해 주세요!
           </Text>
         </Flex>
       }
@@ -47,7 +49,7 @@ export default function SessionExpiredModal({
             w="100%"
             variant={'solid-primary'}
             onClick={() => {
-              router.push('/my-loan')
+              router.push(routePath)
               setIsIdle(false)
               onClose()
             }}

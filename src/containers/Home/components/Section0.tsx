@@ -16,9 +16,9 @@ const Section0 = () => {
           sm: MY_IMAGES.MAIN_IMAGE_TAB.src,
           md: MY_IMAGES.MAIN_IMAGE_PC.src,
         }}
-        bgSize={'cover'}
+        bgSize={'100%'}
         bgPosition={'center'}
-        py={{ base: '40px', sm: '60px', md: '73px' }}
+        py={{ base: '40px', sm: '80px', md: '73px' }}
       >
         <Container>
           <VStack alignItems={'flex-start'}>

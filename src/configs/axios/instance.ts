@@ -16,13 +16,13 @@ const isDev = ENV.NODE_ENV === 'development'
 
 const instance = axios.create({
   baseURL: ENV.API_BASE_URL || 'http://localhost:5001',
-  timeout: 5000,
+  timeout: 29000,
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-const retry = retryRequestManager({ cleanupTimeOut: 5000 })
+const retry = retryRequestManager({ cleanupTimeOut: 29000 })
 
 // refresh token 요청용 별도 instance (interceptor 없음)
 const refreshInstance = axios.create({

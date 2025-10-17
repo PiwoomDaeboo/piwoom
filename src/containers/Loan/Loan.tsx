@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -77,6 +77,7 @@ function Loan() {
   const router = useRouter()
   const [activeButtonIndex, setActiveButtonIndex] = useState<number>(0)
   const [showProcedure, setShowProcedure] = useState<boolean>(false)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
   const {
     isOpen: isLoanImpossibleOpen,
     onOpen: onLoanImpossibleOpen,
@@ -106,6 +107,32 @@ function Loan() {
       setShowProcedure(false)
     }
   }, [router.query])
+
+  // activeButtonIndex 변경 시 해당 버튼으로 스크롤
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current
+      const buttons = container.querySelectorAll('button')
+      const targetButton = buttons[activeButtonIndex]
+
+      if (targetButton) {
+        const containerRect = container.getBoundingClientRect()
+        const buttonRect = targetButton.getBoundingClientRect()
+
+        // 버튼이 컨테이너 중앙에 오도록 스크롤
+        const scrollLeft =
+          buttonRect.left -
+          containerRect.left -
+          containerRect.width / 2 +
+          buttonRect.width / 2
+
+        container.scrollTo({
+          left: container.scrollLeft + scrollLeft,
+          behavior: 'smooth',
+        })
+      }
+    }
+  }, [activeButtonIndex])
 
   const handleButtonClick = (index: number) => {
     setActiveButtonIndex(index)
@@ -172,6 +199,7 @@ function Loan() {
               대출
             </Text>
             <Flex
+              ref={scrollContainerRef}
               flexDir={{ base: 'row', md: 'column' }}
               w={{ base: '100%', md: 'fit-content' }}
               borderBottom={{ base: '1px solid', md: 'none' }}
