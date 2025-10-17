@@ -746,14 +746,14 @@ const ApplyLoanStep4 = () => {
             fontWeight={600}
             color={'grey.8'}
             isLoading={isAccountVerifyMutationLoading}
-            disabled={isAccountVerifyMutationLoading || isBankAccountVerified}
+            isDisabled={isAccountVerifyMutationLoading || isBankAccountVerified}
             w={'209px'}
             onClick={handleOwnerNameSearch}
           >
             {isBankAccountVerified ? '예금주 실명조회 완료' : '예금주 실명조회'}
           </Button>
           {isBankAccountVerified && (
-            <Text textStyle={'pre-body-6'} color={'grey.8'}>
+            <Text textStyle={'pre-body-7'} color={'accent.green2'}>
               예금주 실명조회가 완료됐어요
             </Text>
           )}
