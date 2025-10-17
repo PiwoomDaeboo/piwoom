@@ -11,7 +11,7 @@ export const MENU_ITEMS = [
     ],
   },
   {
-    label: '나의 대출조회',
+    label: '나의 대출 조회',
     href: '/my-loan',
     hasSubmenu: true,
     submenuItems: [
