@@ -16,7 +16,7 @@ const Section0 = () => {
           sm: MY_IMAGES.MAIN_IMAGE_TAB.src,
           md: MY_IMAGES.MAIN_IMAGE_PC.src,
         }}
-        bgSize={'100%'}
+        bgSize={'cover'}
         bgPosition={'center'}
         py={{ base: '40px', sm: '80px', md: '73px' }}
       >
