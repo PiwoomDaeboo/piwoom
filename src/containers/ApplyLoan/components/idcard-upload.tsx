@@ -159,6 +159,24 @@ export default function IdCardUpload() {
             alt="신분증"
           />
         </Flex>
+      </VStack>
+      <InputForm label="신분증" isRequired>
+        <Button
+          variant={'outline-primary'}
+          textStyle={'pre-body-5'}
+          w={'209px'}
+          onClick={handleIdCardUploadButtonClick}
+          isLoading={isIdCardUploading}
+          loadingText="업로드 중..."
+          gap={'8px'}
+          isDisabled={!!uploadedFileName?.length}
+        >
+          <CameraIcon
+            boxSize={'24px'}
+            color={uploadedFileName?.length ? '#00368640' : 'primary.4'}
+          />
+          신분증 업로드
+        </Button>
         {uploadedFileName?.length && uploadedFileName?.length > 0 && (
           <Flex gap={'8px'} flexWrap={'wrap'}>
             <Flex gap={'12px'} p={'8px 12px'} alignItems={'center'}>
@@ -188,24 +206,6 @@ export default function IdCardUpload() {
             </Flex>
           </Flex>
         )}
-      </VStack>
-      <InputForm label="신분증" isRequired>
-        <Button
-          variant={'outline-primary'}
-          textStyle={'pre-body-5'}
-          w={'209px'}
-          onClick={handleIdCardUploadButtonClick}
-          isLoading={isIdCardUploading}
-          loadingText="업로드 중..."
-          gap={'8px'}
-          isDisabled={!!uploadedFileName?.length}
-        >
-          <CameraIcon
-            boxSize={'24px'}
-            color={uploadedFileName?.length ? '#00368640' : 'primary.4'}
-          />
-          신분증 업로드
-        </Button>
         {errors?.identityCard && (
           <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
             {errors?.identityCard?.message as string}

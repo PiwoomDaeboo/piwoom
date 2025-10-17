@@ -56,7 +56,7 @@ export const CARD_DATA = [
   {
     icon: 'loan2',
     title: '신용 대출',
-    description: '피움 자체 신용도 평가 시스템으로',
+    description: '피움 자체 신용도 평가',
     description1: '성장 자금이 필요할 때',
     description2: '빠르고 간편한 비대면 대출',
     badges: ['#DSR 미적용', '#신용점수 영향 X', '#서류 제출 X'],
