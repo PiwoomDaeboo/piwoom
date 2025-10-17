@@ -1010,7 +1010,7 @@ const ApplyLoanStep4 = () => {
           )}
         </InputForm>
 
-        <InputForm label="주거종류">
+        <InputForm label="주거 종류">
           <Flex flexWrap={'wrap'} gap={'8px'}>
             <Button
               bg={housingType === 'APARTMENT' ? 'primary.1' : 'grey.0'}

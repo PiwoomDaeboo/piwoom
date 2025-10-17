@@ -98,8 +98,8 @@ const outlineSecondary = defineVariant({
   hover: { bgColor: 'primary.1' },
   active: { bgColor: 'primary.2' },
   disabled: {
-    color: 'content.6',
-    borderColor: 'border.basic.2',
+    color: '#00368640',
+    borderColor: '#00368640',
     bgColor: 'background.basic.1',
   },
 })
