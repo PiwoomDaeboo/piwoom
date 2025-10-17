@@ -1227,8 +1227,9 @@ const ApplyLoanStep4 = () => {
             추후 대출 현황 조회에서 서류를 업데이트 부탁드립니다.
           </Text>
         </VStack>
-        <AdditionalFileUpload />
 
+        <AdditionalFileUpload />
+        <Box w={'100%'} h={'1px'} bg={'border.basic.1'} my={'48px'} />
         <IdcardUpload />
         <Flex
           w={'100%'}

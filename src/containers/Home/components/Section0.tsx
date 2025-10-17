@@ -18,7 +18,7 @@ const Section0 = () => {
         }}
         bgSize={'cover'}
         bgPosition={'center'}
-        py={{ base: '55px', sm: '60px', md: '73px' }}
+        py={{ base: '40px', sm: '60px', md: '73px' }}
       >
         <Container>
           <VStack alignItems={'flex-start'}>
@@ -35,7 +35,7 @@ const Section0 = () => {
               더 크게 피어날 수 있도록
             </Text>
             <Button
-              mt={{ base: '28px', md: '32px' }}
+              mt={{ base: '14px', md: '32px' }}
               variant={'solid-secondary'}
               minW={'180px'}
               minH={'48px'}

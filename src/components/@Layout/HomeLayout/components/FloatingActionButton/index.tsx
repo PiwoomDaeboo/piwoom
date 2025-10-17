@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { Flex, Text, VStack, useToast } from '@chakra-ui/react'
 
 import {
@@ -8,6 +10,8 @@ import {
 
 export default function FloatingActionButton() {
   const toast = useToast()
+  const [isVisible, setIsVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
 
   // PC 환경 감지 함수
   const isPC = () => {
@@ -16,10 +20,38 @@ export default function FloatingActionButton() {
     )
   }
 
-  // 전화 연결 처리 함수
+  // 모바일 환경 감지 함수
+  const isMobile = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    )
+  }
+
+  // 스크롤 이벤트 핸들러
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+
+      if (isMobile()) {
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+          setIsVisible(false)
+        } else {
+          setIsVisible(true)
+        }
+      }
+
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [lastScrollY])
+
   const handlePhoneCall = () => {
     if (isPC()) {
-      // PC에서는 전화번호를 클립보드에 복사
       navigator.clipboard
         .writeText('055-266-2686')
         .then(() => {
@@ -43,7 +75,11 @@ export default function FloatingActionButton() {
       spacing={'20px'}
       position={'fixed'}
       bottom={{ base: '20px', sm: '40px' }}
-      right={{ base: '20px', md: '40px' }}
+      right={{
+        base: isVisible ? '20px' : '-80px',
+        md: '40px',
+      }}
+      transition={'right 0.3s ease-in-out'}
     >
       <Flex
         w={'60px'}
