@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -100,6 +100,43 @@ const ApplyLoanStep2 = () => {
   }
 
   const [isPhoneCertification, setIsPhoneCertification] = useState(false)
+
+  useEffect(() => {
+    const {
+      identityVerificationId,
+      identityVerificationTxId,
+      transactionType,
+    } = router.query
+
+    if (
+      identityVerificationId &&
+      identityVerificationTxId &&
+      transactionType === 'IDENTITY_VERIFICATION'
+    ) {
+      // identity verification 완료 처리
+      userIdentityVerificationCreate({
+        data: {
+          identityVerificationId: identityVerificationId as string,
+        },
+      })
+
+      const {
+        identityVerificationId: _,
+        identityVerificationTxId: __,
+        transactionType: ___,
+        ...cleanQuery
+      } = router.query
+      router.replace(
+        {
+          pathname: router.pathname,
+          query: cleanQuery,
+        },
+        undefined,
+        { shallow: true },
+      )
+    }
+  }, [router.query, userIdentityVerificationCreate])
+
   return (
     <Container>
       <Flex py={{ base: '40px', sm: '48px', md: '84px' }} flexDir={'column'}>
