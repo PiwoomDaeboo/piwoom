@@ -67,7 +67,7 @@ const Section1 = () => {
   }
 
   return (
-    <Flex w="100%" justifyContent="center" py={'80px'}>
+    <Flex w="100%" justifyContent="center" py={{ base: '24px', sm: '80px' }}>
       <Container>
         <Box mb={{ base: '32px', md: '36px' }}>
           <Text textStyle={'pre-heading-1'}>
@@ -157,6 +157,7 @@ const Section1 = () => {
             return (
               <Card
                 key={index}
+                onClick={() => router.push(card.href)}
                 flexDir={'column'}
                 justifyContent={'space-between'}
                 alignItems={'stretch'}

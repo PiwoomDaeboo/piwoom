@@ -100,6 +100,7 @@ function Section5() {
             <VStack
               w={'100%'}
               alignItems={'flex-start'}
+              gap={'0px'}
               // justifyContent={'space-between'}
               // gap={'28px'}
             >
@@ -111,6 +112,7 @@ function Section5() {
               </VStack>
               <HStack
                 w={'100%'}
+                mt={'28px'}
                 justifyContent={'flex-end'}
                 alignItems={'flex-end'}
               >
