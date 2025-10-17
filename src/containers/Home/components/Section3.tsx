@@ -69,16 +69,26 @@ function Section3() {
       py={{ base: '64px', sm: '96px', md: '160px' }}
     >
       <Flex
-        flexDir={{ base: 'column', sm: 'row' }}
+        display={{ base: 'none', sm: 'flex' }}
         alignItems={'flex-end'}
         px={'16px'}
       >
         <Text textStyle={'pre-display-4'} textAlign={'center'}>
-          피움의 대출, 이런 분들께
-          <Box as={'br'} display={{ base: 'block', sm: 'none' }} /> 도움이 될
-          거예요
+          피움의 대출, 이런 분들께 도움이 될 거예요
         </Text>
         <LeafIcon boxSize={'24px'} mb={'4px'} />
+      </Flex>
+      <Flex
+        display={{ base: 'flex', sm: 'none' }}
+        flexDir={'column'}
+        alignItems={'center'}
+        px={'16px'}
+      >
+        <Text textStyle={'pre-display-4'}>피움의 대출, 이런 분들께</Text>
+        <Flex alignItems={'flex-end'}>
+          <Text textStyle={'pre-display-4'}>도움이 될 거예요</Text>
+          <LeafIcon boxSize={'24px'} />
+        </Flex>
       </Flex>
 
       <Box w="100%" overflow="hidden" py={'45px'} position="relative">
@@ -86,7 +96,7 @@ function Section3() {
           display="flex"
           gap={'32px'}
           animation={{
-            base: 'scrollLeft 20s linear infinite',
+            base: 'scrollLeft 5s linear infinite',
             sm: 'scrollLeft 30s linear infinite',
           }}
           sx={{
@@ -104,8 +114,8 @@ function Section3() {
           {[...sectionData, ...sectionData, ...sectionData].map(
             (data, index) => (
               <Flex
-                minH={'230px'}
-                minW={'280px'}
+                minH={{ base: '200px', sm: '230px', md: '230px' }}
+                minW={{ base: '250px', sm: '290px', md: '280px' }}
                 p={'32px 28px'}
                 bg={'grey.0'}
                 borderRadius={'20px'}

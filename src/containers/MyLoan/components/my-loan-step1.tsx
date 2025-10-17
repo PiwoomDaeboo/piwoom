@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { useRouter } from 'next/router'
 
 import {
@@ -81,6 +83,48 @@ const MyLoanStep1 = () => {
       },
     })
   }
+
+  useEffect(() => {
+    const {
+      identityVerificationId,
+      identityVerificationTxId,
+      transactionType,
+    } = router.query
+
+    if (
+      identityVerificationId &&
+      identityVerificationTxId &&
+      transactionType === 'IDENTITY_VERIFICATION'
+    ) {
+      // identity verification 완료 처리
+      userIdentityVerificationCreate({
+        data: {
+          identityVerificationId: identityVerificationId as string,
+        },
+      })
+      userLoginCreate({
+        data: {
+          identityVerificationId: identityVerificationId as string,
+        },
+      })
+
+      const {
+        identityVerificationId: _,
+        identityVerificationTxId: __,
+        transactionType: ___,
+        ...cleanQuery
+      } = router.query
+      router.replace(
+        {
+          pathname: router.pathname,
+          query: cleanQuery,
+        },
+        undefined,
+        { shallow: true },
+      )
+    }
+  }, [router.query, userIdentityVerificationCreate])
+
   return (
     <Container>
       <Flex
