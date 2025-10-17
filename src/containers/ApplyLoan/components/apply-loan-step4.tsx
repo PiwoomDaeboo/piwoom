@@ -207,7 +207,7 @@ const ApplyLoanStep4 = () => {
       options: {
         onSuccess: (data: any) => {
           console.log('loanCreateMutation', data)
-          localStorage.removeItem('popup_status')
+          reset('popup_status')
           router.replace('/apply-loan-complete')
         },
         onError: (error: any) => {
@@ -231,8 +231,7 @@ const ApplyLoanStep4 = () => {
       safeKey: safeKey,
       accountHolder: getValues('accountHolder') || '-',
       accountHolderSsn: getValues('accountHolderSsn') || '-',
-      // purposeAndRepaymentPlan: getValues('purposeAndRepaymentPlan') || '-',
-      purposeAndRepaymentPlan: '-',
+      purposeAndRepaymentPlan: getValues('purposeAndRepaymentPlan') || '-',
       assetBaseAddress: getValues('assetBaseAddress') || '-',
       assetDetailAddress: getValues('assetDetailAddress') || '-',
       assetPostcode: getValues('assetPostcode') || '-',
@@ -362,7 +361,7 @@ const ApplyLoanStep4 = () => {
         // || bankWatchValue,
         number: accountNumberWatchValue,
         // || accountNumberWatchValue,
-        birth: userInfo?.birth ? userInfo.birth.slice(2) : '880814',
+        birth: userInfo?.birth?.slice(2) || '',
       },
     })
   }

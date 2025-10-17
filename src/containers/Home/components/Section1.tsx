@@ -67,7 +67,11 @@ const Section1 = () => {
   }
 
   return (
-    <Flex w="100%" justifyContent="center" py={{ base: '24px', sm: '80px' }}>
+    <Flex
+      w="100%"
+      justifyContent="center"
+      py={{ base: '24px', sm: '40px', md: '80px' }}
+    >
       <Container>
         <Box mb={{ base: '32px', md: '36px' }}>
           <Text textStyle={'pre-heading-1'}>

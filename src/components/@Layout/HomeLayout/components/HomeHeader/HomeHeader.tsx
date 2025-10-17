@@ -63,6 +63,8 @@ const HomeHeader = ({
       } else {
         if (currentScrollY > lastScrollY && currentScrollY > 80) {
           setIsHeaderVisible(false)
+          // 헤더가 숨겨질 때 hover 상태도 초기화
+          setHoveredMenuIndex(null)
         } else if (currentScrollY < lastScrollY) {
           setIsHeaderVisible(true)
         }
