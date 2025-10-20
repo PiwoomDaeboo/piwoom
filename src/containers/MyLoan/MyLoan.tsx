@@ -33,11 +33,11 @@ function MyLoan() {
       setIsLoading(false)
     }, 1000)
   }, [step])
-  useEffect(() => {
-    if (isLogin) {
-      router.push(`/my-loan?step=2`)
-    }
-  }, [isLogin])
+  // useEffect(() => {
+  //   if (isLogin) {
+  //     router.push(`/my-loan?step=2`)
+  //   }
+  // }, [isLogin])
   if (isLoading) {
     return (
       <Center h={'100vh'}>

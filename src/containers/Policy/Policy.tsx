@@ -54,6 +54,39 @@ function Policy() {
         : <Box
             dangerouslySetInnerHTML={{ __html: policyData?.body as string }}
             minH={'800px'}
+            sx={{
+              '& table': {
+                width: '100%',
+                wordBreak: 'keep-all',
+              },
+              '& th, & td': {
+                border: '1px solid #e2e8f0',
+                padding: '12px',
+                textAlign: 'left',
+                verticalAlign: 'top',
+              },
+              '& th': {
+                fontWeight: 'bold',
+                color: '#2d3748',
+              },
+
+              '& p': {
+                margin: '8px 0',
+                lineHeight: '1.6',
+              },
+              '& h1, & h2, & h3, & h4, & h5, & h6': {
+                margin: '16px 0 8px 0',
+                fontWeight: 'bold',
+              },
+              '& ul, & ol': {
+                margin: '8px 0',
+                paddingLeft: '24px',
+              },
+              '& li': {
+                margin: '4px 0',
+                lineHeight: '1.6',
+              },
+            }}
           ></Box>
         }
       </Flex>
