@@ -16,10 +16,7 @@ import {
 
 function Section2() {
   return (
-    <Flex
-      background={'linear-gradient(180deg, #FFF 0%, #F1F7FF 100%)'}
-      w={'100%'}
-    >
+    <Flex w={'100%'}>
       <Container>
         <Flex
           flexDirection={{ base: 'column', md: 'row' }}

@@ -90,6 +90,9 @@ function Loan() {
   })
 
   useEffect(() => {
+    // router.isReady가 true일 때만 쿼리스트링 처리
+    if (!router.isReady) return
+
     const { type } = router.query
 
     if (type === 'procedure') {
@@ -106,14 +109,18 @@ function Loan() {
       setActiveButtonIndex(0)
       setShowProcedure(false)
     }
-  }, [router.query])
+  }, [router.isReady, router.query])
 
-  // activeButtonIndex 변경 시 해당 버튼으로 스크롤
+  // activeButtonIndex 또는 showProcedure 변경 시 해당 버튼으로 스크롤
   useEffect(() => {
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current
       const buttons = container.querySelectorAll('button')
-      const targetButton = buttons[activeButtonIndex]
+
+      // showProcedure가 true면 마지막 버튼(대출 절차 안내), 아니면 activeButtonIndex에 해당하는 버튼
+      const targetButtonIndex =
+        showProcedure ? buttons.length - 1 : activeButtonIndex
+      const targetButton = buttons[targetButtonIndex]
 
       if (targetButton) {
         const containerRect = container.getBoundingClientRect()
@@ -132,7 +139,7 @@ function Loan() {
         })
       }
     }
-  }, [activeButtonIndex])
+  }, [activeButtonIndex, showProcedure, router.isReady, router.query])
 
   const handleButtonClick = (index: number) => {
     setActiveButtonIndex(index)

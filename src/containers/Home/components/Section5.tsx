@@ -34,7 +34,7 @@ const FAQItem = ({
   onToggle: () => void
 }) => (
   <Flex
-    p="24px 28px"
+    p={{ base: '24px 32px', sm: '24px 28px' }}
     bg="grey.0"
     borderRadius="20px"
     w="100%"
@@ -45,7 +45,7 @@ const FAQItem = ({
     overflow="hidden"
     boxShadow="0 4px 24px 0 rgba(0, 46, 114, 0.06)"
   >
-    <Flex alignItems="center" gap="8px">
+    <Flex alignItems={{ base: 'flex-start', sm: 'center' }} gap="8px">
       <Text as="span" color="primary.3" textStyle="pre-heading-3">
         Q.
       </Text>
@@ -61,8 +61,9 @@ const FAQItem = ({
       transition="all 0.3s ease"
       mt={isOpen ? '16px' : '0'}
       pt={isOpen ? '16px' : '0'}
+      pb={isOpen ? '16px' : '0'}
     >
-      <Box ml="28px" textStyle="pre-body-6" color="grey.8">
+      <Box ml="28px" mr="28px" textStyle="pre-body-6" color="grey.8">
         <Text noOfLines={2}>{item.answer.slice(0, 74)}</Text>
       </Box>
     </Box>
@@ -79,7 +80,7 @@ function Section5() {
   const { data: faqList } = useFaqListQuery({
     variables: {
       query: {
-        limit: 3,
+        limit: 5,
       },
     },
   })
@@ -207,8 +208,7 @@ function Section5() {
             gap={'20px'}
             maxH={'360px'}
             overflowY={'auto'}
-            p={'4px'}
-            boxShadow="0 4px 24px 0 rgba(0, 46, 114, 0.06)"
+            p={'8px'}
           >
             {faqList?.results?.map((item) => (
               <FAQItem
