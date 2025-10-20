@@ -614,7 +614,7 @@ const SubmittingProcess = ({
   const getStatusText = () => {
     switch (currentStatus) {
       case 'PENDING':
-        return '서류를 불러오는 중입니다'
+        return '서류를 불러오는 중입니다.'
       case 'INCOME_CERTIFICATE':
         return '소득금액증명서를 처리하는 중입니다'
       case 'RESIDENT_REGISTRATION_COPY':
@@ -630,7 +630,7 @@ const SubmittingProcess = ({
       case 'FAILED':
         return '서류 제출 중 오류가 발생했습니다'
       default:
-        return '서류를 불러오는 중입니다'
+        return '서류를 불러오는 중입니다.'
     }
   }
 

@@ -38,6 +38,7 @@ const variants = {
       justifyContent: 'center',
       p: '0',
       gap: '12px',
+      bg: 'grey.0',
     },
   }),
   modal: definePartsStyle({
@@ -57,7 +58,9 @@ const sizes = {
     dialog: {
       borderRadius: '0px',
       maxW: '100vw',
-      maxH: '100vh',
+      // maxH: '100%',
+      h: '100%',
+      bg: 'white',
       m: 0,
     },
     dialogContainer: {

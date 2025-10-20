@@ -109,7 +109,8 @@ const Section1 = () => {
                   alignItems={'center'}
                 >
                   <IconComponent
-                    boxSize={hoverStates[index] ? '149px' : '139px'}
+                    transition={'all 0.3s ease-in-out'}
+                    boxSize={hoverStates[index] ? '180px' : '139px'}
                   />
                 </Flex>
                 <HStack mt={'16px'}>

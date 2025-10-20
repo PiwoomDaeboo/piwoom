@@ -43,7 +43,7 @@ function ApplyLoanComplete() {
         alignItems={'center'}
       >
         <VStack alignItems={'center'} w={'100%'}>
-          <BluecheckIcon boxSize={'100px'} />
+          <BluecheckIcon boxSize={{ base: '70px', sm: '80px', md: '96px' }} />
           <Text
             textStyle={'pre-heading-1'}
             color={'grey.10'}
@@ -62,7 +62,7 @@ function ApplyLoanComplete() {
           />
         </VStack>
         <Flex
-          pt={'32px'}
+          pt={{ base: '24px', sm: '32px' }}
           justifyContent={'center'}
           alignItems={'center'}
           flexDir={{ base: 'column', sm: 'row' }}
@@ -108,9 +108,15 @@ function ApplyLoanComplete() {
               position={'relative'}
               zIndex={2}
             >
-              <Text textStyle={'pre-body-7'} color={'grey.10'}>
-                <strong>대출 승인 확률</strong>과 <strong>대출 한도</strong>를
-                높이고 싶으신가요?
+              <Text textStyle={'pre-body-68'} color={'grey.10'}>
+                <Box as="span" textStyle={'pre-body-7'} color={'grey.10'}>
+                  대출 승인 확률
+                </Box>
+                과{' '}
+                <Box as="span" textStyle={'pre-body-7'} color={'grey.10'}>
+                  대출 한도
+                </Box>
+                를 높이고 싶으신가요?
                 <br />
                 아래 버튼을 눌러 세금 납부 내역을 제출해보세요!
               </Text>

@@ -34,6 +34,15 @@ function RepaymentMethodModal({ isOpen, onClose }: RepaymentMethodModalProps) {
       isOpen={isOpen}
       visibleCloseButton={true}
       onClose={handleClose}
+      styles={{
+        body: {
+          bg: 'grey.0',
+        },
+        footer: {
+          bg: 'grey.0',
+          borderRadius: { base: '0px', sm: '0px 0px 16px 16px' },
+        },
+      }}
       size={{ base: 'full', sm: 'md' }}
       header={
         <Box
