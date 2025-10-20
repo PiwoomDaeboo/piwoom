@@ -130,47 +130,41 @@ function Notice() {
             </InputGroup>
           </Flex>
           <Box w={'100%'} minH={'400px'}>
-            {pinnedNoticeList?.results?.map((item, index) => (
-              <Flex
-                key={item.id}
-                borderTop={'1px solid'}
-                borderColor={'grey.2'}
-                px={{ base: '0px', sm: '28px', md: '40px' }}
-                py={{ base: '27px', sm: '30px' }}
-                w={'100%'}
-                justifyContent={'space-between'}
-                _hover={{ bg: 'grey.1' }}
-                cursor={'pointer'}
-                onClick={() => router.push(`/notice/${item.id}`)}
-              >
-                <HStack gap={'32px'}>
-                  <Badge bg="primary.4" color={'white'}>
-                    공지사항
-                  </Badge>
-                  {/* <Text
-                    display={{ base: 'none', sm: 'block' }}
-                    w={'36px'}
-                    textStyle={'pre-body-6'}
-                    color={'grey.7'}
-                  >
-                    {index + 1}
-                  </Text> */}
+            {searchInput.length === 0 &&
+              noticeList?.results?.length !== 0 &&
+              pinnedNoticeList?.results?.map((item, index) => (
+                <Flex
+                  key={item.id}
+                  borderTop={'1px solid'}
+                  borderColor={'grey.2'}
+                  px={{ base: '0px', sm: '28px', md: '40px' }}
+                  py={{ base: '27px', sm: '30px' }}
+                  w={'100%'}
+                  justifyContent={'space-between'}
+                  _hover={{ bg: 'grey.1' }}
+                  cursor={'pointer'}
+                  onClick={() => router.push(`/notice/${item.id}`)}
+                >
+                  <HStack gap={'32px'}>
+                    <Badge bg="primary.4" color={'white'}>
+                      공지사항
+                    </Badge>
+                    <Text
+                      textStyle={item.title ? 'pre-body-3' : 'pre-body-4'}
+                      color={'grey.10'}
+                    >
+                      {item.title}
+                    </Text>
+                  </HStack>
                   <Text
-                    textStyle={item.title ? 'pre-body-3' : 'pre-body-4'}
+                    display={{ base: 'none', sm: 'block' }}
+                    textStyle={'pre-body-8'}
                     color={'grey.10'}
                   >
-                    {item.title}
+                    {formatDate({ date: new Date(item.createdAt) })}
                   </Text>
-                </HStack>
-                <Text
-                  display={{ base: 'none', sm: 'block' }}
-                  textStyle={'pre-body-8'}
-                  color={'grey.10'}
-                >
-                  {formatDate({ date: new Date(item.createdAt) })}
-                </Text>
-              </Flex>
-            ))}
+                </Flex>
+              ))}
             {noticeList?.results?.map((item, index) => (
               <Flex
                 key={item.id}

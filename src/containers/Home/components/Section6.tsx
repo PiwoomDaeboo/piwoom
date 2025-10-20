@@ -23,8 +23,8 @@ import {
 const sliderData = [
   {
     id: 1,
-    title: '불법사채, 불법사금융 피해 예방',
-    subtitle: '급할수록 조심! 급할수록 안전한 금융을 선택하세요.',
+    title: '불법사채, 불법사금융\n 피해 예방',
+    subtitle: '급할수록 조심! 급할수록 안전한 금융을\n 선택하세요.',
     contact: '1332',
     bgColor: '#F6E6EA',
     icon: <Slider1Icon boxSize={{ base: '100px', md: '240px' }} />,
@@ -32,7 +32,7 @@ const sliderData = [
   },
   {
     id: 2,
-    title: '모두가 알아야 할 보이스피싱 대응요령',
+    title: '모두가 알아야 할\n 보이스피싱 대응요령',
     subtitle: '보이스피싱, 알고 대비하면 막을 수 있어요.',
     contact: '',
     bgColor: '#E4E2FF',
@@ -67,16 +67,24 @@ const SliderItem = ({ item, onOpen }: { item: any; onOpen: () => void }) => (
     <Flex
       w="100%"
       h="100%"
-      flexDir={{ base: 'column', md: 'row' }}
+      flexDir={{ base: 'column', sm: 'row' }}
       justifyContent="space-between"
-      alignItems="center"
+      alignItems={{ base: 'flex-start', sm: 'center' }}
     >
       <VStack alignItems="flex-start" spacing={{ base: '8px', md: '16px' }}>
-        <Text textStyle={'pre-heading-1'} color={'grey.9'}>
+        <Text
+          textStyle={'pre-heading-1'}
+          color={'grey.9'}
+          whiteSpace={{ base: 'pre-line', sm: 'normal' }}
+        >
           {item.title}
         </Text>
         <HStack gap={'12px'}>
-          <Text textStyle={'pre-body-4'} color={'grey.8'}>
+          <Text
+            textStyle={'pre-body-4'}
+            color={'grey.8'}
+            whiteSpace={{ base: 'pre-line', sm: 'normal' }}
+          >
             {item.subtitle}
           </Text>
           {item.id === 1 && <Call1332Icon boxSize={'79px'} h={'28px'} />}
@@ -86,7 +94,8 @@ const SliderItem = ({ item, onOpen }: { item: any; onOpen: () => void }) => (
       <Box
         display="flex"
         alignItems="center"
-        justifyContent="center"
+        w={{ base: '100%', sm: 'auto' }}
+        justifyContent={{ base: 'flex-end', sm: 'center' }}
         flexShrink={0}
         ml={{ base: '0', md: '16px' }}
       >

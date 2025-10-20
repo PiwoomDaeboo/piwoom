@@ -124,7 +124,7 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
         otherwise: (schema) => schema.optional(),
       }),
       electronicDocumentConsent: yup.boolean().optional(),
-      companyName: yup.string().max(100).optional(),
+      companyName: yup.string().max(100).required('필수 항목 입니다.'),
       companyAddress: yup.string().optional(),
       companyBusinessNumber: yup.string().max(20).optional(),
       hireYear: yup

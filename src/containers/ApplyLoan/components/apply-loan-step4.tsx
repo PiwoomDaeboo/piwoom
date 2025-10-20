@@ -82,6 +82,7 @@ const ApplyLoanStep4 = () => {
     setValue,
     getValues,
     clearErrors,
+    trigger,
     control,
     handleSubmit,
     watch,
@@ -283,10 +284,21 @@ const ApplyLoanStep4 = () => {
   const handleSubmitClick = handleSubmit(onStep4Submit, onStep4Error)
 
   const handleCompanySelect = (company: Company) => {
-    setValue('companyName', company.name)
-    setValue('companyBusinessNumber', company.businessNo)
-    setValue('baseAddress', company.baseAddress)
-    setValue('detailAddress', company.detailAddress || '')
+    // 먼저 에러를 모두 제거
+    clearErrors(['companyName', 'companyBusinessNumber'])
+
+    // 값 설정 (shouldValidate: false로 설정하여 즉시 validation 실행하지 않음)
+    setValue('companyName', company.name, { shouldValidate: false })
+    setValue('companyBusinessNumber', company.businessNo, {
+      shouldValidate: false,
+    })
+    setValue('baseAddress', company.baseAddress, { shouldValidate: false })
+    setValue('detailAddress', company.detailAddress || '', {
+      shouldValidate: false,
+    })
+
+    // 수동으로 validation 실행
+    trigger(['companyName', 'companyBusinessNumber'])
   }
 
   const handleAddressModalOpen = (
@@ -491,22 +503,20 @@ const ApplyLoanStep4 = () => {
             />
             <Flex gap={'8px'} flexWrap={'wrap'}>
               <Button
-                textStyle={'pre-body-5'}
-                fontWeight={600}
                 bg={loanAmount === 300 ? 'primary.1' : 'grey.0'}
                 variant={
                   loanAmount === 300 ? 'outline-primary' : 'outline-secondary'
                 }
+                w={'52px'}
                 onClick={() => {
                   clearErrors('loanAmount')
                   handleLoanAmountSelect('300')
                 }}
               >
-                300
+                <Text textStyle={'pre-caption-1'}>300</Text>
               </Button>
               <Button
-                textStyle={'pre-body-5'}
-                fontWeight={600}
+                w={'52px'}
                 bg={loanAmount === 600 ? 'primary.1' : 'grey.0'}
                 variant={
                   loanAmount === 600 ? 'outline-primary' : 'outline-secondary'
@@ -516,25 +526,23 @@ const ApplyLoanStep4 = () => {
                   handleLoanAmountSelect('600')
                 }}
               >
-                600
+                <Text textStyle={'pre-caption-1'}>600</Text>
               </Button>
               <Button
-                textStyle={'pre-body-5'}
-                fontWeight={600}
                 bg={loanAmount === 900 ? 'primary.1' : 'grey.0'}
                 variant={
                   loanAmount === 900 ? 'outline-primary' : 'outline-secondary'
                 }
+                w={'52px'}
                 onClick={() => {
                   clearErrors('loanAmount')
                   handleLoanAmountSelect('900')
                 }}
               >
-                900
+                <Text textStyle={'pre-caption-1'}>900</Text>
               </Button>
               <Button
-                textStyle={'pre-body-5'}
-                fontWeight={600}
+                w={'52px'}
                 bg={loanAmount === 1200 ? 'primary.1' : 'grey.0'}
                 variant={
                   loanAmount === 1200 ? 'outline-primary' : 'outline-secondary'
@@ -544,11 +552,10 @@ const ApplyLoanStep4 = () => {
                   handleLoanAmountSelect('1200')
                 }}
               >
-                1200
+                <Text textStyle={'pre-caption-1'}>1200</Text>
               </Button>
               <Button
-                textStyle={'pre-body-5'}
-                fontWeight={600}
+                w={'52px'}
                 bg={loanAmount === 1500 ? 'primary.1' : 'grey.0'}
                 variant={
                   loanAmount === 1500 ? 'outline-primary' : 'outline-secondary'
@@ -558,7 +565,7 @@ const ApplyLoanStep4 = () => {
                   handleLoanAmountSelect('1500')
                 }}
               >
-                1500
+                <Text textStyle={'pre-caption-1'}>1500</Text>
               </Button>
             </Flex>
           </>
@@ -606,95 +613,203 @@ const ApplyLoanStep4 = () => {
             </Text>
           )}
         </InputForm>
-        <InputForm label="대출기간">
-          <VStack alignItems={'flex-start'} spacing={'8px'} w={'100%'}>
-            <InputGroup>
-              <Input
-                placeholder="0"
-                type="number"
-                min={0}
-                max={60}
-                onKeyDown={(evt) =>
-                  ['e', 'E', '+', '-'].includes(evt.key) && evt.preventDefault()
-                }
-                onPaste={handlePaste}
-                textAlign="right"
-                pr="50px"
-                {...register('loanPeriod', {
-                  valueAsNumber: true,
-                  onChange: handleLoanPeriodChange,
-                })}
-                data-field="loanPeriod"
-              />
-              <InputRightElement>
-                <Text>개월</Text>
-              </InputRightElement>
-            </InputGroup>
-            <Text textStyle={'pre-caption-2'} color={'grey.6'}>
-              최대 60개월까지 입력 가능해요
-            </Text>
-            <Flex gap={'8px'} flexWrap={'wrap'}>
-              <Button
-                textStyle={'pre-body-5'}
-                fontWeight={600}
-                bg={loanPeriod === 6 ? 'primary.1' : 'grey.0'}
-                variant={
-                  loanPeriod === 6 ? 'outline-primary' : 'outline-secondary'
-                }
-                onClick={() => {
-                  clearErrors('loanPeriod')
-                  handleLoanPeriodSelect('6개월')
-                }}
-              >
-                6개월
-              </Button>
-              <Button
-                fontWeight={600}
-                bg={loanPeriod === 12 ? 'primary.1' : 'grey.0'}
-                variant={
-                  loanPeriod === 12 ? 'outline-primary' : 'outline-secondary'
-                }
-                onClick={() => {
-                  clearErrors('loanPeriod')
-                  handleLoanPeriodSelect('12개월')
-                }}
-              >
-                12개월
-              </Button>
-              <Button
-                fontWeight={600}
-                bg={loanPeriod === 24 ? 'primary.1' : 'grey.0'}
-                variant={
-                  loanPeriod === 24 ? 'outline-primary' : 'outline-secondary'
-                }
-                onClick={() => {
-                  clearErrors('loanPeriod')
-                  handleLoanPeriodSelect('24개월')
-                }}
-              >
-                24개월
-              </Button>
-              <Button
-                fontWeight={600}
-                bg={loanPeriod === 36 ? 'primary.1' : 'grey.0'}
-                variant={
-                  loanPeriod === 36 ? 'outline-primary' : 'outline-secondary'
-                }
-                onClick={() => {
-                  clearErrors('loanPeriod')
-                  handleLoanPeriodSelect('36개월')
-                }}
-              >
-                36개월
-              </Button>
-            </Flex>
-          </VStack>
-          {errors?.loanPeriod && (
-            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
-              {errors?.loanPeriod?.message as string}
-            </Text>
-          )}
-        </InputForm>
+        {router.query.type === 'salary' ?
+          <InputForm label="대출기간">
+            <VStack alignItems={'flex-start'} spacing={'8px'} w={'100%'}>
+              <InputGroup>
+                <Input
+                  placeholder="0"
+                  type="number"
+                  min={0}
+                  max={6}
+                  onKeyDown={(evt) =>
+                    ['e', 'E', '+', '-', '.'].includes(evt.key) &&
+                    evt.preventDefault()
+                  }
+                  onPaste={handlePaste}
+                  textAlign="right"
+                  pr="50px"
+                  {...register('loanPeriod', {
+                    valueAsNumber: true,
+                    onChange: handleLoanPeriodChange,
+                  })}
+                  data-field="loanPeriod"
+                />
+                <InputRightElement>
+                  <Text>개월</Text>
+                </InputRightElement>
+              </InputGroup>
+              <Text textStyle={'pre-caption-2'} color={'grey.6'}>
+                최대 6개월까지 입력 가능해요
+              </Text>
+              <Flex gap={'8px'} flexWrap={'wrap'}>
+                <Button
+                  bg={loanPeriod === 1 ? 'primary.1' : 'grey.0'}
+                  variant={
+                    loanPeriod === 1 ? 'outline-primary' : 'outline-secondary'
+                  }
+                  onClick={() => {
+                    clearErrors('loanPeriod')
+                    handleLoanPeriodSelect('1개월')
+                  }}
+                >
+                  <Text textStyle={'pre-caption-1'}>1개월</Text>
+                </Button>
+                <Button
+                  bg={loanPeriod === 2 ? 'primary.1' : 'grey.0'}
+                  variant={
+                    loanPeriod === 2 ? 'outline-primary' : 'outline-secondary'
+                  }
+                  onClick={() => {
+                    clearErrors('loanPeriod')
+                    handleLoanPeriodSelect('2개월')
+                  }}
+                >
+                  <Text textStyle={'pre-caption-1'}>2개월</Text>
+                </Button>
+                <Button
+                  bg={loanPeriod === 3 ? 'primary.1' : 'grey.0'}
+                  variant={
+                    loanPeriod === 3 ? 'outline-primary' : 'outline-secondary'
+                  }
+                  onClick={() => {
+                    clearErrors('loanPeriod')
+                    handleLoanPeriodSelect('3개월')
+                  }}
+                >
+                  <Text textStyle={'pre-caption-1'}>3개월</Text>
+                </Button>
+                <Button
+                  bg={loanPeriod === 4 ? 'primary.1' : 'grey.0'}
+                  variant={
+                    loanPeriod === 4 ? 'outline-primary' : 'outline-secondary'
+                  }
+                  onClick={() => {
+                    clearErrors('loanPeriod')
+                    handleLoanPeriodSelect('4개월')
+                  }}
+                >
+                  <Text textStyle={'pre-caption-1'}>4개월</Text>
+                </Button>
+                <Button
+                  bg={loanPeriod === 5 ? 'primary.1' : 'grey.0'}
+                  variant={
+                    loanPeriod === 5 ? 'outline-primary' : 'outline-secondary'
+                  }
+                  onClick={() => {
+                    clearErrors('loanPeriod')
+                    handleLoanPeriodSelect('5개월')
+                  }}
+                >
+                  <Text textStyle={'pre-caption-1'}>5개월</Text>
+                </Button>
+                <Button
+                  bg={loanPeriod === 6 ? 'primary.1' : 'grey.0'}
+                  variant={
+                    loanPeriod === 6 ? 'outline-primary' : 'outline-secondary'
+                  }
+                  onClick={() => {
+                    clearErrors('loanPeriod')
+                    handleLoanPeriodSelect('6개월')
+                  }}
+                >
+                  <Text textStyle={'pre-caption-1'}>6개월</Text>
+                </Button>
+              </Flex>
+            </VStack>
+            {errors?.loanPeriod && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.loanPeriod?.message as string}
+              </Text>
+            )}
+          </InputForm>
+        : <InputForm label="대출기간">
+            <VStack alignItems={'flex-start'} spacing={'8px'} w={'100%'}>
+              <InputGroup>
+                <Input
+                  placeholder="0"
+                  type="number"
+                  min={0}
+                  max={60}
+                  onKeyDown={(evt) =>
+                    ['e', 'E', '+', '-', '.'].includes(evt.key) &&
+                    evt.preventDefault()
+                  }
+                  onPaste={handlePaste}
+                  textAlign="right"
+                  pr="50px"
+                  {...register('loanPeriod', {
+                    valueAsNumber: true,
+                    onChange: handleLoanPeriodChange,
+                  })}
+                  data-field="loanPeriod"
+                />
+                <InputRightElement>
+                  <Text>개월</Text>
+                </InputRightElement>
+              </InputGroup>
+              <Text textStyle={'pre-caption-2'} color={'grey.6'}>
+                최대 60개월까지 입력 가능해요
+              </Text>
+              <Flex gap={'8px'} flexWrap={'wrap'}>
+                <Button
+                  textStyle={'pre-body-5'}
+                  bg={loanPeriod === 6 ? 'primary.1' : 'grey.0'}
+                  variant={
+                    loanPeriod === 6 ? 'outline-primary' : 'outline-secondary'
+                  }
+                  onClick={() => {
+                    clearErrors('loanPeriod')
+                    handleLoanPeriodSelect('6개월')
+                  }}
+                >
+                  <Text textStyle={'pre-caption-1'}>6개월</Text>
+                </Button>
+                <Button
+                  bg={loanPeriod === 12 ? 'primary.1' : 'grey.0'}
+                  variant={
+                    loanPeriod === 12 ? 'outline-primary' : 'outline-secondary'
+                  }
+                  onClick={() => {
+                    clearErrors('loanPeriod')
+                    handleLoanPeriodSelect('12개월')
+                  }}
+                >
+                  <Text textStyle={'pre-caption-1'}>12개월</Text>
+                </Button>
+                <Button
+                  bg={loanPeriod === 24 ? 'primary.1' : 'grey.0'}
+                  variant={
+                    loanPeriod === 24 ? 'outline-primary' : 'outline-secondary'
+                  }
+                  onClick={() => {
+                    clearErrors('loanPeriod')
+                    handleLoanPeriodSelect('24개월')
+                  }}
+                >
+                  <Text textStyle={'pre-caption-1'}>24개월</Text>
+                </Button>
+                <Button
+                  bg={loanPeriod === 36 ? 'primary.1' : 'grey.0'}
+                  variant={
+                    loanPeriod === 36 ? 'outline-primary' : 'outline-secondary'
+                  }
+                  onClick={() => {
+                    clearErrors('loanPeriod')
+                    handleLoanPeriodSelect('36개월')
+                  }}
+                >
+                  <Text textStyle={'pre-caption-1'}>36개월</Text>
+                </Button>
+              </Flex>
+            </VStack>
+            {errors?.loanPeriod && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.loanPeriod?.message as string}
+              </Text>
+            )}
+          </InputForm>
+        }
         <Flex gap={'16px'}>
           <InputForm label="입금은행">
             <Box w={'100%'}>
@@ -726,7 +841,8 @@ const ApplyLoanStep4 = () => {
             <Input
               placeholder="계좌번호"
               onKeyDown={(evt) =>
-                ['e', 'E', '+', '-'].includes(evt.key) && evt.preventDefault()
+                ['e', 'E', '+', '-', '.'].includes(evt.key) &&
+                evt.preventDefault()
               }
               onPaste={handlePaste}
               {...register('accountNumber')}
@@ -743,7 +859,6 @@ const ApplyLoanStep4 = () => {
           <Button
             variant={'outline-secondary'}
             textStyle={'pre-body-5'}
-            fontWeight={600}
             color={'grey.8'}
             isLoading={isAccountVerifyMutationLoading}
             isDisabled={isAccountVerifyMutationLoading || isBankAccountVerified}
@@ -762,7 +877,7 @@ const ApplyLoanStep4 = () => {
         <Text textStyle={'pre-heading-3'} color={'primary.4'}>
           직장 정보
         </Text>
-        <Flex gap={'16px'}>
+        <Flex flexDir={{ base: 'column', sm: 'row' }} gap={'16px'}>
           <InputForm label="직업구분">
             <Box w={'100%'}>
               <Controller
@@ -810,7 +925,7 @@ const ApplyLoanStep4 = () => {
                 직장명 검색
               </Button>
             </Flex>
-            {errors?.companyName && (
+            {!companyName && (
               <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
                 {errors?.companyName?.message as string}
               </Text>
@@ -869,11 +984,6 @@ const ApplyLoanStep4 = () => {
                 {errors?.companyAddress?.message as string}
               </Text>
             )}
-            {errors?.companyDetailAddress && (
-              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
-                {errors?.companyDetailAddress?.message as string}
-              </Text>
-            )}
           </InputForm>
         )}
         {companyAddress && companyName && (
@@ -916,59 +1026,70 @@ const ApplyLoanStep4 = () => {
         )}
         <InputForm label="고용구분">
           <EmploymentTypeButtons />
+          {errors?.employmentType && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.employmentType?.message as string}
+            </Text>
+          )}
         </InputForm>
+
         <InputForm label="입사년월 또는 창업시기">
-          <Flex gap={'16px'}>
-            <InputGroup>
-              <Input
-                placeholder="YYYY"
-                type="number"
-                onPaste={handlePaste}
-                textAlign="right"
-                pr="40px"
-                onKeyDown={(evt) =>
-                  ['e', 'E', '+', '-'].includes(evt.key) && evt.preventDefault()
-                }
-                {...register('hireYear', {
-                  valueAsNumber: true,
-                })}
-                data-field="hireYear"
-              />
-              <InputRightElement>
-                <Text>년</Text>
-              </InputRightElement>
-            </InputGroup>
-            <InputGroup>
-              <Input
-                placeholder="MM"
-                type="number"
-                onPaste={handlePaste}
-                textAlign="right"
-                onKeyDown={(evt) => {
-                  ;['e', 'E', '+', '-'].includes(evt.key) &&
+          <Flex w={'100%'} flexDir={{ base: 'column', sm: 'row' }} gap={'16px'}>
+            <VStack alignItems={'flex-start'} spacing={'4px'} w={'100%'}>
+              <InputGroup w={{ base: '100%', sm: '100%' }}>
+                <Input
+                  placeholder="YYYY"
+                  type="number"
+                  onPaste={handlePaste}
+                  textAlign="right"
+                  pr="40px"
+                  onKeyDown={(evt) =>
+                    ['e', 'E', '+', '-', '.'].includes(evt.key) &&
                     evt.preventDefault()
-                }}
-                pr="40px"
-                {...register('hireMonth', {
-                  valueAsNumber: true,
-                })}
-                data-field="hireMonth"
-              />
-              <InputRightElement>
-                <Text>월</Text>
-              </InputRightElement>
-            </InputGroup>
+                  }
+                  {...register('hireYear', {
+                    valueAsNumber: true,
+                  })}
+                  data-field="hireYear"
+                />
+                <InputRightElement>
+                  <Text>년</Text>
+                </InputRightElement>
+              </InputGroup>
+              {errors?.hireYear && (
+                <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                  {errors?.hireYear?.message as string}
+                </Text>
+              )}
+            </VStack>
+            <VStack alignItems={'flex-start'} spacing={'4px'} w={'100%'}>
+              <InputGroup w={{ base: '100%', sm: '100%' }}>
+                <Input
+                  placeholder="MM"
+                  type="number"
+                  onPaste={handlePaste}
+                  textAlign="right"
+                  onKeyDown={(evt) => {
+                    ;['e', 'E', '+', '-', '.'].includes(evt.key) &&
+                      evt.preventDefault()
+                  }}
+                  pr="40px"
+                  {...register('hireMonth', {
+                    valueAsNumber: true,
+                  })}
+                  data-field="hireMonth"
+                />
+                <InputRightElement>
+                  <Text>월</Text>
+                </InputRightElement>
+              </InputGroup>
+              {errors?.hireMonth && (
+                <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                  {errors?.hireMonth?.message as string}
+                </Text>
+              )}
+            </VStack>
           </Flex>
-          {errors?.hireYear && (
-            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
-              {errors?.hireYear?.message as string}
-            </Text>
-          )}
-          {errors?.hireMonth && (
-            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
-              {errors?.hireMonth?.message as string}
-            </Text>
-          )}
         </InputForm>
         {/* ))} */}
 
@@ -1010,7 +1131,7 @@ const ApplyLoanStep4 = () => {
         </InputForm>
 
         <InputForm label="주거 종류">
-          <Flex flexWrap={'wrap'} gap={'8px'}>
+          <SimpleGrid w={'100%'} columns={{ base: 2, sm: 4 }} spacing={'8px'}>
             <Button
               bg={housingType === 'APARTMENT' ? 'primary.1' : 'grey.0'}
               variant={
@@ -1018,7 +1139,6 @@ const ApplyLoanStep4 = () => {
                   'outline-secondary'
                 )
               }
-              w={'209px'}
               onClick={() => {
                 clearErrors('housingType')
                 handleHousingTypeSelect('APARTMENT')
@@ -1033,7 +1153,6 @@ const ApplyLoanStep4 = () => {
                   'outline-secondary'
                 )
               }
-              w={'209px'}
               onClick={() => {
                 clearErrors('housingType')
                 handleHousingTypeSelect('MULTI_FAMILY')
@@ -1048,7 +1167,6 @@ const ApplyLoanStep4 = () => {
                   'outline-secondary'
                 )
               }
-              w={'209px'}
               onClick={() => {
                 clearErrors('housingType')
                 handleHousingTypeSelect('OTHER')
@@ -1056,7 +1174,7 @@ const ApplyLoanStep4 = () => {
             >
               그 외
             </Button>
-          </Flex>
+          </SimpleGrid>
           {errors?.housingType && (
             <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
               {errors?.housingType?.message as string}
@@ -1064,7 +1182,7 @@ const ApplyLoanStep4 = () => {
           )}
         </InputForm>
         <InputForm label="주거 형태">
-          <Flex flexWrap={'wrap'} gap={'8px'}>
+          <SimpleGrid w={'100%'} columns={{ base: 2, sm: 4 }} spacing={'8px'}>
             <Button
               bg={residenceType === 'OWNED' ? 'primary.1' : 'grey.0'}
               variant={
@@ -1072,7 +1190,6 @@ const ApplyLoanStep4 = () => {
                   'outline-secondary'
                 )
               }
-              w={'209px'}
               onClick={() => {
                 clearErrors('residenceType')
                 handleResidenceTypeSelect('OWNED')
@@ -1087,7 +1204,6 @@ const ApplyLoanStep4 = () => {
                   'outline-secondary'
                 )
               }
-              w={'209px'}
               onClick={() => {
                 clearErrors('residenceType')
                 handleResidenceTypeSelect('JEONSE')
@@ -1102,7 +1218,6 @@ const ApplyLoanStep4 = () => {
                   'outline-secondary'
                 )
               }
-              w={'209px'}
               onClick={() => {
                 clearErrors('residenceType')
                 handleResidenceTypeSelect('MONTHLY_RENT')
@@ -1110,7 +1225,7 @@ const ApplyLoanStep4 = () => {
             >
               월세
             </Button>
-          </Flex>
+          </SimpleGrid>
           {errors?.residenceType && (
             <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
               {errors?.residenceType?.message as string}
@@ -1157,11 +1272,11 @@ const ApplyLoanStep4 = () => {
               }}
             />
           </VStack>
-          {errors?.assetBaseAddress && (
+          {/* {errors?.assetBaseAddress && (
             <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
               {errors?.assetBaseAddress?.message as string}
             </Text>
-          )}
+          )} */}
           {errors?.assetDetailAddress && (
             <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
               {errors?.assetDetailAddress?.message as string}

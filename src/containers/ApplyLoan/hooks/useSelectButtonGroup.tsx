@@ -25,7 +25,7 @@ export const useSelectButtonGroup = ({
       name={name}
       control={control}
       render={({ field }) => (
-        <Flex flexWrap={'wrap'} gap={'8px'}>
+        <SimpleGrid w={'100%'} columns={{ base: 2, sm: 4 }} spacing={'8px'}>
           {options.map((option) => {
             const isSelected =
               variant === 'single' ?
@@ -38,9 +38,7 @@ export const useSelectButtonGroup = ({
                 variant={isSelected ? 'outline-primary' : 'outline-secondary'}
                 textStyle={'pre-body-5'}
                 bg={isSelected ? 'primary.1' : 'grey.0'}
-                fontWeight={600}
                 key={option.value}
-                w={'209px'}
                 onClick={() => {
                   if (variant === 'single') {
                     field.onChange(option.value)
@@ -58,7 +56,7 @@ export const useSelectButtonGroup = ({
               </Button>
             )
           })}
-        </Flex>
+        </SimpleGrid>
       )}
     />
   )

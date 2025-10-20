@@ -22,7 +22,6 @@ import {
 import { MY_IMAGES } from '@/generated/path/images'
 import { useLocalStorage } from '@/stores/local/state'
 import { useSessionStorage } from '@/stores/session/state'
-import { cookieStorage } from '@/utils/cookie-storage'
 
 const MyLoanStep1 = () => {
   const router = useRouter()

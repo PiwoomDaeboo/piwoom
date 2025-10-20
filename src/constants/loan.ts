@@ -39,7 +39,7 @@ export const BANK_DATA = [
       { label: '키움증권', value: '0264' },
       { label: '메리츠증권', value: '0287' },
       { label: '하나증권', value: '0270' },
-      { label: '신한금융투자', value: '0278' },
+      { label: '신한투자증권', value: '0278' },
       { label: '토스증권', value: '0271' },
       { label: '카카오페이증권', value: '0288' },
       { label: '우리투자증권', value: '0294' },
@@ -131,7 +131,7 @@ export const CREDIT_SCORE_OPTIONS = [
 export const EMPLOYMENT_TYPE = [
   { label: '정규직', value: 'PERMANENT' },
   { label: '계약직', value: 'CONTRACT' },
-  // { label: '사업자', value: 'BUSINESS' },
+  { label: '사업자', value: 'BUSINESS' },
 ]
 
 export const REPAYMENT_TYPE = [

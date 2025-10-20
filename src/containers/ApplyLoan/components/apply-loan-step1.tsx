@@ -199,7 +199,7 @@ const ApplyLoanStep1 = () => {
           </Text>
           <Text textStyle={'pre-body-6'} color={'grey.7'}>
             개인(신용)정보의 조회, 수집·이용 및 제공에 관한 동의사항을 숙지해
-            주시기 바라며,
+            주시기 바라며,{' '}
             <Box as="br" display={{ base: 'none', sm: 'block' }} />
             필수적인 사항에 대해 동의하지 않은 경우에는 대출신청이 불가능함을
             알려 드립니다.

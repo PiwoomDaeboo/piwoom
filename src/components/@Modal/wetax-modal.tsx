@@ -468,7 +468,7 @@ const SubmittingProcess = () => {
     >
       <VStack spacing={'8px'} alignItems={'center'}>
         <Text textStyle={'pre-heading-3'} color={'grey.10'}>
-          서류를 불러오는 중입니다
+          서류를 불러오는 중입니다.
         </Text>
         <Text textStyle={'pre-body-6'} color={'grey.7'} textAlign={'center'}>
           조금만 기다려 주세요!
