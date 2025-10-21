@@ -67,11 +67,11 @@ import AdditionalFileUpload from './additional-file-upload'
 import IdcardUpload from './idcard-upload'
 
 interface Company {
-  no: string
-  name: string
-  businessNo: string
-  baseAddress: string
-  detailAddress: string
+  no: string | null
+  name: string | null
+  businessNo: string | null
+  baseAddress: string | null
+  detailAddress: string | null
 }
 
 const ApplyLoanStep4 = () => {
@@ -148,6 +148,8 @@ const ApplyLoanStep4 = () => {
   const [addressModalType, setAddressModalType] = useState<
     'normal' | 'real-estate' | 'company'
   >('normal')
+  const [isCompanyAddressFromSearch, setIsCompanyAddressFromSearch] =
+    useState(false)
   const { identityVerificationToken } = useSessionStorage()
   const { popup_status: safeKey, reset } = useLocalStorage()
   const [isBankAccountVerified, setIsBankAccountVerified] = useState(false)
@@ -287,18 +289,22 @@ const ApplyLoanStep4 = () => {
   const handleSubmitClick = handleSubmit(onStep4Submit, onStep4Error)
 
   const handleCompanySelect = (company: Company) => {
-    // 먼저 에러를 모두 제거
     clearErrors(['companyName', 'companyBusinessNumber'])
 
-    // 값 설정 (shouldValidate: false로 설정하여 즉시 validation 실행하지 않음)
     setValue('companyName', company.name, { shouldValidate: false })
     setValue('companyBusinessNumber', company.businessNo, {
       shouldValidate: false,
     })
-    setValue('baseAddress', company.baseAddress, { shouldValidate: false })
-    setValue('detailAddress', company.detailAddress || '', {
-      shouldValidate: false,
-    })
+    setValue('companyAddress', company.baseAddress, { shouldValidate: false })
+
+    // 검색 결과가 있는 경우와 없는 경우를 구분
+    if (company.baseAddress) {
+      // 검색 결과로 선택된 경우 (주소가 있는 경우)
+      setIsCompanyAddressFromSearch(true)
+    } else {
+      // 검색 결과가 없어서 임의의 주소를 사용하는 경우
+      setIsCompanyAddressFromSearch(false)
+    }
 
     // 수동으로 validation 실행
     trigger(['companyName', 'companyBusinessNumber'])
@@ -940,7 +946,10 @@ const ApplyLoanStep4 = () => {
                 }
                 variant={'solid-primary'}
                 size={'lg'}
-                onClick={onOfficeAddressModalOpen}
+                onClick={() => {
+                  setIsCompanyAddressFromSearch(false)
+                  onOfficeAddressModalOpen()
+                }}
               >
                 직장명 검색
               </Button>
@@ -962,7 +971,7 @@ const ApplyLoanStep4 = () => {
               placeholder="직장 사업자등록번호"
               // onPaste={handlePaste}
               {...register('companyBusinessNumber')}
-              readOnly
+              // readOnly={companyBusinessNumber ? true : false}
               data-field="companyBusinessNumber"
             />
             {errors?.companyBusinessNumber && (
@@ -973,7 +982,7 @@ const ApplyLoanStep4 = () => {
           </InputForm>
         )}
 
-        {!companyAddress && (
+        {companyName && (
           <InputForm label="주소">
             <VStack w={'100%'} gap={'8px'} alignItems={'stretch'}>
               <Flex w={'100%'} gap={'8px'}>
@@ -984,20 +993,24 @@ const ApplyLoanStep4 = () => {
                   readOnly
                   data-field="companyAddress"
                 />
-                <Button
-                  variant={'solid-primary'}
-                  size={'lg'}
-                  onClick={() => handleAddressModalOpen('company')}
-                >
-                  주소검색
-                </Button>
+                {!isCompanyAddressFromSearch && (
+                  <Button
+                    variant={'solid-primary'}
+                    size={'lg'}
+                    onClick={() => handleAddressModalOpen('company')}
+                  >
+                    주소검색
+                  </Button>
+                )}
               </Flex>
-              <Input
-                placeholder="상세주소"
-                w={'100%'}
-                {...register('companyDetailAddress')}
-                data-field="companyDetailAddress"
-              />
+              {!isCompanyAddressFromSearch && (
+                <Input
+                  placeholder="상세주소"
+                  w={'100%'}
+                  {...register('companyDetailAddress')}
+                  data-field="companyDetailAddress"
+                />
+              )}
             </VStack>
             {errors?.companyAddress && (
               <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
@@ -1006,7 +1019,7 @@ const ApplyLoanStep4 = () => {
             )}
           </InputForm>
         )}
-        {companyAddress && companyName && (
+        {/* {companyAddress && companyName && companyBusinessNumber && (
           <InputForm isRequired label="주소">
             <VStack w={'100%'} gap={'8px'} alignItems={'stretch'}>
               <Flex w={'100%'} gap={'8px'}>
@@ -1017,33 +1030,15 @@ const ApplyLoanStep4 = () => {
                   readOnly
                   data-field="companyAddress"
                 />
-                <Button
-                  variant={'solid-primary'}
-                  size={'lg'}
-                  onClick={() => handleAddressModalOpen('normal')}
-                >
-                  주소검색
-                </Button>
               </Flex>
-              <Input
-                placeholder="상세주소"
-                w={'100%'}
-                {...register('companyDetailAddress')}
-                data-field="companyDetailAddress"
-              />
             </VStack>
             {errors?.companyAddress && (
               <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
                 {errors?.companyAddress?.message as string}
               </Text>
             )}
-            {errors?.companyDetailAddress && (
-              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
-                {errors?.companyDetailAddress?.message as string}
-              </Text>
-            )}
           </InputForm>
-        )}
+        )} */}
         <InputForm label="고용구분">
           <EmploymentTypeButtons />
           {errors?.employmentType && (

@@ -263,7 +263,10 @@ export default function Detail() {
               whiteSpace={'pre-line'}
               alignSelf={'flex-end'}
             >
-              {loanRetrieveData?.contract?.repaymentAccount || '-'}
+              {loanRetrieveData?.contract?.repaymentAccountName}
+              {loanRetrieveData?.contract?.repaymentAccountNumber}
+              {loanRetrieveData?.contract?.repaymentAccountHolder &&
+                `${loanRetrieveData?.contract?.repaymentAccountName} ${loanRetrieveData?.contract?.repaymentAccountNumber}(${loanRetrieveData?.contract?.repaymentAccountHolder})`}
             </Text>
           </HStack>
           <HStack
@@ -283,7 +286,7 @@ export default function Detail() {
               alignSelf={'flex-end'}
             >
               {loanRetrieveData?.contract?.prepaymentRate.toLocaleString() || 0}
-              원
+              %
             </Text>
           </HStack>
           <HStack

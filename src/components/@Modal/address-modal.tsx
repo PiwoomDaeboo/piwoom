@@ -69,7 +69,6 @@ function AddressModal({ isOpen, onClose, type }: AddressModalProps) {
       onClose()
     } else if (type === 'company') {
       setValue('companyAddress', baseAddress)
-      setValue('companyDetailAddress', buildingInfo)
       onClose()
     }
   }
