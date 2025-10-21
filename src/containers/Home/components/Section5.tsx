@@ -19,8 +19,6 @@ import {
   CaretRightIcon,
   InstagramIcon,
   NaverIcon,
-  NoticeIcon,
-  Sectionicon1Icon,
 } from '@/generated/icons/MyIcons'
 
 // FAQ 아이템 컴포넌트
@@ -42,7 +40,6 @@ const FAQItem = ({
     cursor="pointer"
     onClick={onToggle}
     transition="all 0.3s ease"
-    overflow="hidden"
     backgroundColor="background.basic.2"
     border="1px solid"
     borderColor="border.basic.2"
@@ -58,16 +55,22 @@ const FAQItem = ({
     </Flex>
 
     <Box
-      h={isOpen ? '138px' : '0'}
+      h={isOpen ? '80px' : '0'}
       opacity={isOpen ? 1 : 0}
       overflow="hidden"
       transition="all 0.3s ease"
-      mt={isOpen ? '16px' : '0'}
-      mb="16px"
-      pt={isOpen ? '16px' : '0'}
-      pb={isOpen ? '16px' : '0'}
+      // mt={isOpen ? '16px' : '0'}
+      // mb="16px"
+      // pt={isOpen ? '16px' : '0'}
+      // pb={isOpen ? '16px' : '0'}
     >
-      <Box ml="28px" mr="28px" textStyle="pre-body-6" color="grey.8">
+      <Box
+        mt={'14px'}
+        ml="28px"
+        mr="28px"
+        textStyle="pre-body-6"
+        color="grey.8"
+      >
         <Text noOfLines={2}>{item.answer.slice(0, 74)}</Text>
       </Box>
     </Box>
@@ -210,9 +213,9 @@ function Section5() {
           <VStack
             w={'100%'}
             gap={'20px'}
-            maxH={'360px'}
-            minH={'360px'}
-            overflowY={'auto'}
+            maxH={{ base: '400px', sm: '360px' }}
+            minH={{ base: '430px', sm: '360px' }}
+            // overflowY={'auto'}
             p={'8px'}
           >
             {faqList?.results?.map((item) => (

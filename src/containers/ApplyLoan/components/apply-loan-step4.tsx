@@ -853,6 +853,7 @@ const ApplyLoanStep4 = () => {
           </InputForm>
           <InputForm label="계좌번호">
             <Input
+              type="number"
               placeholder="계좌번호"
               onKeyDown={(evt) =>
                 ['e', 'E', '+', '-', '.'].includes(evt.key) &&

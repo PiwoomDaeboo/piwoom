@@ -80,8 +80,12 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
         .min(0)
         .required('필수 항목 입니다.'),
       bank: yup.string().required('필수 항목 입니다.'),
-      accountNumber: yup.string().required('필수 항목 입니다.'),
-
+      accountNumber: yup
+        .number()
+        .typeError('숫자만 입력 가능합니다.')
+        .integer('숫자만 입력 가능합니다.')
+        .positive()
+        .required('필수 항목 입니다.'),
       // accountHolderSsn: yup.string().required('필수 항목 입니다.'),
       accountHolder: yup.string().required('필수 항목 입니다.'),
       accountHolderSsn: yup.string().nullable().optional(),
