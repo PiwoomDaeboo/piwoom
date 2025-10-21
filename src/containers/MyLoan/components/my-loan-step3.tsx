@@ -243,7 +243,7 @@ const MyLoanStep3 = () => {
                 {userLoanData?.contract?.repaymentAccountName}
                 {userLoanData?.contract?.repaymentAccountNumber}
                 {userLoanData?.contract?.repaymentAccountHolder &&
-                  `(예금주 : ${userLoanData?.contract?.repaymentAccountHolder})`}
+                  `${userLoanData?.contract?.repaymentAccountHolder} ${userLoanData?.contract?.repaymentAccountNumber} (예금주 : ${userLoanData?.contract?.repaymentAccountHolder})`}
               </Text>
             </VStack>
           </SimpleGrid>
