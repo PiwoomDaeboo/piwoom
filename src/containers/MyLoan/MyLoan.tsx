@@ -7,6 +7,7 @@ import { Center, Spinner, useDisclosure } from '@chakra-ui/react'
 import SessionExpiredModal from '@/components/@Modal/session-expired-modal'
 import { useAuth } from '@/hooks/useAuth'
 import { useIdleTimer } from '@/hooks/useIdleTimer'
+import { useLocalStorage } from '@/stores/local/state'
 
 import MyLoanProcess from './components/my-loan-process'
 import MyLoanStep1 from './components/my-loan-step1'
@@ -16,7 +17,7 @@ import MyLoanStep4 from './components/my-loan-step4'
 
 function MyLoan() {
   const [isLoading, setIsLoading] = useState(false)
-  const { isLogin } = useAuth()
+  const { token: accessToken } = useLocalStorage()
   const router = useRouter()
   const { isIdle, setIsIdle } = useIdleTimer({ timeout: 10 * 60 * 1000 }) // 5분 테스트
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -33,11 +34,11 @@ function MyLoan() {
       setIsLoading(false)
     }, 1000)
   }, [step])
-  // useEffect(() => {
-  //   if (isLogin) {
-  //     router.push(`/my-loan?step=2`)
-  //   }
-  // }, [isLogin])
+  useEffect(() => {
+    if (!accessToken) {
+      router.push(`/my-loan?step=1`)
+    }
+  }, [accessToken])
   if (isLoading) {
     return (
       <Center h={'100vh'}>

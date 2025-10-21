@@ -3,14 +3,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import {
-  Badge,
-  Box,
-  Button,
   Center,
   Container,
   Flex,
-  HStack,
-  SimpleGrid,
   Spinner,
   Tab,
   TabList,
@@ -27,6 +22,7 @@ import { Pagination } from '@/components/pagination'
 import { LoanListParamsStatusInEnumType } from '@/generated/apis/@types/data-contracts'
 import { useLoanListQuery } from '@/generated/apis/Loan/Loan.query'
 import { useAuth } from '@/hooks/useAuth'
+import { useLocalStorage } from '@/stores/local/state'
 import { useSessionStorage } from '@/stores/session/state'
 
 import MyLoanAuthentication from './components/my-loan-authentication'
@@ -35,7 +31,7 @@ import MyLoanList from './components/my-loan-list'
 function MyLoanStatus() {
   const router = useRouter()
   const postsPerPage = 9
-  const { isLogin } = useAuth()
+  const { token: accessToken } = useLocalStorage()
   const { identityVerificationToken } = useSessionStorage()
   const selectedTab = useMemo(() => {
     const tabQuery = router.query.tab
@@ -79,9 +75,9 @@ function MyLoanStatus() {
         status_in: status as LoanListParamsStatusInEnumType[],
       },
     },
-    // options: {
-    //   enabled: !!isLogin,
-    // },
+    options: {
+      enabled: !!accessToken,
+    },
   })
   const totalPages = Math.ceil((loanList?.count || 0) / postsPerPage)
 
@@ -95,6 +91,11 @@ function MyLoanStatus() {
       { shallow: true },
     )
   }
+  useEffect(() => {
+    if (!accessToken) {
+      router.push(`/my-loan-status`)
+    }
+  }, [accessToken])
 
   const handlePageChange = (page: number) => {
     router.push(
@@ -119,7 +120,6 @@ function MyLoanStatus() {
       )
     }
   }, [router.isReady])
-  console.log(isLogin)
 
   if (isLoading) {
     return (
@@ -144,9 +144,9 @@ function MyLoanStatus() {
         </Container>
       </Flex>
       <Container py={'64px'}>
-        {!identityVerificationToken && <MyLoanAuthentication />}
+        {!accessToken && <MyLoanAuthentication />}
 
-        {isLogin && identityVerificationToken && (
+        {accessToken && (
           <>
             <Tabs index={selectedTab} onChange={handleTabChange}>
               <TabList>
