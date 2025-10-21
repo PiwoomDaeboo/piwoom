@@ -13,7 +13,7 @@ function NiceCallback() {
 
   useEffect(() => {
     if (safe_key) {
-      set('useb', safe_key)
+      set('popup_status', safe_key)
 
       setTimeout(() => {
         window.close()

@@ -6,6 +6,7 @@ import {
   LoanListParamsStatusInEnumType,
   LoanRequestType,
   LoanSignErrorMessageType,
+  LoanSignRequestType,
   LoanSignType,
   LoanType,
   PaginatedLoanListType,
@@ -157,11 +158,17 @@ export class LoanApi<
    * @request POST:/v1/loan/{id}/sign/
    * @secure
    */
-  loanSignCreate = (variables: { id: number; params?: RequestParams }) =>
+  loanSignCreate = (variables: {
+    id: number
+    data: DeepOmitReadOnly<LoanSignRequestType>
+    params?: RequestParams
+  }) =>
     this.request<LoanSignType, LoanSignErrorMessageType | CommonErrorType>({
       path: `/v1/loan/${variables.id}/sign/`,
       method: 'POST',
+      body: variables.data,
       secure: true,
+      type: ContentType.Json,
       format: 'json',
       ...variables.params,
     })

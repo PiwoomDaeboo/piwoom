@@ -817,14 +817,9 @@ export interface LoanContractType {
    * 다음 상환 스케줄
    * @format date
    */
-  nextScheduleDate?: string | null
-  /**
-   * 다음 상환액
-   * @format int64
-   * @min 0
-   * @max 9223372036854776000
-   */
-  nextScheduleAmount?: number | null
+  readonly nextScheduleDate: string | null
+  /** 다음 상환액 */
+  readonly nextScheduleAmount: number | null
 }
 
 export interface LoanContractRequestType {
@@ -902,18 +897,6 @@ export interface LoanContractRequestType {
    * @max 9223372036854776000
    */
   remainingAmount: number
-  /**
-   * 다음 상환 스케줄
-   * @format date
-   */
-  nextScheduleDate?: string | null
-  /**
-   * 다음 상환액
-   * @format int64
-   * @min 0
-   * @max 9223372036854776000
-   */
-  nextScheduleAmount?: number | null
 }
 
 export interface LoanContractUrlType {
@@ -1547,6 +1530,12 @@ export interface LoanSignType {
 
 export interface LoanSignErrorMessageType {
   nonField?: string[]
+  ekycData?: string[]
+}
+
+export interface LoanSignRequestType {
+  /** eKYC */
+  ekycData?: any
 }
 
 export interface LoanUserType {

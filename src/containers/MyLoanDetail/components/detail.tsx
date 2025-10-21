@@ -249,8 +249,6 @@ export default function Detail() {
               whiteSpace={'pre-line'}
               alignSelf={'flex-end'}
             >
-              {loanRetrieveData?.contract?.repaymentAccountName}
-              {loanRetrieveData?.contract?.repaymentAccountNumber}
               {loanRetrieveData?.contract?.repaymentAccountHolder &&
                 `${loanRetrieveData?.contract?.repaymentAccountName} ${loanRetrieveData?.contract?.repaymentAccountNumber}(${loanRetrieveData?.contract?.repaymentAccountHolder})`}
             </Text>
@@ -292,7 +290,7 @@ export default function Detail() {
               alignSelf={'flex-end'}
             >
               {loanRetrieveData?.contract?.isCollateralProvided ?
-                '해당 있음'
+                '담보 있음'
               : '해당 없음'}
             </Text>
           </HStack>
@@ -313,7 +311,7 @@ export default function Detail() {
               alignSelf={'flex-end'}
             >
               {loanRetrieveData?.contract?.isJointGuarantee ?
-                '해당 있음'
+                '보증 있음'
               : '해당 없음'}
             </Text>
           </HStack>
