@@ -19,6 +19,9 @@ function NiceCallback() {
         window.close()
       }, 500)
     }
+    setTimeout(() => {
+      window.close()
+    }, 1000)
   }, [safe_key])
 
   return (
