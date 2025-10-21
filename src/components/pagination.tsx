@@ -23,27 +23,42 @@ export const Pagination = ({
     }
 
     const pages: (number | string)[] = []
+    const sidePages = Math.floor(showPages / 2) // 현재 페이지 양쪽에 표시할 페이지 수
 
     // 첫 페이지는 항상 표시
     pages.push(1)
 
-    if (currentPage <= 3) {
-      // 현재 페이지가 앞쪽에 있을 때
-      pages.push(2, 3)
-      if (totalPages > 3) {
+    if (currentPage <= sidePages + 2) {
+      // 현재 페이지가 앞쪽에 있을 때: 1, 2, 3, 4, ..., 마지막
+      for (let i = 2; i <= Math.min(showPages, totalPages - 1); i++) {
+        pages.push(i)
+      }
+      if (totalPages > showPages + 1) {
         pages.push('...')
         pages.push(totalPages)
+      } else if (totalPages > showPages) {
+        pages.push(totalPages)
       }
-    } else if (currentPage >= totalPages - 2) {
-      // 현재 페이지가 뒤쪽에 있을 때
-      if (totalPages > 3) {
+    } else if (currentPage >= totalPages - sidePages - 1) {
+      // 현재 페이지가 뒤쪽에 있을 때: 1, ..., 마지막-3, 마지막-2, 마지막-1, 마지막
+      if (totalPages > showPages + 1) {
         pages.push('...')
       }
-      pages.push(totalPages - 2, totalPages - 1, totalPages)
+      for (
+        let i = Math.max(2, totalPages - showPages + 1);
+        i <= totalPages;
+        i++
+      ) {
+        pages.push(i)
+      }
     } else {
-      // 현재 페이지가 중간에 있을 때
+      // 현재 페이지가 중간에 있을 때: 1, ..., 현재-1, 현재, 현재+1, ..., 마지막
       pages.push('...')
-      pages.push(currentPage - 1, currentPage, currentPage + 1)
+      for (let i = currentPage - sidePages; i <= currentPage + sidePages; i++) {
+        if (i > 1 && i < totalPages) {
+          pages.push(i)
+        }
+      }
       pages.push('...')
       pages.push(totalPages)
     }
