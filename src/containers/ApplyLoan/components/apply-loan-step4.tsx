@@ -161,11 +161,11 @@ const ApplyLoanStep4 = () => {
   })
   const companyName = useWatch({ control, name: 'companyName' })
   const companyAddress = useWatch({ control, name: 'companyAddress' })
-  const { data: settingData } = useSettingRetrieveQuery({
-    variables: {
-      id: 'me',
-    },
-  })
+  // const { data: settingData } = useSettingRetrieveQuery({
+  //   variables: {
+  //     id: 'me',
+  //   },
+  // })
   const {
     mutate: accountVerifyMutation,
     isPending: isAccountVerifyMutationLoading,
@@ -1307,18 +1307,18 @@ const ApplyLoanStep4 = () => {
             variant={'outline-primary'}
             textStyle={'pre-body-5'}
             w={'209px'}
-            disabled={!settingData?.isGov}
+            // disabled={!settingData?.isGov}
             isDisabled={isDocumentSubmissionCompleted}
             onClick={handleUntactDocumentApplyModalOpen}
           >
             {isDocumentSubmissionCompleted ? '서류제출완료' : '비대면 서류제출'}
           </Button>
 
-          {!settingData?.isGov && (
+          {/* {!settingData?.isGov && (
             <Text textStyle={'pre-body-6'} color={'accent.red2'}>
               비대면 서류제출 기능이 비활성화되어 있어요.
             </Text>
-          )}
+          )} */}
           {errors?.untactDocumentSubmission && (
             <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
               {errors?.untactDocumentSubmission?.message as string}
