@@ -112,11 +112,10 @@ instance.interceptors.response.use(
 
       if (isUnAuthError) {
         useLocalStorage.getState().reset('token')
-        const isClient = useGlobalStore.getState().isClient
-        if (isClient) Router.push(ROUTES.LOGIN_MAIN)
+        alert('다시 로그인해주세요.')
+        Router.push(window.location.origin)
         return Promise.reject(error)
       }
-
       return Promise.reject(error)
     } catch (e) {
       styledConsole({

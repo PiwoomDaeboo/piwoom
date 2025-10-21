@@ -14,7 +14,7 @@ export const getBadgeStyle = (
     case 'IN_PROGRESS':
       return { color: 'primary.4', bg: 'primary.1' }
     case 'REMITTING':
-      return { color: 'secondary.2', bg: 'secondary.1' }
+      return { color: 'secondary.4', bg: 'secondary.2' }
     case 'OVERDUE':
       return { color: 'accent.red2', bg: 'accent.red1' }
     case 'EARLY_REPAYMENT_COMPLETED':
