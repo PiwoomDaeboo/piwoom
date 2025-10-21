@@ -46,6 +46,7 @@ import {
   WooriauthenticationIcon,
   XCircleFillIcon,
 } from '@/generated/icons/MyIcons'
+import { useLocalStorage } from '@/stores/local/state'
 import { useSessionStorage } from '@/stores/session/state'
 import { extractUserInfoFromJWT } from '@/utils/jwt'
 
@@ -60,17 +61,6 @@ const passTypes = [
   { label: 'KT', value: '02' },
   { label: 'LGU+', value: '03' },
 ]
-
-// KAKAO - 카카오톡
-// SAMSUNG - 삼성패스
-// KB - 국민인증서
-// PASS - 통신사PASS
-// SHINHAN - 신한인증서
-// NAVER - 네이버
-// TOSS - 토스
-// NH - NH인증서
-// WOORI - 우리인증서
-// HANA - 하나인증서
 
 const authOptions = [
   { type: 'KAKAO', icon: KakaoAuthenticationIcon, label: '카카오톡' },
@@ -104,7 +94,7 @@ function UntactDocumentApplyModal({
     gender_code?: string
   } | null>(null)
   const { identityVerificationToken } = useSessionStorage()
-  // const [shouldExecuteGovQuery, setShouldExecuteGovQuery] = useState(false)
+  const { token: accessToken } = useLocalStorage()
   const toast = useToast()
 
   const [govData, setGovData] = useState<any>(null)
@@ -113,13 +103,11 @@ function UntactDocumentApplyModal({
   const [totalDocuments, setTotalDocuments] = useState<number>(5) // 총 5개 문서
   const [currentStatus, setCurrentStatus] = useState<string>('PENDING')
 
-  // 시/도 옵션 생성
   const cityOptions = Object.keys(GOV_REGIONS).map((city) => ({
     label: city,
     value: city,
   }))
 
-  // 선택된 시/도에 따른 군/구 옵션 생성
   const districtOptions =
     selectedCity ?
       GOV_REGIONS[selectedCity as keyof typeof GOV_REGIONS].map((district) => ({
@@ -133,7 +121,7 @@ function UntactDocumentApplyModal({
       id: 'me',
     },
     options: {
-      enabled: !!identityVerificationToken,
+      enabled: !!isOpen && !!accessToken,
     },
   })
 

@@ -42,6 +42,7 @@ import {
   ShinhanAuthenticationIcon,
   TossAuthenticationIcon,
 } from '@/generated/icons/MyIcons'
+import { useLocalStorage } from '@/stores/local/state'
 import { useSessionStorage } from '@/stores/session/state'
 import { extractUserInfoFromJWT } from '@/utils/jwt'
 
@@ -77,12 +78,13 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
     birth?: string
     gender_code?: string
   } | null>(null)
+  const { token: accessToken } = useLocalStorage()
   const { data: userData } = useUserRetrieveQuery({
     variables: {
       id: 'me',
     },
     options: {
-      enabled: !!identityVerificationToken,
+      enabled: !!isOpen && !!accessToken,
     },
   })
 
