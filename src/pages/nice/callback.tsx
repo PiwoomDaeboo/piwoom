@@ -15,9 +15,9 @@ function NiceCallback() {
     if (safe_key) {
       set('useb', safe_key)
 
-      // setTimeout(() => {
-      //   window.close()
-      // }, 500)
+      setTimeout(() => {
+        window.close()
+      }, 500)
     }
   }, [safe_key])
 
