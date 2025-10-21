@@ -94,7 +94,6 @@ export default function IdCardUpload() {
   const handleIdCardUploadButtonClick = () => {
     idCardInputRef.current?.click()
   }
-  console.log('previewUrl', previewUrl)
 
   // 컴포넌트 언마운트 시 미리보기 URL 정리
   useEffect(() => {

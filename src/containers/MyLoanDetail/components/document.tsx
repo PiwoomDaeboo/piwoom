@@ -6,6 +6,7 @@ import {
   AspectRatio,
   Box,
   Button,
+  Center,
   Flex,
   HStack,
   Input,
@@ -25,19 +26,24 @@ import InputForm from '@/components/InputForm'
 import AdditionalFileUpload from '@/containers/ApplyLoan/components/additional-file-upload'
 import { useLoanPartialUpdateMutation } from '@/generated/apis/Loan/Loan.query'
 import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
-import { CameraIcon, CaretLeftIcon } from '@/generated/icons/MyIcons'
+import {
+  CameraIcon,
+  CaretLeftIcon,
+  DocumenticonIcon,
+  XIcon,
+} from '@/generated/icons/MyIcons'
 import { FolderIcon, InfoFillIcon } from '@/generated/icons/MyIcons'
+import { MY_IMAGES } from '@/generated/path/images'
 import { useLocalStorage } from '@/stores/local/state'
 import { useSessionStorage } from '@/stores/session/state'
 import { extractUserInfoFromJWT } from '@/utils/jwt'
-
-import { SAMPLE_LOAN_DATA, getFormattedDetailData } from '../consts'
 
 export default function Document() {
   const router = useRouter()
   const { id } = router.query
   const methods = useForm()
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [uploadedFileName, setUploadedFileName] = useState<string>('')
 
   const [userInfo, setUserInfo] = useState<{
     name?: string
@@ -88,6 +94,12 @@ export default function Document() {
       options: {
         onSuccess: (data) => {
           setUploadedFileUrl(`${data.url}/${data?.fields?.key}`)
+          methods.setValue('identityCard', `${data?.fields?.key}`)
+          setUploadedFileName(
+            data?.fields?.key?.split('/').pop() || data?.fields?.key,
+          )
+
+          methods.clearErrors('identityCard')
         },
         onError: (error) => {
           console.error('파일 업로드 실패:', error)
@@ -108,8 +120,10 @@ export default function Document() {
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl)
       }
+
       const newPreviewUrl = URL.createObjectURL(file)
       setPreviewUrl(newPreviewUrl)
+
       handleUploadIdCard(file)
     }
   }
@@ -157,6 +171,13 @@ export default function Document() {
       },
     })
   })
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl)
+      }
+    }
+  }, [previewUrl])
 
   return (
     <FormProvider {...methods}>
@@ -210,6 +231,7 @@ export default function Document() {
             alignItems={'center'}
           >
             <InputForm
+              isRequired={false}
               label="신용정보 제출하기"
               tooltipLabel="대출 심사를 위해 고객님의 신용정보 확인이 필수입니다. [제출] 버튼을 누르시면 NICE평가정보의 ‘신용인증송부 서비스’를 통해 본인인증과 정보 확인을 거친 뒤, 고객님이 동의하신 신용정보만 심사 목적으로 안전하게 당사에 제공됩니다."
             >
@@ -222,7 +244,7 @@ export default function Document() {
                 제출
               </Button>
             </InputForm>
-            <InputForm label="위택스 서류 제출">
+            <InputForm isRequired={false} label="위택스 서류 제출">
               <Button
                 variant={'outline-primary'}
                 textStyle={'pre-body-5'}
@@ -260,7 +282,7 @@ export default function Document() {
               </VStack>
             )}
             <VStack w={'100%'} spacing={'12px'}>
-              <InputForm label="비대면 서류제출">
+              <InputForm isRequired={false} label="비대면 서류제출">
                 <Button
                   variant={'outline-primary'}
                   textStyle={'pre-body-5'}
@@ -344,7 +366,7 @@ export default function Document() {
             </Flex>
           </InputForm> */}
             <VStack w={'100%'} alignItems={'flex-start'} spacing={'12px'}>
-              <InputForm label="신분증" isRequired>
+              <InputForm label="신분증" isRequired={false}>
                 <Button
                   variant={'outline-primary'}
                   textStyle={'pre-body-5'}
@@ -352,10 +374,43 @@ export default function Document() {
                   onClick={handleUploadButtonClick}
                   isLoading={isIdCardUploading}
                   gap={'8px'}
+                  isDisabled={!!uploadedFileName?.length}
                 >
-                  <CameraIcon boxSize={'24px'} color={'primary.4'} />
+                  <CameraIcon
+                    boxSize={'24px'}
+                    color={uploadedFileName?.length ? '#00368640' : 'primary.4'}
+                  />
                   신분증 업로드
                 </Button>
+                {uploadedFileName?.length && uploadedFileName?.length > 0 && (
+                  <Flex gap={'8px'} flexWrap={'wrap'}>
+                    <Flex gap={'12px'} p={'8px 12px'} alignItems={'center'}>
+                      <HStack gap={'4px'}>
+                        <Center
+                          bg={'primary.1'}
+                          borderRadius={'50%'}
+                          w={'28px'}
+                          h={'28px'}
+                          justifyContent={'center'}
+                          alignItems={'center'}
+                          // p={'4px'}
+                        >
+                          <DocumenticonIcon boxSize={'16px'} />
+                        </Center>
+                        <Text textStyle={'pre-body-68'} color={'grey.8'}>
+                          {uploadedFileName}
+                        </Text>
+                      </HStack>
+                      <Box
+                        p={0}
+                        cursor={'pointer'}
+                        onClick={() => setUploadedFileName('')}
+                      >
+                        <XIcon boxSize={'16px'} />
+                      </Box>
+                    </Flex>
+                  </Flex>
+                )}
               </InputForm>
               <VStack
                 alignItems={'flex-start'}
@@ -398,20 +453,13 @@ export default function Document() {
                     accept="image/*"
                     display="none"
                   />
-                  {previewUrl ?
-                    <ImageAsNext
-                      w={'100%'}
-                      h={'100%'}
-                      objectFit={'contain'}
-                      fill
-                      unoptimized
-                      src={previewUrl}
-                      alt="신분증 미리보기"
-                    />
-                  : <Text textStyle={'pre-body-6'} color={'grey.6'}>
-                      파일을 선택해주세요
-                    </Text>
-                  }
+                  <ImageAsNext
+                    w={'100%'}
+                    h={'100%'}
+                    fill
+                    src={MY_IMAGES.ID_CARD.src}
+                    alt="신분증"
+                  />
                 </Flex>
               </VStack>
             </VStack>

@@ -57,7 +57,13 @@ function MyLoanStatus() {
 
   const status = useMemo<LoanListParamsStatusInEnumType[]>(() => {
     if (selectedTab === 0) {
-      return ['UNDER_REVIEW', 'CONTRACTING', 'IN_PROGRESS', 'OVERDUE']
+      return [
+        'UNDER_REVIEW',
+        'CONTRACTING',
+        'REMITTING',
+        'IN_PROGRESS',
+        'OVERDUE',
+      ]
     } else if (selectedTab === 1) {
       return ['EARLY_REPAYMENT_COMPLETED', 'MATURITY_REPAYMENT_COMPLETED']
     } else {

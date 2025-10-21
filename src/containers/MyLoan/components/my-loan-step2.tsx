@@ -129,7 +129,7 @@ const MyLoanStep2 = () => {
                       • 채무자:
                     </Text>
                     <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                      {item?.accountHolder || '-'}
+                      {item?.user?.name || '-'}
                     </Text>
                   </HStack>
                   <HStack justifyContent={'flex-start'} alignItems={'center'}>

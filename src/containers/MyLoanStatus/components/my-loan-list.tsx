@@ -70,13 +70,36 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
           const response = await fetch(contractDownloadData.url)
           const blob = await response.blob()
 
+          // 서버에서 제공한 파일명 추출
+          let filename = `피움대부_계약서_${contractDownloadId}.pdf` // 기본값
+
+          // Content-Disposition 헤더에서 파일명 추출
+          const contentDisposition = response.headers.get('Content-Disposition')
+          if (contentDisposition) {
+            const filenameMatch = contentDisposition.match(
+              /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/,
+            )
+            if (filenameMatch && filenameMatch[1]) {
+              filename = filenameMatch[1].replace(/['"]/g, '')
+            }
+          }
+
+          // URL에서 파일명 추출 (Content-Disposition이 없는 경우)
+          if (filename === `피움대부_계약서_${contractDownloadId}.pdf`) {
+            const urlPath = new URL(contractDownloadData.url).pathname
+            const urlFilename = urlPath.split('/').pop()
+            if (urlFilename && urlFilename.includes('.')) {
+              filename = urlFilename
+            }
+          }
+
           // Blob URL 생성
           const blobUrl = window.URL.createObjectURL(blob)
 
           // 다운로드 링크 생성 및 클릭
           const link = document.createElement('a')
           link.href = blobUrl
-          link.download = `피움대부_계약서_${contractDownloadId}.pdf`
+          link.download = filename
           document.body.appendChild(link)
           link.click()
 

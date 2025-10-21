@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import {
   Box,
@@ -15,21 +15,105 @@ import ModalBasis from '@/components/@Modal/ModalBasis'
 interface MyLoanTermsModalProps {
   isOpen: boolean
   onClose: () => void
+  onConfirm?: () => void
   termsNumber: number
 }
 
 function MyLoanTermsModal({
   isOpen,
   onClose,
+  onConfirm,
   termsNumber = 1,
 }: MyLoanTermsModalProps) {
+  const [isScrolledToBottom, setIsScrolledToBottom] = useState(false)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+
   const handleConfirm = () => {
-    onClose()
+    if (onConfirm) {
+      onConfirm()
+    } else {
+      onClose()
+    }
   }
 
   const handleClose = () => {
     onClose()
   }
+
+  const handleScroll = useCallback(() => {
+    const container = scrollContainerRef.current
+    if (container) {
+      const { scrollTop, scrollHeight, clientHeight } = container
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10 // 10px 여유
+      console.log('Scroll debug:', {
+        scrollTop,
+        scrollHeight,
+        clientHeight,
+        isAtBottom,
+      })
+      setIsScrolledToBottom(isAtBottom)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isOpen && termsNumber === 1) {
+      // termsNumber가 1인 경우에만 스크롤 이벤트 추가
+      let retryCount = 0
+      const maxRetries = 10
+
+      const tryAddScrollListener = () => {
+        const container = scrollContainerRef.current
+        if (container) {
+          console.log('Adding scroll listener to container:', container)
+          container.addEventListener('scroll', handleScroll)
+          // 초기 상태 확인
+          handleScroll()
+          return true
+        } else {
+          retryCount++
+          console.log(
+            `Container not found, retrying... (${retryCount}/${maxRetries})`,
+          )
+          if (retryCount < maxRetries) {
+            setTimeout(tryAddScrollListener, 100)
+          }
+          return false
+        }
+      }
+
+      const timer = setTimeout(tryAddScrollListener, 100)
+
+      return () => {
+        clearTimeout(timer)
+        const container = scrollContainerRef.current
+        if (container) {
+          console.log('Removing scroll listener from container:', container)
+          container.removeEventListener('scroll', handleScroll)
+        }
+      }
+    }
+  }, [isOpen, termsNumber, handleScroll])
+
+  // 모달이 열릴 때마다 스크롤 상태 초기화
+  useEffect(() => {
+    if (isOpen) {
+      console.log('Modal opened, termsNumber:', termsNumber)
+      setIsScrolledToBottom(termsNumber !== 1) // termsNumber가 1이 아닌 경우는 항상 true
+    } else {
+      console.log('Modal closed, resetting scroll state')
+      setIsScrolledToBottom(false)
+    }
+  }, [isOpen, termsNumber])
+
+  // 모달이 닫힐 때 모든 이벤트 리스너 정리
+  useEffect(() => {
+    if (!isOpen) {
+      const container = scrollContainerRef.current
+      if (container) {
+        container.removeEventListener('scroll', handleScroll)
+      }
+    }
+  }, [isOpen])
 
   const getTitle = () => {
     switch (termsNumber) {
@@ -73,13 +157,24 @@ function MyLoanTermsModal({
         </Box>
       }
       body={
-        <Flex flexDir={'column'} gap={'12px'} maxH={'450px'} overflowY={'auto'}>
+        <Flex
+          ref={scrollContainerRef}
+          flexDir={'column'}
+          gap={'12px'}
+          maxH={'450px'}
+          overflowY={'auto'}
+        >
           {getBodyContent()}
         </Flex>
       }
       footer={
         <Flex w="100%">
-          <Button w="100%" variant={'solid-primary'} onClick={handleConfirm}>
+          <Button
+            w="100%"
+            variant={isScrolledToBottom ? 'solid-primary' : 'outline-primary'}
+            onClick={handleConfirm}
+            isDisabled={!isScrolledToBottom}
+          >
             확인
           </Button>
         </Flex>

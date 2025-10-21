@@ -43,7 +43,10 @@ const FAQItem = ({
     onClick={onToggle}
     transition="all 0.3s ease"
     overflow="hidden"
-    boxShadow="0 4px 24px 0 rgba(0, 46, 114, 0.06)"
+    backgroundColor="background.basic.2"
+    border="1px solid"
+    borderColor="border.basic.2"
+    minH="fit-content"
   >
     <Flex alignItems={{ base: 'flex-start', sm: 'center' }} gap="8px">
       <Text as="span" color="primary.3" textStyle="pre-heading-3">
@@ -60,6 +63,7 @@ const FAQItem = ({
       overflow="hidden"
       transition="all 0.3s ease"
       mt={isOpen ? '16px' : '0'}
+      mb="16px"
       pt={isOpen ? '16px' : '0'}
       pb={isOpen ? '16px' : '0'}
     >
@@ -80,7 +84,7 @@ function Section5() {
   const { data: faqList } = useFaqListQuery({
     variables: {
       query: {
-        limit: 5,
+        limit: 3,
       },
     },
   })
@@ -207,6 +211,7 @@ function Section5() {
             w={'100%'}
             gap={'20px'}
             maxH={'360px'}
+            minH={'360px'}
             overflowY={'auto'}
             p={'8px'}
           >

@@ -246,6 +246,7 @@ const ApplyLoanStep4 = () => {
 
   const onStep4Error = (errors: any) => {
     console.log('Step4 폼 에러:', errors)
+
     toast({
       render: () => (
         <Box
@@ -265,6 +266,7 @@ const ApplyLoanStep4 = () => {
       duration: 5000,
       isClosable: true,
     })
+
     const firstErrorField = Object.keys(errors)[0]
     const errorElement =
       document.querySelector(`[name="${firstErrorField}"]`) ||
@@ -383,8 +385,13 @@ const ApplyLoanStep4 = () => {
     })
   }
   const handleUntactDocumentApplyModalOpen = () => {
-    setIsDocumentSubmissionCompleted(true)
     onUntactDocumentApplyModalOpen()
+  }
+
+  const handleUntactDocumentSubmissionComplete = () => {
+    setIsDocumentSubmissionCompleted(true)
+    setValue('untactDocumentSubmission', true)
+    clearErrors('untactDocumentSubmission')
   }
 
   useEffect(() => {
@@ -402,6 +409,7 @@ const ApplyLoanStep4 = () => {
       <UntactDocumentApplyModal
         isOpen={isUntactDocumentApplyModalOpen}
         onClose={onUntactDocumentApplyModalClose}
+        onComplete={handleUntactDocumentSubmissionComplete}
       />
       <AddressModal
         isOpen={isAddressModalOpen}
@@ -1313,6 +1321,11 @@ const ApplyLoanStep4 = () => {
           {!settingData?.isGov && (
             <Text textStyle={'pre-body-6'} color={'accent.red2'}>
               비대면 서류제출 기능이 비활성화되어 있어요.
+            </Text>
+          )}
+          {errors?.untactDocumentSubmission && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.untactDocumentSubmission?.message as string}
             </Text>
           )}
         </InputForm>

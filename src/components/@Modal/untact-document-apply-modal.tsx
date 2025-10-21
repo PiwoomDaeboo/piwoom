@@ -18,11 +18,10 @@ import ModalBasis from '@/components/@Modal/ModalBasis'
 import CommonSelect from '@/components/CommonSelect'
 import InputForm from '@/components/InputForm'
 import loadingLottieData from '@/components/loading-lottie.json'
+import { GOV_REGIONS } from '@/constants/loan'
 import {
   GovLoginRequestAgencyEnumType,
   GovLoginRequestMethodEnumType,
-  WetaxLoginRequestAgencyEnumType,
-  WetaxLoginRequestMethodEnumType,
 } from '@/generated/apis/@types/data-contracts'
 import {
   useGovLoginCreateMutation,
@@ -53,6 +52,7 @@ import { extractUserInfoFromJWT } from '@/utils/jwt'
 interface UntactDocumentApplyModalProps {
   isOpen: boolean
   onClose: () => void
+  onComplete?: () => void
 }
 
 const passTypes = [
@@ -73,26 +73,29 @@ const passTypes = [
 // HANA - 하나인증서
 
 const authOptions = [
-  { type: 'KB', icon: KbAuthenticationIcon, label: '국민인증서' },
-  { type: 'NH', icon: NhauthenticationIcon, label: 'NH인증서' },
-  { type: 'PASS', icon: PassAuthenticationIcon, label: '통신사PASS' },
-  { type: 'WOORI', icon: WooriauthenticationIcon, label: '우리인증서' },
-  { type: 'NAVER', icon: NaverAuthenticationIcon, label: '네이버' },
-  { type: 'SAMSUNG', icon: SamsungauthenticationIcon, label: '삼성패스' },
   { type: 'KAKAO', icon: KakaoAuthenticationIcon, label: '카카오톡' },
   { type: 'TOSS', icon: TossAuthenticationIcon, label: '토스' },
+  { type: 'PASS', icon: PassAuthenticationIcon, label: '통신사PASS' },
+  { type: 'NAVER', icon: NaverAuthenticationIcon, label: '네이버' },
+  { type: 'KB', icon: KbAuthenticationIcon, label: '국민인증서' },
   { type: 'SHINHAN', icon: ShinhanAuthenticationIcon, label: '신한인증서' },
   { type: 'HANA', icon: HanaauthenticationIcon, label: '하나인증서' },
+  { type: 'WOORI', icon: WooriauthenticationIcon, label: '우리인증서' },
+  { type: 'NH', icon: NhauthenticationIcon, label: 'NH인증서' },
+  { type: 'SAMSUNG', icon: SamsungauthenticationIcon, label: '삼성패스' },
 ]
 
 function UntactDocumentApplyModal({
   isOpen,
   onClose,
+  onComplete,
 }: UntactDocumentApplyModalProps) {
   const [selectedAuth, setSelectedAuth] = useState<string | null>(null)
   const [selectedPassType, setSelectedPassType] = useState<string>('')
+  const [selectedCity, setSelectedCity] = useState<string>('')
+  const [selectedDistrict, setSelectedDistrict] = useState<string>('')
   const [govRetrieveId, setGovRetrieveId] = useState<number | null>(null)
-  const { setValue, trigger } = useFormContext()
+  const { setValue, trigger, clearErrors } = useFormContext()
   const [loadingProcess, setLoadingProcess] = useState<number>(0)
   const [userInfo, setUserInfo] = useState<{
     name?: string
@@ -109,6 +112,21 @@ function UntactDocumentApplyModal({
   const [completedDocuments, setCompletedDocuments] = useState<number>(0)
   const [totalDocuments, setTotalDocuments] = useState<number>(5) // 총 5개 문서
   const [currentStatus, setCurrentStatus] = useState<string>('PENDING')
+
+  // 시/도 옵션 생성
+  const cityOptions = Object.keys(GOV_REGIONS).map((city) => ({
+    label: city,
+    value: city,
+  }))
+
+  // 선택된 시/도에 따른 군/구 옵션 생성
+  const districtOptions =
+    selectedCity ?
+      GOV_REGIONS[selectedCity as keyof typeof GOV_REGIONS].map((district) => ({
+        label: district,
+        value: district,
+      }))
+    : []
 
   const { data: userData } = useUserRetrieveQuery({
     variables: {
@@ -146,9 +164,7 @@ function UntactDocumentApplyModal({
       id: govRetrieveId as number,
     },
     options: {
-      enabled:
-        govRetrieveId !== null &&
-        ((loadingProcess === 2 && shouldPoll) || !!isOpen),
+      enabled: govRetrieveId !== null && loadingProcess === 2 && shouldPoll,
       refetchInterval: shouldPoll ? 5000 : false,
       refetchIntervalInBackground: true,
       refetchOnWindowFocus: true,
@@ -160,6 +176,7 @@ function UntactDocumentApplyModal({
       options: {
         onSuccess: (data) => {
           setLoadingProcess(2)
+          clearErrors('untactDocumentSubmission')
         },
         onError: (error: any) => {
           toast({
@@ -185,7 +202,6 @@ function UntactDocumentApplyModal({
       },
     })
 
-  // 실제 API 응답을 처리하는 useEffect
   useEffect(() => {
     const data = govQuery.data
     if (!data) return
@@ -255,6 +271,11 @@ function UntactDocumentApplyModal({
     if (data.status === 'SUCCESS') {
       console.log('[Real API] SUCCESS detected, stopping polling')
       setShouldPoll(false)
+      // 시군구 선택 상태 초기화
+      setSelectedCity('')
+      setSelectedDistrict('')
+      setSelectedAuth(null)
+      setSelectedPassType('')
       toast({
         title: '서류 제출 완료',
         description: '모든 서류가 성공적으로 제출되었습니다.',
@@ -262,6 +283,10 @@ function UntactDocumentApplyModal({
         duration: 3000,
         isClosable: true,
       })
+      // 서류제출 완료 콜백 호출
+      if (onComplete) {
+        onComplete()
+      }
     } else if (data.status === 'FAILED') {
       console.log('[Real API] FAILED detected, stopping polling')
       setShouldPoll(false)
@@ -297,6 +322,11 @@ function UntactDocumentApplyModal({
     setShouldPoll(true)
     setCompletedDocuments(0)
     setCurrentStatus('PENDING')
+    // 시군구 선택 상태 초기화
+    setSelectedCity('')
+    setSelectedDistrict('')
+    setSelectedAuth(null)
+    setSelectedPassType('')
     onClose()
   }
 
@@ -307,6 +337,15 @@ function UntactDocumentApplyModal({
     }
   }
 
+  const handleCityChange = (selectedOption: any) => {
+    setSelectedCity(selectedOption?.value || '')
+    setSelectedDistrict('') // 시/도가 변경되면 군/구 선택 초기화
+  }
+
+  const handleDistrictChange = (selectedOption: any) => {
+    setSelectedDistrict(selectedOption?.value || '')
+  }
+
   const handleLoginGov = () => {
     govMutation({
       data: {
@@ -315,6 +354,8 @@ function UntactDocumentApplyModal({
         birth: userInfo?.birth || userData?.birth || '',
         phone: userInfo?.phone || userData?.phone || '',
         agency: selectedPassType as GovLoginRequestAgencyEnumType,
+        sido: selectedCity,
+        sigungu: selectedDistrict,
       },
     })
   }
@@ -335,7 +376,7 @@ function UntactDocumentApplyModal({
             <SimpleGrid
               p={'20px'}
               columns={{ base: 4, sm: 5 }}
-              spacing={'26px'}
+              spacing={{ base: '0px', sm: '26px' }}
               bg={'grey.1'}
               w={'100%'}
               borderRadius={'10px'}
@@ -345,17 +386,17 @@ function UntactDocumentApplyModal({
                   key={type}
                   direction={'column'}
                   align={'center'}
-                  p={'16px'}
                   borderRadius={'10px'}
                   cursor={'pointer'}
-                  bg={selectedAuth === type ? 'primary.1' : 'transparent'}
+                  py={'4px'}
+                  bg={selectedAuth === type ? 'primary.2' : 'transparent'}
                   border={
-                    selectedAuth === type ? '2px solid' : (
-                      '2px solid transparent'
+                    selectedAuth === type ? '1px solid' : (
+                      '1px solid transparent'
                     )
                   }
                   borderColor={
-                    selectedAuth === type ? 'primary.3' : 'transparent'
+                    selectedAuth === type ? 'primary.2' : 'transparent'
                   }
                   _hover={{
                     bg: selectedAuth === type ? 'primary.1' : 'grey.2',
@@ -367,18 +408,61 @@ function UntactDocumentApplyModal({
               ))}
             </SimpleGrid>
 
+            <SimpleGrid columns={2} gap={'8px'} w={'100%'}>
+              <InputForm label="시도명" isRequired>
+                <Box w={'100%'}>
+                  <CommonSelect
+                    options={cityOptions}
+                    placeholder="시도명 선택"
+                    value={cityOptions.find(
+                      (option) => option.value === selectedCity,
+                    )}
+                    onChange={handleCityChange}
+                  />
+                </Box>
+              </InputForm>
+
+              <InputForm label="시군구명" isRequired>
+                <Box w={'100%'}>
+                  <CommonSelect
+                    options={districtOptions}
+                    placeholder="시군구명 선택"
+                    value={districtOptions.find(
+                      (option) => option.value === selectedDistrict,
+                    )}
+                    onChange={handleDistrictChange}
+                    isDisabled={!selectedCity}
+                  />
+                </Box>
+              </InputForm>
+            </SimpleGrid>
             {selectedAuth === 'PASS' && (
               <InputForm label="통신사" isRequired>
-                <CommonSelect
-                  options={passTypes}
-                  placeholder="선택"
-                  value={passTypes.find(
-                    (option) => option.value === selectedPassType,
-                  )}
-                  onChange={(selectedOption) =>
-                    setSelectedPassType(selectedOption?.value || '')
-                  }
-                />
+                <Box w={'100%'} display={{ base: 'none', sm: 'block' }}>
+                  <CommonSelect
+                    options={passTypes}
+                    placeholder="선택"
+                    value={passTypes.find(
+                      (option) => option.value === selectedPassType,
+                    )}
+                    onChange={(selectedOption) =>
+                      setSelectedPassType(selectedOption?.value || '')
+                    }
+                  />
+                </Box>
+                <Box w={'100%'} display={{ base: 'block', sm: 'none' }}>
+                  <CommonSelect
+                    menuPlacement="top"
+                    options={passTypes}
+                    placeholder="선택"
+                    value={passTypes.find(
+                      (option) => option.value === selectedPassType,
+                    )}
+                    onChange={(selectedOption) =>
+                      setSelectedPassType(selectedOption?.value || '')
+                    }
+                  />
+                </Box>
               </InputForm>
             )}
           </VStack>

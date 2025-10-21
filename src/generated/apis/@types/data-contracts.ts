@@ -302,6 +302,16 @@ export interface GovLogType {
 
 export interface GovLoginType {
   readonly id: number
+  /**
+   * 시도
+   * @maxLength 20
+   */
+  sido: string
+  /**
+   * 시군구
+   * @maxLength 20
+   */
+  sigungu: string
   /** 공통 */
   readonly common: CommonType
   /** 세션ID */
@@ -315,6 +325,8 @@ export interface GovLoginErrorMessageType {
   birth?: string[]
   phone?: string[]
   agency?: string[]
+  sido?: string[]
+  sigungu?: string[]
 }
 
 export interface GovLoginRequestType {
@@ -357,6 +369,18 @@ export interface GovLoginRequestType {
    * * `03` - LGU+
    */
   agency?: GovLoginRequestAgencyEnumType
+  /**
+   * 시도
+   * @minLength 1
+   * @maxLength 20
+   */
+  sido: string
+  /**
+   * 시군구
+   * @minLength 1
+   * @maxLength 20
+   */
+  sigungu: string
 }
 
 export interface GovOtpErrorMessageType {
@@ -378,6 +402,8 @@ export interface GovOtpRequestType {
 
 export interface LoanType {
   readonly id: number
+  /** 유저 */
+  readonly user: LoanUserType
   /** 계약번호 */
   readonly no: string
   /**
@@ -394,9 +420,9 @@ export interface LoanType {
   readonly status: LoanStatusEnumType
   /**
    * 유형
-   * * `A` - 월급
-   * * `B` - 신용
-   * * `C` - 부동산 담보
+   * * `A` - 비상금 대출
+   * * `B` - 신용 대출
+   * * `C` - 부동산 담보 대출
    */
   kind: LoanKindEnumType
   /**
@@ -436,15 +462,17 @@ export interface LoanType {
    */
   annualIncome: LoanAnnualIncomeEnumType
   /**
-   * 월 실수령액 또는 월 수입 (만원)
+   * 월 실수령액 또는 월 수입
+   * @format int64
    * @min 0
-   * @max 2147483647
+   * @max 9223372036854776000
    */
   monthlyIncome: number
   /**
-   * 월 고정 지출 (만원)
+   * 월 고정 지출
+   * @format int64
    * @min 0
-   * @max 2147483647
+   * @max 9223372036854776000
    */
   monthlyFixedExpense: number
   /**
@@ -490,13 +518,14 @@ export interface LoanType {
    */
   safeKey: string
   /** 대출 용도 및 상환 계획 */
-  purposeAndRepaymentPlan: string
+  purposeAndRepaymentPlan?: string
   /** 전자문서 수신 동의 */
   electronicDocumentConsent?: boolean
   /**
-   * 대출신청 금액 (만원)
+   * 대출신청 금액
+   * @format int64
    * @min 0
-   * @max 2147483647
+   * @max 9223372036854776000
    */
   loanAmount: number
   /**
@@ -633,6 +662,7 @@ export interface LoanType {
    * 고용구분
    * * `PERMANENT` - 정규직
    * * `CONTRACT` - 계약직
+   * * `BUSINESS` - 사업자
    */
   employmentType?: LoanEmploymentTypeEnumType
   /**
@@ -680,17 +710,17 @@ export interface LoanType {
    * 우편번호
    * @maxLength 5
    */
-  assetPostcode: string
+  assetPostcode?: string
   /**
    * 기본주소
    * @maxLength 200
    */
-  assetBaseAddress: string
+  assetBaseAddress?: string
   /**
    * 상세주소
    * @maxLength 200
    */
-  assetDetailAddress: string
+  assetDetailAddress?: string
   /**
    * 등본상주소
    * @maxLength 500
@@ -1170,9 +1200,9 @@ export interface LoanRequestType {
   identityVerificationToken?: string
   /**
    * 유형
-   * * `A` - 월급
-   * * `B` - 신용
-   * * `C` - 부동산 담보
+   * * `A` - 비상금 대출
+   * * `B` - 신용 대출
+   * * `C` - 부동산 담보 대출
    */
   kind: LoanRequestKindEnumType
   /**
@@ -1218,15 +1248,17 @@ export interface LoanRequestType {
    */
   annualIncome: LoanRequestAnnualIncomeEnumType
   /**
-   * 월 실수령액 또는 월 수입 (만원)
+   * 월 실수령액 또는 월 수입
+   * @format int64
    * @min 0
-   * @max 2147483647
+   * @max 9223372036854776000
    */
   monthlyIncome: number
   /**
-   * 월 고정 지출 (만원)
+   * 월 고정 지출
+   * @format int64
    * @min 0
-   * @max 2147483647
+   * @max 9223372036854776000
    */
   monthlyFixedExpense: number
   /**
@@ -1272,17 +1304,15 @@ export interface LoanRequestType {
    * @maxLength 100
    */
   safeKey: string
-  /**
-   * 대출 용도 및 상환 계획
-   * @minLength 1
-   */
-  purposeAndRepaymentPlan: string
+  /** 대출 용도 및 상환 계획 */
+  purposeAndRepaymentPlan?: string
   /** 전자문서 수신 동의 */
   electronicDocumentConsent?: boolean
   /**
-   * 대출신청 금액 (만원)
+   * 대출신청 금액
+   * @format int64
    * @min 0
-   * @max 2147483647
+   * @max 9223372036854776000
    */
   loanAmount: number
   /**
@@ -1422,6 +1452,7 @@ export interface LoanRequestType {
    * 고용구분
    * * `PERMANENT` - 정규직
    * * `CONTRACT` - 계약직
+   * * `BUSINESS` - 사업자
    */
   employmentType?: LoanRequestEmploymentTypeEnumType
   /**
@@ -1470,22 +1501,19 @@ export interface LoanRequestType {
   residenceType: LoanRequestResidenceTypeEnumType
   /**
    * 우편번호
-   * @minLength 1
    * @maxLength 5
    */
-  assetPostcode: string
+  assetPostcode?: string
   /**
    * 기본주소
-   * @minLength 1
    * @maxLength 200
    */
-  assetBaseAddress: string
+  assetBaseAddress?: string
   /**
    * 상세주소
-   * @minLength 1
    * @maxLength 200
    */
-  assetDetailAddress: string
+  assetDetailAddress?: string
   /**
    * 등본상주소
    * @maxLength 500
@@ -1519,6 +1547,24 @@ export interface LoanSignType {
 
 export interface LoanSignErrorMessageType {
   nonField?: string[]
+}
+
+export interface LoanUserType {
+  readonly id: number
+  /**
+   * 이름
+   * @maxLength 50
+   */
+  name: string
+}
+
+export interface LoanUserRequestType {
+  /**
+   * 이름
+   * @minLength 1
+   * @maxLength 50
+   */
+  name: string
 }
 
 export interface NoticeType {
@@ -1602,9 +1648,9 @@ export interface PatchedLoanRequestType {
   identityVerificationToken?: string
   /**
    * 유형
-   * * `A` - 월급
-   * * `B` - 신용
-   * * `C` - 부동산 담보
+   * * `A` - 비상금 대출
+   * * `B` - 신용 대출
+   * * `C` - 부동산 담보 대출
    */
   kind?: PatchedLoanRequestKindEnumType
   /**
@@ -1650,15 +1696,17 @@ export interface PatchedLoanRequestType {
    */
   annualIncome?: PatchedLoanRequestAnnualIncomeEnumType
   /**
-   * 월 실수령액 또는 월 수입 (만원)
+   * 월 실수령액 또는 월 수입
+   * @format int64
    * @min 0
-   * @max 2147483647
+   * @max 9223372036854776000
    */
   monthlyIncome?: number
   /**
-   * 월 고정 지출 (만원)
+   * 월 고정 지출
+   * @format int64
    * @min 0
-   * @max 2147483647
+   * @max 9223372036854776000
    */
   monthlyFixedExpense?: number
   /**
@@ -1704,17 +1752,15 @@ export interface PatchedLoanRequestType {
    * @maxLength 100
    */
   safeKey?: string
-  /**
-   * 대출 용도 및 상환 계획
-   * @minLength 1
-   */
+  /** 대출 용도 및 상환 계획 */
   purposeAndRepaymentPlan?: string
   /** 전자문서 수신 동의 */
   electronicDocumentConsent?: boolean
   /**
-   * 대출신청 금액 (만원)
+   * 대출신청 금액
+   * @format int64
    * @min 0
-   * @max 2147483647
+   * @max 9223372036854776000
    */
   loanAmount?: number
   /**
@@ -1854,6 +1900,7 @@ export interface PatchedLoanRequestType {
    * 고용구분
    * * `PERMANENT` - 정규직
    * * `CONTRACT` - 계약직
+   * * `BUSINESS` - 사업자
    */
   employmentType?: PatchedLoanRequestEmploymentTypeEnumType
   /**
@@ -1902,19 +1949,16 @@ export interface PatchedLoanRequestType {
   residenceType?: PatchedLoanRequestResidenceTypeEnumType
   /**
    * 우편번호
-   * @minLength 1
    * @maxLength 5
    */
   assetPostcode?: string
   /**
    * 기본주소
-   * @minLength 1
    * @maxLength 200
    */
   assetBaseAddress?: string
   /**
    * 상세주소
-   * @minLength 1
    * @maxLength 200
    */
   assetDetailAddress?: string
@@ -2082,6 +2126,8 @@ export interface SettingType {
   isGov?: boolean
   /** 위텍스 제출 활성화 */
   isWetax?: boolean
+  /** 유스비 제출 활성화 */
+  isUseb?: boolean
   /**
    * 대출 신청 가능 신용 점수
    * @min 0
@@ -2113,6 +2159,7 @@ export interface UserType {
   birth: string
   /**
    * 성별 코드
+   * 주민등록번호 뒷 한자리
    * @maxLength 1
    */
   genderCode: string
@@ -2651,15 +2698,15 @@ export const LoanStatusEnumTypeMap = {
 } as const
 
 /**
- * * `A` - 월급
- * `B` - 신용
- * `C` - 부동산 담보
+ * * `A` - 비상금 대출
+ * `B` - 신용 대출
+ * `C` - 부동산 담보 대출
  */
 export type LoanKindEnumType = keyof typeof LoanKindEnumTypeMap
 export const LoanKindEnumTypeMap = {
-  A: '월급',
-  B: '신용',
-  C: '부동산 담보',
+  A: '비상금 대출',
+  B: '신용 대출',
+  C: '부동산 담보 대출',
 } as const
 
 /**
@@ -2966,10 +3013,12 @@ export const LoanJobTypeEnumTypeMap = {
 /**
  * * `PERMANENT` - 정규직
  * `CONTRACT` - 계약직
+ * `BUSINESS` - 사업자
  */
 export type LoanEmploymentTypeEnumType =
   keyof typeof LoanEmploymentTypeEnumTypeMap
 export const LoanEmploymentTypeEnumTypeMap = {
+  BUSINESS: '사업자',
   CONTRACT: '계약직',
   PERMANENT: '정규직',
 } as const
@@ -3064,15 +3113,15 @@ export const LoanContractRequestInterestPaymentDateEnumTypeMap = {
 } as const
 
 /**
- * * `A` - 월급
- * `B` - 신용
- * `C` - 부동산 담보
+ * * `A` - 비상금 대출
+ * `B` - 신용 대출
+ * `C` - 부동산 담보 대출
  */
 export type LoanRequestKindEnumType = keyof typeof LoanRequestKindEnumTypeMap
 export const LoanRequestKindEnumTypeMap = {
-  A: '월급',
-  B: '신용',
-  C: '부동산 담보',
+  A: '비상금 대출',
+  B: '신용 대출',
+  C: '부동산 담보 대출',
 } as const
 
 /**
@@ -3385,10 +3434,12 @@ export const LoanRequestJobTypeEnumTypeMap = {
 /**
  * * `PERMANENT` - 정규직
  * `CONTRACT` - 계약직
+ * `BUSINESS` - 사업자
  */
 export type LoanRequestEmploymentTypeEnumType =
   keyof typeof LoanRequestEmploymentTypeEnumTypeMap
 export const LoanRequestEmploymentTypeEnumTypeMap = {
+  BUSINESS: '사업자',
   CONTRACT: '계약직',
   PERMANENT: '정규직',
 } as const
@@ -3420,16 +3471,16 @@ export const LoanRequestResidenceTypeEnumTypeMap = {
 } as const
 
 /**
- * * `A` - 월급
- * `B` - 신용
- * `C` - 부동산 담보
+ * * `A` - 비상금 대출
+ * `B` - 신용 대출
+ * `C` - 부동산 담보 대출
  */
 export type PatchedLoanRequestKindEnumType =
   keyof typeof PatchedLoanRequestKindEnumTypeMap
 export const PatchedLoanRequestKindEnumTypeMap = {
-  A: '월급',
-  B: '신용',
-  C: '부동산 담보',
+  A: '비상금 대출',
+  B: '신용 대출',
+  C: '부동산 담보 대출',
 } as const
 
 /**
@@ -3743,10 +3794,12 @@ export const PatchedLoanRequestJobTypeEnumTypeMap = {
 /**
  * * `PERMANENT` - 정규직
  * `CONTRACT` - 계약직
+ * `BUSINESS` - 사업자
  */
 export type PatchedLoanRequestEmploymentTypeEnumType =
   keyof typeof PatchedLoanRequestEmploymentTypeEnumTypeMap
 export const PatchedLoanRequestEmploymentTypeEnumTypeMap = {
+  BUSINESS: '사업자',
   CONTRACT: '계약직',
   PERMANENT: '정규직',
 } as const

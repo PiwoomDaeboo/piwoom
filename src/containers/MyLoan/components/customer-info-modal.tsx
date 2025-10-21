@@ -112,7 +112,7 @@ function CustomerInfoModal({
               성별
             </Text>
             <Text textStyle={'pre-body-5'} color={'grey.8'}>
-              {userInfo?.gender_code || '-'}
+              {userInfo?.gender_code === '1' ? '남성' : '여성'}
             </Text>
           </HStack>
           <HStack

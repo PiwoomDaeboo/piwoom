@@ -114,6 +114,16 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
       healthInsurancePaymentConfirmation2: yup.string().nullable().optional(),
       identityCard: yup.string().required('필수 항목 입니다.'),
       fileSet: yup.mixed().nullable().optional(),
+      untactDocumentSubmission: yup
+        .boolean()
+        .test(
+          'untact-document-required',
+          '비대면 서류제출을 완료해주세요.',
+          function (value) {
+            // 정부24 기능이 활성화된 경우에만 필수
+            return value === true
+          },
+        ),
 
       // Optional fields
 
