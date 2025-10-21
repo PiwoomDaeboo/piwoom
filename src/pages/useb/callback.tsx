@@ -5,29 +5,30 @@ import { useSearchParams } from 'next/navigation'
 
 import HomeLayout from '@/components/@Layout/HomeLayout'
 import { useLocalStorage } from '@/stores/local/state'
+import { useSessionStorage } from '@/stores/session/state'
 
-function NiceCallback() {
+function UsebCallback() {
   const searchParams = useSearchParams()
-  const safe_key = searchParams.get('safe_key')
+  const id = searchParams.get('id')
   const { set } = useLocalStorage()
 
   useEffect(() => {
-    if (safe_key) {
-      set('useb', safe_key)
+    if (id) {
+      set('popup_status', id)
 
       // setTimeout(() => {
       //   window.close()
       // }, 500)
     }
-  }, [safe_key])
+  }, [id])
 
   return (
     <>
       {/* output: 똑똑한개발자 | 메인 */}
       {/* titleTemplate는 /configs/seo/config.ts에서 변경 가능합니다. */}
-      <div>신용정보 제출 중...</div>
+      <div>신분증 진위 여부 확인중...</div>
     </>
   )
 }
 
-export default NiceCallback
+export default UsebCallback

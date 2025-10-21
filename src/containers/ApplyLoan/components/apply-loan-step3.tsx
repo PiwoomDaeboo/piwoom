@@ -368,8 +368,11 @@ const ApplyLoanStep3 = () => {
         </VStack>
 
         <InputForm label="대출 용도">
-          <Flex w={'100%'} gap={'16px'}>
-            <VStack w={'50%'} alignItems={'flex-start'}>
+          <Flex w={'100%'} gap={'8px'} flexDir={{ base: 'column', sm: 'row' }}>
+            <VStack
+              w={{ base: '100%', sm: '50%', md: '50%' }}
+              alignItems={'flex-start'}
+            >
               <Box w={'100%'}>
                 <Controller
                   name="purpose"
@@ -404,7 +407,7 @@ const ApplyLoanStep3 = () => {
                 </Text>
               )}
             </VStack>
-            <Box />
+            <Box w={{ base: '0', sm: '50%', md: '50%' }} />
           </Flex>
           {errors?.purpose && (
             <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
@@ -413,7 +416,7 @@ const ApplyLoanStep3 = () => {
           )}
         </InputForm>
         <InputForm label="총 자산 규모" w={'100%'}>
-          <SimpleGrid w={'100%'} gap={'16px'} columns={{ base: 2, sm: 4 }}>
+          <SimpleGrid w={'100%'} gap={'8px'} columns={{ base: 2, sm: 4 }}>
             {TOTAL_ASSET_OPTIONS.map((option) => (
               <Button
                 key={option.value}
@@ -439,7 +442,7 @@ const ApplyLoanStep3 = () => {
           )}
         </InputForm>
         <InputForm label="연 소득">
-          <SimpleGrid w={'100%'} gap={'16px'} columns={{ base: 2, sm: 4 }}>
+          <SimpleGrid w={'100%'} gap={'8px'} columns={{ base: 2, sm: 4 }}>
             {ANNUAL_INCOME_OPTIONS.map((option) => (
               <Button
                 key={option.value}
@@ -464,7 +467,7 @@ const ApplyLoanStep3 = () => {
             </Text>
           )}
         </InputForm>
-        <Flex gap={'16px'}>
+        <Flex gap={'8px'}>
           <InputForm label="월 실수령액 또는 월 수입">
             <Controller
               name="monthlyIncome"
@@ -532,7 +535,7 @@ const ApplyLoanStep3 = () => {
         </Flex>
 
         <InputForm label="부채규모">
-          <SimpleGrid w={'100%'} gap={'16px'} columns={{ base: 2, sm: 4 }}>
+          <SimpleGrid w={'100%'} gap={'8px'} columns={{ base: 2, sm: 4 }}>
             {DEBT_SCALE_OPTIONS.map((option) => (
               <Button
                 key={option.value}
@@ -557,7 +560,7 @@ const ApplyLoanStep3 = () => {
             </Text>
           )}
         </InputForm>
-        <Flex gap={'16px'}>
+        <Flex gap={'8px'}>
           <InputForm label="변제방법 (자금원천)">
             <Box w={'100%'}>
               <Controller
@@ -653,7 +656,7 @@ const ApplyLoanStep3 = () => {
             w={'209px'}
             isDisabled={!!safeKeyWatchValue}
           >
-            제출
+            {safeKeyWatchValue ? '제출 완료' : '제출'}
           </Button>
           {safeKeyWatchValue && (
             <Text textStyle={'pre-body-7'} color={'accent.green2'}>

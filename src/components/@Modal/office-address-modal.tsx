@@ -153,7 +153,7 @@ function OfficeAddressModal({
         >
           <InputForm isRequired label="직장명">
             <HStack w={'100%'}>
-              <Box w={{ base: '40%', sm: '30%' }}>
+              <Box w={{ base: '45%', sm: '30%' }}>
                 <CommonSelect
                   options={[
                     { label: '직장명', value: 'name' },
@@ -168,18 +168,14 @@ function OfficeAddressModal({
                   placeholder="선택"
                 />
               </Box>
-              <Box w={'70%'}>
+              <Box w={{ base: '55%', sm: '70%' }}>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" pl={'12px'}>
                     <MagnifyingGlassIcon color="grey.8" boxSize={'20px'} />
                   </InputLeftElement>
                   <Input
                     pl={'48px'}
-                    placeholder={
-                      searchType === 'name' ? '직장명을 입력하세요' : (
-                        '법인번호를 입력하세요'
-                      )
-                    }
+                    placeholder={searchType === 'name' ? '직장명' : '법인번호'}
                     value={name}
                     onChange={handleNameChange}
                     isInvalid={!!searchError}

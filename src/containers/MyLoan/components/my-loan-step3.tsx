@@ -86,6 +86,15 @@ const MyLoanStep3 = () => {
     onTermsOpen()
     setTermsNumber(termsNumber)
   }
+
+  const handleTermsConfirm = () => {
+    // 약관 확인 후 해당 항목을 체크
+    const currentItem = AGREEMENT_ITEMS.find((item) => item.id === termsNumber)
+    if (currentItem) {
+      handleIndividualAgreement(currentItem.key, true)
+    }
+    onTermsClose()
+  }
   const { mutate: createContractSignature } = useLoanSignCreateMutation({
     options: {
       onSuccess: (data) => {
@@ -136,6 +145,7 @@ const MyLoanStep3 = () => {
       <MyLoanTermsModal
         isOpen={isTermsOpen}
         onClose={onTermsClose}
+        onConfirm={handleTermsConfirm}
         termsNumber={termsNumber}
       />
 
@@ -164,7 +174,7 @@ const MyLoanStep3 = () => {
                 대부금액
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                {userLoanData?.loanAmount?.toLocaleString()}원
+                {userLoanData?.loanAmount?.toLocaleString() || 0}원
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -261,34 +271,23 @@ const MyLoanStep3 = () => {
                   'primary.1'
                 : 'transparent'
               }
+              cursor={'pointer'}
+              onClick={() => handleTermsOpen(item.id)}
             >
               <HStack w={'100%'} spacing={3}>
                 <Checkbox
                   isChecked={agreements[item.key as keyof typeof agreements]}
                   sx={CHECKBOX_STYLES}
                   onChange={(e) => {
+                    e.stopPropagation()
                     handleIndividualAgreement(item.key, e.target.checked)
                   }}
                 />
-                <Text
-                  textStyle={'pre-body-5'}
-                  color={'grey.10'}
-                  cursor={'pointer'}
-                  onClick={() => {
-                    handleIndividualAgreement(
-                      item.key,
-                      !agreements[item.key as keyof typeof agreements],
-                    )
-                  }}
-                >
+                <Text textStyle={'pre-body-5'} color={'grey.10'}>
                   {item.label}
                 </Text>
               </HStack>
-              <Box
-                onClick={() => handleTermsOpen(item.id)}
-                cursor={'pointer'}
-                p={'4px'}
-              >
+              <Box p={'4px'}>
                 <CaretRightIcon boxSize={'24px'} />
               </Box>
             </Flex>
@@ -378,7 +377,10 @@ const MyLoanStep3 = () => {
             variant={'solid-primary'}
             w={'160px'}
             isDisabled={
-              !isAgree || !agreements.privacy || !agreements.collection
+              !isAgree ||
+              !agreements.privacy ||
+              !agreements.collection ||
+              !agreements.all
             }
             onClick={() => createContractSignature({ id: Number(userId) })}
             // onClick={() => router.push('/my-loan?step=4')}

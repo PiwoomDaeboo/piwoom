@@ -171,6 +171,7 @@ const ApplyLoanStep4 = () => {
     options: {
       onSuccess: (data) => {
         // setValue('accountHolderSsn', true)
+        clearErrors('accountHolder')
         console.log('ownerNameSearch', data)
         setIsBankAccountVerified(true)
         setValue('accountHolder', data?.holder)
@@ -245,6 +246,7 @@ const ApplyLoanStep4 = () => {
 
   const onStep4Error = (errors: any) => {
     console.log('Step4 폼 에러:', errors)
+
     toast({
       render: () => (
         <Box
@@ -264,6 +266,7 @@ const ApplyLoanStep4 = () => {
       duration: 5000,
       isClosable: true,
     })
+
     const firstErrorField = Object.keys(errors)[0]
     const errorElement =
       document.querySelector(`[name="${firstErrorField}"]`) ||
@@ -342,7 +345,11 @@ const ApplyLoanStep4 = () => {
 
   const handleLoanPeriodChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value) || 0
-    const clampedValue = Math.min(Math.max(value, 0), 60)
+
+    const clampedValue =
+      router.query.type === 'salary' ?
+        Math.min(Math.max(value, 0), 6)
+      : Math.min(Math.max(value, 0), 60)
 
     if (value !== clampedValue) {
       setValue('loanPeriod', clampedValue)
@@ -381,6 +388,12 @@ const ApplyLoanStep4 = () => {
     onUntactDocumentApplyModalOpen()
   }
 
+  const handleUntactDocumentSubmissionComplete = () => {
+    setIsDocumentSubmissionCompleted(true)
+    setValue('untactDocumentSubmission', true)
+    clearErrors('untactDocumentSubmission')
+  }
+
   useEffect(() => {
     const extractedUserInfo = extractUserInfoFromJWT(
       identityVerificationToken as string,
@@ -396,6 +409,7 @@ const ApplyLoanStep4 = () => {
       <UntactDocumentApplyModal
         isOpen={isUntactDocumentApplyModalOpen}
         onClose={onUntactDocumentApplyModalClose}
+        onComplete={handleUntactDocumentSubmissionComplete}
       />
       <AddressModal
         isOpen={isAddressModalOpen}
@@ -810,7 +824,7 @@ const ApplyLoanStep4 = () => {
             )}
           </InputForm>
         }
-        <Flex gap={'16px'}>
+        <Flex gap={'8px'}>
           <InputForm label="입금은행">
             <Box w={'100%'}>
               <Controller
@@ -872,12 +886,17 @@ const ApplyLoanStep4 = () => {
               예금주 실명조회가 완료됐어요
             </Text>
           )}
+          {errors?.accountHolder && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.accountHolder?.message as string}
+            </Text>
+          )}
         </InputForm>
         <Box w={'100%'} h={'1px'} bg={'border.basic.1'} my={'48px'} />
         <Text textStyle={'pre-heading-3'} color={'primary.4'}>
           직장 정보
         </Text>
-        <Flex flexDir={{ base: 'column', sm: 'row' }} gap={'16px'}>
+        <Flex flexDir={{ base: 'column', sm: 'row' }} gap={'8px'}>
           <InputForm label="직업구분">
             <Box w={'100%'}>
               <Controller
@@ -1034,7 +1053,7 @@ const ApplyLoanStep4 = () => {
         </InputForm>
 
         <InputForm label="입사년월 또는 창업시기">
-          <Flex w={'100%'} flexDir={{ base: 'column', sm: 'row' }} gap={'16px'}>
+          <Flex w={'100%'} flexDir={{ base: 'column', sm: 'row' }} gap={'8px'}>
             <VStack alignItems={'flex-start'} spacing={'4px'} w={'100%'}>
               <InputGroup w={{ base: '100%', sm: '100%' }}>
                 <Input
@@ -1287,7 +1306,7 @@ const ApplyLoanStep4 = () => {
         <Text textStyle={'pre-heading-3'} color={'primary.4'}>
           서류 제출
         </Text>
-        <InputForm label="" isRequired={false}>
+        <InputForm label="비대면 서류제출" isRequired={true}>
           <Button
             variant={'outline-primary'}
             textStyle={'pre-body-5'}
@@ -1298,14 +1317,15 @@ const ApplyLoanStep4 = () => {
           >
             {isDocumentSubmissionCompleted ? '서류제출완료' : '비대면 서류제출'}
           </Button>
-          {isDocumentSubmissionCompleted && (
-            <Text textStyle={'pre-body-6'} color={'grey.8'}>
-              비대면 서류제출이 완료됐어요.
-            </Text>
-          )}
+
           {!settingData?.isGov && (
             <Text textStyle={'pre-body-6'} color={'accent.red2'}>
               비대면 서류제출 기능이 비활성화되어 있어요.
+            </Text>
+          )}
+          {errors?.untactDocumentSubmission && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.untactDocumentSubmission?.message as string}
             </Text>
           )}
         </InputForm>

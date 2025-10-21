@@ -11,6 +11,7 @@ export type LocalStorage = {
   token: TokenType | null
   count: number
   popup_status: string | null
+  useb: string | null
 }
 
 /**
@@ -28,10 +29,11 @@ export const useLocalStorage = create(
         token: null,
         count: 0,
         popup_status: null,
+        useb: null,
       })),
     ),
     {
-      name: '@toktokhan-dev',
+      name: '@piwoom',
     },
   ),
 )

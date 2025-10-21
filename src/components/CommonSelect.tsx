@@ -87,6 +87,26 @@ export const CommonSelect: SelectComponent = ({
         indicatorSeparator: () => ({
           display: 'none',
         }),
+        menuList: (provided) => ({
+          ...provided,
+          maxHeight: '200px',
+          overflowY: 'auto',
+          css: {
+            '&::-webkit-scrollbar': {
+              width: '6px',
+            },
+            '&::-webkit-scrollbar-track': {
+              background: 'transparent',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              background: '#E2E8F0',
+              borderRadius: '3px',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              background: '#CBD5E0',
+            },
+          },
+        }),
       }}
       menuPortalTarget={document.body}
       styles={{

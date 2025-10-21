@@ -16,6 +16,8 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
+import { REPAYMENT_TYPE } from '@/constants/loan'
+import { useLoanRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
 import { useLoanScheduleListQuery } from '@/generated/apis/Schedule/Schedule.query'
 import { CaretLeftIcon } from '@/generated/icons/MyIcons'
 
@@ -30,6 +32,17 @@ export default function Schedule() {
       enabled: !!router.query.id,
     },
   })
+  const { data: loanRetrieveData } = useLoanRetrieveQuery({
+    variables: {
+      id: Number(router.query.id),
+    },
+    options: {
+      enabled: !!router.query.id && !isLoading,
+    },
+  })
+  console.log(loanRetrieveData)
+
+  const repaymentType = loanRetrieveData?.contract?.repaymentType
   if (isLoading) {
     return (
       <Center h={'100vh'}>
@@ -79,7 +92,7 @@ export default function Schedule() {
 
         <Box w={'100%'} mt={'32px'}>
           <VStack gap={'16px'} alignItems={'stretch'}>
-            {scheduleData?.map((item) => (
+            {scheduleData?.map((item, index) => (
               <Flex
                 key={item.repaymentDate}
                 w={'100%'}
@@ -103,14 +116,18 @@ export default function Schedule() {
                   </Text>
                   <Flex flexDir={'column'} alignItems={'flex-start'}>
                     <Text textStyle={'pre-caption-2'} color={'primary.3'}>
-                      이자
+                      {repaymentType === 'EQUAL_INSTALLMENT' ?
+                        '원리금'
+                      : index === (scheduleData?.length || 0) - 1 ?
+                        '원금 및 이자'
+                      : '이자'}
                     </Text>
                     <Text
                       textStyle={'pre-body-3'}
                       color={'grey.10'}
                       textAlign={'right'}
                     >
-                      {item.interestAmount.toLocaleString() || 0}원
+                      {item?.interestAmount?.toLocaleString() || 0}원
                     </Text>
                   </Flex>
                 </Flex>

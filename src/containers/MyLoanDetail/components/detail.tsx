@@ -104,8 +104,9 @@ export default function Detail() {
               alignSelf={'flex-end'}
             >
               {loanRetrieveData?.contract?.amount?.toLocaleString() ||
-                loanRetrieveData?.loanAmount?.toLocaleString()}
-              만원
+                loanRetrieveData?.loanAmount?.toLocaleString() ||
+                0}
+              원
             </Text>
           </HStack>
           <HStack
@@ -124,9 +125,9 @@ export default function Detail() {
               whiteSpace={'pre-line'}
               alignSelf={'flex-end'}
             >
-              {loanRetrieveData?.contract?.remainingAmount?.toLocaleString() ||
+              {loanRetrieveData?.contract?.remainingAmount.toLocaleString() ||
                 0}
-              만원
+              원
             </Text>
           </HStack>
           <HStack

@@ -1,3 +1,5 @@
+import { Box } from '@chakra-ui/react'
+
 import Terms from '../Terms'
 import Section0 from './components/Section0'
 import Section1 from './components/Section1'
@@ -11,8 +13,13 @@ function Home() {
   return (
     <>
       <Section0 />
-      <Section1 />
-      <Section2 />
+      <Box
+        w={'100%'}
+        background={'linear-gradient(180deg, #FFF 0%, #F1F7FF 100%)'}
+      >
+        <Section1 />
+        <Section2 />
+      </Box>
       <Section3 />
       <Section4 />
       <Section5 />

@@ -3,9 +3,11 @@ import { useRouter } from 'next/router'
 import {
   Box,
   Button,
+  Center,
   Container,
   Flex,
   HStack,
+  Spinner,
   Text,
   VStack,
 } from '@chakra-ui/react'
@@ -17,7 +19,7 @@ import { formatDate } from '@/utils/date-format'
 function NoticeDetail() {
   const router = useRouter()
   const { id } = router.query
-  const { data: noticeDetail } = useNoticeRetrieveQuery({
+  const { data: noticeDetail, isLoading } = useNoticeRetrieveQuery({
     variables: {
       id: Number(id),
     },
@@ -36,6 +38,14 @@ function NoticeDetail() {
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+  }
+
+  if (isLoading) {
+    return (
+      <Center h={'100vh'}>
+        <Spinner />
+      </Center>
+    )
   }
 
   return (
@@ -103,7 +113,14 @@ function NoticeDetail() {
             _hover={{ bg: 'grey.1' }}
             cursor={'pointer'}
           >
-            <HStack gap={'56px'}>
+            <HStack
+              cursor={'pointer'}
+              gap={'56px'}
+              onClick={() =>
+                noticeDetail?.nextNotice?.id &&
+                (() => router.push(`/notice/${noticeDetail?.nextNotice?.id}`))()
+              }
+            >
               <Text
                 display={{ base: 'none', sm: 'block' }}
                 textStyle={'pre-body-5'}
@@ -125,7 +142,14 @@ function NoticeDetail() {
             _hover={{ bg: 'grey.1' }}
             cursor={'pointer'}
           >
-            <HStack gap={'56px'}>
+            <HStack
+              cursor={'pointer'}
+              gap={'56px'}
+              onClick={() =>
+                noticeDetail?.prevNotice?.id &&
+                (() => router.push(`/notice/${noticeDetail?.prevNotice?.id}`))()
+              }
+            >
               <Text
                 display={{ base: 'none', sm: 'block' }}
                 textStyle={'pre-body-5'}

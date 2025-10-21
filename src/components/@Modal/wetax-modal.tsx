@@ -56,12 +56,12 @@ const passTypes = [
 ]
 
 const authOptions = [
-  { type: 'KAKAO', icon: KakaoAuthenticationIcon, label: '카카오' },
-  { type: 'KB', icon: KbAuthenticationIcon, label: 'KB' },
-  { type: 'PASS', icon: PassAuthenticationIcon, label: 'PASS' },
-  { type: 'SHINHAN', icon: ShinhanAuthenticationIcon, label: '신한' },
-  { type: 'NAVER', icon: NaverAuthenticationIcon, label: '네이버' },
+  { type: 'KAKAO', icon: KakaoAuthenticationIcon, label: '카카오톡' },
   { type: 'TOSS', icon: TossAuthenticationIcon, label: '토스' },
+  { type: 'PASS', icon: PassAuthenticationIcon, label: '통신사PASS' },
+  { type: 'NAVER', icon: NaverAuthenticationIcon, label: '네이버' },
+  { type: 'KB', icon: KbAuthenticationIcon, label: '국민인증서' },
+  { type: 'SHINHAN', icon: ShinhanAuthenticationIcon, label: '신한인증서' },
 ]
 
 function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
