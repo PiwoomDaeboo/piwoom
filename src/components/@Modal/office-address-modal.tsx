@@ -25,11 +25,11 @@ import { useCompanyListQuery } from '@/generated/apis/Company/Company.query'
 import { MagnifyingGlassIcon } from '@/generated/icons/MyIcons'
 
 interface Company {
-  no: string
-  name: string
-  businessNo: string
-  baseAddress: string
-  detailAddress: string
+  no: string | null
+  name: string | null
+  businessNo: string | null
+  baseAddress: string | null
+  detailAddress: string | null
 }
 
 interface OfficeAddressModalProps {
@@ -72,11 +72,11 @@ function OfficeAddressModal({
 
   const handleConfirm = () => {
     onSelectCompany?.({
-      no: '',
+      no: null,
       name: name,
-      businessNo: '',
-      baseAddress: '',
-      detailAddress: '',
+      businessNo: null,
+      baseAddress: null,
+      detailAddress: null,
     })
     setName('')
     setNo('')
@@ -104,10 +104,7 @@ function OfficeAddressModal({
   }
 
   const handleCompanySelect = (company: Company) => {
-    setValue('companyName', company.name)
-    setValue('companyBusinessNumber', formatBusinessNumber(company.businessNo))
-    setValue('companyAddress', company.baseAddress)
-    setValue('companyDetailAddress', company.detailAddress)
+    onSelectCompany?.(company)
     setName('')
     onClose()
   }
@@ -205,7 +202,10 @@ function OfficeAddressModal({
             // maxH={{ base: 'calc(100vh - 100px)', md: 'none' }}
           >
             {isCompanyListLoading && (
-              <Center h={'100%'}>
+              <Center
+                h={{ base: 'calc(100vh - 200px)', md: '450px' }}
+                maxH={{ base: 'calc(100vh - 200px)', md: '600px' }}
+              >
                 <Spinner />
               </Center>
             )}

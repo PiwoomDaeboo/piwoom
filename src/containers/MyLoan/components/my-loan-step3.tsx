@@ -25,8 +25,12 @@ import {
   useLoanRetrieveQuery,
   useLoanSignCreateMutation,
 } from '@/generated/apis/Loan/Loan.query'
+import { useUsebAccessTokenCreateMutation } from '@/generated/apis/Useb/Useb.query'
+import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
 import { MY_IMAGES } from '@/generated/path/images'
+import { useSessionStorage } from '@/stores/session/state'
+import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 import {
   AGREEMENT_ITEMS,
@@ -38,6 +42,7 @@ import MyLoanTermsModal from './my-loan-terms-modal'
 
 const MyLoanStep3 = () => {
   const router = useRouter()
+  const [ekycData, setEkycData] = useState<any>(null)
   const { userId } = router.query
   const { data: userLoanData } = useLoanRetrieveQuery({
     variables: {
@@ -47,19 +52,14 @@ const MyLoanStep3 = () => {
       enabled: !!userId,
     },
   })
-  console.log('userLoanData', userLoanData)
 
   const {
     isOpen: isTermsOpen,
     onOpen: onTermsOpen,
     onClose: onTermsClose,
   } = useDisclosure()
-  const {
-    isOpen: isAuthAlertOpen,
-    onOpen: onAuthAlertOpen,
-    onClose: onAuthAlertClose,
-  } = useDisclosure()
   const toast = useToast()
+  const [usebAccessToken, setUsebAccessToken] = useState('')
   const [isAgree, setIsAgree] = useState(false)
   const [termsNumber, setTermsNumber] = useState(1)
   const [signUrl, setSignUrl] = useState('')
@@ -68,6 +68,12 @@ const MyLoanStep3 = () => {
     privacy: false,
     collection: false,
   })
+  const { data: userData } = useUserRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
+
   const handleIndividualAgreement = (key: string, checked: boolean) => {
     const newAgreements = { ...agreements, [key]: checked }
 
@@ -88,7 +94,6 @@ const MyLoanStep3 = () => {
   }
 
   const handleTermsConfirm = () => {
-    // 약관 확인 후 해당 항목을 체크
     const currentItem = AGREEMENT_ITEMS.find((item) => item.id === termsNumber)
     if (currentItem) {
       handleIndividualAgreement(currentItem.key, true)
@@ -122,6 +127,16 @@ const MyLoanStep3 = () => {
       },
     },
   })
+
+  const { mutate: usebAccessTokenCreate } = useUsebAccessTokenCreateMutation({
+    options: {
+      onSuccess: (data) => {
+        setUsebAccessToken(data.accessToken)
+        console.log('usebAccessToken', data)
+      },
+    },
+  })
+
   const handleApplyCreditInfoSubmit = (url: string) => {
     if (!url) return
 
@@ -131,14 +146,56 @@ const MyLoanStep3 = () => {
       'width=800, height=600, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
     )
   }
+
+  const openUsebKycPopup = () => {
+    const popup = window.open(
+      '/ekyc',
+      'ekycPopup',
+      'width=800, height=640, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
+    )
+
+    if (!popup) {
+      toast({
+        title: '팝업 차단됨',
+        description: '팝업이 차단되었습니다. 팝업을 허용해주세요.',
+        status: 'error',
+        duration: 3000,
+      })
+    }
+  }
+
   useEffect(() => {
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'popup_status') {
+    if (usebAccessToken) {
+      openUsebKycPopup()
+    }
+  }, [usebAccessToken])
+
+  useEffect(() => {
+    const handleStorageChange = (e: MessageEvent) => {
+      if (
+        e.data.result === 'success' &&
+        (e.data.review_result.result_type === 1 ||
+          e.data.review_result.result_type === 5)
+      ) {
         console.log(e)
-        router.replace('/my-loan?step=4')
+        setEkycData(e.data)
+      } else {
+        return
+        // toast({
+        //   title: '신분증 인증 실패',
+        //   description: '신분증 인증에 실패했습니다.',
+        //   status: 'error',
+        //   duration: 3000,
+        // })
       }
-    })
-  }, [router])
+    }
+
+    window.addEventListener('message', handleStorageChange)
+
+    return () => {
+      window.removeEventListener('message', handleStorageChange)
+    }
+  }, [])
 
   return (
     <Container>
@@ -149,7 +206,7 @@ const MyLoanStep3 = () => {
         termsNumber={termsNumber}
       />
 
-      <AuthAlertModal isOpen={isAuthAlertOpen} onClose={onAuthAlertClose} />
+      {/* <AuthAlertModal isOpen={isAuthAlertOpen} onClose={onAuthAlertClose} /> */}
 
       <Flex
         pt={{ base: '40px', sm: '48px', md: '80px' }}
@@ -174,7 +231,7 @@ const MyLoanStep3 = () => {
                 대부금액
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                {userLoanData?.loanAmount?.toLocaleString() || 0}원
+                {userLoanData?.contract?.amount?.toLocaleString() || 0}원
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -240,10 +297,8 @@ const MyLoanStep3 = () => {
                 상환금 입금 계좌
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                {userLoanData?.contract?.repaymentAccountName}
-                {userLoanData?.contract?.repaymentAccountNumber}
                 {userLoanData?.contract?.repaymentAccountHolder &&
-                  `(예금주 : ${userLoanData?.contract?.repaymentAccountHolder})`}
+                  `${userLoanData?.contract?.repaymentAccountName} ${userLoanData?.contract?.repaymentAccountNumber} (예금주 : ${userLoanData?.contract?.repaymentAccountHolder})`}
               </Text>
             </VStack>
           </SimpleGrid>
@@ -304,13 +359,19 @@ const MyLoanStep3 = () => {
               textStyle={'pre-body-5'}
               color={'grey.8'}
               w={'209px'}
+              isDisabled={!!ekycData}
               onClick={() => {
-                onAuthAlertOpen()
+                openUsebKycPopup()
               }}
             >
               신분증 인증 진행
             </Button>
           </VStack>
+          {ekycData && (
+            <Text textStyle={'pre-body-7'} color={'accent.green2'}>
+              신분증 인증이 완료되었어요.
+            </Text>
+          )}
         </InputForm>
         <VStack alignItems={'flex-start'} my={'64px'} spacing={'32px'}>
           <VStack alignItems={'flex-start'} spacing={'8px'}>
@@ -382,7 +443,12 @@ const MyLoanStep3 = () => {
               !agreements.collection ||
               !agreements.all
             }
-            onClick={() => createContractSignature({ id: Number(userId) })}
+            onClick={() =>
+              createContractSignature({
+                id: Number(userId),
+                data: { ekycData },
+              })
+            }
             // onClick={() => router.push('/my-loan?step=4')}
           >
             전자서명 진행

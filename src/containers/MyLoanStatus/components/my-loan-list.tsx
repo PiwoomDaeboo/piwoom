@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 
 import LoanDelayModal from '@/components/@Modal/loan-delay-modal'
-import { LOAN_STATUS } from '@/constants/loan'
+import { LOAN_KIND_OPTIONS, LOAN_STATUS } from '@/constants/loan'
 import { LoanType } from '@/generated/apis/@types/data-contracts'
 import { useLoanContractUrlRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
@@ -132,6 +132,16 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
     }
   }
 
+  const isStatusRemitting = (status: string): boolean => {
+    return (
+        status === 'UNDER_REVIEW' ||
+          status === 'CONTRACTING' ||
+          status === 'REMITTING'
+      ) ?
+        true
+      : false
+  }
+
   return (
     <>
       <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} gap={'20px'}>
@@ -182,37 +192,67 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                 </Flex>
               )}
             </HStack>
-            <Flex flexDirection={'column'} w={'100%'} gap={'6px'} mt={'20px'}>
-              <HStack justifyContent={'space-between'}>
-                <Text textStyle={'pre-body-6'} color={'grey.10'}>
-                  대출 금액
-                </Text>
-                <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                  {item?.contract?.amount?.toLocaleString() ||
-                    item?.loanAmount?.toLocaleString()}
-                  원
-                </Text>
-              </HStack>
-              <HStack justifyContent={'space-between'}>
-                <Text textStyle={'pre-body-6'} color={'grey.10'}>
-                  대출 갚는날
-                </Text>
-                <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                  매월{' '}
-                  {item?.contract?.interestPaymentDate ||
-                    item?.interestPaymentDate}
-                  일
-                </Text>
-              </HStack>
-              <HStack justifyContent={'space-between'}>
-                <Text textStyle={'pre-body-6'} color={'grey.10'}>
-                  다음 갚을 금액
-                </Text>
-                <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                  {item?.contract?.remainingAmount?.toLocaleString() || 0}원
-                </Text>
-              </HStack>
-            </Flex>
+            {isStatusRemitting(item.status) ?
+              <Flex flexDirection={'column'} w={'100%'} gap={'6px'} mt={'20px'}>
+                <HStack justifyContent={'space-between'}>
+                  <Text textStyle={'pre-body-6'} color={'grey.10'}>
+                    대출 상품
+                  </Text>
+                  <Text textStyle={'pre-body-5'} color={'grey.10'}>
+                    {LOAN_KIND_OPTIONS.find((kind) => kind.value === item?.kind)
+                      ?.label || '-'}
+                    대출
+                  </Text>
+                </HStack>
+                <HStack justifyContent={'space-between'}>
+                  <Text textStyle={'pre-body-6'} color={'grey.10'}>
+                    대출 신청액
+                  </Text>
+                  <Text textStyle={'pre-body-5'} color={'grey.10'}>
+                    {item?.loanAmount?.toLocaleString() || 0}원
+                  </Text>
+                </HStack>
+                <HStack justifyContent={'space-between'}>
+                  <Text textStyle={'pre-body-6'} color={'grey.10'}>
+                    대출 신청일
+                  </Text>
+                  <Text textStyle={'pre-body-5'} color={'grey.10'}>
+                    {item?.contract?.remainingAmount?.toLocaleString() || 0}원
+                  </Text>
+                </HStack>
+              </Flex>
+            : <Flex flexDirection={'column'} w={'100%'} gap={'6px'} mt={'20px'}>
+                <HStack justifyContent={'space-between'}>
+                  <Text textStyle={'pre-body-6'} color={'grey.10'}>
+                    대출 금액
+                  </Text>
+                  <Text textStyle={'pre-body-5'} color={'grey.10'}>
+                    {item?.contract?.amount?.toLocaleString() ||
+                      item?.loanAmount?.toLocaleString()}
+                    원
+                  </Text>
+                </HStack>
+                <HStack justifyContent={'space-between'}>
+                  <Text textStyle={'pre-body-6'} color={'grey.10'}>
+                    다음 갚는날
+                  </Text>
+                  <Text textStyle={'pre-body-5'} color={'grey.10'}>
+                    매월{' '}
+                    {item?.contract?.interestPaymentDate ||
+                      item?.interestPaymentDate}
+                    일
+                  </Text>
+                </HStack>
+                <HStack justifyContent={'space-between'}>
+                  <Text textStyle={'pre-body-6'} color={'grey.10'}>
+                    다음 갚을 금액
+                  </Text>
+                  <Text textStyle={'pre-body-5'} color={'grey.10'}>
+                    {item?.contract?.remainingAmount?.toLocaleString() || 0}원
+                  </Text>
+                </HStack>
+              </Flex>
+            }
 
             <SimpleGrid
               // visibility={'hidden'}

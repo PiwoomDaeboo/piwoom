@@ -137,7 +137,7 @@ const MyLoanStep2 = () => {
                       • 대출원금:
                     </Text>
                     <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                      {item.contract?.amount?.toLocaleString() || 0}만원
+                      {item.contract?.amount?.toLocaleString() || 0}원
                     </Text>
                   </HStack>
                   <HStack justifyContent={'flex-start'} alignItems={'center'}>

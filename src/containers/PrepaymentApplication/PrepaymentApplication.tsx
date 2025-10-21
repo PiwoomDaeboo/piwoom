@@ -170,9 +170,7 @@ function PrepaymentApplication() {
               </Text>
               <Text textStyle={'pre-heading-2'} color={'grey.10'}>
                 <Box as={'span'} color={'primary.3'}>
-                  {loanData?.loanAmount.toLocaleString() ||
-                    loanData?.contract?.remainingAmount?.toLocaleString() ||
-                    0}
+                  {loanData?.contract?.remainingAmount?.toLocaleString() || 0}
                 </Box>
                 원
               </Text>
@@ -180,10 +178,7 @@ function PrepaymentApplication() {
             <Button
               variant={'text-primary'}
               onClick={() => {
-                const remainingAmount =
-                  loanData?.loanAmount ||
-                  loanData?.contract?.remainingAmount ||
-                  0
+                const remainingAmount = loanData?.contract?.remainingAmount || 0
                 setPrepaymentAmount(remainingAmount)
                 debouncedCalculate(remainingAmount)
               }}

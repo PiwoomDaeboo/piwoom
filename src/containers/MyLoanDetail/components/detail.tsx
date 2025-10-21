@@ -1,25 +1,11 @@
-import { useEffect, useState } from 'react'
-
 import { useRouter } from 'next/router'
 
-import {
-  Badge,
-  Box,
-  Button,
-  Container,
-  Flex,
-  HStack,
-  Skeleton,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Badge, Button, Flex, HStack, Text, VStack } from '@chakra-ui/react'
 
 import { LOAN_STATUS, REPAYMENT_TYPE } from '@/constants/loan'
 import { useLoanRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
 import { CaretLeftIcon } from '@/generated/icons/MyIcons'
 import { getBadgeStyle } from '@/utils/style-utils'
-
-import { SAMPLE_LOAN_DATA, getFormattedDetailData } from '../consts'
 
 export default function Detail() {
   const router = useRouter()
@@ -263,7 +249,8 @@ export default function Detail() {
               whiteSpace={'pre-line'}
               alignSelf={'flex-end'}
             >
-              {loanRetrieveData?.contract?.repaymentAccount || '-'}
+              {loanRetrieveData?.contract?.repaymentAccountHolder &&
+                `${loanRetrieveData?.contract?.repaymentAccountName} ${loanRetrieveData?.contract?.repaymentAccountNumber}(${loanRetrieveData?.contract?.repaymentAccountHolder})`}
             </Text>
           </HStack>
           <HStack
@@ -283,7 +270,7 @@ export default function Detail() {
               alignSelf={'flex-end'}
             >
               {loanRetrieveData?.contract?.prepaymentRate.toLocaleString() || 0}
-              원
+              %
             </Text>
           </HStack>
           <HStack
@@ -303,7 +290,7 @@ export default function Detail() {
               alignSelf={'flex-end'}
             >
               {loanRetrieveData?.contract?.isCollateralProvided ?
-                '해당'
+                '담보 있음'
               : '해당 없음'}
             </Text>
           </HStack>
@@ -324,7 +311,7 @@ export default function Detail() {
               alignSelf={'flex-end'}
             >
               {loanRetrieveData?.contract?.isJointGuarantee ?
-                '해당'
+                '보증 있음'
               : '해당 없음'}
             </Text>
           </HStack>
