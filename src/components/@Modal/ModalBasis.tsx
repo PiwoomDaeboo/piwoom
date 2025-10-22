@@ -34,6 +34,8 @@ const ModalBasis = ({
   footer,
   styles,
   visibleCloseButton = true,
+  returnFocusOnClose = false,
+  blockScrollOnMount = true,
   ...props
 }: ModalBasisProps) => {
   return (

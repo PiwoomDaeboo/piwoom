@@ -284,6 +284,8 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
               <Button
                 variant={'solid-primary'}
                 w={'100%'}
+                isLoading={isOtpPending}
+                loadingText="인증절차 처리중"
                 onClick={handleOtpWetax}
               >
                 인증완료

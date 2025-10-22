@@ -100,6 +100,17 @@ const HomeHeader = ({
     return '0px'
   }, [])
 
+  const loginHoverMenuMarginRight = useCallback((index: number) => {
+    if (index === 0) {
+      return '-10px'
+    }
+    if (index === 1) {
+      return '20px'
+    }
+
+    return '-40px'
+  }, [])
+
   return (
     <Flex
       w="100%"
@@ -318,7 +329,11 @@ const HomeHeader = ({
                 justifyContent={'center'}
                 h={'100%'}
                 gap={'40px'}
-                mr={hoverMenuMarginRight(hoveredMenuIndex)}
+                mr={
+                  token ?
+                    loginHoverMenuMarginRight(hoveredMenuIndex)
+                  : hoverMenuMarginRight(hoveredMenuIndex)
+                }
                 ml={hoveredMenuIndex === 2 ? '190px' : '0px'}
               >
                 {MENU_ITEMS[hoveredMenuIndex].submenuItems?.map(

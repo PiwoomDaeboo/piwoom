@@ -63,6 +63,13 @@ const SliderItem = ({ item, onOpen }: { item: any; onOpen: () => void }) => (
     onClick={onOpen}
     cursor="pointer"
     overflow="hidden"
+    tabIndex={-1} // 포커스 비활성화
+    sx={{
+      '&:focus': {
+        outline: 'none',
+        boxShadow: 'none',
+      },
+    }}
   >
     <Flex
       w="100%"
@@ -182,10 +189,8 @@ function Section6() {
   }
 
   const handleSlideClick = () => {
-    if (!isDragging) {
-      setSelectedSlideData(sliderData[currentSlide])
-      onOpen()
-    }
+    setSelectedSlideData(sliderData[currentSlide])
+    onOpen()
   }
   return (
     <Flex
