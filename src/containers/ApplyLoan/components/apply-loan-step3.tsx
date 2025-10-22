@@ -26,6 +26,7 @@ import ModalBasis from '@/components/@Modal/ModalBasis'
 import CommonSelect from '@/components/CommonSelect'
 import InputForm from '@/components/InputForm'
 import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
+import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 import { XCircleFillIcon } from '@/generated/icons/MyIcons'
 import { useLocalStorage } from '@/stores/local/state'
 
@@ -54,12 +55,7 @@ const ApplyLoanStep3 = () => {
   const toast = useToast()
   console.log('errors', errors)
   console.log('watch', watch())
-  const [userInfo, setUserInfo] = useState<{
-    name?: string
-    phone?: string
-    birth?: string
-    gender_code?: string
-  } | null>(null)
+
   const totalAsset = useWatch({ control, name: 'totalAsset' })
   const annualIncome = useWatch({ control, name: 'annualIncome' })
   const debtScale = useWatch({ control, name: 'debtScale' })
@@ -69,7 +65,11 @@ const ApplyLoanStep3 = () => {
   const creditScore = useWatch({ control, name: 'creditScore' })
   const safeKeyWatchValue = useWatch({ control, name: 'safeKey' })
   const [popupWindow, setPopupWindow] = useState<Window | null>(null)
-
+  const { data: userData } = useUserRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
   // safeKey 필드를 폼에 등록
   register('safeKey')
   const { data: settingData } = useSettingRetrieveQuery({
@@ -271,7 +271,7 @@ const ApplyLoanStep3 = () => {
     e.stopPropagation()
 
     const popup = window.open(
-      `https://api.piwoom.com/v1/nice/?name=${userInfo?.name}&birth=${userInfo?.birth}&gender=${userInfo?.gender_code}`,
+      `https://api.piwoom.com/v1/nice/?name=${userData?.name}&birth=${userData?.birth}&gender=${userData?.genderCode}`,
       'popupChk',
       'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
     )
