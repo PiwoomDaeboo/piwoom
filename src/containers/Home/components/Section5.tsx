@@ -33,16 +33,15 @@ const FAQItem = ({
 }) => (
   <Flex
     p={{ base: '24px 32px', sm: '24px 28px' }}
-    bg="grey.0"
+    bg="background.basic.2"
     borderRadius="20px"
     w="100%"
     flexDir="column"
     cursor="pointer"
     onClick={onToggle}
     transition="all 0.3s ease"
-    backgroundColor="background.basic.2"
     border="1px solid"
-    borderColor="border.basic.2"
+    borderColor="border.basic.1"
     minH="fit-content"
   >
     <Flex alignItems={{ base: 'flex-start', sm: 'center' }} gap="8px">
