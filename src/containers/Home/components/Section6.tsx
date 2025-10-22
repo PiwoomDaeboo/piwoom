@@ -79,7 +79,7 @@ const SliderItem = ({ item, onOpen }: { item: any; onOpen: () => void }) => (
         >
           {item.title}
         </Text>
-        <HStack gap={'12px'}>
+        <HStack gap={'12px'} display={{ base: 'none', sm: 'flex' }}>
           <Text
             textStyle={'pre-body-4'}
             color={'grey.8'}
@@ -88,6 +88,16 @@ const SliderItem = ({ item, onOpen }: { item: any; onOpen: () => void }) => (
             {item.subtitle}
           </Text>
           {item.id === 1 && <Call1332Icon boxSize={'79px'} h={'28px'} />}
+        </HStack>
+        <HStack gap={'12px'} display={{ base: 'flex', sm: 'none' }}>
+          <Text
+            textStyle={'pre-body-4'}
+            color={'grey.8'}
+            whiteSpace={{ base: 'pre-line', sm: 'normal' }}
+          >
+            {item.subtitle}{' '}
+            {item.id === 1 && <Call1332Icon boxSize={'79px'} h={'28px'} />}
+          </Text>
         </HStack>
       </VStack>
 
@@ -183,7 +193,8 @@ function Section6() {
       justifyContent="center"
       alignItems="center"
       flexDir="column"
-      py={{ base: '16px', sm: '40px', md: '96px' }}
+      pt={{ base: '26px', sm: '40px', md: '96px' }}
+      pb={{ base: '56px', sm: '120px', md: '120px' }}
     >
       <YoutubeVideoModal
         isOpen={isOpen}
