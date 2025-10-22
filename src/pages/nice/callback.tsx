@@ -28,7 +28,9 @@ function NiceCallback() {
     <>
       {/* output: 똑똑한개발자 | 메인 */}
       {/* titleTemplate는 /configs/seo/config.ts에서 변경 가능합니다. */}
-      <div>신용정보 제출 중...</div>
+      <div>
+        {safe_key ? '신용정보 제출 중...' : '신용정보 제출에 실패했습니다.'}
+      </div>
     </>
   )
 }

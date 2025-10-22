@@ -90,7 +90,7 @@ export const CommonSelect: SelectComponent = ({
         menuList: (provided) => ({
           ...provided,
           maxHeight: '200px',
-          overflowY: 'auto',
+          overflowY: 'scroll !important',
           css: {
             '&::-webkit-scrollbar': {
               width: '6px',

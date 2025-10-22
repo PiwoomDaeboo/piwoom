@@ -26,6 +26,7 @@ import InputForm from '@/components/InputForm'
 import AdditionalFileUpload from '@/containers/ApplyLoan/components/additional-file-upload'
 import { useLoanPartialUpdateMutation } from '@/generated/apis/Loan/Loan.query'
 import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
+import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 import {
   CameraIcon,
   CaretLeftIcon,
@@ -41,17 +42,11 @@ export default function Document() {
   const { id } = router.query
   const methods = useForm()
   const { control, handleSubmit, setValue, clearErrors } = methods
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  //   setValue,
-  //   clearErrors,
-  //   control,
-  // } = useForm()
+
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [uploadedFileName, setUploadedFileName] = useState<string>('')
-
+  const [isDocumentSubmissionCompleted, setIsDocumentSubmissionCompleted] =
+    useState(false)
   const [userInfo, setUserInfo] = useState<{
     name?: string
     phone?: string
@@ -70,6 +65,12 @@ export default function Document() {
     onOpen: onUntactDocumentApplyModalOpen,
     onClose: onUntactDocumentApplyModalClose,
   } = useDisclosure()
+
+  const { data: userData } = useUserRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
 
   const { mutate: documentSubmitMutation, isPending: isDocumentSubmitLoading } =
     useLoanPartialUpdateMutation({
@@ -134,6 +135,11 @@ export default function Document() {
       handleUploadIdCard(file)
     }
   }
+  const handleUntactDocumentSubmissionComplete = () => {
+    setIsDocumentSubmissionCompleted(true)
+    setValue('untactDocumentSubmission', true)
+    clearErrors('untactDocumentSubmission')
+  }
 
   const handleUploadButtonClick = () => {
     fileInputRef.current?.click()
@@ -143,7 +149,7 @@ export default function Document() {
     e.stopPropagation()
 
     window.open(
-      `https://api.piwoom.com/v1/nice/?name=${userInfo?.name}&birth=${userInfo?.birth}&gender=${userInfo?.gender_code}`,
+      `https://api.piwoom.com/v1/nice/?name=${userData?.name}&birth=${userData?.birth}&gender=${userData?.genderCode}`,
       'popupChk',
       'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
     )
@@ -183,6 +189,7 @@ export default function Document() {
         <UntactDocumentApplyModal
           isOpen={isUntactDocumentApplyModalOpen}
           onClose={onUntactDocumentApplyModalClose}
+          onComplete={handleUntactDocumentSubmissionComplete}
         />
         <Flex
           w={'100%'}
@@ -236,7 +243,6 @@ export default function Document() {
                 variant={'outline-primary'}
                 textStyle={'pre-body-5'}
                 w={'209px'}
-                color={'grey.8'}
                 isDisabled={!!safeKey}
                 onClick={handleApplyCreditInfoSubmit}
               >
@@ -293,8 +299,11 @@ export default function Document() {
                   w={'209px'}
                   onClick={onUntactDocumentApplyModalOpen}
                   disabled={!settingData?.isGov}
+                  isDisabled={isDocumentSubmissionCompleted}
                 >
-                  비대면 서류제출
+                  {isDocumentSubmissionCompleted ?
+                    '서류제출완료'
+                  : '비대면 서류제출'}
                 </Button>
               </InputForm>
               {!settingData?.isGov && (

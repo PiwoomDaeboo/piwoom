@@ -76,7 +76,16 @@ const HomeHeaderDrawer = ({
               py={'8px'}
               h={'64px'}
             >
-              <Link variant={'unstyled'} href={ROUTES.MAIN}>
+              <Link
+                variant={'unstyled'}
+                href={ROUTES.MAIN}
+                onClick={(e) => {
+                  if (router.pathname === ROUTES.MAIN) {
+                    e.preventDefault()
+                    onClose()
+                  }
+                }}
+              >
                 <ImageAsNext
                   w={'107px'}
                   h={'20px'}

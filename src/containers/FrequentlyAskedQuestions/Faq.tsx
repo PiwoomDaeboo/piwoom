@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -65,16 +65,30 @@ function Faq() {
     })
   }
 
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      router.push({
-        pathname: router.pathname,
-        query: {
-          page: 1,
-          search_keyword: searchInput,
-        },
-      })
-    }
+  // 디바운싱을 위한 검색 함수
+  const debouncedSearch = useCallback(
+    (() => {
+      let timeoutId: NodeJS.Timeout
+      return (keyword: string) => {
+        clearTimeout(timeoutId)
+        timeoutId = setTimeout(() => {
+          router.push({
+            pathname: router.pathname,
+            query: {
+              page: 1,
+              search_keyword: keyword,
+            },
+          })
+        }, 500) // 500ms 디바운싱
+      }
+    })(),
+    [router],
+  )
+
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setSearchInput(value)
+    debouncedSearch(value)
   }
   return (
     <>
@@ -100,8 +114,7 @@ function Faq() {
               <Input
                 placeholder="검색어를 입력해 주세요."
                 value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyDown={handleSearch}
+                onChange={handleSearchInputChange}
                 pl={'48px'}
               />
               {searchInput.length > 0 && (

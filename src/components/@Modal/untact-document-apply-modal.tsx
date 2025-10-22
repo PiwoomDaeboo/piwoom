@@ -31,7 +31,9 @@ import {
 import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 import {
   AuthUserIcon,
+  BluecheckIcon,
   CaretRightIcon,
+  CheckCircleFillIcon,
   DeviceMobile1Icon,
   DeviceMobileIcon,
   HanaauthenticationIcon,
@@ -47,6 +49,7 @@ import {
   XCircleFillIcon,
 } from '@/generated/icons/MyIcons'
 import { useLocalStorage } from '@/stores/local/state'
+import { extractErrorMessage } from '@/utils/error-handler'
 
 interface UntactDocumentApplyModalProps {
   isOpen: boolean
@@ -125,7 +128,25 @@ function UntactDocumentApplyModal({
           setGovData(data)
         },
         onError: (error) => {
-          console.error(error)
+          toast({
+            render: () => (
+              <Box
+                borderRadius={'10px'}
+                color="white"
+                p={'12px'}
+                bg="rgba(27, 28, 29, 0.80)"
+              >
+                <HStack spacing={'24px'} alignItems={'center'}>
+                  <XCircleFillIcon boxSize={'24px'} />
+                  <Text textStyle={'pre-body-68'} color={'grey.0'}>
+                    {extractErrorMessage(error)}
+                  </Text>
+                </HStack>
+              </Box>
+            ),
+            duration: 5000,
+            isClosable: true,
+          })
         },
       },
     })
@@ -510,7 +531,7 @@ function UntactDocumentApplyModal({
               variant={'solid-primary'}
               w={'100%'}
               onClick={handleClose}
-              // isLoading={isPending}
+              isDisabled={shouldPoll}
             >
               확인
             </Button>
@@ -724,20 +745,28 @@ const SubmittingProcess = ({
       {/* 진행률 표시 */}
       <VStack spacing={'8px'} alignItems={'center'}>
         <Text textStyle={'pre-body-5'} color={'primary.4'}>
-          {completedDocuments}/{totalDocuments} 진행중 ..
+          {completedDocuments}/{totalDocuments}{' '}
+          {completedDocuments === 5 ? '완료' : '진행중'}
         </Text>
       </VStack>
 
       {/* 로딩 애니메이션 - 실패 시에는 숨김 */}
       {currentStatus !== 'FAILED' && (
-        <Box w={'144px'} h={'144px'}>
-          <Lottie
-            animationData={loadingLottieData}
-            loop={currentStatus !== 'SUCCESS'}
-            autoplay={true}
-            style={{ width: '100%', height: '100%' }}
-          />
-        </Box>
+        <Flex
+          justifyContent={'center'}
+          alignItems={'center'}
+          w={'144px'}
+          h={'144px'}
+        >
+          {completedDocuments !== 5 ?
+            <Lottie
+              animationData={loadingLottieData}
+              loop={currentStatus !== 'SUCCESS'}
+              autoplay={true}
+              style={{ width: '100%', height: '100%' }}
+            />
+          : <BluecheckIcon boxSize={'96px'} />}
+        </Flex>
       )}
 
       {/* 실패 시 에러 아이콘 */}
