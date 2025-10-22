@@ -14,19 +14,18 @@ import {
   Text,
   VStack,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 import * as PortOne from '@portone/browser-sdk/v2'
 
 import { useFormContext, useWatch } from 'react-hook-form'
 
-import LoanTermsModal from '@/components/@Modal/LoanTermsModal'
-import ModalBasis from '@/components/@Modal/ModalBasis'
 import { ENV } from '@/configs/env'
-import { useUserIdentityVerificationCreateMutation } from '@/generated/apis/User/User.query'
-import { CaretRightIcon } from '@/generated/icons/MyIcons'
+import {
+  useUserLoginCreateMutation,
+  useUserRetrieveQuery,
+} from '@/generated/apis/User/User.query'
 import { useLocalStorage } from '@/stores/local/state'
-import { useSessionStorage } from '@/stores/session/state'
-import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 const ApplyLoanStep2 = () => {
   const {
@@ -35,40 +34,36 @@ const ApplyLoanStep2 = () => {
     setValue,
     control,
   } = useFormContext()
-  const { popup_status: safeKey, reset } = useLocalStorage()
+  const toast = useToast()
+  const { token: accessToken, reset, set } = useLocalStorage()
 
   const emailValue = useWatch({ control, name: 'email' })
+  const { mutateAsync: userLoginCreate } = useUserLoginCreateMutation({
+    options: {
+      onSuccess: (data) => {
+        set({
+          token: {
+            access_token: data.accessToken,
+            refresh_token: data.refreshToken,
+          },
+        })
+        setValue('email', userData?.email || '')
+
+        setIsPhoneCertification(true)
+      },
+      // onError: (error: any) => {
+      //   // router.push(`/my-loan-status`)
+      //   toast({
+      //     title: error?.response?.data?.nonField[0],
+      //     status: 'error',
+      //     duration: 5000,
+      //   })
+      // },
+    },
+  })
 
   const router = useRouter()
 
-  const [userInfo, setUserInfo] = useState<{
-    name?: string
-    phone?: string
-    birth?: string
-    gender_code?: string
-  } | null>(null)
-
-  const { set } = useSessionStorage()
-  const { mutateAsync: userIdentityVerificationCreate } =
-    useUserIdentityVerificationCreateMutation({
-      options: {
-        onSuccess: (data) => {
-          set({
-            identityVerificationToken: data.identityVerificationToken,
-          })
-
-          const extractedUserInfo = extractUserInfoFromJWT(
-            data.identityVerificationToken,
-          )
-          if (extractedUserInfo) {
-            setUserInfo(extractedUserInfo)
-            console.log('Extracted user info:', extractedUserInfo)
-          }
-
-          setIsPhoneCertification(true)
-        },
-      },
-    })
   const handleAuthentication = async () => {
     const response = await PortOne.requestIdentityVerification({
       storeId: ENV.PORTONE_STORE_ID || '',
@@ -79,8 +74,7 @@ const ApplyLoanStep2 = () => {
     if (response?.code !== undefined) {
       return alert(response?.message)
     }
-
-    userIdentityVerificationCreate({
+    userLoginCreate({
       data: {
         identityVerificationId: response?.identityVerificationId || '',
       },
@@ -101,6 +95,15 @@ const ApplyLoanStep2 = () => {
 
   const [isPhoneCertification, setIsPhoneCertification] = useState(false)
 
+  const { data: userData } = useUserRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+    options: {
+      enabled: !!accessToken,
+    },
+  })
+
   useEffect(() => {
     const {
       identityVerificationId,
@@ -114,7 +117,7 @@ const ApplyLoanStep2 = () => {
       transactionType === 'IDENTITY_VERIFICATION'
     ) {
       // identity verification 완료 처리
-      userIdentityVerificationCreate({
+      userLoginCreate({
         data: {
           identityVerificationId: identityVerificationId as string,
         },
@@ -135,7 +138,7 @@ const ApplyLoanStep2 = () => {
         { shallow: true },
       )
     }
-  }, [router.query, userIdentityVerificationCreate])
+  }, [router.query])
 
   return (
     <Container>
@@ -174,7 +177,7 @@ const ApplyLoanStep2 = () => {
                 이름(한글)
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.7'}>
-                {userInfo?.name || '-'}
+                {userData?.name || '-'}
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -182,8 +185,8 @@ const ApplyLoanStep2 = () => {
                 주민등록번호
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.7'}>
-                {userInfo?.birth && userInfo?.gender_code ?
-                  `${userInfo.birth.slice(2, 8)}-${userInfo.gender_code}******`
+                {userData?.birth && userData?.genderCode ?
+                  `${userData.birth.slice(2, 8)}-${userData.genderCode}******`
                 : '-'}
               </Text>
             </VStack>
@@ -192,8 +195,8 @@ const ApplyLoanStep2 = () => {
                 휴대폰번호
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.7'}>
-                {userInfo?.phone ?
-                  `${userInfo.phone.slice(0, 3)}-${userInfo.phone.slice(3, 7)}-${userInfo.phone.slice(7)}`
+                {userData?.phone ?
+                  `${userData.phone.slice(0, 3)}-${userData.phone.slice(3, 7)}-${userData.phone.slice(7)}`
                 : '-'}
               </Text>
             </VStack>

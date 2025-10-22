@@ -43,8 +43,6 @@ import {
   TossAuthenticationIcon,
 } from '@/generated/icons/MyIcons'
 import { useLocalStorage } from '@/stores/local/state'
-import { useSessionStorage } from '@/stores/session/state'
-import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 interface WetaxModalProps {
   isOpen: boolean
@@ -71,13 +69,6 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
   const [loadingProcess, setLoadingProcess] = useState<number>(0)
   const [wetaxData, setWetaxData] = useState<WetaxLoginType | null>(null)
   const toast = useToast()
-  const { identityVerificationToken } = useSessionStorage()
-  const [userInfo, setUserInfo] = useState<{
-    name?: string
-    phone?: string
-    birth?: string
-    gender_code?: string
-  } | null>(null)
   const { token: accessToken } = useLocalStorage()
   const { data: userData } = useUserRetrieveQuery({
     variables: {
@@ -88,14 +79,6 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
     },
   })
 
-  useEffect(() => {
-    const extractedUserInfo = extractUserInfoFromJWT(
-      identityVerificationToken as string,
-    )
-    if (extractedUserInfo) {
-      setUserInfo(extractedUserInfo)
-    }
-  }, [])
   const { mutate: otpWetax, isPending: isOtpPending } =
     useWetaxOtpCreateMutation({
       options: {
@@ -150,9 +133,9 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
     loginWetax({
       data: {
         method: selectedAuth as WetaxLoginRequestMethodEnumType,
-        name: userInfo?.name || userData?.name || '',
-        birth: userInfo?.birth || userData?.birth || '',
-        phone: userInfo?.phone || userData?.phone || '',
+        name: userData?.name || '',
+        birth: userData?.birth || '',
+        phone: userData?.phone || '',
         agency: selectedPassType as WetaxLoginRequestAgencyEnumType,
       },
     })

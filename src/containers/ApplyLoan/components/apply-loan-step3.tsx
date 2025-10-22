@@ -26,10 +26,8 @@ import ModalBasis from '@/components/@Modal/ModalBasis'
 import CommonSelect from '@/components/CommonSelect'
 import InputForm from '@/components/InputForm'
 import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
-import { InfoFillIcon, XCircleFillIcon } from '@/generated/icons/MyIcons'
+import { XCircleFillIcon } from '@/generated/icons/MyIcons'
 import { useLocalStorage } from '@/stores/local/state'
-import { useSessionStorage } from '@/stores/session/state'
-import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 import {
   ANNUAL_INCOME_OPTIONS,
@@ -62,7 +60,6 @@ const ApplyLoanStep3 = () => {
     birth?: string
     gender_code?: string
   } | null>(null)
-  const { identityVerificationToken } = useSessionStorage()
   const totalAsset = useWatch({ control, name: 'totalAsset' })
   const annualIncome = useWatch({ control, name: 'annualIncome' })
   const debtScale = useWatch({ control, name: 'debtScale' })
@@ -269,16 +266,6 @@ const ApplyLoanStep3 = () => {
     }
   }
 
-  const getUserInfo = () => {
-    const extractedUserInfo = extractUserInfoFromJWT(
-      identityVerificationToken as string,
-    )
-    if (extractedUserInfo) {
-      setUserInfo(extractedUserInfo)
-      console.log('Extracted user info:', extractedUserInfo)
-    }
-  }
-
   const handleApplyCreditInfoSubmit = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -302,16 +289,6 @@ const ApplyLoanStep3 = () => {
       }, 1000)
     }
   }
-
-  useEffect(() => {
-    const extractedUserInfo = extractUserInfoFromJWT(
-      identityVerificationToken as string,
-    )
-    if (extractedUserInfo) {
-      setUserInfo(extractedUserInfo)
-      console.log('Extracted user info:', extractedUserInfo)
-    }
-  }, [])
 
   const placeholderData = {
     mortgage:

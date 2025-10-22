@@ -36,6 +36,7 @@ import { useAccountVerifyCreateMutation } from '@/generated/apis/Account/Account
 import { useGovRetrieveQuery } from '@/generated/apis/Gov/Gov.query'
 import { useLoanCreateMutation } from '@/generated/apis/Loan/Loan.query'
 import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
+import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 import {
   CaretRightIcon,
   DocumenticonIcon,
@@ -44,10 +45,7 @@ import {
   XCircleFillIcon,
   XIcon,
 } from '@/generated/icons/MyIcons'
-import { useQueryEffects } from '@/hooks/useQueryEffect'
 import { useLocalStorage } from '@/stores/local/state'
-import { useSessionStorage } from '@/stores/session/state'
-import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 import AddressModal from '../../../components/@Modal/address-modal'
 import DocumentAgreeModal from '../../../components/@Modal/document-agree-modal'
@@ -86,6 +84,7 @@ const ApplyLoanStep4 = () => {
     control,
     handleSubmit,
     watch,
+    setError,
     formState: { errors },
   } = useFormContext()
   const [userInfo, setUserInfo] = useState<{
@@ -100,17 +99,10 @@ const ApplyLoanStep4 = () => {
   const loanPeriod = useWatch({ control, name: 'loanPeriod' })
   const residenceType = useWatch({ control, name: 'residenceType' })
   const housingType = useWatch({ control, name: 'housingType' })
-  const companyBusinessNumber = useWatch({
-    control,
-    name: 'companyBusinessNumber',
-  })
+  const jobTypeWatchValue = useWatch({ control, name: 'jobType' })
 
   const baseAddress = useWatch({ control, name: 'baseAddress' })
-  const detailAddress = useWatch({ control, name: 'detailAddress' })
   const assetBaseAddress = useWatch({ control, name: 'assetBaseAddress' })
-  const assetDetailAddress = useWatch({ control, name: 'assetDetailAddress' })
-  const postcode = useWatch({ control, name: 'postcode' })
-  const assetPostcode = useWatch({ control, name: 'assetPostcode' })
   const electronicDocumentConsent = useWatch({
     control,
     name: 'electronicDocumentConsent',
@@ -140,9 +132,7 @@ const ApplyLoanStep4 = () => {
     onOpen: onUntactDocumentApplyModalOpen,
     onClose: onUntactDocumentApplyModalClose,
   } = useDisclosure()
-  const [fileUploadedFileName, setFileUploadedFileName] = useState<
-    string[] | null
-  >([])
+
   const [isDocumentSubmissionCompleted, setIsDocumentSubmissionCompleted] =
     useState(false)
   const [addressModalType, setAddressModalType] = useState<
@@ -150,7 +140,6 @@ const ApplyLoanStep4 = () => {
   >('normal')
   const [isCompanyAddressFromSearch, setIsCompanyAddressFromSearch] =
     useState(false)
-  const { identityVerificationToken } = useSessionStorage()
   const { popup_status: safeKey, reset } = useLocalStorage()
   const [isBankAccountVerified, setIsBankAccountVerified] = useState(false)
   const bankWatchValue = useWatch({ control, name: 'bank' })
@@ -159,6 +148,7 @@ const ApplyLoanStep4 = () => {
     control,
     name: 'employmentType',
   })
+
   const companyName = useWatch({ control, name: 'companyName' })
   const companyAddress = useWatch({ control, name: 'companyAddress' })
   // const { data: settingData } = useSettingRetrieveQuery({
@@ -166,6 +156,7 @@ const ApplyLoanStep4 = () => {
   //     id: 'me',
   //   },
   // })
+  console.log(employmentTypeWatchValue)
   const {
     mutate: accountVerifyMutation,
     isPending: isAccountVerifyMutationLoading,
@@ -222,7 +213,7 @@ const ApplyLoanStep4 = () => {
 
   const onStep4Submit = (data: any) => {
     const requestData = {
-      identityVerificationToken: identityVerificationToken,
+      // identityVerificationToken: identityVerificationToken,
       incomeCertificate: getValues('incomeCertificate') || '',
       residentRegistrationCopy: getValues('residentRegistrationCopy') || '',
       healthInsuranceEligibilityConfirmation:
@@ -285,6 +276,11 @@ const ApplyLoanStep4 = () => {
     }
   }
 
+  const { data: userData } = useUserRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
   // 대출신청 버튼 클릭 핸들러 (handleSubmit 사용)
   const handleSubmitClick = handleSubmit(onStep4Submit, onStep4Error)
 
@@ -386,7 +382,7 @@ const ApplyLoanStep4 = () => {
         // || bankWatchValue,
         number: accountNumberWatchValue,
         // || accountNumberWatchValue,
-        birth: userInfo?.birth?.slice(2) || '',
+        birth: userData?.birth?.slice(2) || '',
       },
     })
   }
@@ -399,16 +395,6 @@ const ApplyLoanStep4 = () => {
     setValue('untactDocumentSubmission', true)
     clearErrors('untactDocumentSubmission')
   }
-
-  useEffect(() => {
-    const extractedUserInfo = extractUserInfoFromJWT(
-      identityVerificationToken as string,
-    )
-    if (extractedUserInfo) {
-      setUserInfo(extractedUserInfo)
-      console.log('Extracted user info:', extractedUserInfo)
-    }
-  }, [])
 
   return (
     <Container>
@@ -838,6 +824,7 @@ const ApplyLoanStep4 = () => {
                 control={control}
                 render={({ field }) => (
                   <CommonSelect
+                    isDisabled={isBankAccountVerified}
                     options={BANK_DATA}
                     placeholder="선택"
                     value={BANK_DATA.flatMap((group) => group.options).find(
@@ -861,10 +848,21 @@ const ApplyLoanStep4 = () => {
             <Input
               type="number"
               placeholder="계좌번호"
+              maxLength={20}
+              disabled={isBankAccountVerified}
               onKeyDown={(evt) =>
                 ['e', 'E', '+', '-', '.'].includes(evt.key) &&
                 evt.preventDefault()
               }
+              onInput={(evt) => {
+                const target = evt.target as HTMLInputElement
+                if (target.value.length > 20) {
+                  target.value = target.value.slice(0, 20)
+                  setError('accountNumber', {
+                    message: '계좌번호는 최대 20자리까지 입력 가능합니다.',
+                  })
+                }
+              }}
               onPaste={handlePaste}
               {...register('accountNumber')}
               data-field="accountNumber"
@@ -940,9 +938,9 @@ const ApplyLoanStep4 = () => {
                 data-field="companyName"
               />
               <Button
-                disabled={
-                  employmentTypeWatchValue === 'HOUSEWIFE' ||
-                  employmentTypeWatchValue === 'UNEMPLOYED'
+                isDisabled={
+                  jobTypeWatchValue === 'HOUSEWIFE' ||
+                  jobTypeWatchValue === 'UNEMPLOYED'
                 }
                 variant={'solid-primary'}
                 size={'lg'}
@@ -964,8 +962,8 @@ const ApplyLoanStep4 = () => {
         {companyName && (
           <InputForm
             label="직장 사업자등록번호"
-            isRequired={companyAddress ? true : false}
-            isOptional={companyAddress ? false : true}
+            isRequired={isCompanyAddressFromSearch ? true : false}
+            isOptional={isCompanyAddressFromSearch ? false : true}
           >
             <Input
               placeholder="직장 사업자등록번호"
@@ -1009,12 +1007,23 @@ const ApplyLoanStep4 = () => {
                   w={'100%'}
                   {...register('companyDetailAddress')}
                   data-field="companyDetailAddress"
+                  onChange={(e) => {
+                    register('companyDetailAddress').onChange(e)
+                    if (errors?.companyDetailAddress) {
+                      clearErrors('companyDetailAddress')
+                    }
+                  }}
                 />
               )}
             </VStack>
-            {errors?.companyAddress && (
+            {/* {errors?.companyAddress && (
               <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
                 {errors?.companyAddress?.message as string}
+              </Text>
+            )} */}
+            {errors?.companyDetailAddress && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.companyDetailAddress?.message as string}
               </Text>
             )}
           </InputForm>
@@ -1058,6 +1067,10 @@ const ApplyLoanStep4 = () => {
                   onPaste={handlePaste}
                   textAlign="right"
                   pr="40px"
+                  disabled={
+                    jobTypeWatchValue === 'HOUSEWIFE' ||
+                    jobTypeWatchValue === 'UNEMPLOYED'
+                  }
                   onKeyDown={(evt) =>
                     ['e', 'E', '+', '-', '.'].includes(evt.key) &&
                     evt.preventDefault()
@@ -1082,6 +1095,10 @@ const ApplyLoanStep4 = () => {
                 <Input
                   placeholder="MM"
                   type="number"
+                  disabled={
+                    jobTypeWatchValue === 'HOUSEWIFE' ||
+                    jobTypeWatchValue === 'UNEMPLOYED'
+                  }
                   onPaste={handlePaste}
                   textAlign="right"
                   onKeyDown={(evt) => {

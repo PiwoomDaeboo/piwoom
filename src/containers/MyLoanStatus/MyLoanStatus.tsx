@@ -21,9 +21,7 @@ import NonData from '@/components/NonData'
 import { Pagination } from '@/components/pagination'
 import { LoanListParamsStatusInEnumType } from '@/generated/apis/@types/data-contracts'
 import { useLoanListQuery } from '@/generated/apis/Loan/Loan.query'
-import { useAuth } from '@/hooks/useAuth'
 import { useLocalStorage } from '@/stores/local/state'
-import { useSessionStorage } from '@/stores/session/state'
 
 import MyLoanAuthentication from './components/my-loan-authentication'
 import MyLoanList from './components/my-loan-list'
@@ -32,7 +30,7 @@ function MyLoanStatus() {
   const router = useRouter()
   const postsPerPage = 9
   const { token: accessToken } = useLocalStorage()
-  const { identityVerificationToken } = useSessionStorage()
+
   const selectedTab = useMemo(() => {
     const tabQuery = router.query.tab
     if (typeof tabQuery === 'string') {

@@ -107,6 +107,9 @@ const SliderItem = ({ item, onOpen }: { item: any; onOpen: () => void }) => (
 
 function Section6() {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [selectedSlideData, setSelectedSlideData] = useState<
+    (typeof sliderData)[0] | null
+  >(null)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isDragging, setIsDragging] = useState(false)
   const settings = {
@@ -170,6 +173,7 @@ function Section6() {
 
   const handleSlideClick = () => {
     if (!isDragging) {
+      setSelectedSlideData(sliderData[currentSlide])
       onOpen()
     }
   }
@@ -184,7 +188,7 @@ function Section6() {
       <YoutubeVideoModal
         isOpen={isOpen}
         onClose={onClose}
-        link={sliderData[currentSlide].link}
+        link={selectedSlideData?.link || ''}
       />
       <Container>
         <VStack spacing="0" w="100%">

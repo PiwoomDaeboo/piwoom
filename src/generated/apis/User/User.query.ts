@@ -6,7 +6,6 @@ import instance from '@/configs/axios/instance'
 
 import {
   CommonErrorType,
-  UserIdentityVerificationErrorMessageType,
   UserLoginErrorMessageType,
   UserRefreshErrorMessageType,
 } from '../@types/data-contracts'
@@ -38,36 +37,12 @@ const isDefined = (v: unknown) => typeof v !== 'undefined'
  * query-keys
  */
 export const QUERY_KEY_USER_API = {
-  IDENTITY_VERIFICATION_CREATE: () => ['USER_IDENTITY_VERIFICATION_CREATE'],
   LOGIN_CREATE: () => ['USER_LOGIN_CREATE'],
   REFRESH_CREATE: () => ['USER_REFRESH_CREATE'],
   TEST_RETRIEVE: (variables?: Parameter<typeof userApi.userTestRetrieve>) =>
     ['USER_TEST_RETRIEVE', variables].filter(isDefined),
   RETRIEVE: (variables?: Parameter<typeof userApi.userRetrieve>) =>
     ['USER_RETRIEVE', variables].filter(isDefined),
-}
-
-/**
- * No description
- *
- * @tags user
- * @name UserIdentityVerificationCreate
- * @summary 유저 본인인증
- * @request POST:/v1/user/identity_verification/
- * @secure  */
-
-export const useUserIdentityVerificationCreateMutation = (
-  params: MutationHookParams<
-    typeof userApi.userIdentityVerificationCreate,
-    AxiosError<UserIdentityVerificationErrorMessageType | CommonErrorType>
-  >,
-) => {
-  const mutationKey = QUERY_KEY_USER_API.IDENTITY_VERIFICATION_CREATE()
-  return useMutation({
-    mutationKey,
-    mutationFn: userApi.userIdentityVerificationCreate,
-    ...params?.options,
-  })
 }
 
 /**

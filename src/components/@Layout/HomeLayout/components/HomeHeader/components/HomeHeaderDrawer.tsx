@@ -77,7 +77,12 @@ const HomeHeaderDrawer = ({
               h={'64px'}
             >
               <Link variant={'unstyled'} href={ROUTES.MAIN}>
-                <ImageAsNext src={MY_IMAGES.LOGO_MO.src} alt="logo" />
+                <ImageAsNext
+                  w={'107px'}
+                  h={'20px'}
+                  src={MY_IMAGES.LOGO_MO.src}
+                  alt="logo"
+                />
                 {/* <HeaderlogoIcon boxSize={'107px'} h={'20px'} /> */}
               </Link>
               <HStack gap={'10px'}>

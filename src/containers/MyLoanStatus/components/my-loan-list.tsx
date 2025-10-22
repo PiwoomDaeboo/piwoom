@@ -19,6 +19,7 @@ import { LOAN_KIND_OPTIONS, LOAN_STATUS } from '@/constants/loan'
 import { LoanType } from '@/generated/apis/@types/data-contracts'
 import { useLoanContractUrlRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
+import { formatDate } from '@/utils/date-format'
 import {
   getAdditionalDocumentButtonVisibility,
   getBadgeStyle,
@@ -47,7 +48,8 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
     if (
       status === 'UNDER_REVIEW' ||
       status === 'CONTRACTING' ||
-      status === 'REMITTING'
+      status === 'REMITTING' ||
+      status === 'REJECTED'
     ) {
       return false
     } else return true
@@ -132,14 +134,11 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
     }
   }
 
-  const isStatusRemitting = (status: string): boolean => {
-    return (
-        status === 'UNDER_REVIEW' ||
-          status === 'CONTRACTING' ||
-          status === 'REMITTING'
-      ) ?
-        true
-      : false
+  const isStatusReviewAndRejected = (status: string): boolean => {
+    return status === 'UNDER_REVIEW' || status === 'REJECTED' ? true : false
+  }
+  const isStatusInProgressAndOverdue = (status: string): boolean => {
+    return status === 'IN_PROGRESS' || status === 'OVERDUE' ? true : false
   }
 
   return (
@@ -170,7 +169,11 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                   }
                 </Badge>
                 <Text>
-                  계약번호{' '}
+                  {isStatusReviewAndRejected(item.status) ?
+                    item.status === 'UNDER_REVIEW' ?
+                      '신청번호'
+                    : '계약번호'
+                  : '계약번호'}
                   <Box as="span" ml={'8px'} color={'primary.4'}>
                     {item.no}
                   </Box>
@@ -192,7 +195,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                 </Flex>
               )}
             </HStack>
-            {isStatusRemitting(item.status) ?
+            {isStatusReviewAndRejected(item.status) ?
               <Flex flexDirection={'column'} w={'100%'} gap={'6px'} mt={'20px'}>
                 <HStack justifyContent={'space-between'}>
                   <Text textStyle={'pre-body-6'} color={'grey.10'}>
@@ -200,7 +203,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                   </Text>
                   <Text textStyle={'pre-body-5'} color={'grey.10'}>
                     {LOAN_KIND_OPTIONS.find((kind) => kind.value === item?.kind)
-                      ?.label || '-'}
+                      ?.label || '-'}{' '}
                     대출
                   </Text>
                 </HStack>
@@ -209,7 +212,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                     대출 신청액
                   </Text>
                   <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                    {item?.loanAmount?.toLocaleString() || 0}원
+                    {item?.contract?.amount?.toLocaleString() || 0}원
                   </Text>
                 </HStack>
                 <HStack justifyContent={'space-between'}>
@@ -217,7 +220,12 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                     대출 신청일
                   </Text>
                   <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                    {item?.contract?.remainingAmount?.toLocaleString() || 0}원
+                    {item?.contract?.loanDate ||
+                      formatDate({
+                        date: new Date(item.createdAt),
+                        format: 'YYYY-MM-DD',
+                      }) ||
+                      '-'}
                   </Text>
                 </HStack>
               </Flex>
@@ -237,10 +245,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                     다음 갚는날
                   </Text>
                   <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                    매월{' '}
-                    {item?.contract?.interestPaymentDate ||
-                      item?.interestPaymentDate}
-                    일
+                    {item?.contract?.nextScheduleDate || '-'}
                   </Text>
                 </HStack>
                 <HStack justifyContent={'space-between'}>
@@ -253,60 +258,70 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                 </HStack>
               </Flex>
             }
-
-            <SimpleGrid
-              // visibility={'hidden'}
-              visibility={'visible'}
-              columns={2}
-              gap={'8px'}
-              mt={'20px'}
+            <Flex
+              flexDirection={
+                isStatusInProgressAndOverdue(item.status) ? 'column-reverse' : (
+                  'column'
+                )
+              }
             >
-              <Button
-                visibility={getRepaymentButtonVisibility(item.status)}
-                variant={'outline-secondary'}
-                onClick={() => {
-                  handleRepayment(item?.status, item?.id)
-                }}
+              <SimpleGrid
+                // visibility={'hidden'}
+                visibility={'visible'}
+                columns={2}
+                gap={'8px'}
+                mt={'10px'}
               >
-                <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                  중도 상환 신청하기
-                </Text>
-              </Button>
-              <Button
-                visibility={getContractDownloadButtonVisibility(item.status)}
-                variant={'outline-secondary'}
-                onClick={() => handleContractDownload(item?.id.toString())}
-              >
-                <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                  계약서 다운로드
-                </Text>
-              </Button>
-
-              <Button
-                visibility={getScheduleButtonVisibility(item.status)}
-                variant={'outline-secondary'}
-                onClick={() => {
-                  router.push(`/my-loan-status/${item?.id}?detailMenu=schedule`)
-                }}
-              >
-                <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                  상환 스케줄 확인하기
-                </Text>
-              </Button>
-              <Button
-                visibility={getDocumentRequestButtonVisibility(item.status)}
-                variant={'outline-secondary'}
-                onClick={() => {
-                  window.open('http://pf.kakao.com/_xkxoben/chat', '_blank')
-                }}
-              >
-                <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                  기타서류 발급 요청하기
-                </Text>
-              </Button>
-            </SimpleGrid>
+                <Button
+                  visibility={getRepaymentButtonVisibility(item.status)}
+                  variant={'outline-secondary'}
+                  onClick={() => {
+                    handleRepayment(item?.status, item?.id)
+                  }}
+                >
+                  <Text textStyle={'pre-body-7'} color={'grey.8'}>
+                    중도 상환 신청하기
+                  </Text>
+                </Button>
+                <Button
+                  visibility={getContractDownloadButtonVisibility(item.status)}
+                  variant={'outline-secondary'}
+                  onClick={() => handleContractDownload(item?.id.toString())}
+                >
+                  <Text textStyle={'pre-body-7'} color={'grey.8'}>
+                    계약서 다운로드
+                  </Text>
+                </Button>
+              </SimpleGrid>
+              <SimpleGrid columns={2} gap={'8px'} mt={'10px'}>
+                <Button
+                  visibility={getScheduleButtonVisibility(item.status)}
+                  variant={'outline-secondary'}
+                  onClick={() => {
+                    router.push(
+                      `/my-loan-status/${item?.id}?detailMenu=schedule`,
+                    )
+                  }}
+                >
+                  <Text textStyle={'pre-body-7'} color={'grey.8'}>
+                    상환 스케줄 확인하기
+                  </Text>
+                </Button>
+                <Button
+                  visibility={getDocumentRequestButtonVisibility(item.status)}
+                  variant={'outline-secondary'}
+                  onClick={() => {
+                    window.open('http://pf.kakao.com/_xkxoben/chat', '_blank')
+                  }}
+                >
+                  <Text textStyle={'pre-body-7'} color={'grey.8'}>
+                    기타서류 발급 요청하기
+                  </Text>
+                </Button>
+              </SimpleGrid>
+            </Flex>
             <Button
-              visibility={getAdditionalDocumentButtonVisibility(item.status)}
+              // visibility={getAdditionalDocumentButtonVisibility(item.status)}
               mt={'10px'}
               variant={'outline-secondary'}
               w={'100%'}

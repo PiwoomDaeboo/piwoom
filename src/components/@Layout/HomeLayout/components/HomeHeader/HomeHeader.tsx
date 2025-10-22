@@ -13,11 +13,12 @@ import {
   Text,
 } from '@chakra-ui/react'
 
-import { MenuIcon } from 'generated/icons/MyIcons'
+import { MenuIcon, UserIcon } from 'generated/icons/MyIcons'
 
 import ImageAsNext from '@/components/ImageAsNext'
 import { MY_IMAGES } from '@/generated/path/images'
 import { ROUTES } from '@/generated/path/routes'
+import { useLocalStorage } from '@/stores/local/state'
 
 import { MENU_ITEMS } from '../consts/menu'
 import HomeHeaderDrawer from './components/HomeHeaderDrawer'
@@ -35,7 +36,9 @@ const HomeHeader = ({
   ...props
 }: HomeHeaderProps) => {
   const router = useRouter()
+  const { token } = useLocalStorage()
   const [hoveredMenuIndex, setHoveredMenuIndex] = useState<number | null>(null)
+  const [isLogoutMenuOpen, setIsLogoutMenuOpen] = useState(false)
   const [isHeaderVisible, setIsHeaderVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -81,6 +84,11 @@ const HomeHeader = ({
       }
     }
   }, [lastScrollY, isDrawerOpen])
+  const handleLogout = useCallback(() => {
+    useLocalStorage.getState().reset('token')
+    router.replace(ROUTES.MAIN)
+    setIsLogoutMenuOpen(false)
+  }, [])
   const hoverMenuMarginRight = useCallback((index: number) => {
     if (index === 0) {
       return '24px'
@@ -204,14 +212,55 @@ const HomeHeader = ({
             ))}
           </HStack>
           <HStack gap={'10px'} display={{ base: 'none', md: 'flex' }}>
-            <Button
-              onClick={() => router.push(ROUTES.MY_LOAN_STATUS_MAIN)}
-              variant={'outline-secondary'}
-            >
-              <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                대출 조회
-              </Text>
-            </Button>
+            {token ?
+              <Flex
+                w={'48px'}
+                h={'48px'}
+                bg={'primary.4'}
+                borderRadius={'full'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                cursor={'pointer'}
+                position={'relative'}
+                onClick={() => setIsLogoutMenuOpen(!isLogoutMenuOpen)}
+              >
+                <UserIcon boxSize={'24px'} color={'grey.0'} />
+                {isLogoutMenuOpen && (
+                  <Flex
+                    bg={'grey.0'}
+                    minW={'160px'}
+                    borderRadius={'10px'}
+                    display={'flex'}
+                    justifyContent={'flex-start'}
+                    border={'1px solid'}
+                    borderColor={'grey.2'}
+                    alignItems={'center'}
+                    position={'absolute'}
+                    zIndex={999}
+                    onClick={handleLogout}
+                    boxShadow={
+                      '0 20px 80px 0 rgba(27, 28, 29, 0.04), 0 4px 10px 0 rgba(27, 28, 29, 0.04)'
+                    }
+                    bottom={'-50px'}
+                    right={0}
+                    p={'10px 12px'}
+                  >
+                    <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                      로그아웃
+                    </Text>
+                  </Flex>
+                )}
+              </Flex>
+            : <Button
+                onClick={() => router.push(ROUTES.MY_LOAN_STATUS_MAIN)}
+                variant={'outline-secondary'}
+              >
+                <Text textStyle={'pre-body-7'} color={'grey.8'}>
+                  대출 조회
+                </Text>
+              </Button>
+            }
+
             <Button
               onClick={() => router.push('/apply-loan?step=1&type=credit')}
               variant={'black-primary'}

@@ -730,6 +730,11 @@ export interface LoanType {
   readonly isIdentityCard: boolean
   /** 계약 */
   readonly contract: LoanContractType | null
+  /**
+   * 생성일시
+   * @format date-time
+   */
+  readonly createdAt: string
 }
 
 export interface LoanContractType {
@@ -909,7 +914,6 @@ export interface LoanContractUrlType {
 
 export interface LoanErrorMessageType {
   nonField?: string[]
-  identityVerificationToken?: string[]
   kind?: string[]
   email?: string[]
   purpose?: string[]
@@ -1176,11 +1180,6 @@ export interface LoanLocalTaxRequestType {
 }
 
 export interface LoanRequestType {
-  /**
-   * 본인인증 토큰
-   * @minLength 1
-   */
-  identityVerificationToken?: string
   /**
    * 유형
    * * `A` - 비상금 대출
@@ -1630,11 +1629,6 @@ export interface PaginatedNoticeListType {
 }
 
 export interface PatchedLoanRequestType {
-  /**
-   * 본인인증 토큰
-   * @minLength 1
-   */
-  identityVerificationToken?: string
   /**
    * 유형
    * * `A` - 비상금 대출
@@ -2162,25 +2156,7 @@ export interface UserType {
    * @format email
    * @maxLength 254
    */
-  email: string
-}
-
-export interface UserIdentityVerificationType {
-  /** 본인인증 토큰 */
-  readonly identityVerificationToken: string
-}
-
-export interface UserIdentityVerificationErrorMessageType {
-  nonField?: string[]
-  identityVerificationId?: string[]
-}
-
-export interface UserIdentityVerificationRequestType {
-  /**
-   * 본인인증 id
-   * @minLength 1
-   */
-  identityVerificationId: string
+  email?: string | null
 }
 
 export interface UserLoginType {

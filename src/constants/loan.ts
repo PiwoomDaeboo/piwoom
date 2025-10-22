@@ -140,7 +140,7 @@ export const REPAYMENT_TYPE = [
 ]
 
 export const LOAN_KIND_OPTIONS = [
-  { label: '월급', value: 'A' },
+  { label: '비상금', value: 'A' },
   { label: '신용', value: 'B' },
   { label: '부동산 담보', value: 'C' },
 ]
@@ -161,7 +161,7 @@ export const LOAN_PURPOSE_OPTIONS = [
 
 export const TOTAL_ASSET_OPTIONS = [
   { label: '1억원 미만', value: 'UNDER_100M' },
-  { label: '1억~5억원 미만', value: 'RANGE_100M_500M' },
+  { label: '1억원~5억원 미만', value: 'RANGE_100M_500M' },
   { label: '5억원 이상', value: 'OVER_500M' },
   { label: '자산 없음', value: 'NO_ASSET' },
 ]

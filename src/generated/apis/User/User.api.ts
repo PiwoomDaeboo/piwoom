@@ -1,9 +1,6 @@
 import { ContentType, HttpClient, RequestParams } from '../@http-client'
 import {
   CommonErrorType,
-  UserIdentityVerificationErrorMessageType,
-  UserIdentityVerificationRequestType,
-  UserIdentityVerificationType,
   UserLoginErrorMessageType,
   UserLoginRequestType,
   UserLoginType,
@@ -23,32 +20,6 @@ import { DeepOmitReadOnly } from '../@types/util-types'
 export class UserApi<
   SecurityDataType = unknown,
 > extends HttpClient<SecurityDataType> {
-  /**
-   * No description
-   *
-   * @tags user
-   * @name UserIdentityVerificationCreate
-   * @summary 유저 본인인증
-   * @request POST:/v1/user/identity_verification/
-   * @secure
-   */
-  userIdentityVerificationCreate = (variables: {
-    data: DeepOmitReadOnly<UserIdentityVerificationRequestType>
-    params?: RequestParams
-  }) =>
-    this.request<
-      UserIdentityVerificationType,
-      UserIdentityVerificationErrorMessageType | CommonErrorType
-    >({
-      path: `/v1/user/identity_verification/`,
-      method: 'POST',
-      body: variables.data,
-      secure: true,
-      type: ContentType.Json,
-      format: 'json',
-      ...variables.params,
-    })
-
   /**
    * No description
    *

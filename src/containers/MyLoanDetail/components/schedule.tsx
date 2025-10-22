@@ -127,7 +127,7 @@ export default function Schedule() {
                       color={'grey.10'}
                       textAlign={'right'}
                     >
-                      {item?.interestAmount?.toLocaleString() || 0}원
+                      {item?.monthlyAmount?.toLocaleString() || 0}원
                     </Text>
                   </Flex>
                 </Flex>
