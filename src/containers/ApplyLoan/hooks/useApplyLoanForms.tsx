@@ -84,7 +84,24 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
         .number()
         .typeError('숫자만 입력 가능합니다.')
         .integer('숫자만 입력 가능합니다.')
+
         .positive()
+        .test(
+          'min-length',
+          '계좌번호는 최소 6자리 이상 입력해주세요.',
+          function (value) {
+            if (!value) return true // required 검증은 별도로 처리
+            return value.toString().length >= 6
+          },
+        )
+        .test(
+          'max-length',
+          '계좌번호는 최대 20자리까지 입력 가능합니다.',
+          function (value) {
+            if (!value) return true // required 검증은 별도로 처리
+            return value.toString().length <= 20
+          },
+        )
         .required('필수 항목 입니다.'),
       // accountHolderSsn: yup.string().required('필수 항목 입니다.'),
       accountHolder: yup.string().required('필수 항목 입니다.'),

@@ -1,6 +1,6 @@
 import { Button, Flex, SimpleGrid } from '@chakra-ui/react'
 
-import { Controller, useFormContext } from 'react-hook-form'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
 
 interface SelectButtonOption {
   value: string
@@ -19,7 +19,10 @@ export const useSelectButtonGroup = ({
   variant = 'single',
 }: UseSelectButtonGroupProps) => {
   const { control } = useFormContext()
-
+  const jobTypeWatchValue = useWatch({
+    control,
+    name: 'jobType',
+  })
   const SelectButtonGroup = () => (
     <Controller
       name={name}
@@ -39,6 +42,10 @@ export const useSelectButtonGroup = ({
                 textStyle={'pre-body-5'}
                 bg={isSelected ? 'primary.1' : 'grey.0'}
                 key={option.value}
+                isDisabled={
+                  jobTypeWatchValue === 'HOUSEWIFE' ||
+                  jobTypeWatchValue === 'UNEMPLOYED'
+                }
                 onClick={() => {
                   if (variant === 'single') {
                     field.onChange(option.value)

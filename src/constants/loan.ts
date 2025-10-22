@@ -161,7 +161,7 @@ export const LOAN_PURPOSE_OPTIONS = [
 
 export const TOTAL_ASSET_OPTIONS = [
   { label: '1억원 미만', value: 'UNDER_100M' },
-  { label: '1억~5억원 미만', value: 'RANGE_100M_500M' },
+  { label: '1억원~5억원 미만', value: 'RANGE_100M_500M' },
   { label: '5억원 이상', value: 'OVER_500M' },
   { label: '자산 없음', value: 'NO_ASSET' },
 ]

@@ -492,6 +492,7 @@ function UntactDocumentApplyModal({
               variant={'solid-primary'}
               w={'100%'}
               onClick={handleLoginGov}
+              isDisabled={!selectedAuth || !selectedDistrict}
               isLoading={isGovMutationPending}
               loadingText="인증절차 처리중"
             >

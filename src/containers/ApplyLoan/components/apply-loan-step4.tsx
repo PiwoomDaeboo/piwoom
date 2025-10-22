@@ -86,6 +86,7 @@ const ApplyLoanStep4 = () => {
     control,
     handleSubmit,
     watch,
+    setError,
     formState: { errors },
   } = useFormContext()
   const [userInfo, setUserInfo] = useState<{
@@ -100,17 +101,10 @@ const ApplyLoanStep4 = () => {
   const loanPeriod = useWatch({ control, name: 'loanPeriod' })
   const residenceType = useWatch({ control, name: 'residenceType' })
   const housingType = useWatch({ control, name: 'housingType' })
-  const companyBusinessNumber = useWatch({
-    control,
-    name: 'companyBusinessNumber',
-  })
+  const jobTypeWatchValue = useWatch({ control, name: 'jobType' })
 
   const baseAddress = useWatch({ control, name: 'baseAddress' })
-  const detailAddress = useWatch({ control, name: 'detailAddress' })
   const assetBaseAddress = useWatch({ control, name: 'assetBaseAddress' })
-  const assetDetailAddress = useWatch({ control, name: 'assetDetailAddress' })
-  const postcode = useWatch({ control, name: 'postcode' })
-  const assetPostcode = useWatch({ control, name: 'assetPostcode' })
   const electronicDocumentConsent = useWatch({
     control,
     name: 'electronicDocumentConsent',
@@ -140,9 +134,7 @@ const ApplyLoanStep4 = () => {
     onOpen: onUntactDocumentApplyModalOpen,
     onClose: onUntactDocumentApplyModalClose,
   } = useDisclosure()
-  const [fileUploadedFileName, setFileUploadedFileName] = useState<
-    string[] | null
-  >([])
+
   const [isDocumentSubmissionCompleted, setIsDocumentSubmissionCompleted] =
     useState(false)
   const [addressModalType, setAddressModalType] = useState<
@@ -159,6 +151,7 @@ const ApplyLoanStep4 = () => {
     control,
     name: 'employmentType',
   })
+
   const companyName = useWatch({ control, name: 'companyName' })
   const companyAddress = useWatch({ control, name: 'companyAddress' })
   // const { data: settingData } = useSettingRetrieveQuery({
@@ -166,6 +159,7 @@ const ApplyLoanStep4 = () => {
   //     id: 'me',
   //   },
   // })
+  console.log(employmentTypeWatchValue)
   const {
     mutate: accountVerifyMutation,
     isPending: isAccountVerifyMutationLoading,
@@ -401,14 +395,16 @@ const ApplyLoanStep4 = () => {
   }
 
   useEffect(() => {
-    const extractedUserInfo = extractUserInfoFromJWT(
-      identityVerificationToken as string,
-    )
-    if (extractedUserInfo) {
-      setUserInfo(extractedUserInfo)
-      console.log('Extracted user info:', extractedUserInfo)
+    if (identityVerificationToken) {
+      const extractedUserInfo = extractUserInfoFromJWT(
+        identityVerificationToken as string,
+      )
+      if (extractedUserInfo) {
+        setUserInfo(extractedUserInfo)
+        console.log('Extracted user info:', extractedUserInfo)
+      }
     }
-  }, [])
+  }, [identityVerificationToken])
 
   return (
     <Container>
@@ -861,10 +857,20 @@ const ApplyLoanStep4 = () => {
             <Input
               type="number"
               placeholder="계좌번호"
+              maxLength={20}
               onKeyDown={(evt) =>
                 ['e', 'E', '+', '-', '.'].includes(evt.key) &&
                 evt.preventDefault()
               }
+              onInput={(evt) => {
+                const target = evt.target as HTMLInputElement
+                if (target.value.length > 20) {
+                  target.value = target.value.slice(0, 20)
+                  setError('accountNumber', {
+                    message: '계좌번호는 최대 20자리까지 입력 가능합니다.',
+                  })
+                }
+              }}
               onPaste={handlePaste}
               {...register('accountNumber')}
               data-field="accountNumber"
@@ -940,9 +946,9 @@ const ApplyLoanStep4 = () => {
                 data-field="companyName"
               />
               <Button
-                disabled={
-                  employmentTypeWatchValue === 'HOUSEWIFE' ||
-                  employmentTypeWatchValue === 'UNEMPLOYED'
+                isDisabled={
+                  jobTypeWatchValue === 'HOUSEWIFE' ||
+                  jobTypeWatchValue === 'UNEMPLOYED'
                 }
                 variant={'solid-primary'}
                 size={'lg'}
@@ -1058,6 +1064,10 @@ const ApplyLoanStep4 = () => {
                   onPaste={handlePaste}
                   textAlign="right"
                   pr="40px"
+                  disabled={
+                    jobTypeWatchValue === 'HOUSEWIFE' ||
+                    jobTypeWatchValue === 'UNEMPLOYED'
+                  }
                   onKeyDown={(evt) =>
                     ['e', 'E', '+', '-', '.'].includes(evt.key) &&
                     evt.preventDefault()
@@ -1082,6 +1092,10 @@ const ApplyLoanStep4 = () => {
                 <Input
                   placeholder="MM"
                   type="number"
+                  disabled={
+                    jobTypeWatchValue === 'HOUSEWIFE' ||
+                    jobTypeWatchValue === 'UNEMPLOYED'
+                  }
                   onPaste={handlePaste}
                   textAlign="right"
                   onKeyDown={(evt) => {
