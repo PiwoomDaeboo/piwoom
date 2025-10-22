@@ -24,12 +24,13 @@ import {
   useLoanPrepaymentCalculateCreateMutation,
   useLoanPrepaymentCreateMutation,
 } from '@/generated/apis/Prepayment/Prepayment.query'
+import { CaretLeftIcon } from '@/generated/icons/MyIcons'
 import { useSessionStorage } from '@/stores/session/state'
 import { handleErrorToast } from '@/utils/error-handler'
 
 function PrepaymentApplication() {
   const router = useRouter()
-  const [prepaymentAmount, setPrepaymentAmount] = useState(0)
+  const [prepaymentAmount, setPrepaymentAmount] = useState<number | null>(null)
   const toast = useToast()
   const { set } = useSessionStorage()
   const { data: loanData } = useLoanRetrieveQuery({
@@ -44,6 +45,7 @@ function PrepaymentApplication() {
   const {
     data: prepaymentCalculateData,
     mutate: handlePrepaymentCalculateCreateMutation,
+    isPending: isCalculateLoading,
   } = useLoanPrepaymentCalculateCreateMutation({
     options: {
       onSuccess: (data) => {
@@ -101,7 +103,7 @@ function PrepaymentApplication() {
     handlePrepaymentCreateMutation({
       loanId: Number(router.query.id),
       data: {
-        amount: prepaymentAmount,
+        amount: prepaymentAmount || 0,
       },
     })
   }
@@ -115,9 +117,18 @@ function PrepaymentApplication() {
         gap={'32px'}
       >
         <VStack alignItems={'flex-start'} spacing={'8px'}>
-          <Text textStyle={'pre-heading-2'} color={'grey.10'}>
-            중도상환 신청
-          </Text>
+          <HStack>
+            <Button
+              variant={'none'}
+              p={'4px'}
+              onClick={() => router.push('/my-loan-status')}
+            >
+              <CaretLeftIcon boxSize={'24px'} />
+            </Button>
+            <Text textStyle={'pre-heading-2'} color={'grey.10'}>
+              중도상환 신청
+            </Text>
+          </HStack>
           <Text textStyle={'pre-body-6'} color={'grey.7'}>
             남은 대출금에서 상환할 금액을 신청합니다.
           </Text>
@@ -147,11 +158,27 @@ function PrepaymentApplication() {
                 placeholder="0"
                 type="number"
                 textAlign="right"
+                value={prepaymentAmount?.toString() || undefined}
                 pr="50px"
+                onKeyDown={(evt) => {
+                  ;['e', 'E', '+', '-', '.'].includes(evt.key) &&
+                    evt.preventDefault()
+                }}
                 onChange={(e) => {
-                  const value = Number(e.target.value)
-                  setPrepaymentAmount(value)
-                  debouncedCalculate(value)
+                  const inputValue = e.target.value
+                  const value = Number(inputValue)
+                  const remainingAmount =
+                    loanData?.contract?.remainingAmount || 0
+
+                  if (inputValue === '' || (!isNaN(value) && value >= 0)) {
+                    if (
+                      value === 0 ||
+                      (value >= 1 && value <= remainingAmount)
+                    ) {
+                      setPrepaymentAmount(value)
+                      debouncedCalculate(value)
+                    }
+                  }
                 }}
               />
               <InputRightElement>
@@ -177,6 +204,8 @@ function PrepaymentApplication() {
             </VStack>
             <Button
               variant={'text-primary'}
+              isLoading={isCalculateLoading}
+              type="button"
               onClick={() => {
                 const remainingAmount = loanData?.contract?.remainingAmount || 0
                 setPrepaymentAmount(remainingAmount)
@@ -224,7 +253,15 @@ function PrepaymentApplication() {
             </VStack>
           </Flex>
           <Flex w={'100%'} justifyContent={'center'}>
-            <Button variant={'solid-primary'} onClick={handleRepaymentAmount}>
+            <Button
+              isDisabled={
+                prepaymentAmount === null ||
+                prepaymentAmount < 1 ||
+                prepaymentAmount > (loanData?.contract?.remainingAmount || 0)
+              }
+              variant={'solid-primary'}
+              onClick={handleRepaymentAmount}
+            >
               다음
             </Button>
           </Flex>
