@@ -47,8 +47,6 @@ import {
   XCircleFillIcon,
 } from '@/generated/icons/MyIcons'
 import { useLocalStorage } from '@/stores/local/state'
-import { useSessionStorage } from '@/stores/session/state'
-import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 interface UntactDocumentApplyModalProps {
   isOpen: boolean
@@ -87,13 +85,6 @@ function UntactDocumentApplyModal({
   const [govRetrieveId, setGovRetrieveId] = useState<number | null>(null)
   const { setValue, trigger, clearErrors } = useFormContext()
   const [loadingProcess, setLoadingProcess] = useState<number>(0)
-  const [userInfo, setUserInfo] = useState<{
-    name?: string
-    phone?: string
-    birth?: string
-    gender_code?: string
-  } | null>(null)
-  const { identityVerificationToken } = useSessionStorage()
   const { token: accessToken } = useLocalStorage()
   const toast = useToast()
 
@@ -125,14 +116,6 @@ function UntactDocumentApplyModal({
     },
   })
 
-  useEffect(() => {
-    const extractedUserInfo = extractUserInfoFromJWT(
-      identityVerificationToken as string,
-    )
-    if (extractedUserInfo) {
-      setUserInfo(extractedUserInfo)
-    }
-  }, [])
   const { mutate: govMutation, isPending: isGovMutationPending } =
     useGovLoginCreateMutation({
       options: {
@@ -338,9 +321,9 @@ function UntactDocumentApplyModal({
     govMutation({
       data: {
         method: selectedAuth as GovLoginRequestMethodEnumType,
-        name: userInfo?.name || userData?.name || '',
-        birth: userInfo?.birth || userData?.birth || '',
-        phone: userInfo?.phone || userData?.phone || '',
+        name: userData?.name || '',
+        birth: userData?.birth || '',
+        phone: userData?.phone || '',
         agency: selectedPassType as GovLoginRequestAgencyEnumType,
         sido: selectedCity,
         sigungu: selectedDistrict,

@@ -28,9 +28,6 @@ import {
 import { useUsebAccessTokenCreateMutation } from '@/generated/apis/Useb/Useb.query'
 import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
-import { MY_IMAGES } from '@/generated/path/images'
-import { useSessionStorage } from '@/stores/session/state'
-import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 import {
   AGREEMENT_ITEMS,

@@ -35,8 +35,6 @@ import {
 import { FolderIcon, InfoFillIcon } from '@/generated/icons/MyIcons'
 import { MY_IMAGES } from '@/generated/path/images'
 import { useLocalStorage } from '@/stores/local/state'
-import { useSessionStorage } from '@/stores/session/state'
-import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 export default function Document() {
   const router = useRouter()
@@ -73,7 +71,6 @@ export default function Document() {
     onClose: onUntactDocumentApplyModalClose,
   } = useDisclosure()
 
-  const { identityVerificationToken } = useSessionStorage()
   const { mutate: documentSubmitMutation, isPending: isDocumentSubmitLoading } =
     useLoanPartialUpdateMutation({
       options: {
@@ -151,17 +148,7 @@ export default function Document() {
       'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
     )
   }
-  useEffect(() => {
-    const extractedUserInfo = extractUserInfoFromJWT(
-      identityVerificationToken as string,
-    )
-    if (extractedUserInfo) {
-      setUserInfo(extractedUserInfo)
-      console.log('Extracted user info:', extractedUserInfo)
-    }
-  }, [])
 
-  console.log('safeKeyWatchValue', safeKey)
   useEffect(() => {
     window.addEventListener('storage', (e) => {
       if (e.key === 'popup_status') {

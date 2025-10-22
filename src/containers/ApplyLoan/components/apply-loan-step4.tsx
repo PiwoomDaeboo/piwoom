@@ -44,10 +44,7 @@ import {
   XCircleFillIcon,
   XIcon,
 } from '@/generated/icons/MyIcons'
-import { useQueryEffects } from '@/hooks/useQueryEffect'
 import { useLocalStorage } from '@/stores/local/state'
-import { useSessionStorage } from '@/stores/session/state'
-import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 import AddressModal from '../../../components/@Modal/address-modal'
 import DocumentAgreeModal from '../../../components/@Modal/document-agree-modal'
@@ -142,7 +139,6 @@ const ApplyLoanStep4 = () => {
   >('normal')
   const [isCompanyAddressFromSearch, setIsCompanyAddressFromSearch] =
     useState(false)
-  const { identityVerificationToken } = useSessionStorage()
   const { popup_status: safeKey, reset } = useLocalStorage()
   const [isBankAccountVerified, setIsBankAccountVerified] = useState(false)
   const bankWatchValue = useWatch({ control, name: 'bank' })
@@ -216,7 +212,7 @@ const ApplyLoanStep4 = () => {
 
   const onStep4Submit = (data: any) => {
     const requestData = {
-      identityVerificationToken: identityVerificationToken,
+      // identityVerificationToken: identityVerificationToken,
       incomeCertificate: getValues('incomeCertificate') || '',
       residentRegistrationCopy: getValues('residentRegistrationCopy') || '',
       healthInsuranceEligibilityConfirmation:
@@ -393,18 +389,6 @@ const ApplyLoanStep4 = () => {
     setValue('untactDocumentSubmission', true)
     clearErrors('untactDocumentSubmission')
   }
-
-  useEffect(() => {
-    if (identityVerificationToken) {
-      const extractedUserInfo = extractUserInfoFromJWT(
-        identityVerificationToken as string,
-      )
-      if (extractedUserInfo) {
-        setUserInfo(extractedUserInfo)
-        console.log('Extracted user info:', extractedUserInfo)
-      }
-    }
-  }, [identityVerificationToken])
 
   return (
     <Container>

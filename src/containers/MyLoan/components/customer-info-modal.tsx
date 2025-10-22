@@ -6,8 +6,6 @@ import { Box, Button, Flex, HStack, Input, Text } from '@chakra-ui/react'
 
 import ModalBasis from '@/components/@Modal/ModalBasis'
 import { useLoanRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
-import { useSessionStorage } from '@/stores/session/state'
-import { extractUserInfoFromJWT } from '@/utils/jwt'
 
 interface CustomerInfoModalProps {
   isOpen: boolean
@@ -38,7 +36,6 @@ function CustomerInfoModal({
     birth?: string
     gender_code?: string
   } | null>(null)
-  const { identityVerificationToken } = useSessionStorage()
 
   const { data: loanData } = useLoanRetrieveQuery({
     variables: {
@@ -49,14 +46,6 @@ function CustomerInfoModal({
     },
   })
 
-  useEffect(() => {
-    const extractedUserInfo = extractUserInfoFromJWT(
-      identityVerificationToken as string,
-    )
-    if (extractedUserInfo) {
-      setUserInfo(extractedUserInfo)
-    }
-  }, [])
   return (
     <ModalBasis
       isOpen={isOpen}

@@ -15,18 +15,13 @@ import * as PortOne from '@portone/browser-sdk/v2'
 
 import ImageAsNext from '@/components/ImageAsNext'
 import { ENV } from '@/configs/env'
-import {
-  useUserIdentityVerificationCreateMutation,
-  useUserLoginCreateMutation,
-} from '@/generated/apis/User/User.query'
+import { useUserLoginCreateMutation } from '@/generated/apis/User/User.query'
 import { MY_IMAGES } from '@/generated/path/images'
 import { useLocalStorage } from '@/stores/local/state'
-import { useSessionStorage } from '@/stores/session/state'
 
 const MyLoanStep1 = () => {
   const router = useRouter()
   const { set } = useLocalStorage()
-  const { set: setSessionStorage } = useSessionStorage()
   const toast = useToast()
   const { mutateAsync: userLoginCreate } = useUserLoginCreateMutation({
     options: {
@@ -50,16 +45,6 @@ const MyLoanStep1 = () => {
     },
   })
 
-  const { mutateAsync: userIdentityVerificationCreate } =
-    useUserIdentityVerificationCreateMutation({
-      options: {
-        onSuccess: (data) => {
-          setSessionStorage({
-            identityVerificationToken: data.identityVerificationToken,
-          })
-        },
-      },
-    })
   const handleAuthentication = async () => {
     const response = await PortOne.requestIdentityVerification({
       storeId: ENV.PORTONE_STORE_ID || '',
@@ -72,11 +57,6 @@ const MyLoanStep1 = () => {
     }
 
     userLoginCreate({
-      data: {
-        identityVerificationId: response?.identityVerificationId || '',
-      },
-    })
-    userIdentityVerificationCreate({
       data: {
         identityVerificationId: response?.identityVerificationId || '',
       },
@@ -95,12 +75,6 @@ const MyLoanStep1 = () => {
       identityVerificationTxId &&
       transactionType === 'IDENTITY_VERIFICATION'
     ) {
-      // identity verification 완료 처리
-      userIdentityVerificationCreate({
-        data: {
-          identityVerificationId: identityVerificationId as string,
-        },
-      })
       userLoginCreate({
         data: {
           identityVerificationId: identityVerificationId as string,
@@ -122,7 +96,7 @@ const MyLoanStep1 = () => {
         { shallow: true },
       )
     }
-  }, [router.query, userIdentityVerificationCreate])
+  }, [router.query])
 
   return (
     <Container>
