@@ -140,7 +140,7 @@ export const REPAYMENT_TYPE = [
 ]
 
 export const LOAN_KIND_OPTIONS = [
-  { label: '월급', value: 'A' },
+  { label: '비상금', value: 'A' },
   { label: '신용', value: 'B' },
   { label: '부동산 담보', value: 'C' },
 ]

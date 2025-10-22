@@ -36,6 +36,7 @@ import { useAccountVerifyCreateMutation } from '@/generated/apis/Account/Account
 import { useGovRetrieveQuery } from '@/generated/apis/Gov/Gov.query'
 import { useLoanCreateMutation } from '@/generated/apis/Loan/Loan.query'
 import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
+import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 import {
   CaretRightIcon,
   DocumenticonIcon,
@@ -275,6 +276,11 @@ const ApplyLoanStep4 = () => {
     }
   }
 
+  const { data: userData } = useUserRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
   // 대출신청 버튼 클릭 핸들러 (handleSubmit 사용)
   const handleSubmitClick = handleSubmit(onStep4Submit, onStep4Error)
 
@@ -376,7 +382,7 @@ const ApplyLoanStep4 = () => {
         // || bankWatchValue,
         number: accountNumberWatchValue,
         // || accountNumberWatchValue,
-        birth: userInfo?.birth?.slice(2) || '',
+        birth: userData?.birth?.slice(2) || '',
       },
     })
   }
@@ -818,6 +824,7 @@ const ApplyLoanStep4 = () => {
                 control={control}
                 render={({ field }) => (
                   <CommonSelect
+                    isDisabled={isBankAccountVerified}
                     options={BANK_DATA}
                     placeholder="선택"
                     value={BANK_DATA.flatMap((group) => group.options).find(
@@ -842,6 +849,7 @@ const ApplyLoanStep4 = () => {
               type="number"
               placeholder="계좌번호"
               maxLength={20}
+              disabled={isBankAccountVerified}
               onKeyDown={(evt) =>
                 ['e', 'E', '+', '-', '.'].includes(evt.key) &&
                 evt.preventDefault()
@@ -954,8 +962,8 @@ const ApplyLoanStep4 = () => {
         {companyName && (
           <InputForm
             label="직장 사업자등록번호"
-            isRequired={companyAddress ? true : false}
-            isOptional={companyAddress ? false : true}
+            isRequired={isCompanyAddressFromSearch ? true : false}
+            isOptional={isCompanyAddressFromSearch ? false : true}
           >
             <Input
               placeholder="직장 사업자등록번호"
@@ -999,12 +1007,23 @@ const ApplyLoanStep4 = () => {
                   w={'100%'}
                   {...register('companyDetailAddress')}
                   data-field="companyDetailAddress"
+                  onChange={(e) => {
+                    register('companyDetailAddress').onChange(e)
+                    if (errors?.companyDetailAddress) {
+                      clearErrors('companyDetailAddress')
+                    }
+                  }}
                 />
               )}
             </VStack>
-            {errors?.companyAddress && (
+            {/* {errors?.companyAddress && (
               <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
                 {errors?.companyAddress?.message as string}
+              </Text>
+            )} */}
+            {errors?.companyDetailAddress && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.companyDetailAddress?.message as string}
               </Text>
             )}
           </InputForm>

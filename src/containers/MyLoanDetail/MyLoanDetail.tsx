@@ -38,11 +38,16 @@ function MyLoanDetail() {
     },
   })
 
-  useEffect(() => {
-    if (detailMenu) {
-      setIsDetailMenu(detailMenu as string)
-    }
-  }, [detailMenu])
+  // useEffect(() => {
+  //   if (detailMenu) {
+  //     setIsDetailMenu(detailMenu as string)
+  //     router.push(`/my-loan-status/${router.query.id}?detailMenu=${detailMenu}`)
+  //   }
+  // }, [detailMenu])
+  const handleDetailMenuChange = (menu: string) => {
+    setIsDetailMenu(menu)
+    router.push(`/my-loan-status/${router.query.id}?detailMenu=${menu}`)
+  }
 
   // useEffect(() => {
   //   if (!isLogin) {
@@ -116,7 +121,7 @@ function MyLoanDetail() {
                   flexShrink={0}
                   isActive={isDetailMenu === button.value}
                   variant={'text-secondary'}
-                  onClick={() => setIsDetailMenu(button.value)}
+                  onClick={() => handleDetailMenuChange(button.value)}
                 >
                   {button.title}
                 </Button>

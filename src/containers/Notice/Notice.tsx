@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -33,7 +33,7 @@ function Notice() {
   const { data: pinnedNoticeList } = useNoticeListQuery({
     variables: {
       query: {
-        q: '',
+        q: String(search_keyword),
         is_pinned: true,
         limit: postsPerPage,
         offset: (currentPage - 1) * postsPerPage,
@@ -70,16 +70,30 @@ function Notice() {
     })
   }
 
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      router.push({
-        pathname: router.pathname,
-        query: {
-          page: 1,
-          search_keyword: searchInput,
-        },
-      })
-    }
+  // 디바운싱을 위한 검색 함수
+  const debouncedSearch = useCallback(
+    (() => {
+      let timeoutId: NodeJS.Timeout
+      return (keyword: string) => {
+        clearTimeout(timeoutId)
+        timeoutId = setTimeout(() => {
+          router.push({
+            pathname: router.pathname,
+            query: {
+              page: 1,
+              search_keyword: keyword,
+            },
+          })
+        }, 500) // 500ms 디바운싱
+      }
+    })(),
+    [router],
+  )
+
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setSearchInput(value)
+    debouncedSearch(value)
   }
 
   return (
@@ -107,8 +121,7 @@ function Notice() {
                 placeholder="검색어를 입력해 주세요."
                 pl={'48px'}
                 value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyDown={handleSearch}
+                onChange={handleSearchInputChange}
               />
               {searchInput.length > 0 && (
                 <InputRightElement
@@ -130,8 +143,8 @@ function Notice() {
             </InputGroup>
           </Flex>
           <Box w={'100%'} minH={'400px'}>
-            {searchInput.length === 0 &&
-              noticeList?.results?.length !== 0 &&
+            {noticeList?.results?.length === 0 && <NonData variant="search" />}
+            {noticeList?.results?.length !== 0 &&
               pinnedNoticeList?.results?.map((item, index) => (
                 <Flex
                   key={item.id}

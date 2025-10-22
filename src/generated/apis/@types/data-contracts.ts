@@ -730,6 +730,11 @@ export interface LoanType {
   readonly isIdentityCard: boolean
   /** 계약 */
   readonly contract: LoanContractType | null
+  /**
+   * 생성일시
+   * @format date-time
+   */
+  readonly createdAt: string
 }
 
 export interface LoanContractType {

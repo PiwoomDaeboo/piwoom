@@ -303,7 +303,8 @@ function OfficeAddressModal({
         </Flex>
       }
       footer={
-        companyList?.isNext && (
+        companyList?.count &&
+        companyList?.count !== 0 && (
           <Flex w={'100%'} justifyContent={'center'} h={'fit-content'}>
             <Flex justifyContent={'center'}>
               <Pagination

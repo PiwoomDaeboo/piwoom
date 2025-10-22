@@ -18,52 +18,51 @@ export const Pagination = ({
   showPages = 3,
 }: PaginationProps) => {
   const getVisiblePages = () => {
-    if (totalPages <= showPages) {
+    // 페이지가 5개 이하면 모든 페이지 표시
+    if (totalPages <= 5) {
       return Array.from({ length: totalPages }, (_, i) => i + 1)
     }
 
     const pages: (number | string)[] = []
-    const sidePages = Math.floor(showPages / 2) // 현재 페이지 양쪽에 표시할 페이지 수
 
     // 첫 페이지는 항상 표시
     pages.push(1)
 
-    if (currentPage <= sidePages + 2) {
-      // 현재 페이지가 앞쪽에 있을 때: 1, 2, 3, 4, ..., 마지막
-      for (let i = 2; i <= Math.min(showPages, totalPages - 1); i++) {
-        pages.push(i)
-      }
-      if (totalPages > showPages + 1) {
-        pages.push('...')
-        pages.push(totalPages)
-      } else if (totalPages > showPages) {
-        pages.push(totalPages)
-      }
-    } else if (currentPage >= totalPages - sidePages - 1) {
-      // 현재 페이지가 뒤쪽에 있을 때: 1, ..., 마지막-3, 마지막-2, 마지막-1, 마지막
-      if (totalPages > showPages + 1) {
-        pages.push('...')
-      }
-      for (
-        let i = Math.max(2, totalPages - showPages + 1);
-        i <= totalPages;
-        i++
-      ) {
-        pages.push(i)
-      }
-    } else {
-      // 현재 페이지가 중간에 있을 때: 1, ..., 현재-1, 현재, 현재+1, ..., 마지막
-      pages.push('...')
-      for (let i = currentPage - sidePages; i <= currentPage + sidePages; i++) {
-        if (i > 1 && i < totalPages) {
-          pages.push(i)
-        }
-      }
-      pages.push('...')
-      pages.push(totalPages)
+    // 현재 페이지 주변 페이지들 계산 (showPages 개수만큼)
+    const halfPages = Math.floor(showPages / 2)
+    let startPage = Math.max(2, currentPage - halfPages)
+    let endPage = Math.min(totalPages - 1, currentPage + halfPages)
+
+    // 현재 페이지가 앞쪽에 있을 때
+    if (currentPage <= halfPages + 2) {
+      startPage = 2
+      endPage = Math.min(totalPages - 1, showPages + 1)
+    }
+    // 현재 페이지가 뒤쪽에 있을 때
+    else if (currentPage >= totalPages - halfPages - 1) {
+      startPage = Math.max(2, totalPages - showPages)
+      endPage = totalPages - 1
     }
 
-    return pages.filter((page, index, arr) => arr.indexOf(page) === index)
+    // 첫 페이지와 현재 페이지 주변 사이에 '...' 표시
+    if (startPage > 2) {
+      pages.push('...')
+    }
+
+    // 현재 페이지 주변 페이지들 표시
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i)
+    }
+
+    // 현재 페이지 주변과 마지막 페이지 사이에 '...' 표시
+    if (endPage < totalPages - 1) {
+      pages.push('...')
+    }
+
+    // 마지막 페이지는 항상 표시
+    pages.push(totalPages)
+
+    return pages
   }
 
   const handlePrevious = () => {
@@ -102,10 +101,10 @@ export const Pagination = ({
           <React.Fragment key={`${page}-${index}`}>
             {page === '...' ?
               <Text
-                px={{ base: '2', md: '3' }}
+                // px={{ base: '2', md: '3' }}
                 py="2"
                 textStyle={'pre-caption-1'}
-                color={'grey.2'}
+                color={'grey.8'}
                 textAlign="center"
               >
                 ...

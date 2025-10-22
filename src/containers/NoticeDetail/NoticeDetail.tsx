@@ -168,7 +168,7 @@ function NoticeDetail() {
               variant={'solid-primary'}
               w={'160px'}
               size={'lg'}
-              onClick={() => router.back()}
+              onClick={() => router.push('/notice')}
             >
               목록
             </Button>
