@@ -379,8 +379,8 @@ function UntactDocumentApplyModal({
               ))}
             </SimpleGrid>
 
-            <SimpleGrid columns={2} gap={'8px'} w={'100%'}>
-              <InputForm label="시도명" isRequired>
+            <InputForm label="주민등록상 주소 확인" isRequired>
+              <Flex w={'100%'} gap={'8px'}>
                 <Box w={'100%'}>
                   <CommonSelect
                     options={cityOptions}
@@ -391,9 +391,6 @@ function UntactDocumentApplyModal({
                     onChange={handleCityChange}
                   />
                 </Box>
-              </InputForm>
-
-              <InputForm label="시군구명" isRequired>
                 <Box w={'100%'}>
                   <CommonSelect
                     options={districtOptions}
@@ -405,8 +402,9 @@ function UntactDocumentApplyModal({
                     isDisabled={!selectedCity}
                   />
                 </Box>
-              </InputForm>
-            </SimpleGrid>
+              </Flex>
+            </InputForm>
+
             {selectedAuth === 'PASS' && (
               <InputForm label="통신사" isRequired>
                 <Box w={'100%'} display={{ base: 'none', sm: 'block' }}>
