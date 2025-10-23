@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+
 import {
   Box,
   Container,
@@ -9,7 +11,8 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
-import Card from '@/components/Card'
+import { gsap } from 'gsap'
+
 import {
   LeafIcon,
   Sectionicon1Icon,
@@ -59,7 +62,65 @@ const sectionData = [
   },
 ]
 
+// 마퀴 애니메이션 초기화 함수
+const initMarquee = (marqueeElement: HTMLElement) => {
+  const marqueeInner = marqueeElement.querySelector(
+    '.marquee__inner',
+  ) as HTMLElement
+
+  if (!marqueeInner) return
+
+  // 기존 애니메이션 정리
+  gsap.killTweensOf(marqueeInner)
+
+  // 컨텐츠 너비 계산
+  const contentWidth = marqueeInner.scrollWidth
+  const halfWidth = contentWidth / 2
+
+  // 반응형에 따른 애니메이션 시간 계산
+  const getDuration = () => {
+    const width = window.innerWidth
+    if (width < 480) return 5 // base: 5초
+    if (width < 768) return 20 // sm: 20초
+    return 30 // md 이상: 30초
+  }
+
+  // 초기 위치 설정
+  gsap.set(marqueeInner, { x: 0 })
+
+  // 무한 스크롤 애니메이션
+  gsap.to(marqueeInner, {
+    x: -halfWidth,
+    duration: getDuration(),
+    ease: 'none',
+    repeat: -1,
+  })
+}
+
 function Section3() {
+  const marqueeRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!marqueeRef.current) return
+
+    const marquee = marqueeRef.current
+
+    // 마퀴 애니메이션 초기화
+    initMarquee(marquee)
+
+    // 반응형 대응을 위한 리사이즈 이벤트
+    const handleResize = () => {
+      initMarquee(marquee)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      gsap.killTweensOf('.marquee__inner')
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [sectionData])
+
   return (
     <Flex
       w={'100%'}
@@ -91,49 +152,43 @@ function Section3() {
         </Flex>
       </Flex>
 
-      <Box w="100%" overflow="hidden" py={'45px'} position="relative">
+      <Box
+        ref={marqueeRef}
+        className="marquee"
+        w="100%"
+        overflow="hidden"
+        py={'45px'}
+        position="relative"
+      >
         <Box
+          className="marquee__inner"
           display="flex"
-          gap={'32px'}
-          animation={{
-            base: 'scrollLeft 5s linear infinite',
-            sm: 'scrollLeft 30s linear infinite',
-          }}
-          sx={{
-            '@keyframes scrollLeft': {
-              '0%': {
-                transform: 'translateX(0)',
-              },
-              '100%': {
-                transform: 'translateX(calc(-100% / 3))',
-              },
-            },
-          }}
+          w={'max-content'}
+          willChange="transform"
         >
           {/* 3개의 동일한 세트로 무한 스크롤 구현 */}
-          {[...sectionData, ...sectionData, ...sectionData].map(
-            (data, index) => (
-              <Flex
-                minH={{ base: '200px', sm: '230px', md: '230px' }}
-                minW={{ base: '250px', sm: '290px', md: '280px' }}
-                p={'32px 28px'}
-                bg={'grey.0'}
-                borderRadius={'20px'}
-                boxShadow={'0 8px 50px 0 rgba(0, 46, 114, 0.10)'}
-                key={`${data.description1}-${index}`}
-                flexDir={'column'}
-                alignItems={'flex-start'}
-                justifyContent={'space-between'}
-                flexShrink={0}
-              >
-                <data.icon boxSize={'70px'} />
-                <VStack alignItems={'flex-start'} gap={'0px'}>
-                  <Text textStyle={'pre-body-4'}>{data.description1}</Text>
-                  <Text textStyle={'pre-body-3'}>{data.description2}</Text>
-                </VStack>
-              </Flex>
-            ),
-          )}
+          {[...sectionData, ...sectionData].map((data, index) => (
+            <Flex
+              mr={'32px'}
+              minH={{ base: '200px', sm: '230px', md: '230px' }}
+              minW={{ base: '250px', sm: '290px', md: '280px' }}
+              p={'32px 28px'}
+              bg={'grey.0'}
+              borderRadius={'20px'}
+              boxShadow={'0 8px 50px 0 rgba(0, 46, 114, 0.10)'}
+              key={`${data.description1}-${index}`}
+              flexDir={'column'}
+              alignItems={'flex-start'}
+              justifyContent={'space-between'}
+              flexShrink={0}
+            >
+              <data.icon boxSize={'70px'} />
+              <VStack alignItems={'flex-start'} gap={'0px'}>
+                <Text textStyle={'pre-body-4'}>{data.description1}</Text>
+                <Text textStyle={'pre-body-3'}>{data.description2}</Text>
+              </VStack>
+            </Flex>
+          ))}
         </Box>
       </Box>
     </Flex>
