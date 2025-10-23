@@ -26,6 +26,7 @@ import WetaxModal from '../../components/@Modal/wetax-modal'
 
 function ApplyLoanComplete() {
   const router = useRouter()
+  const { loanId } = router.query
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { data: settingData } = useSettingRetrieveQuery({
     variables: {
@@ -35,7 +36,7 @@ function ApplyLoanComplete() {
 
   return (
     <Container>
-      <WetaxModal isOpen={isOpen} onClose={onClose} />
+      <WetaxModal isOpen={isOpen} onClose={onClose} loanId={Number(loanId)} />
       <Flex
         py={{ base: '48px', sm: '64px', md: '120px' }}
         flexDir={'column'}

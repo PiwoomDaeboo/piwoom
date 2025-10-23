@@ -11,10 +11,12 @@ import {
   HStack,
   IconButton,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react'
 
 import { MenuIcon, UserIcon } from 'generated/icons/MyIcons'
 
+import LoanImpossibleModal from '@/components/@Modal/loan-impossible-modal'
 import ImageAsNext from '@/components/ImageAsNext'
 import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
 import { MY_IMAGES } from '@/generated/path/images'
@@ -43,6 +45,11 @@ const HomeHeader = ({
       id: 'me',
     },
   })
+  const {
+    isOpen: isLoanImpossibleModalOpen,
+    onOpen: onLoanImpossibleModalOpen,
+    onClose: onLoanImpossibleModalClose,
+  } = useDisclosure()
   const [hoveredMenuIndex, setHoveredMenuIndex] = useState<number | null>(null)
   const [isLogoutMenuOpen, setIsLogoutMenuOpen] = useState(false)
   const [isHeaderVisible, setIsHeaderVisible] = useState(true)
@@ -140,6 +147,14 @@ const HomeHeader = ({
     return '-40px'
   }, [])
 
+  const handleLoanApply = useCallback(() => {
+    if (!settingData?.isLoan) {
+      onLoanImpossibleModalOpen()
+    } else {
+      router.push('/apply-loan?step=1&type=credit')
+    }
+  }, [settingData?.isLoan])
+
   return (
     <Flex
       w="100%"
@@ -156,6 +171,10 @@ const HomeHeader = ({
       transition={'transform 0.3s ease-in-out'}
       {...props}
     >
+      <LoanImpossibleModal
+        isOpen={isLoanImpossibleModalOpen}
+        onClose={onLoanImpossibleModalClose}
+      />
       <Flex
         py={'12px'}
         w={'100%'}
@@ -317,11 +336,7 @@ const HomeHeader = ({
               </Button>
             }
 
-            <Button
-              onClick={() => router.push('/apply-loan?step=1&type=credit')}
-              variant={'black-primary'}
-              isDisabled={!settingData?.isLoan}
-            >
+            <Button onClick={handleLoanApply} variant={'black-primary'}>
               <Text textStyle={'pre-body-7'} color={'grey.0'}>
                 대출 신청
               </Text>
@@ -330,11 +345,9 @@ const HomeHeader = ({
           <HStack display={{ base: 'flex', md: 'none' }}>
             <Button
               variant={'black-primary'}
-              isDisabled={!settingData?.isLoan}
               onClick={() => {
                 isDrawerOpen && onDrawerClose
-
-                router.push('/apply-loan?step=1&type=credit')
+                handleLoanApply()
               }}
             >
               대출 신청
@@ -407,7 +420,7 @@ const HomeHeader = ({
         )}
 
       <HomeHeaderDrawer
-        isLoan={!settingData?.isLoan}
+        isLoan={Boolean(settingData?.isLoan)}
         isOpen={isDrawerOpen}
         onClose={onDrawerClose}
       />

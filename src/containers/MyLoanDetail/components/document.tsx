@@ -73,6 +73,7 @@ export default function Document() {
     },
   })
 
+  const localTaxSetWatchValue = useWatch({ control, name: 'localTaxSet' })
   const { mutate: documentSubmitMutation, isPending: isDocumentSubmitLoading } =
     useLoanPartialUpdateMutation({
       options: {
@@ -187,7 +188,11 @@ export default function Document() {
   return (
     <FormProvider {...methods}>
       <Flex flexDir={'column'} w={'100%'}>
-        <WetaxModal isOpen={wetaxModalOpen} onClose={onWetaxModalClose} />
+        <WetaxModal
+          isOpen={wetaxModalOpen}
+          onClose={onWetaxModalClose}
+          shouldSetFormValue={true}
+        />
         <UntactDocumentApplyModal
           isOpen={isUntactDocumentApplyModalOpen}
           onClose={onUntactDocumentApplyModalClose}
@@ -266,6 +271,11 @@ export default function Document() {
               >
                 세금 납부 내역 제출
               </Button>
+              {localTaxSetWatchValue && (
+                <Text textStyle={'pre-body-7'} color={'accent.green2'}>
+                  세금 납부 내역이 제출되었어요.
+                </Text>
+              )}
             </InputForm>
             {!settingData?.isWetax && (
               <VStack w={'100%'} spacing={'12px'}>
@@ -285,10 +295,11 @@ export default function Document() {
                     </Text>
                   </HStack>
                   <Text textStyle={'pre-body-6'} color={'grey.8'}>
-                    서버 점검 등 사유로 인해 세금납부내역 제출을 진행하지 않을
-                    수 있습니다.
+                    서버 점검 등의 사유로 인해 세금 납부 내역 제출을 진행하지
+                    않고 있습니다.
                     <br />
-                    추후 대출 현황 조회에서 서류를 업데이트 부탁드립니다.
+                    추후 별도 안내를 통해 세금 납부 내역 제출을 요청드리도록
+                    하겠습니다.
                   </Text>
                 </VStack>
               </VStack>
@@ -308,83 +319,74 @@ export default function Document() {
                     '서류제출완료'
                   : '비대면 서류제출'}
                 </Button>
-                <VStack
-                  alignItems={'flex-start'}
-                  p={'24px 20px'}
-                  borderRadius={'20px'}
-                  border={'1px solid'}
-                  borderColor={'border.basic.1'}
-                  gap={'24px'}
-                  w={'100%'}
-                >
-                  <HStack>
-                    <InfoFillIcon boxSize={'24px'} />
-                    <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                      유의사항
-                    </Text>
-                  </HStack>
-                  <Text textStyle={'pre-body-6'} color={'grey.8'}>
-                    정부24 회원이 아닌 경우, 먼저 회원가입을 완료하셔야 비대면
-                    서류 제출이 가능합니다. <br /> 아래 링크를 통해 정부24
-                    회원가입을 진행하신 뒤 서류 제출을 진행해 주시기 바랍니다.
-                  </Text>
-                  <Button
-                    variant={'text-primary'}
-                    onClick={() =>
-                      window.open(
-                        'https://plus.gov.kr/member/signUpAgree?awqf=!2f',
-                        '_blank',
-                      )
-                    }
+                {settingData?.isGov && (
+                  <VStack
+                    alignItems={'flex-start'}
+                    p={'24px 20px'}
+                    borderRadius={'20px'}
+                    border={'1px solid'}
+                    borderColor={'border.basic.1'}
+                    gap={'24px'}
+                    w={'100%'}
                   >
-                    정부24 회원가입
-                  </Button>
-                  <Text textStyle={'pre-body-6'} color={'grey.8'}>
-                    서버 점검 등 사유로 인해 비대면 서류 제출을 진행하지 않을 수
-                    있습니다.
-                    <br />
-                    추후 대출 현황 조회에서 서류를 업데이트 부탁드립니다.
-                  </Text>
-                </VStack>
+                    <HStack>
+                      <InfoFillIcon boxSize={'24px'} />
+                      <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                        유의사항
+                      </Text>
+                    </HStack>
+                    <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                      정부24 회원이 아닌 경우, 먼저 회원가입을 완료하셔야 비대면
+                      서류 제출이 가능합니다. <br /> 아래 링크를 통해 정부24
+                      회원가입을 진행하신 뒤 서류 제출을 진행해 주시기 바랍니다.
+                    </Text>
+                    <Button
+                      variant={'text-primary'}
+                      onClick={() =>
+                        window.open(
+                          'https://plus.gov.kr/member/signUpAgree?awqf=!2f',
+                          '_blank',
+                        )
+                      }
+                    >
+                      정부24 회원가입
+                    </Button>
+                    <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                      서버 점검 등 사유로 인해 비대면 서류 제출을 진행하지 않을
+                      수 있습니다.
+                      <br />
+                      추후 대출 현황 조회에서 서류를 업데이트 부탁드립니다.
+                    </Text>
+                  </VStack>
+                )}
               </InputForm>
               {!settingData?.isGov && (
-                <VStack
-                  w={'100%'}
-                  alignItems={'flex-start'}
-                  p={'16px 20px'}
-                  borderRadius={'20px'}
-                  border={'1px solid'}
-                  borderColor={'border.basic.1'}
-                  gap={'24px'}
-                >
-                  <HStack w={'100%'}>
-                    <InfoFillIcon boxSize={'24px'} />
-                    <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                      유의사항
-                    </Text>
-                  </HStack>
-                  <Text textStyle={'pre-body-6'} color={'grey.8'}>
-                    정부24 회원이 아닌 경우, 먼저 회원가입을 완료하셔야 비대면
-                    서류 제출이 가능합니다. <br /> 아래 링크를 통해 정부24
-                    회원가입을 진행하신 뒤 서류 제출을 진행해 주시기 바랍니다.
-                  </Text>
-                  <Button
-                    variant={'text-primary'}
-                    onClick={() =>
-                      window.open(
-                        'https://plus.gov.kr/member/signUpAgree?awqf=!2f',
-                        '_blank',
-                      )
-                    }
-                  >
-                    정부24 회원가입
-                  </Button>
-                  <Text textStyle={'pre-body-6'} color={'grey.8'}>
-                    서버 점검 등 사유로 인해 비대면 서류 제출을 진행하지 않을 수
-                    있습니다.
-                    <br />
-                    추후 대출 현황 조회에서 서류를 업데이트 부탁드립니다.
-                  </Text>
+                <VStack w={'100%'} spacing={'12px'}>
+                  <VStack w={'100%'} spacing={'12px'}>
+                    <VStack
+                      w={'100%'}
+                      alignItems={'flex-start'}
+                      p={'16px 20px'}
+                      borderRadius={'20px'}
+                      border={'1px solid'}
+                      borderColor={'border.basic.1'}
+                      gap={'24px'}
+                    >
+                      <HStack w={'100%'}>
+                        <InfoFillIcon boxSize={'24px'} />
+                        <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                          유의사항
+                        </Text>
+                      </HStack>
+                      <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                        서버 점검 등의 사유로 인해 비대면 서류 제출을 진행하지
+                        않고 있습니다.
+                        <br />
+                        추후 별도 안내를 통해 비대면 서류 제출을 요청드리도록
+                        하겠습니다.
+                      </Text>
+                    </VStack>
+                  </VStack>
                 </VStack>
               )}
             </VStack>

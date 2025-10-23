@@ -31,6 +31,7 @@ import { handleErrorToast } from '@/utils/error-handler'
 function PrepaymentApplication() {
   const router = useRouter()
   const [prepaymentAmount, setPrepaymentAmount] = useState<number | null>(null)
+  const [displayValue, setDisplayValue] = useState<string>('')
   const toast = useToast()
   const { set } = useSessionStorage()
   const { data: loanData } = useLoanRetrieveQuery({
@@ -108,6 +109,19 @@ function PrepaymentApplication() {
     })
   }
 
+  const formatNumberWithCommas = (
+    value: number | string | undefined,
+  ): string => {
+    if (!value) return ''
+    const numbers = String(value).replace(/[^0-9]/g, '')
+    return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  }
+
+  const parseNumberFromFormatted = (value: string): number | undefined => {
+    const numbers = value.replace(/[^0-9]/g, '')
+    return numbers === '' ? undefined : Number(numbers)
+  }
+
   return (
     <Container>
       <Flex
@@ -156,9 +170,9 @@ function PrepaymentApplication() {
             <InputGroup>
               <Input
                 placeholder="0"
-                type="number"
+                type="text"
                 textAlign="right"
-                value={prepaymentAmount?.toString() || undefined}
+                value={displayValue}
                 pr="50px"
                 onKeyDown={(evt) => {
                   ;['e', 'E', '+', '-', '.'].includes(evt.key) &&
@@ -166,17 +180,24 @@ function PrepaymentApplication() {
                 }}
                 onChange={(e) => {
                   const inputValue = e.target.value
-                  const value = Number(inputValue)
+                  const numericValue = parseNumberFromFormatted(inputValue)
                   const remainingAmount =
                     loanData?.contract?.remainingAmount || 0
 
-                  if (inputValue === '' || (!isNaN(value) && value >= 0)) {
+                  if (
+                    inputValue === '' ||
+                    (numericValue !== undefined && numericValue >= 0)
+                  ) {
                     if (
-                      value === 0 ||
-                      (value >= 1 && value <= remainingAmount)
+                      numericValue === undefined ||
+                      numericValue === 0 ||
+                      (numericValue >= 1 && numericValue <= remainingAmount)
                     ) {
-                      setPrepaymentAmount(value)
-                      debouncedCalculate(value)
+                      setPrepaymentAmount(numericValue || null)
+                      setDisplayValue(formatNumberWithCommas(numericValue))
+                      if (numericValue && numericValue > 0) {
+                        debouncedCalculate(numericValue)
+                      }
                     }
                   }
                 }}
@@ -209,6 +230,7 @@ function PrepaymentApplication() {
               onClick={() => {
                 const remainingAmount = loanData?.contract?.remainingAmount || 0
                 setPrepaymentAmount(remainingAmount)
+                setDisplayValue(formatNumberWithCommas(remainingAmount))
                 debouncedCalculate(remainingAmount)
               }}
             >

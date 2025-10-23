@@ -25,6 +25,7 @@ import {
   WetaxLoginType,
   WetaxType,
 } from '@/generated/apis/@types/data-contracts'
+import { useLoanPartialUpdateMutation } from '@/generated/apis/Loan/Loan.query'
 import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 import {
   useWetaxLoginCreateMutation,
@@ -50,6 +51,8 @@ import { useLocalStorage } from '@/stores/local/state'
 interface WetaxModalProps {
   isOpen: boolean
   onClose: () => void
+  loanId?: string | number
+  shouldSetFormValue?: boolean
 }
 const passTypes = [
   { label: 'SKT', value: '01' },
@@ -66,15 +69,21 @@ const authOptions = [
   { type: 'SHINHAN', icon: ShinhanAuthenticationIcon, label: '신한인증서' },
 ]
 
-function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
-  const { setValue } = useFormContext()
+function WetaxModal({
+  loanId,
+  isOpen,
+  onClose,
+  shouldSetFormValue = false,
+}: WetaxModalProps) {
+  const formContext = useFormContext()
+  const setValue = shouldSetFormValue ? formContext?.setValue : null
   const [selectedAuth, setSelectedAuth] = useState<string | null>(null)
   const [selectedPassType, setSelectedPassType] = useState<string>('')
   const [loadingProcess, setLoadingProcess] = useState<number>(0)
   const [wetaxData, setWetaxData] = useState<WetaxLoginType | null>(null)
   const [shouldPoll, setShouldPoll] = useState(true)
   const [completedDocuments, setCompletedDocuments] = useState<number>(1)
-  const [totalDocuments, setTotalDocuments] = useState<number>(3) // 총 3개 문서 (세금납부내역)
+  const [totalDocuments, setTotalDocuments] = useState<number>(1) // 총 3개 문서 (세금납부내역)
   const [currentStatus, setCurrentStatus] = useState<string>('PENDING')
   const toast = useToast()
   const { token: accessToken } = useLocalStorage()
@@ -169,7 +178,13 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
       refetchOnWindowFocus: true,
     },
   })
-  console.log(wetaxQuery.data)
+  const { mutate: documentSubmitMutation, isPending: isDocumentSubmitLoading } =
+    useLoanPartialUpdateMutation({
+      options: {
+        onSuccess: () => {},
+        onError: (error) => {},
+      },
+    })
 
   useEffect(() => {
     const data = wetaxQuery.data
@@ -198,7 +213,17 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
     if (data.status === 'SUCCESS') {
       console.log('[Wetax API] SUCCESS detected, stopping polling')
       setShouldPoll(false)
-      setValue('localTaxSet', data.dataSet as any)
+      if (shouldSetFormValue) {
+        setValue?.('localTaxSet', data.dataSet as any)
+      } else {
+        documentSubmitMutation({
+          id: Number(loanId),
+          data: {
+            localTaxSet: data.dataSet as any,
+          },
+        })
+      }
+
       toast({
         title: '세금 납부 내역 제출 완료',
         description: '모든 세금 납부 내역이 성공적으로 제출되었습니다.',
@@ -543,18 +568,8 @@ const SubmittingProcess = ({
     switch (currentStatus) {
       case 'PENDING':
         return '세금 납부 내역을 불러오는 중입니다.'
-      case 'TAX_PAYMENT_HISTORY':
-        return '세금 납부 내역을 발급 중입니다.'
-      case 'INCOME_TAX_RETURN':
-        return '소득세 신고서를 발급 중입니다.'
-      case 'VAT_RETURN':
-        return '부가세 신고서를 발급 중입니다.'
-      case 'SUCCESS':
-        return '모든 세금 납부 내역이 성공적으로 제출되었습니다'
-      case 'FAILED':
-        return '세금 납부 내역 제출 중 오류가 발생했습니다'
       default:
-        return '세금 납부 내역을 불러오는 중입니다.'
+        return '세금 납부 내역이 제출되었습니다.'
     }
   }
 
