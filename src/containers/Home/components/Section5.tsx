@@ -104,13 +104,7 @@ function Section5() {
             alignItems={'center'}
             w={'100%'}
           >
-            <VStack
-              w={'100%'}
-              alignItems={'flex-start'}
-              gap={'0px'}
-              // justifyContent={'space-between'}
-              // gap={'28px'}
-            >
+            <VStack w={'100%'} alignItems={'flex-start'} gap={'0px'}>
               <VStack alignItems={'flex-start'}>
                 <Text textStyle={'pre-heading-1'}>공지사항</Text>
                 <Text textStyle={'pre-body-6'}>

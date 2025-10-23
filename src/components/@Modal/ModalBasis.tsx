@@ -35,12 +35,18 @@ const ModalBasis = ({
   styles,
   visibleCloseButton = true,
   returnFocusOnClose = false,
-  blockScrollOnMount = false,
+  blockScrollOnMount = true,
   preserveScrollBarGap = true,
   ...props
 }: ModalBasisProps) => {
   return (
-    <Modal isCentered {...props}>
+    <Modal
+      isCentered
+      blockScrollOnMount={blockScrollOnMount}
+      preserveScrollBarGap={preserveScrollBarGap}
+      returnFocusOnClose={returnFocusOnClose}
+      {...props}
+    >
       <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(4px)" />
       <ModalContent>
         {visibleCloseButton && <ModalCloseButton />}
