@@ -24,7 +24,11 @@ import {
   XIcon,
 } from '@/generated/icons/MyIcons'
 
-export default function AdditionalFileUpload() {
+export default function AdditionalFileUpload({
+  isOptional = true,
+}: {
+  isOptional?: boolean
+}) {
   const router = useRouter()
   const [fileUploadedFileName, setFileUploadedFileName] = useState<
     string[] | null
@@ -105,7 +109,7 @@ export default function AdditionalFileUpload() {
     <>
       <InputForm
         label="추가 서류 제출"
-        isOptional
+        isOptional={isOptional}
         isRequired={false}
         w={'100%'}
         tooltipLabel="비대면서류제출을 통해 수집되는 각종 서류 및 데이터들은 고객님의 최신 소득 정보를 반영하지 못하고 있을 수 있습니다. 따라서 [갑종근로소득에대한소득세원천징수증명서], [은행급여이체내역] 또는 [근로소득원천징수영수증] 등을 추가로 제출하실 경우 대출 승인 확률 및 한도가 올라갈 수 있습니다. 추가 서류 제출은 대출 신청 이후 [나의 대출 조회 - 대출 현황 조회] 페이지 내에서도 가능합니다."
