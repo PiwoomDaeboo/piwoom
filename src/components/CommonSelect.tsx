@@ -94,17 +94,33 @@ export const CommonSelect: SelectComponent = ({
           css: {
             '&::-webkit-scrollbar': {
               width: '6px',
+              display: 'block !important',
             },
             '&::-webkit-scrollbar-track': {
               background: 'transparent',
+              display: 'block !important',
             },
             '&::-webkit-scrollbar-thumb': {
               background: '#E2E8F0',
               borderRadius: '3px',
+              display: 'block !important',
+              minHeight: '20px',
             },
             '&::-webkit-scrollbar-thumb:hover': {
               background: '#CBD5E0',
             },
+            // 모바일에서 스크롤바 강제 표시
+            '&::-webkit-scrollbar:vertical': {
+              width: '6px',
+              display: 'block !important',
+            },
+            '&::-webkit-scrollbar:horizontal': {
+              height: '6px',
+              display: 'block !important',
+            },
+            // Firefox용 스크롤바 스타일
+            scrollbarWidth: 'thin',
+            scrollbarColor: '#E2E8F0 transparent',
           },
         }),
       }}
