@@ -191,7 +191,24 @@ export default function IdCardUpload() {
                 >
                   <DocumenticonIcon boxSize={'16px'} />
                 </Center>
-                <Text textStyle={'pre-body-68'} color={'grey.8'}>
+
+                <Text
+                  display={{ base: 'block', sm: 'none' }}
+                  textStyle={'pre-body-68'}
+                  color={'grey.8'}
+                  maxW={'200px'}
+                  noOfLines={1}
+                  overflow={'hidden'}
+                  textOverflow={'ellipsis'}
+                  whiteSpace={'nowrap'}
+                >
+                  {uploadedFileName}
+                </Text>
+                <Text
+                  display={{ base: 'none', sm: 'block' }}
+                  textStyle={'pre-body-68'}
+                  color={'grey.8'}
+                >
                   {uploadedFileName}
                 </Text>
               </HStack>
