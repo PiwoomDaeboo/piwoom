@@ -113,9 +113,12 @@ const blackPrimary = defineVariant({
   hover: { bgColor: 'grey.8' },
   active: { bgColor: 'grey.10' },
   disabled: {
-    color: 'content.6',
-    borderColor: 'border.basic.2',
-    bgColor: 'background.basic.1',
+    // color: 'content.6',
+    // borderColor: 'border.basic.2',
+    // bgColor: 'background.basic.1',
+    color: 'content.5',
+    bgColor: 'background.basic.4',
+    borderColor: 'transparent',
   },
 })
 

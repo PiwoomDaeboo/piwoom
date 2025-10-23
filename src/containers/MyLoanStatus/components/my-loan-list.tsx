@@ -19,6 +19,7 @@ import { LOAN_KIND_OPTIONS, LOAN_STATUS } from '@/constants/loan'
 import { LoanType } from '@/generated/apis/@types/data-contracts'
 import { useLoanContractUrlRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
+import { useLocalStorage } from '@/stores/local/state'
 import { formatDate } from '@/utils/date-format'
 import {
   getAdditionalDocumentButtonVisibility,
@@ -35,6 +36,7 @@ interface MyLoanListProps {
 
 export default function MyLoanList({ loanList }: MyLoanListProps) {
   const router = useRouter()
+  const { reset } = useLocalStorage()
   const {
     isOpen: isLoanDelayOpen,
     onClose: onLoanDelayClose,
@@ -280,7 +282,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                   }}
                 >
                   <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                    중도 상환 신청하기
+                    중도 상환 신청
                   </Text>
                 </Button>
                 <Button
@@ -304,7 +306,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                   }}
                 >
                   <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                    상환 스케줄 확인하기
+                    상환 스케줄 확인
                   </Text>
                 </Button>
                 <Button
@@ -315,7 +317,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                   }}
                 >
                   <Text textStyle={'pre-body-7'} color={'grey.8'}>
-                    기타서류 발급 요청하기
+                    기타서류 발급 요청
                   </Text>
                 </Button>
               </SimpleGrid>
@@ -326,6 +328,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
               variant={'outline-secondary'}
               w={'100%'}
               onClick={() => {
+                reset('popup_status')
                 router.push(`/my-loan-status/${item?.id}?detailMenu=document`)
               }}
             >

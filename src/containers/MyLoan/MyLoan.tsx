@@ -27,7 +27,7 @@ function MyLoan() {
       onOpen()
     }
   }, [isIdle, router])
-  console.log('isIdle', isIdle)
+  console.log('accessToken', accessToken)
   useEffect(() => {
     setIsLoading(true)
     setTimeout(() => {

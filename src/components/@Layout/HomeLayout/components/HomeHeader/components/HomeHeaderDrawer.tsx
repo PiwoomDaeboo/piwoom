@@ -32,12 +32,14 @@ import { MENU_ITEMS } from '../../consts/menu'
 
 interface HomeHeaderDrawerProps extends Omit<DrawerProps, 'children'> {
   bodyProps?: ChakraProps
+  isLoan: boolean
 }
 
 const HomeHeaderDrawer = ({
   bodyProps,
   isOpen,
   onClose,
+  isLoan = false,
   ...props
 }: HomeHeaderDrawerProps) => {
   const router = useRouter()
@@ -98,6 +100,7 @@ const HomeHeaderDrawer = ({
                 <Button
                   w={'83px'}
                   variant={'black-primary'}
+                  isDisabled={isLoan}
                   onClick={() => router.push('/apply-loan?step=1&type=credit')}
                 >
                   대출 신청
