@@ -48,6 +48,7 @@ const HomeHeader = ({
   const [isHeaderVisible, setIsHeaderVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   const handleMouseEnter = (menuIndex: number) => {
     if (hoverTimeoutRef.current) {
@@ -100,6 +101,23 @@ const HomeHeader = ({
     router.push(ROUTES.MY_LOAN_STATUS_MAIN)
     setIsLogoutMenuOpen(false)
   }, [])
+
+  // 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsLogoutMenuOpen(false)
+      }
+    }
+
+    if (isLogoutMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isLogoutMenuOpen])
   const hoverMenuMarginRight = useCallback((index: number) => {
     if (index === 0) {
       return '24px'
@@ -236,6 +254,7 @@ const HomeHeader = ({
           <HStack gap={'10px'} display={{ base: 'none', md: 'flex' }}>
             {token ?
               <Flex
+                ref={menuRef}
                 w={'48px'}
                 h={'48px'}
                 bg={'primary.4'}

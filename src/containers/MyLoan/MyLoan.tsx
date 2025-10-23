@@ -23,10 +23,10 @@ function MyLoan() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { step } = router.query
   useEffect(() => {
-    if (isIdle) {
+    if (isIdle && step && step !== '1') {
       onOpen()
     }
-  }, [isIdle, router])
+  }, [isIdle, step, onOpen])
   useEffect(() => {
     setIsLoading(true)
     setTimeout(() => {
