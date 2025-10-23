@@ -445,7 +445,7 @@ const ApplyLoanStep3 = () => {
                 <InputGroup>
                   <Input
                     placeholder="0"
-                    type="number"
+                    type="text"
                     textAlign="right"
                     pr="50px"
                     value={formatNumberWithCommas(field.value)}
@@ -477,7 +477,7 @@ const ApplyLoanStep3 = () => {
                 <InputGroup>
                   <Input
                     placeholder="0"
-                    type="number"
+                    type="text"
                     textAlign="right"
                     pr="50px"
                     value={formatNumberWithCommas(field.value)}
