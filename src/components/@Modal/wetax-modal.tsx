@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react'
 
 import Lottie from 'lottie-react'
+import { useFormContext } from 'react-hook-form'
 
 import ModalBasis from '@/components/@Modal/ModalBasis'
 import CommonSelect from '@/components/CommonSelect'
@@ -32,6 +33,7 @@ import {
 } from '@/generated/apis/Wetax/Wetax.query'
 import {
   AuthUserIcon,
+  BluecheckIcon,
   CaretRightIcon,
   DeviceMobile1Icon,
   DeviceMobileIcon,
@@ -41,6 +43,7 @@ import {
   PassAuthenticationIcon,
   ShinhanAuthenticationIcon,
   TossAuthenticationIcon,
+  XCircleFillIcon,
 } from '@/generated/icons/MyIcons'
 import { useLocalStorage } from '@/stores/local/state'
 
@@ -64,10 +67,15 @@ const authOptions = [
 ]
 
 function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
+  const { setValue } = useFormContext()
   const [selectedAuth, setSelectedAuth] = useState<string | null>(null)
   const [selectedPassType, setSelectedPassType] = useState<string>('')
   const [loadingProcess, setLoadingProcess] = useState<number>(0)
   const [wetaxData, setWetaxData] = useState<WetaxLoginType | null>(null)
+  const [shouldPoll, setShouldPoll] = useState(true)
+  const [completedDocuments, setCompletedDocuments] = useState<number>(1)
+  const [totalDocuments, setTotalDocuments] = useState<number>(3) // 총 3개 문서 (세금납부내역)
+  const [currentStatus, setCurrentStatus] = useState<string>('PENDING')
   const toast = useToast()
   const { token: accessToken } = useLocalStorage()
   const { data: userData } = useUserRetrieveQuery({
@@ -150,19 +158,92 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
     })
   }
 
-  const { data: wetaxRetrieveData } = useWetaxRetrieveQuery({
+  const wetaxQuery = useWetaxRetrieveQuery({
     variables: {
       id: wetaxData?.id || 0,
     },
     options: {
-      enabled: !!wetaxData?.id,
+      enabled: wetaxData?.id !== null && loadingProcess === 2 && shouldPoll,
+      refetchInterval: shouldPoll ? 5000 : false,
+      refetchIntervalInBackground: true,
+      refetchOnWindowFocus: true,
     },
   })
+  console.log(wetaxQuery.data)
+
+  useEffect(() => {
+    const data = wetaxQuery.data
+    if (!data) return
+
+    // 상태 업데이트
+    if (data.status) {
+      setCurrentStatus(data.status)
+    }
+
+    let completedCount = 1
+
+    if (data.dataSet && Array.isArray(data.dataSet)) {
+      // 각 문서 종류별로 완료된 항목 카운트
+      const actualCompletedCount = data.dataSet.filter((dataItem: any) => {
+        // 세금 납부 내역 데이터가 있는 경우 완료로 간주
+        return !!dataItem.taxNumber && !!dataItem.paymentDate
+      }).length
+
+      // 1부터 시작하되, 실제 완료된 문서 개수에 1을 더함
+      completedCount = 1 + actualCompletedCount
+    }
+
+    setCompletedDocuments(completedCount)
+
+    if (data.status === 'SUCCESS') {
+      console.log('[Wetax API] SUCCESS detected, stopping polling')
+      setShouldPoll(false)
+      setValue('localTaxSet', data.dataSet as any)
+      toast({
+        title: '세금 납부 내역 제출 완료',
+        description: '모든 세금 납부 내역이 성공적으로 제출되었습니다.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
+    } else if (data.status === 'FAILED') {
+      console.log('[Wetax API] FAILED detected, stopping polling')
+      setShouldPoll(false)
+      toast({
+        title: '세금 납부 내역 제출 실패',
+        description:
+          data.failedReason || '세금 납부 내역 제출 중 오류가 발생했습니다.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+  }, [wetaxQuery.data, toast])
+
+  // 실제 API 에러 처리
+  useEffect(() => {
+    if (wetaxQuery.error) {
+      console.error('[Wetax API onError]:', wetaxQuery.error)
+      setShouldPoll(false)
+      setCurrentStatus('FAILED')
+
+      toast({
+        title: '세금 납부 내역 제출 실패',
+        description: '세금 납부 내역 제출 중 오류가 발생했습니다.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+  }, [wetaxQuery.error, toast])
 
   const handleClose = () => {
     setSelectedAuth(null)
     setSelectedPassType('')
     setLoadingProcess(0)
+    setShouldPoll(true)
+    setCompletedDocuments(1)
+    setCurrentStatus('PENDING')
     onClose()
   }
 
@@ -232,7 +313,13 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
       case 1:
         return <SubmittingAuthProcess />
       case 2:
-        return <SubmittingProcess />
+        return (
+          <SubmittingProcess
+            completedDocuments={completedDocuments}
+            totalDocuments={totalDocuments}
+            currentStatus={currentStatus}
+          />
+        )
     }
   }
 
@@ -297,7 +384,7 @@ function WetaxModal({ isOpen, onClose }: WetaxModalProps) {
               variant={'solid-primary'}
               w={'100%'}
               onClick={handleClose}
-              isLoading={isPending}
+              isDisabled={shouldPoll}
             >
               확인
             </Button>
@@ -443,7 +530,45 @@ const SubmittingAuthProcess = () => {
   )
 }
 
-const SubmittingProcess = () => {
+const SubmittingProcess = ({
+  completedDocuments,
+  totalDocuments,
+  currentStatus,
+}: {
+  completedDocuments: number
+  totalDocuments: number
+  currentStatus: string
+}) => {
+  const getStatusText = () => {
+    switch (currentStatus) {
+      case 'PENDING':
+        return '세금 납부 내역을 불러오는 중입니다.'
+      case 'TAX_PAYMENT_HISTORY':
+        return '세금 납부 내역을 발급 중입니다.'
+      case 'INCOME_TAX_RETURN':
+        return '소득세 신고서를 발급 중입니다.'
+      case 'VAT_RETURN':
+        return '부가세 신고서를 발급 중입니다.'
+      case 'SUCCESS':
+        return '모든 세금 납부 내역이 성공적으로 제출되었습니다'
+      case 'FAILED':
+        return '세금 납부 내역 제출 중 오류가 발생했습니다'
+      default:
+        return '세금 납부 내역을 불러오는 중입니다.'
+    }
+  }
+
+  const getStatusColor = () => {
+    switch (currentStatus) {
+      case 'SUCCESS':
+        return 'green.500'
+      case 'FAILED':
+        return 'red.500'
+      default:
+        return 'grey.10'
+    }
+  }
+
   return (
     <VStack
       spacing={'20px'}
@@ -454,21 +579,68 @@ const SubmittingProcess = () => {
       borderRadius={'10px'}
     >
       <VStack spacing={'8px'} alignItems={'center'}>
-        <Text textStyle={'pre-heading-3'} color={'grey.10'}>
-          서류를 불러오는 중입니다.
+        <Text
+          textStyle={
+            currentStatus === 'SUCCESS' ? 'pre-body-5' : 'pre-heading-3'
+          }
+          color={getStatusColor()}
+        >
+          {getStatusText()}
         </Text>
-        <Text textStyle={'pre-body-6'} color={'grey.7'} textAlign={'center'}>
-          조금만 기다려 주세요!
+        <Text
+          textStyle={'pre-body-6'}
+          whiteSpace={'pre-wrap'}
+          color={'grey.7'}
+          textAlign={'center'}
+        >
+          {currentStatus === 'SUCCESS' ?
+            ''
+          : currentStatus === 'FAILED' ?
+            '다시 시도해 주세요.'
+          : '조금만 기다려주세요!\n최대 3분 가량 소요될 수 있습니다'}
         </Text>
       </VStack>
-      <Box w={'144px'} h={'144px'}>
-        <Lottie
-          animationData={loadingLottieData}
-          loop={true}
-          autoplay={true}
-          style={{ width: '100%', height: '100%' }}
-        />
-      </Box>
+
+      {/* 진행률 표시 */}
+      {currentStatus !== 'SUCCESS' && (
+        <VStack spacing={'8px'} alignItems={'center'}>
+          <Text textStyle={'pre-body-5'} color={'primary.4'}>
+            {completedDocuments}/{totalDocuments} 진행 중
+          </Text>
+        </VStack>
+      )}
+
+      {/* 로딩 애니메이션 - 실패 시에는 숨김 */}
+      {currentStatus !== 'FAILED' && (
+        <Flex
+          justifyContent={'center'}
+          alignItems={'center'}
+          w={'144px'}
+          h={'144px'}
+        >
+          {currentStatus !== 'SUCCESS' ?
+            <Lottie
+              animationData={loadingLottieData}
+              loop={currentStatus !== 'SUCCESS'}
+              autoplay={true}
+              style={{ width: '100%', height: '100%' }}
+            />
+          : <BluecheckIcon boxSize={'96px'} />}
+        </Flex>
+      )}
+
+      {/* 실패 시 에러 아이콘 */}
+      {currentStatus === 'FAILED' && (
+        <Box
+          w={'144px'}
+          h={'144px'}
+          display={'flex'}
+          alignItems={'center'}
+          justifyContent={'center'}
+        >
+          <XCircleFillIcon boxSize={'80px'} color={'red.500'} />
+        </Box>
+      )}
     </VStack>
   )
 }
