@@ -18,6 +18,7 @@ import {
 
 import { useLoanRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
 import { useAuth } from '@/hooks/useAuth'
+import { useLocalStorage } from '@/stores/local/state'
 
 import Detail from './components/detail'
 import Document from './components/document'
@@ -26,41 +27,33 @@ import { BUTTON_DATA, LoanDetailApiData, SAMPLE_LOAN_DATA } from './consts'
 
 function MyLoanDetail() {
   const router = useRouter()
+
   const { detailMenu } = router.query
   const [isDetailMenu, setIsDetailMenu] = useState<string>('detail')
-  const { isLogin } = useAuth()
-  const { data: loanRetrieveData } = useLoanRetrieveQuery({
-    variables: {
-      id: Number(router.query.id),
-    },
-    options: {
-      enabled: !!router.query.id,
-    },
-  })
 
-  // useEffect(() => {
-  //   if (detailMenu) {
-  //     setIsDetailMenu(detailMenu as string)
-  //     router.push(`/my-loan-status/${router.query.id}?detailMenu=${detailMenu}`)
-  //   }
-  // }, [detailMenu])
+  const { data: loanRetrieveData, isLoading: isLoading } = useLoanRetrieveQuery(
+    {
+      variables: {
+        id: Number(router.query.id),
+      },
+      options: {
+        enabled: !!router.query.id,
+      },
+    },
+  )
+
+  useEffect(() => {
+    if (detailMenu) {
+      setIsDetailMenu(detailMenu as string)
+      router.push(`/my-loan-status/${router.query.id}?detailMenu=${detailMenu}`)
+    }
+  }, [detailMenu])
+
   const handleDetailMenuChange = (menu: string) => {
     setIsDetailMenu(menu)
     router.push(`/my-loan-status/${router.query.id}?detailMenu=${menu}`)
   }
 
-  // useEffect(() => {
-  //   if (!isLogin) {
-  //     router.replace(`/my-loan-status`)
-  //   }
-  // }, [isLogin])
-  if (!isLogin) {
-    return (
-      <Center h={'100vh'}>
-        <Spinner />
-      </Center>
-    )
-  }
   return (
     <>
       <Container

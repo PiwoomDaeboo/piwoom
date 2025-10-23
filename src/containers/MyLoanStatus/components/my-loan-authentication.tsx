@@ -38,7 +38,7 @@ function MyLoanAuthentication() {
         if (error?.response?.data?.status === 400) {
           toast(
             handleErrorToast(error, {
-              title: '대출조회 실패',
+              title: '로그인 실패',
             }),
           )
         } else {

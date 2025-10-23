@@ -16,6 +16,7 @@ import {
 import { MenuIcon, UserIcon } from 'generated/icons/MyIcons'
 
 import ImageAsNext from '@/components/ImageAsNext'
+import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
 import { MY_IMAGES } from '@/generated/path/images'
 import { ROUTES } from '@/generated/path/routes'
 import { useLocalStorage } from '@/stores/local/state'
@@ -37,6 +38,11 @@ const HomeHeader = ({
 }: HomeHeaderProps) => {
   const router = useRouter()
   const { token } = useLocalStorage()
+  const { data: settingData } = useSettingRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
   const [hoveredMenuIndex, setHoveredMenuIndex] = useState<number | null>(null)
   const [isLogoutMenuOpen, setIsLogoutMenuOpen] = useState(false)
   const [isHeaderVisible, setIsHeaderVisible] = useState(true)
@@ -275,6 +281,7 @@ const HomeHeader = ({
             <Button
               onClick={() => router.push('/apply-loan?step=1&type=credit')}
               variant={'black-primary'}
+              isDisabled={!settingData?.isLoan}
             >
               <Text textStyle={'pre-body-7'} color={'grey.0'}>
                 대출 신청
@@ -284,6 +291,7 @@ const HomeHeader = ({
           <HStack display={{ base: 'flex', md: 'none' }}>
             <Button
               variant={'black-primary'}
+              isDisabled={!settingData?.isLoan}
               onClick={() => {
                 isDrawerOpen && onDrawerClose
 
@@ -359,7 +367,11 @@ const HomeHeader = ({
           </Box>
         )}
 
-      <HomeHeaderDrawer isOpen={isDrawerOpen} onClose={onDrawerClose} />
+      <HomeHeaderDrawer
+        isLoan={!settingData?.isLoan}
+        isOpen={isDrawerOpen}
+        onClose={onDrawerClose}
+      />
     </Flex>
   )
 }

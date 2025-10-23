@@ -151,11 +151,11 @@ const ApplyLoanStep4 = () => {
 
   const companyName = useWatch({ control, name: 'companyName' })
   const companyAddress = useWatch({ control, name: 'companyAddress' })
-  // const { data: settingData } = useSettingRetrieveQuery({
-  //   variables: {
-  //     id: 'me',
-  //   },
-  // })
+  const { data: settingData } = useSettingRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
   console.log(employmentTypeWatchValue)
   const {
     mutate: accountVerifyMutation,
@@ -396,6 +396,19 @@ const ApplyLoanStep4 = () => {
     clearErrors('untactDocumentSubmission')
   }
 
+  useEffect(() => {
+    if (
+      jobTypeWatchValue === 'HOUSEWIFE' ||
+      jobTypeWatchValue === 'UNEMPLOYED'
+    ) {
+      clearErrors('companyName')
+      clearErrors('companyBusinessNumber')
+      clearErrors('employmentType')
+      clearErrors('hireYear')
+      clearErrors('hireMonth')
+    }
+  }, [jobTypeWatchValue])
+
   return (
     <Container>
       <UntactDocumentApplyModal
@@ -489,7 +502,7 @@ const ApplyLoanStep4 = () => {
                 <InputGroup>
                   <Input
                     placeholder="0"
-                    type="text"
+                    type="number"
                     textAlign="right"
                     pr="50px"
                     value={formatNumberWithCommas(field.value)}
@@ -1325,7 +1338,7 @@ const ApplyLoanStep4 = () => {
             textStyle={'pre-body-5'}
             w={'209px'}
             // disabled={!settingData?.isGov}
-            isDisabled={isDocumentSubmissionCompleted}
+            isDisabled={isDocumentSubmissionCompleted || !settingData?.isGov}
             onClick={handleUntactDocumentApplyModalOpen}
           >
             {isDocumentSubmissionCompleted ? '서류제출완료' : '비대면 서류제출'}

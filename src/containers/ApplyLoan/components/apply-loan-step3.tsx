@@ -64,13 +64,12 @@ const ApplyLoanStep3 = () => {
   const monthlyIncome = useWatch({ control, name: 'monthlyIncome' })
   const creditScore = useWatch({ control, name: 'creditScore' })
   const safeKeyWatchValue = useWatch({ control, name: 'safeKey' })
-  const [popupWindow, setPopupWindow] = useState<Window | null>(null)
   const { data: userData } = useUserRetrieveQuery({
     variables: {
       id: 'me',
     },
   })
-  // safeKey 필드를 폼에 등록
+
   register('safeKey')
   const { data: settingData } = useSettingRetrieveQuery({
     variables: {
@@ -106,7 +105,6 @@ const ApplyLoanStep3 = () => {
     return numbers === '' ? undefined : Number(numbers)
   }
 
-  // 신용점수 문자열을 숫자로 변환하는 함수
   const getCreditScoreValue = (score: string): number => {
     const scoreMap: { [key: string]: number } = {
       UNDER_650: 0,
@@ -241,16 +239,11 @@ const ApplyLoanStep3 = () => {
     return isValid
   }
 
-  // 다음 버튼 클릭 핸들러
   const handleNextClick = async () => {
-    // safeKey 필드를 명시적으로 검증
     const safeKeyValid = await trigger('safeKey')
     const isValid = await validateStep3Fields()
 
-    // safeKey가 없으면 진행하지 않음
     if (!safeKeyWatchValue || !safeKeyValid) {
-      console.log('safeKey가 없어서 진행할 수 없습니다.')
-      // safeKey 에러를 직접 설정하여 화면에 에러 메시지 표시
       setError('safeKey', {
         type: 'required',
         message: '신용정보 제출이 필요합니다.',
@@ -301,7 +294,6 @@ const ApplyLoanStep3 = () => {
   console.log('safeKeyWatchValue', safeKey)
 
   useEffect(() => {
-    // localStorage에서 safeKey 값이 있으면 폼에 설정
     if (safeKey) {
       setValue('safeKey', safeKey)
       clearErrors('safeKey') // 에러 클리어
@@ -453,7 +445,7 @@ const ApplyLoanStep3 = () => {
                 <InputGroup>
                   <Input
                     placeholder="0"
-                    type="text"
+                    type="number"
                     textAlign="right"
                     pr="50px"
                     value={formatNumberWithCommas(field.value)}
@@ -485,7 +477,7 @@ const ApplyLoanStep3 = () => {
                 <InputGroup>
                   <Input
                     placeholder="0"
-                    type="text"
+                    type="number"
                     textAlign="right"
                     pr="50px"
                     value={formatNumberWithCommas(field.value)}

@@ -25,6 +25,7 @@ import {
   useLoanRetrieveQuery,
   useLoanSignCreateMutation,
 } from '@/generated/apis/Loan/Loan.query'
+import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
 import { useUsebAccessTokenCreateMutation } from '@/generated/apis/Useb/Useb.query'
 import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
@@ -66,6 +67,11 @@ const MyLoanStep3 = () => {
     collection: false,
   })
   const { data: userData } = useUserRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
+  const { data: settingData } = useSettingRetrieveQuery({
     variables: {
       id: 'me',
     },
@@ -356,7 +362,7 @@ const MyLoanStep3 = () => {
               textStyle={'pre-body-5'}
               color={'grey.8'}
               w={'209px'}
-              isDisabled={!!ekycData}
+              isDisabled={!!ekycData || !settingData?.isUseb}
               onClick={() => {
                 openUsebKycPopup()
               }}

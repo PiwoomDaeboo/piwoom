@@ -83,6 +83,7 @@ export default function Document() {
             status: 'success',
             duration: 5000,
           })
+          router.replace('/my-loan-status')
         },
         onError: (error) => {
           console.error('error', error)
@@ -259,7 +260,7 @@ export default function Document() {
                 variant={'outline-primary'}
                 textStyle={'pre-body-5'}
                 w={'209px'}
-                disabled={!settingData?.isWetax}
+                isDisabled={!settingData?.isWetax}
                 onClick={onWetaxModalOpen}
               >
                 세금 납부 내역 제출
@@ -298,8 +299,9 @@ export default function Document() {
                   textStyle={'pre-body-5'}
                   w={'209px'}
                   onClick={onUntactDocumentApplyModalOpen}
-                  disabled={!settingData?.isGov}
-                  isDisabled={isDocumentSubmissionCompleted}
+                  isDisabled={
+                    isDocumentSubmissionCompleted || !settingData?.isGov
+                  }
                 >
                   {isDocumentSubmissionCompleted ?
                     '서류제출완료'
@@ -381,7 +383,23 @@ export default function Document() {
                         >
                           <DocumenticonIcon boxSize={'16px'} />
                         </Center>
-                        <Text textStyle={'pre-body-68'} color={'grey.8'}>
+                        <Text
+                          display={{ base: 'block', sm: 'none' }}
+                          textStyle={'pre-body-68'}
+                          color={'grey.8'}
+                          maxW={'200px'}
+                          noOfLines={1}
+                          overflow={'hidden'}
+                          textOverflow={'ellipsis'}
+                          whiteSpace={'nowrap'}
+                        >
+                          {uploadedFileName}
+                        </Text>
+                        <Text
+                          display={{ base: 'none', sm: 'block' }}
+                          textStyle={'pre-body-68'}
+                          color={'grey.8'}
+                        >
                           {uploadedFileName}
                         </Text>
                       </HStack>
@@ -402,7 +420,6 @@ export default function Document() {
                 borderRadius={'20px'}
                 border={'1px solid'}
                 borderColor={'border.basic.1'}
-                spacing={'24px'}
               >
                 <HStack>
                   <InfoFillIcon boxSize={'24px'} />

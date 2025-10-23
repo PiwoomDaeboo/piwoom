@@ -395,7 +395,10 @@ function UntactDocumentApplyModal({
                   }}
                   onClick={() => handleAuthSelect(type)}
                 >
-                  <Icon boxSize={'80px'} />
+                  <Icon
+                    boxSize={type === 'PASS' ? '77px' : '80px'}
+                    mt={type === 'PASS' ? '1px' : '0px'}
+                  />
                 </Flex>
               ))}
             </SimpleGrid>
@@ -415,7 +418,7 @@ function UntactDocumentApplyModal({
                 <Box w={'100%'}>
                   <CommonSelect
                     options={districtOptions}
-                    placeholder="시군구명 선택"
+                    placeholder="시군구 선택"
                     value={districtOptions.find(
                       (option) => option.value === selectedDistrict,
                     )}
@@ -691,15 +694,15 @@ const SubmittingProcess = ({
       case 'PENDING':
         return '서류를 불러오는 중입니다.'
       case 'INCOME_CERTIFICATE':
-        return '소득금액증명서를 처리하는 중입니다'
+        return '소득금액증명서를 처리하는 중입니다.'
       case 'RESIDENT_REGISTRATION_COPY':
-        return '주민등록표등초본을 처리하는 중입니다'
+        return '주민등록표등초본을 처리하는 중입니다.'
       case 'HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION':
-        return '건강보험자격득실확인서를 처리하는 중입니다'
+        return '건강보험자격득실확인서를 처리하는 중입니다.'
       case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION':
-        return '건강보험납부확인서를 처리하는 중입니다'
+        return '건강보험납부확인서를 처리하는 중입니다.'
       case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2':
-        return '건강보험납부확인서 2를 처리하는 중입니다'
+        return '건강보험납부확인서 2를 처리하는 중입니다.'
       case 'SUCCESS':
         return '모든 서류가 성공적으로 제출되었습니다'
       case 'FAILED':
@@ -746,7 +749,7 @@ const SubmittingProcess = ({
       <VStack spacing={'8px'} alignItems={'center'}>
         <Text textStyle={'pre-body-5'} color={'primary.4'}>
           {completedDocuments}/{totalDocuments}{' '}
-          {completedDocuments === 5 ? '완료' : '진행중'}
+          {completedDocuments === 5 ? '완료' : '진행 중'}
         </Text>
       </VStack>
 

@@ -6,6 +6,7 @@ import { Box, Button, Flex, HStack, Input, Text } from '@chakra-ui/react'
 
 import ModalBasis from '@/components/@Modal/ModalBasis'
 import { useLoanRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
+import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 
 interface CustomerInfoModalProps {
   isOpen: boolean
@@ -30,12 +31,11 @@ function CustomerInfoModal({
     router.push('/my-loan')
     window.open('http://pf.kakao.com/_xkxoben/chat', '_blank')
   }
-  const [userInfo, setUserInfo] = useState<{
-    name?: string
-    phone?: string
-    birth?: string
-    gender_code?: string
-  } | null>(null)
+  const { data: userData } = useUserRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+  })
 
   const { data: loanData } = useLoanRetrieveQuery({
     variables: {
@@ -75,7 +75,7 @@ function CustomerInfoModal({
               성명
             </Text>
             <Text textStyle={'pre-body-5'} color={'grey.8'}>
-              {userInfo?.name || '-'}
+              {userData?.name || '-'}
             </Text>
           </HStack>
           <HStack
@@ -88,7 +88,7 @@ function CustomerInfoModal({
               생년월일
             </Text>
             <Text textStyle={'pre-body-5'} color={'grey.8'}>
-              {userInfo?.birth || '-'}
+              {userData?.birth || '-'}
             </Text>
           </HStack>
           <HStack
@@ -101,7 +101,7 @@ function CustomerInfoModal({
               성별
             </Text>
             <Text textStyle={'pre-body-5'} color={'grey.8'}>
-              {userInfo?.gender_code === '1' ? '남성' : '여성'}
+              {userData?.genderCode === '1' ? '남성' : '여성'}
             </Text>
           </HStack>
           <HStack
@@ -114,7 +114,7 @@ function CustomerInfoModal({
               휴대폰
             </Text>
             <Text textStyle={'pre-body-5'} color={'grey.8'}>
-              {userInfo?.phone || '-'}
+              {userData?.phone || '-'}
             </Text>
           </HStack>
           <HStack
