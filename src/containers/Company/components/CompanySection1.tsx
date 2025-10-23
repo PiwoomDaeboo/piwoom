@@ -147,7 +147,6 @@ function CompanySection1() {
         <Box
           className="marquee__inner"
           display="flex"
-          gap={'32px'}
           w={'max-content'}
           willChange="transform"
         >
@@ -159,6 +158,7 @@ function CompanySection1() {
               borderRadius={'20px'}
               w={{ base: '280px', sm: '320px', md: '400px', lg: '512px' }}
               flexShrink={0}
+              mr={'32px'}
             >
               <ImageAsNext
                 src={data.src}

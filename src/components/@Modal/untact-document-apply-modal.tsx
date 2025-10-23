@@ -206,9 +206,23 @@ function UntactDocumentApplyModal({
     let completedCount = 1
 
     if (data.logSet && Array.isArray(data.logSet)) {
-      const fileCount = data.logSet.filter((logItem) => logItem.file).length
-      // 최소 1부터 시작, 파일이 있으면 그 개수만큼
-      completedCount = Math.max(1, fileCount)
+      // 각 문서 종류별로 완료된 항목 카운트
+      const actualCompletedCount = data.logSet.filter((logItem) => {
+        switch (logItem.kind) {
+          case 'INCOME_CERTIFICATE':
+          case 'HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION':
+          case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION':
+          case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2':
+            return !!logItem.file // 파일이 있는 경우
+          case 'RESIDENT_REGISTRATION_COPY':
+            return !!logItem.address // 주소가 있는 경우
+          default:
+            return false
+        }
+      }).length
+
+      // 1부터 시작하되, 실제 완료된 문서 개수에 1을 더함
+      completedCount = 1 + actualCompletedCount
     }
 
     setCompletedDocuments(completedCount)
@@ -735,15 +749,25 @@ const SubmittingProcess = ({
       borderRadius={'10px'}
     >
       <VStack spacing={'8px'} alignItems={'center'}>
-        <Text textStyle={'pre-heading-3'} color={getStatusColor()}>
+        <Text
+          textStyle={
+            currentStatus === 'SUCCESS' ? 'pre-body-5' : 'pre-heading-3'
+          }
+          color={getStatusColor()}
+        >
           {getStatusText()}
         </Text>
-        <Text textStyle={'pre-body-6'} color={'grey.7'} textAlign={'center'}>
+        <Text
+          textStyle={'pre-body-6'}
+          whiteSpace={'pre-wrap'}
+          color={'grey.7'}
+          textAlign={'center'}
+        >
           {currentStatus === 'SUCCESS' ?
-            '모든 서류가 완료되었습니다!'
+            ''
           : currentStatus === 'FAILED' ?
             '다시 시도해 주세요.'
-          : '조금만 기다려 주세요!'}
+          : '조금만 기다려주세요!\n최대 3분 가량 소요될 수 있습니다'}
         </Text>
       </VStack>
 
@@ -751,8 +775,7 @@ const SubmittingProcess = ({
       {currentStatus !== 'SUCCESS' && (
         <VStack spacing={'8px'} alignItems={'center'}>
           <Text textStyle={'pre-body-5'} color={'primary.4'}>
-            {completedDocuments}/{totalDocuments}{' '}
-            {completedDocuments === 5 ? '완료' : '진행 중'}
+            {completedDocuments}/{totalDocuments} 진행 중
           </Text>
         </VStack>
       )}
@@ -765,7 +788,7 @@ const SubmittingProcess = ({
           w={'144px'}
           h={'144px'}
         >
-          {completedDocuments !== 5 ?
+          {currentStatus !== 'SUCCESS' ?
             <Lottie
               animationData={loadingLottieData}
               loop={currentStatus !== 'SUCCESS'}

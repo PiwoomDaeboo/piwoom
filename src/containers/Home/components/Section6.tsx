@@ -60,7 +60,11 @@ const SliderItem = ({ item, onOpen }: { item: any; onOpen: () => void }) => (
     borderRadius="20px"
     p="32px"
     position="relative"
-    onClick={onOpen}
+    onClick={(e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      onOpen()
+    }}
     cursor="pointer"
     overflow="hidden"
     tabIndex={-1} // 포커스 비활성화
@@ -198,7 +202,7 @@ function Section6() {
       justifyContent="center"
       alignItems="center"
       flexDir="column"
-      pt={{ base: '26px', sm: '40px', md: '96px' }}
+      pt={{ base: '56px', sm: '40px', md: '96px' }}
       pb={{ base: '56px', sm: '120px', md: '120px' }}
     >
       <YoutubeVideoModal

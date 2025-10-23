@@ -24,6 +24,7 @@ import WetaxModal from '@/components/@Modal/wetax-modal'
 import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
 import AdditionalFileUpload from '@/containers/ApplyLoan/components/additional-file-upload'
+import IdCardUpload from '@/containers/ApplyLoan/components/idcard-upload'
 import { useLoanPartialUpdateMutation } from '@/generated/apis/Loan/Loan.query'
 import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
 import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
@@ -307,6 +308,44 @@ export default function Document() {
                     '서류제출완료'
                   : '비대면 서류제출'}
                 </Button>
+                <VStack
+                  alignItems={'flex-start'}
+                  p={'24px 20px'}
+                  borderRadius={'20px'}
+                  border={'1px solid'}
+                  borderColor={'border.basic.1'}
+                  gap={'24px'}
+                  w={'100%'}
+                >
+                  <HStack>
+                    <InfoFillIcon boxSize={'24px'} />
+                    <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                      유의사항
+                    </Text>
+                  </HStack>
+                  <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                    정부24 회원이 아닌 경우, 먼저 회원가입을 완료하셔야 비대면
+                    서류 제출이 가능합니다. <br /> 아래 링크를 통해 정부24
+                    회원가입을 진행하신 뒤 서류 제출을 진행해 주시기 바랍니다.
+                  </Text>
+                  <Button
+                    variant={'text-primary'}
+                    onClick={() =>
+                      window.open(
+                        'https://plus.gov.kr/member/signUpAgree?awqf=!2f',
+                        '_blank',
+                      )
+                    }
+                  >
+                    정부24 회원가입
+                  </Button>
+                  <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                    서버 점검 등 사유로 인해 비대면 서류 제출을 진행하지 않을 수
+                    있습니다.
+                    <br />
+                    추후 대출 현황 조회에서 서류를 업데이트 부탁드립니다.
+                  </Text>
+                </VStack>
               </InputForm>
               {!settingData?.isGov && (
                 <VStack
@@ -349,70 +388,11 @@ export default function Document() {
                 </VStack>
               )}
             </VStack>
-            <AdditionalFileUpload />
+            <AdditionalFileUpload isOptional={false} />
 
             <VStack w={'100%'} alignItems={'flex-start'} spacing={'12px'}>
               <InputForm label="신분증" isRequired={false}>
-                <Button
-                  variant={'outline-primary'}
-                  textStyle={'pre-body-5'}
-                  w={'209px'}
-                  onClick={handleUploadButtonClick}
-                  isLoading={isIdCardUploading}
-                  gap={'8px'}
-                  isDisabled={!!uploadedFileName?.length}
-                >
-                  <CameraIcon
-                    boxSize={'24px'}
-                    color={uploadedFileName?.length ? '#00368640' : 'primary.4'}
-                  />
-                  신분증 업로드
-                </Button>
-                {uploadedFileName?.length && uploadedFileName?.length > 0 && (
-                  <Flex gap={'8px'} flexWrap={'wrap'}>
-                    <Flex gap={'12px'} p={'8px 12px'} alignItems={'center'}>
-                      <HStack gap={'4px'}>
-                        <Center
-                          bg={'primary.1'}
-                          borderRadius={'50%'}
-                          w={'28px'}
-                          h={'28px'}
-                          justifyContent={'center'}
-                          alignItems={'center'}
-                          // p={'4px'}
-                        >
-                          <DocumenticonIcon boxSize={'16px'} />
-                        </Center>
-                        <Text
-                          display={{ base: 'block', sm: 'none' }}
-                          textStyle={'pre-body-68'}
-                          color={'grey.8'}
-                          maxW={'200px'}
-                          noOfLines={1}
-                          overflow={'hidden'}
-                          textOverflow={'ellipsis'}
-                          whiteSpace={'nowrap'}
-                        >
-                          {uploadedFileName}
-                        </Text>
-                        <Text
-                          display={{ base: 'none', sm: 'block' }}
-                          textStyle={'pre-body-68'}
-                          color={'grey.8'}
-                        >
-                          {uploadedFileName}
-                        </Text>
-                      </HStack>
-                      <Box
-                        p={0}
-                        cursor={'pointer'}
-                        onClick={() => setUploadedFileName('')}
-                      >
-                        <XIcon boxSize={'16px'} />
-                      </Box>
-                    </Flex>
-                  </Flex>
-                )}
+                <></>
               </InputForm>
               <VStack
                 alignItems={'flex-start'}
@@ -463,6 +443,67 @@ export default function Document() {
                   />
                 </Flex>
               </VStack>
+
+              {uploadedFileName?.length && uploadedFileName?.length > 0 && (
+                <Flex gap={'8px'} flexWrap={'wrap'}>
+                  <Flex gap={'12px'} p={'8px 12px'} alignItems={'center'}>
+                    <HStack gap={'4px'}>
+                      <Center
+                        bg={'primary.1'}
+                        borderRadius={'50%'}
+                        w={'28px'}
+                        h={'28px'}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                        // p={'4px'}
+                      >
+                        <DocumenticonIcon boxSize={'16px'} />
+                      </Center>
+                      <Text
+                        display={{ base: 'block', sm: 'none' }}
+                        textStyle={'pre-body-68'}
+                        color={'grey.8'}
+                        maxW={'200px'}
+                        noOfLines={1}
+                        overflow={'hidden'}
+                        textOverflow={'ellipsis'}
+                        whiteSpace={'nowrap'}
+                      >
+                        {uploadedFileName}
+                      </Text>
+                      <Text
+                        display={{ base: 'none', sm: 'block' }}
+                        textStyle={'pre-body-68'}
+                        color={'grey.8'}
+                      >
+                        {uploadedFileName}
+                      </Text>
+                    </HStack>
+                    <Box
+                      p={0}
+                      cursor={'pointer'}
+                      onClick={() => setUploadedFileName('')}
+                    >
+                      <XIcon boxSize={'16px'} />
+                    </Box>
+                  </Flex>
+                </Flex>
+              )}
+              <Button
+                variant={'outline-primary'}
+                textStyle={'pre-body-5'}
+                w={'209px'}
+                onClick={handleUploadButtonClick}
+                isLoading={isIdCardUploading}
+                gap={'8px'}
+                isDisabled={!!uploadedFileName?.length}
+              >
+                <CameraIcon
+                  boxSize={'24px'}
+                  color={uploadedFileName?.length ? '#00368640' : 'primary.4'}
+                />
+                신분증 업로드
+              </Button>
             </VStack>
           </Flex>
           <Flex w={'100%'} justifyContent={'center'}>

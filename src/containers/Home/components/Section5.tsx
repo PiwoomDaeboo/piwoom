@@ -80,7 +80,7 @@ function Section5() {
   const [openFAQ, setOpenFAQ] = useState<number | null>(14)
   const router = useRouter()
   const handleFAQToggle = (faqId: number) => {
-    setOpenFAQ(openFAQ === faqId ? null : faqId)
+    setOpenFAQ(faqId)
   }
 
   const { data: faqList } = useFaqListQuery({
