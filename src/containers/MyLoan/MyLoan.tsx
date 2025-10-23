@@ -27,18 +27,13 @@ function MyLoan() {
       onOpen()
     }
   }, [isIdle, router])
-  console.log('accessToken', accessToken)
   useEffect(() => {
     setIsLoading(true)
     setTimeout(() => {
       setIsLoading(false)
     }, 1000)
   }, [step])
-  useEffect(() => {
-    if (!accessToken) {
-      router.push(`/my-loan?step=1`)
-    }
-  }, [accessToken])
+
   if (isLoading) {
     return (
       <Center h={'100vh'}>

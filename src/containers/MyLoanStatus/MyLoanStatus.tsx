@@ -89,11 +89,6 @@ function MyLoanStatus() {
       { shallow: true },
     )
   }
-  useEffect(() => {
-    if (!accessToken) {
-      router.push(`/my-loan-status`)
-    }
-  }, [accessToken])
 
   const handlePageChange = (page: number) => {
     router.push(
