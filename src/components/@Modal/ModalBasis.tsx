@@ -35,7 +35,8 @@ const ModalBasis = ({
   styles,
   visibleCloseButton = true,
   returnFocusOnClose = false,
-  blockScrollOnMount = true,
+  blockScrollOnMount = false,
+  preserveScrollBarGap = true,
   ...props
 }: ModalBasisProps) => {
   return (

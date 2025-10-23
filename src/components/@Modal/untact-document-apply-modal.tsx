@@ -93,7 +93,7 @@ function UntactDocumentApplyModal({
 
   const [govData, setGovData] = useState<any>(null)
   const [shouldPoll, setShouldPoll] = useState(true)
-  const [completedDocuments, setCompletedDocuments] = useState<number>(0)
+  const [completedDocuments, setCompletedDocuments] = useState<number>(1)
   const [totalDocuments, setTotalDocuments] = useState<number>(5) // 총 5개 문서
   const [currentStatus, setCurrentStatus] = useState<string>('PENDING')
 
@@ -203,10 +203,12 @@ function UntactDocumentApplyModal({
       setCurrentStatus(data.status)
     }
 
-    let completedCount = 0
+    let completedCount = 1
 
     if (data.logSet && Array.isArray(data.logSet)) {
-      completedCount = data.logSet.filter((logItem) => logItem.file).length
+      const fileCount = data.logSet.filter((logItem) => logItem.file).length
+      // 최소 1부터 시작, 파일이 있으면 그 개수만큼
+      completedCount = Math.max(1, fileCount)
     }
 
     setCompletedDocuments(completedCount)
@@ -312,7 +314,7 @@ function UntactDocumentApplyModal({
   const handleClose = () => {
     setLoadingProcess(0)
     setShouldPoll(true)
-    setCompletedDocuments(0)
+    setCompletedDocuments(1)
     setCurrentStatus('PENDING')
     // 시군구 선택 상태 초기화
     setSelectedCity('')
@@ -694,15 +696,15 @@ const SubmittingProcess = ({
       case 'PENDING':
         return '서류를 불러오는 중입니다.'
       case 'INCOME_CERTIFICATE':
-        return '소득금액증명서를 처리하는 중입니다.'
+        return '소득금액증명 발급 중입니다.'
       case 'RESIDENT_REGISTRATION_COPY':
-        return '주민등록표등초본을 처리하는 중입니다.'
+        return '주민등록표 등본 발급 중입니다.'
       case 'HEALTH_INSURANCE_ELIGIBILITY_CONFIRMATION':
-        return '건강보험자격득실확인서를 처리하는 중입니다.'
+        return '건강보험 자격득실 확인서 발급 중입니다.'
       case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION':
-        return '건강보험납부확인서를 처리하는 중입니다.'
+        return '건강보험료 납부확인서(올해) 발급 중입니다.'
       case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2':
-        return '건강보험납부확인서 2를 처리하는 중입니다.'
+        return '건강보험료 납부확인서(작년) 발급 중입니다.'
       case 'SUCCESS':
         return '모든 서류가 성공적으로 제출되었습니다'
       case 'FAILED':
@@ -746,12 +748,14 @@ const SubmittingProcess = ({
       </VStack>
 
       {/* 진행률 표시 */}
-      <VStack spacing={'8px'} alignItems={'center'}>
-        <Text textStyle={'pre-body-5'} color={'primary.4'}>
-          {completedDocuments}/{totalDocuments}{' '}
-          {completedDocuments === 5 ? '완료' : '진행 중'}
-        </Text>
-      </VStack>
+      {currentStatus !== 'SUCCESS' && (
+        <VStack spacing={'8px'} alignItems={'center'}>
+          <Text textStyle={'pre-body-5'} color={'primary.4'}>
+            {completedDocuments}/{totalDocuments}{' '}
+            {completedDocuments === 5 ? '완료' : '진행 중'}
+          </Text>
+        </VStack>
+      )}
 
       {/* 로딩 애니메이션 - 실패 시에는 숨김 */}
       {currentStatus !== 'FAILED' && (

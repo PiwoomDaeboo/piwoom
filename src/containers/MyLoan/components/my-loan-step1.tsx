@@ -50,7 +50,7 @@ const MyLoanStep1 = () => {
       storeId: ENV.PORTONE_STORE_ID || '',
       identityVerificationId: crypto.randomUUID(),
       channelKey: ENV.PORTONE_CHANNEL_KEY || '',
-      redirectUrl: `${window.location.origin}/my-loan?step=2`,
+      redirectUrl: `${window.location.origin}/my-loan?step=1`,
     })
     if (response?.code !== undefined) {
       return alert(response?.message)
