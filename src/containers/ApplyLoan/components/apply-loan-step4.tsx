@@ -203,7 +203,7 @@ const ApplyLoanStep4 = () => {
         onSuccess: (data: any) => {
           console.log('loanCreateMutation', data)
           reset('popup_status')
-          router.replace('/apply-loan-complete')
+          router.replace('/apply-loan-complete?loanId=' + data.id)
         },
         onError: (error: any) => {
           console.error('loanCreateMutation', error)

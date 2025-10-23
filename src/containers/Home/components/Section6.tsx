@@ -197,33 +197,35 @@ function Section6() {
     onOpen()
   }
   return (
-    <Flex
-      w="100%"
-      justifyContent="center"
-      alignItems="center"
-      flexDir="column"
-      pt={{ base: '56px', sm: '40px', md: '96px' }}
-      pb={{ base: '56px', sm: '120px', md: '120px' }}
-    >
+    <>
       <YoutubeVideoModal
         isOpen={isOpen}
         onClose={onClose}
         link={selectedSlideData?.link || ''}
       />
-      <Container>
-        <VStack spacing="0" w="100%">
-          <Box w="100%" overflow="hidden" position="relative">
-            <Slider {...settings}>
-              {sliderData.map((item) => (
-                <Box key={item.id} w="100%">
-                  <SliderItem item={item} onOpen={handleSlideClick} />
-                </Box>
-              ))}
-            </Slider>
-          </Box>
-        </VStack>
-      </Container>
-    </Flex>
+      <Flex
+        w="100%"
+        justifyContent="center"
+        alignItems="center"
+        flexDir="column"
+        pt={{ base: '56px', sm: '40px', md: '96px' }}
+        pb={{ base: '56px', sm: '120px', md: '120px' }}
+      >
+        <Container>
+          <VStack spacing="0" w="100%">
+            <Box w="100%" overflow="hidden" position="relative">
+              <Slider {...settings}>
+                {sliderData.map((item) => (
+                  <Box key={item.id} w="100%">
+                    <SliderItem item={item} onOpen={handleSlideClick} />
+                  </Box>
+                ))}
+              </Slider>
+            </Box>
+          </VStack>
+        </Container>
+      </Flex>
+    </>
   )
 }
 

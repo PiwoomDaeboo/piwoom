@@ -1,15 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-import {
-  Box,
-  Container,
-  Flex,
-  Grid,
-  HStack,
-  SimpleGrid,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Flex, Text, VStack } from '@chakra-ui/react'
 
 import { gsap } from 'gsap'
 
@@ -62,7 +53,6 @@ const sectionData = [
   },
 ]
 
-// 마퀴 애니메이션 초기화 함수
 const initMarquee = (marqueeElement: HTMLElement) => {
   const marqueeInner = marqueeElement.querySelector(
     '.marquee__inner',
@@ -70,25 +60,20 @@ const initMarquee = (marqueeElement: HTMLElement) => {
 
   if (!marqueeInner) return
 
-  // 기존 애니메이션 정리
   gsap.killTweensOf(marqueeInner)
 
-  // 컨텐츠 너비 계산
   const contentWidth = marqueeInner.scrollWidth
   const halfWidth = contentWidth / 2
 
-  // 반응형에 따른 애니메이션 시간 계산
   const getDuration = () => {
     const width = window.innerWidth
-    if (width < 480) return 5 // base: 5초
-    if (width < 768) return 20 // sm: 20초
-    return 30 // md 이상: 30초
+    if (width < 480) return 5
+    if (width < 768) return 20
+    return 30
   }
 
-  // 초기 위치 설정
   gsap.set(marqueeInner, { x: 0 })
 
-  // 무한 스크롤 애니메이션
   gsap.to(marqueeInner, {
     x: -halfWidth,
     duration: getDuration(),
@@ -105,10 +90,8 @@ function Section3() {
 
     const marquee = marqueeRef.current
 
-    // 마퀴 애니메이션 초기화
     initMarquee(marquee)
 
-    // 반응형 대응을 위한 리사이즈 이벤트
     const handleResize = () => {
       initMarquee(marquee)
     }
@@ -166,7 +149,6 @@ function Section3() {
           w={'max-content'}
           willChange="transform"
         >
-          {/* 3개의 동일한 세트로 무한 스크롤 구현 */}
           {[...sectionData, ...sectionData].map((data, index) => (
             <Flex
               mr={'32px'}
