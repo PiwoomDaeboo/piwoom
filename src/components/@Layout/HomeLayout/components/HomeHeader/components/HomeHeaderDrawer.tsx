@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { useRouter } from 'next/router'
 
 import { Link } from '@chakra-ui/next-js'
@@ -24,9 +26,11 @@ import {
   CaretDownIcon,
   HeaderlogoIcon,
   MenuIcon,
+  SignoutIcon,
 } from '@/generated/icons/MyIcons'
 import { MY_IMAGES } from '@/generated/path/images'
 import { ROUTES } from '@/generated/path/routes'
+import { useLocalStorage } from '@/stores/local/state'
 
 import { MENU_ITEMS } from '../../consts/menu'
 
@@ -43,6 +47,12 @@ const HomeHeaderDrawer = ({
   ...props
 }: HomeHeaderDrawerProps) => {
   const router = useRouter()
+
+  const handleLogout = useCallback(() => {
+    useLocalStorage.getState().reset('token')
+    router.replace(ROUTES.MAIN)
+    onClose()
+  }, [])
   return (
     <DrawerBasis
       isOpen={isOpen}
@@ -121,104 +131,126 @@ const HomeHeaderDrawer = ({
         </Flex>
       }
       body={
-        <Container px={'0px'}>
-          <VStack alignItems={'flex-start'} spacing={'0px'} px={'0px'}>
-            {MENU_ITEMS.map((item) => {
-              // submenuItems가 없는 경우 바로 링크로 이동
-              if (!item.submenuItems || item.submenuItems.length === 0) {
-                return (
-                  <Box
-                    key={item.label}
-                    as="a"
-                    w={'100%'}
-                    borderBottom={'1px solid'}
-                    borderColor={'grey.2'}
-                    py={'10px'}
-                    px={'0px'}
-                    _hover={{
-                      bg: 'primary.1',
-                    }}
-                  >
-                    <Link href={item.href || '#'} onClick={onClose}>
-                      <HStack w={'100%'} alignItems={'center'} gap={'10px'}>
-                        <Text textStyle={'pre-body-3'} color={'grey.10'}>
-                          {item.label}
-                        </Text>
-                      </HStack>
-                    </Link>
-                  </Box>
-                )
-              }
-
-              return (
-                <Accordion key={item.label} allowToggle w={'100%'} px={'0px'}>
-                  <AccordionItem
-                    border={'none'}
-                    borderBottom={'1px solid'}
-                    borderColor={'grey.2'}
-                  >
-                    <AccordionButton
+        <Container px={'0px'} h={'100%'}>
+          <Flex
+            flexDir="column"
+            justifyContent={'space-between'}
+            alignItems="stretch"
+            h={'100%'}
+          >
+            <VStack alignItems={'flex-start'} spacing={'0px'} px={'0px'}>
+              {MENU_ITEMS.map((item) => {
+                // submenuItems가 없는 경우 바로 링크로 이동
+                if (!item.submenuItems || item.submenuItems.length === 0) {
+                  return (
+                    <Box
+                      key={item.label}
+                      as="a"
+                      w={'100%'}
+                      borderBottom={'1px solid'}
+                      borderColor={'grey.2'}
                       py={'10px'}
                       px={'0px'}
-                      _expanded={{
-                        '& > svg': {
-                          transform: 'rotate(180deg)',
-                        },
+                      _hover={{
+                        bg: 'primary.1',
                       }}
                     >
-                      <Box as="span" flex="1" textAlign="left">
-                        <HStack alignItems={'center'} gap={'10px'}>
+                      <Link href={item.href || '#'} onClick={onClose}>
+                        <HStack w={'100%'} alignItems={'center'} gap={'10px'}>
                           <Text textStyle={'pre-body-3'} color={'grey.10'}>
                             {item.label}
                           </Text>
                         </HStack>
-                      </Box>
+                      </Link>
+                    </Box>
+                  )
+                }
 
-                      <CaretDownIcon
-                        boxSize={'24px'}
-                        color={'grey.8'}
-                        ml={'20px'}
-                        transform={'rotate(0deg)'}
-                        transition={'transform 0.2s ease-in-out'}
-                      />
-                    </AccordionButton>
+                return (
+                  <Accordion key={item.label} allowToggle w={'100%'} px={'0px'}>
+                    <AccordionItem
+                      border={'none'}
+                      borderBottom={'1px solid'}
+                      borderColor={'grey.2'}
+                    >
+                      <AccordionButton
+                        py={'10px'}
+                        px={'0px'}
+                        _expanded={{
+                          '& > svg': {
+                            transform: 'rotate(180deg)',
+                          },
+                        }}
+                      >
+                        <Box as="span" flex="1" textAlign="left">
+                          <HStack alignItems={'center'} gap={'10px'}>
+                            <Text textStyle={'pre-body-3'} color={'grey.10'}>
+                              {item.label}
+                            </Text>
+                          </HStack>
+                        </Box>
 
-                    <AccordionPanel py={'12px'} bg={'grey.0'}>
-                      <Flex flexDir={'column'} gap={'10px'}>
-                        {item.submenuItems?.map((subItem) => (
-                          <Link
-                            key={subItem.label}
-                            href={subItem.href}
-                            p={'12px 16px'}
-                            borderRadius={'16px'}
-                            textStyle={'pre-body-4'}
-                            color={'grey.10'}
-                            _hover={{
-                              bg: 'primary.1',
-                              color: 'primary.4',
-                              textStyle: 'pre-body-3',
-                            }}
-                            title={`${subItem.label} 페이지로 이동`}
-                            aria-label={`${subItem.label} 서브메뉴`}
-                            display="block"
-                            onClick={onClose}
-                          >
-                            <Text
-                              w={'100%'}
+                        <CaretDownIcon
+                          boxSize={'24px'}
+                          color={'grey.8'}
+                          ml={'20px'}
+                          transform={'rotate(0deg)'}
+                          transition={'transform 0.2s ease-in-out'}
+                        />
+                      </AccordionButton>
+
+                      <AccordionPanel py={'12px'} bg={'grey.0'}>
+                        <Flex flexDir={'column'} gap={'10px'}>
+                          {item.submenuItems?.map((subItem) => (
+                            <Link
+                              key={subItem.label}
+                              href={subItem.href}
+                              p={'12px 16px'}
+                              borderRadius={'16px'}
                               textStyle={'pre-body-4'}
                               color={'grey.10'}
+                              _hover={{
+                                bg: 'primary.1',
+                                color: 'primary.4',
+                                textStyle: 'pre-body-3',
+                              }}
+                              title={`${subItem.label} 페이지로 이동`}
+                              aria-label={`${subItem.label} 서브메뉴`}
+                              display="block"
+                              onClick={onClose}
                             >
-                              {subItem.label}
-                            </Text>
-                          </Link>
-                        ))}
-                      </Flex>
-                    </AccordionPanel>
-                  </AccordionItem>
-                </Accordion>
-              )
-            })}
-          </VStack>
+                              <Text
+                                w={'100%'}
+                                textStyle={'pre-body-4'}
+                                color={'grey.10'}
+                              >
+                                {subItem.label}
+                              </Text>
+                            </Link>
+                          ))}
+                        </Flex>
+                      </AccordionPanel>
+                    </AccordionItem>
+                  </Accordion>
+                )
+              })}
+            </VStack>
+            <Flex alignItems={'center'} gap={'12px'} onClick={handleLogout}>
+              <Flex
+                w={'40px'}
+                h={'40px'}
+                bg={'grey.2'}
+                borderRadius={'full'}
+                justifyContent={'center'}
+                alignItems={'center'}
+              >
+                <SignoutIcon boxSize={'24px'} />
+              </Flex>
+              <Text textStyle={'pre-body-3'} color={'grey.8'}>
+                로그아웃
+              </Text>
+            </Flex>
+          </Flex>
         </Container>
       }
       styles={{

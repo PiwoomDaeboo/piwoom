@@ -95,6 +95,11 @@ const HomeHeader = ({
     router.replace(ROUTES.MAIN)
     setIsLogoutMenuOpen(false)
   }, [])
+
+  const handleMyLoanStatus = useCallback(() => {
+    router.push(ROUTES.MY_LOAN_STATUS_MAIN)
+    setIsLogoutMenuOpen(false)
+  }, [])
   const hoverMenuMarginRight = useCallback((index: number) => {
     if (index === 0) {
       return '24px'
@@ -248,23 +253,38 @@ const HomeHeader = ({
                     minW={'160px'}
                     borderRadius={'10px'}
                     display={'flex'}
-                    justifyContent={'flex-start'}
+                    flexDirection={'column'}
                     border={'1px solid'}
                     borderColor={'grey.2'}
-                    alignItems={'center'}
                     position={'absolute'}
                     zIndex={999}
-                    onClick={handleLogout}
                     boxShadow={
                       '0 20px 80px 0 rgba(27, 28, 29, 0.04), 0 4px 10px 0 rgba(27, 28, 29, 0.04)'
                     }
-                    bottom={'-50px'}
+                    bottom={'-100px'}
                     right={0}
-                    p={'10px 12px'}
+                    overflow={'hidden'}
                   >
-                    <Text textStyle={'pre-body-6'} color={'grey.8'}>
-                      로그아웃
-                    </Text>
+                    <Flex
+                      p={'10px 12px'}
+                      cursor={'pointer'}
+                      _hover={{ bg: 'grey.1' }}
+                      onClick={handleMyLoanStatus}
+                    >
+                      <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                        나의 대출 조회
+                      </Text>
+                    </Flex>
+                    <Flex
+                      p={'10px 12px'}
+                      cursor={'pointer'}
+                      _hover={{ bg: 'grey.1' }}
+                      onClick={handleLogout}
+                    >
+                      <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                        로그아웃
+                      </Text>
+                    </Flex>
                   </Flex>
                 )}
               </Flex>
