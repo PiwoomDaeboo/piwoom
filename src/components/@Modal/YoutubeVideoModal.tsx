@@ -14,18 +14,6 @@ interface YoutubeVideoModalProps {
 function YoutubeVideoModal({ isOpen, onClose, link }: YoutubeVideoModalProps) {
   const [scrollPosition, setScrollPosition] = useState(0)
 
-  useEffect(() => {
-    if (isOpen) {
-      setScrollPosition(window.pageYOffset)
-    }
-  }, [isOpen])
-
-  useEffect(() => {
-    if (!isOpen && scrollPosition !== 0) {
-      window.scrollTo(0, scrollPosition)
-    }
-  }, [isOpen, scrollPosition])
-
   const handleClose = () => {
     onClose()
   }
