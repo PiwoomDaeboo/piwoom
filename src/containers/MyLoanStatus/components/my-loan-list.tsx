@@ -49,8 +49,8 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
   const getLoanStatus = (status: string): boolean => {
     if (
       status === 'UNDER_REVIEW' ||
-      status === 'CONTRACTING' ||
-      status === 'REMITTING' ||
+      // status === 'CONTRACTING' ||
+      // status === 'REMITTING' ||
       status === 'REJECTED'
     ) {
       return false

@@ -6,7 +6,7 @@ export const BUTTON_DATA = [
     value: 'detail',
   },
   {
-    title: '상환 스케줄 확인하기',
+    title: '상환 스케줄 확인',
     value: 'schedule',
   },
   {

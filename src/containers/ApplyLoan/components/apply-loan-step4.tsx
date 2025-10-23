@@ -227,6 +227,8 @@ const ApplyLoanStep4 = () => {
       accountHolder: getValues('accountHolder') || '-',
       accountHolderSsn: getValues('accountHolderSsn') || '-',
       purposeAndRepaymentPlan: getValues('purposeAndRepaymentPlan') || '-',
+      companyDetailAddress:
+        isCompanyAddressFromSearch ? getValues('companyDetailAddress') : '',
       assetBaseAddress: getValues('assetBaseAddress') || '-',
       assetDetailAddress: getValues('assetDetailAddress') || '-',
       assetPostcode: getValues('assetPostcode') || '-',
@@ -1029,11 +1031,11 @@ const ApplyLoanStep4 = () => {
                 />
               )}
             </VStack>
-            {/* {errors?.companyAddress && (
+            {errors?.companyAddress && (
               <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
                 {errors?.companyAddress?.message as string}
               </Text>
-            )} */}
+            )}
             {errors?.companyDetailAddress && (
               <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
                 {errors?.companyDetailAddress?.message as string}
@@ -1336,6 +1338,7 @@ const ApplyLoanStep4 = () => {
           <Button
             variant={'outline-primary'}
             textStyle={'pre-body-5'}
+            type="button"
             w={'209px'}
             // disabled={!settingData?.isGov}
             isDisabled={isDocumentSubmissionCompleted || !settingData?.isGov}
