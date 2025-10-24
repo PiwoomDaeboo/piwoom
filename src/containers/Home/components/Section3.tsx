@@ -67,7 +67,7 @@ const initMarquee = (marqueeElement: HTMLElement) => {
 
   const getDuration = () => {
     const width = window.innerWidth
-    if (width < 480) return 5
+    if (width < 480) return 20
     if (width < 768) return 20
     return 30
   }

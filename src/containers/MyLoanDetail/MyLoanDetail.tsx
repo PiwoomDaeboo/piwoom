@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -27,6 +27,7 @@ import { BUTTON_DATA, LoanDetailApiData, SAMPLE_LOAN_DATA } from './consts'
 
 function MyLoanDetail() {
   const router = useRouter()
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   const { detailMenu } = router.query
   const [isDetailMenu, setIsDetailMenu] = useState<string>('detail')
@@ -48,6 +49,37 @@ function MyLoanDetail() {
       router.push(`/my-loan-status/${router.query.id}?detailMenu=${detailMenu}`)
     }
   }, [detailMenu])
+
+  // isDetailMenu 변경 시 해당 버튼으로 스크롤
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current
+      const buttons = container.querySelectorAll('button')
+
+      // 현재 활성화된 메뉴에 해당하는 버튼 찾기
+      const activeButtonIndex = BUTTON_DATA.findIndex(
+        (button) => button.value === isDetailMenu,
+      )
+      const targetButton = buttons[activeButtonIndex]
+
+      if (targetButton) {
+        const containerRect = container.getBoundingClientRect()
+        const buttonRect = targetButton.getBoundingClientRect()
+
+        // 버튼이 컨테이너 중앙에 오도록 스크롤
+        const scrollLeft =
+          buttonRect.left -
+          containerRect.left -
+          containerRect.width / 2 +
+          buttonRect.width / 2
+
+        container.scrollTo({
+          left: container.scrollLeft + scrollLeft,
+          behavior: 'smooth',
+        })
+      }
+    }
+  }, [isDetailMenu])
 
   const handleDetailMenuChange = (menu: string) => {
     setIsDetailMenu(menu)
@@ -84,6 +116,7 @@ function MyLoanDetail() {
               </Text>
             </HStack>
             <Flex
+              ref={scrollContainerRef}
               flexDir={{ base: 'row', md: 'column' }}
               w={{ base: '100%', md: 'fit-content' }}
               overflowX={{ base: 'auto', md: 'visible' }}

@@ -129,7 +129,7 @@ const HomeHeaderDrawer = ({
                 <HStack gap={'10px'}>
                   <Button
                     w={'83px'}
-                    variant={'black-primary'}
+                    variant={'outline-primary'}
                     onClick={handleLoanApply}
                   >
                     대출 신청

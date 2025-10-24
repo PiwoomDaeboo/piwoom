@@ -154,7 +154,7 @@ const MyLoanStep3 = () => {
     const popup = window.open(
       '/ekyc',
       'ekycPopup',
-      'width=800, height=640, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
+      'width=800, height=800, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no',
     )
 
     if (!popup) {

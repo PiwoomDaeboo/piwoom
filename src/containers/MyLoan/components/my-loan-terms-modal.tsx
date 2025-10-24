@@ -315,7 +315,7 @@ const LoanTermsTable = ({
                       textStyle={'pre-body-68'}
                       color={'grey.10'}
                     >
-                      0.0%
+                      -
                     </Text>
                   </Box>
                 </Flex>
@@ -400,7 +400,7 @@ const LoanTermsTable = ({
                       textStyle={'pre-body-68'}
                       color={'grey.10'}
                     >
-                      0.0%
+                      -
                     </Text>
                   </Box>
                 </Flex>
@@ -533,7 +533,7 @@ const LoanTermsTable = ({
           </Box>
           <Box w={'70%'} p={'12px'}>
             <Text textStyle={'pre-body-68'} color={'grey.10'}>
-              {loanData?.contract?.isJointGuarantee ? '있음' : '없음'}
+              {loanData?.contract?.guarantorName || '-'}
             </Text>
           </Box>
         </Flex>
@@ -654,7 +654,8 @@ const LoanTermsTable = ({
           <Box w={'70%'} p={'12px'}>
             <VStack spacing={'4px'} align={'stretch'}>
               <Text textStyle={'pre-body-68'} color={'grey.10'}>
-                1. 신용정보조회비용(00원)
+                1. 신용정보조회비용(
+                {loanData?.contract?.creditInquiryFee.toLocaleString() || 0}원)
               </Text>
               <Text textStyle={'pre-body-68'} color={'grey.10'}>
                 • 부동산 담보대출의 경우 담보권설정비용(등록면허세, 지방교육세,
