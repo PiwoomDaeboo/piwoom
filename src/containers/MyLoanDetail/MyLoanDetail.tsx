@@ -138,7 +138,16 @@ function MyLoanDetail() {
                 },
               }}
             >
-              {BUTTON_DATA.map((button, index) => (
+              {BUTTON_DATA.filter((button) => {
+                if (
+                  loanRetrieveData?.status === 'REJECTED' ||
+                  loanRetrieveData?.status === 'UNDER_REVIEW'
+                ) {
+                  return button.value === 'document'
+                }
+
+                return true
+              }).map((button, index) => (
                 <Button
                   transition={'all 0.2s ease-in-out'}
                   key={index}
