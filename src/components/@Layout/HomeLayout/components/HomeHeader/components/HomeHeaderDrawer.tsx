@@ -154,10 +154,16 @@ const HomeHeaderDrawer = ({
             <Flex
               flexDir="column"
               justifyContent={'space-between'}
-              alignItems="stretch"
+              // alignItems="stretch"
               h={'100%'}
+              pb={'16px'}
             >
-              <VStack alignItems={'flex-start'} spacing={'0px'} px={'0px'}>
+              <VStack
+                alignItems={'flex-start'}
+                spacing={'0px'}
+                px={'0px'}
+                mb={'32px'}
+              >
                 {MENU_ITEMS.map((item) => {
                   // submenuItems가 없는 경우 바로 링크로 이동
                   if (!item.submenuItems || item.submenuItems.length === 0) {

@@ -271,34 +271,35 @@ export default function Document() {
                   세금 납부 내역이 제출되었어요.
                 </Text>
               )}
-            </InputForm>
-            {!settingData?.isWetax && (
-              <VStack w={'100%'} spacing={'12px'}>
-                <VStack
-                  w={'100%'}
-                  alignItems={'flex-start'}
-                  p={'16px 20px'}
-                  borderRadius={'20px'}
-                  border={'1px solid'}
-                  borderColor={'border.basic.1'}
-                  gap={'24px'}
-                >
-                  <HStack w={'100%'}>
-                    <InfoFillIcon boxSize={'24px'} />
-                    <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                      유의사항
+              {!settingData?.isWetax && (
+                <VStack w={'100%'} spacing={'12px'}>
+                  <VStack
+                    w={'100%'}
+                    alignItems={'flex-start'}
+                    p={'16px 20px'}
+                    borderRadius={'20px'}
+                    border={'1px solid'}
+                    borderColor={'border.basic.1'}
+                    gap={'24px'}
+                  >
+                    <HStack w={'100%'}>
+                      <InfoFillIcon boxSize={'24px'} />
+                      <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                        유의사항
+                      </Text>
+                    </HStack>
+                    <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                      서버 점검 등의 사유로 인해 세금 납부 내역 제출 기능을
+                      제공하지 않을 수 있습니다.
+                      <br />
+                      추후 [대출 현황 조회] 페이지에서 세금 납부 내역을 제출
+                      부탁드립니다
                     </Text>
-                  </HStack>
-                  <Text textStyle={'pre-body-6'} color={'grey.8'}>
-                    서버 점검 등의 사유로 인해 세금 납부 내역 제출을 진행하지
-                    않고 있습니다.
-                    <br />
-                    추후 별도 안내를 통해 세금 납부 내역 제출을 요청드리도록
-                    하겠습니다.
-                  </Text>
+                  </VStack>
                 </VStack>
-              </VStack>
-            )}
+              )}
+            </InputForm>
+
             <VStack w={'100%'} spacing={'12px'}>
               <InputForm isRequired={false} label="비대면 서류제출">
                 <Button
@@ -347,10 +348,11 @@ export default function Document() {
                       정부24 회원가입
                     </Button>
                     <Text textStyle={'pre-body-6'} color={'grey.8'}>
-                      서버 점검 등 사유로 인해 비대면 서류 제출을 진행하지 않을
-                      수 있습니다.
+                      서버 점검 등의 사유로 인해 비대면 서류 제출 기능을
+                      제공하지 않을 수 있습니다.
                       <br />
-                      추후 대출 현황 조회에서 서류를 업데이트 부탁드립니다.
+                      추후 [대출 현황 조회] 페이지에서 비대면 서류 제출을 진행
+                      부탁드립니다.
                     </Text>
                   </VStack>
                 )}
@@ -374,11 +376,11 @@ export default function Document() {
                         </Text>
                       </HStack>
                       <Text textStyle={'pre-body-6'} color={'grey.8'}>
-                        서버 점검 등의 사유로 인해 비대면 서류 제출을 진행하지
-                        않고 있습니다.
+                        서버 점검 등의 사유로 인해 비대면 서류 제출 기능을
+                        제공하지 않을 수 있습니다.
                         <br />
-                        추후 별도 안내를 통해 비대면 서류 제출을 요청드리도록
-                        하겠습니다.
+                        추후 [대출 현황 조회] 페이지에서 비대면 서류 제출을 진행
+                        부탁드립니다.
                       </Text>
                     </VStack>
                   </VStack>

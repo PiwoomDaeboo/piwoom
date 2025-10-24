@@ -7,6 +7,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
+import MyLoanTermsModal from '@/containers/MyLoan/components/my-loan-terms-modal'
 import {
   PhoneCallFillIcon,
   ScrollFillIcon,
@@ -20,8 +21,8 @@ function Section2() {
       <Container>
         <Flex
           flexDirection={{ base: 'column', md: 'row' }}
-          pt={{ base: '24px', md: '48px' }}
-          pb={{ base: '36px', sm: '64px', md: '96px' }}
+          pt={'48px'}
+          pb={{ base: '64px', sm: '64px', md: '96px' }}
           justifyContent={{ base: 'space-between', md: 'space-between' }}
           alignItems={{ base: 'flex-start', md: 'center' }}
         >

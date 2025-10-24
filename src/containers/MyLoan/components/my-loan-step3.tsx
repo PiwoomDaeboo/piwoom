@@ -28,7 +28,7 @@ import {
 import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
 import { useUsebAccessTokenCreateMutation } from '@/generated/apis/Useb/Useb.query'
 import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
-import { CaretRightIcon } from '@/generated/icons/MyIcons'
+import { CaretRightIcon, InfoFillIcon } from '@/generated/icons/MyIcons'
 
 import {
   AGREEMENT_ITEMS,
@@ -374,6 +374,35 @@ const MyLoanStep3 = () => {
             <Text textStyle={'pre-body-7'} color={'accent.green2'}>
               신분증 인증이 완료되었어요.
             </Text>
+          )}
+          {!settingData?.isUseb && (
+            <VStack w={'100%'} spacing={'12px'}>
+              <VStack w={'100%'} spacing={'12px'}>
+                <VStack
+                  w={'100%'}
+                  alignItems={'flex-start'}
+                  p={'16px 20px'}
+                  borderRadius={'20px'}
+                  border={'1px solid'}
+                  borderColor={'border.basic.1'}
+                  gap={'24px'}
+                >
+                  <HStack w={'100%'}>
+                    <InfoFillIcon boxSize={'24px'} />
+                    <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                      유의사항
+                    </Text>
+                  </HStack>
+                  <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                    서버 점검 등의 사유로 인해 신분증 인증 절차를 진행하지 않을
+                    수 있습니다.
+                    <br />
+                    [신분증 인증 진행] 버튼이 비활성화되어 있는 경우 해당 절차를
+                    생략하시고 전자서명을 진행 부탁드립니다.
+                  </Text>
+                </VStack>
+              </VStack>
+            </VStack>
           )}
         </InputForm>
         <VStack alignItems={'flex-start'} my={'64px'} spacing={'32px'}>

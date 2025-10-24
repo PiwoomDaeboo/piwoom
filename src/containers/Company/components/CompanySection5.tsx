@@ -22,7 +22,8 @@ const CompanySection5 = () => {
           sm: MY_IMAGES.BG_CEO_TAB.src,
           md: MY_IMAGES.BG_CEO_PC.src,
         }}
-        bgSize={{ base: 'cover', md: 'contain' }}
+        // bgSize={{ base: 'cover', md: 'contain' }}
+        bgSize={'contain'}
         bgPosition={'center'}
         pt={{ base: '64px', md: '80px' }}
         pb={{ base: '80px', md: '120px' }}
