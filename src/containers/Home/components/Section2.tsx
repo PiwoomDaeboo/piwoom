@@ -21,7 +21,7 @@ function Section2() {
       <Container>
         <Flex
           flexDirection={{ base: 'column', md: 'row' }}
-          pt={'48px'}
+          pt={{ base: '40px', sm: '48px', md: '32px' }}
           pb={{ base: '64px', sm: '64px', md: '96px' }}
           justifyContent={{ base: 'space-between', md: 'space-between' }}
           alignItems={{ base: 'flex-start', md: 'center' }}

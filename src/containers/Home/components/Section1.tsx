@@ -70,7 +70,7 @@ const Section1 = () => {
     <Flex
       w="100%"
       justifyContent="center"
-      py={{ base: '56px', sm: '64px', md: '96px' }}
+      py={{ base: '48px', sm: '64px', md: '96px' }}
     >
       <Container>
         <VStack
