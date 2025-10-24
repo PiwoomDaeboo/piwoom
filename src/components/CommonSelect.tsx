@@ -54,7 +54,6 @@ export const CommonSelect: SelectComponent = ({
           ...provided,
           bg: 'transparent',
           color: 'content.1',
-
           _hover: {
             bg: 'primary.1',
             color: '',
@@ -64,6 +63,42 @@ export const CommonSelect: SelectComponent = ({
             color: 'white',
             _hover: {
               bg: 'primary.3',
+            },
+          },
+          // 스크롤바 스타일
+          overflowY: 'scroll',
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'auto',
+          scrollbarColor: '#666 #e0e0e0',
+          '&::-webkit-scrollbar': {
+            width: '14px',
+            display: 'block',
+            WebkitAppearance: 'none',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#e0e0e0',
+            borderRadius: '7px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: '#666',
+            borderRadius: '7px',
+            border: '2px solid rgba(255, 255, 255, 0.3)',
+            minHeight: '50px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            background: '#444',
+          },
+          '&::-webkit-scrollbar-thumb:active': {
+            background: '#222',
+          },
+          '@media (max-width: 768px)': {
+            '&::-webkit-scrollbar': {
+              width: '16px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              background: '#555',
+              minHeight: '60px',
+              border: '3px solid rgba(255, 255, 255, 0.4)',
             },
           },
         }),
@@ -91,19 +126,43 @@ export const CommonSelect: SelectComponent = ({
         menuList: (provided) => ({
           ...provided,
           maxHeight: '200px',
-          overflowY: 'scroll !important',
-          '::-webkit-scrollbar': {
-            width: '4px',
-            height: '0px',
+          overflowY: 'scroll',
+          WebkitOverflowScrolling: 'touch',
+          // Firefox 스크롤바 스타일
+          scrollbarWidth: 'auto',
+          scrollbarColor: '#666 #e0e0e0',
+          // Webkit 스크롤바 스타일
+          '&::-webkit-scrollbar': {
+            width: '14px',
+            display: 'block',
+            WebkitAppearance: 'none',
           },
-          '::-webkit-scrollbar-track': {
-            background: '#f1f1f1',
+          '&::-webkit-scrollbar-track': {
+            background: '#e0e0e0',
+            borderRadius: '7px',
           },
-          '::-webkit-scrollbar-thumb': {
-            background: '#888',
+          '&::-webkit-scrollbar-thumb': {
+            background: '#666',
+            borderRadius: '7px',
+            border: '2px solid rgba(255, 255, 255, 0.3)',
+            minHeight: '50px',
           },
-          '::-webkit-scrollbar-thumb:hover': {
-            background: '#555',
+          '&::-webkit-scrollbar-thumb:hover': {
+            background: '#444',
+          },
+          '&::-webkit-scrollbar-thumb:active': {
+            background: '#222',
+          },
+          // 모바일 전용 - 더 큰 스크롤바
+          '@media (max-width: 768px)': {
+            '&::-webkit-scrollbar': {
+              width: '16px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              background: '#555',
+              minHeight: '60px',
+              border: '3px solid rgba(255, 255, 255, 0.4)',
+            },
           },
         }),
       }}

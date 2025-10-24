@@ -70,10 +70,55 @@ const Section1 = () => {
     <Flex
       w="100%"
       justifyContent="center"
-      py={{ base: '24px', sm: '40px', md: '80px' }}
+      py={{ base: '56px', sm: '64px', md: '96px' }}
     >
       <Container>
-        <Box mb={{ base: '32px', md: '36px' }}>
+        <VStack
+          alignItems={'flex-start'}
+          gap={'6px'}
+          mb={{ base: '32px', md: '36px' }}
+        >
+          <Flex
+            flexDir={{ base: 'column', sm: 'row' }}
+            gap={{ base: '0px', sm: '8px' }}
+            alignItems={'flex-start'}
+          >
+            <Text
+              textStyle={{ base: 'pre-display-4', md: 'pre-display-4' }}
+              color={'primary.4'}
+            >
+              소중한 순간들이
+            </Text>
+            <Text
+              textStyle={{ base: 'pre-display-4', md: 'pre-display-4' }}
+              color={'primary.4'}
+            >
+              더 크게 피어날 수 있도록
+            </Text>
+          </Flex>
+          <Text
+            display={{ base: 'block', md: 'none' }}
+            textStyle={{
+              base: 'pre-body-4',
+              sm: 'pre-body-2',
+            }}
+            fontSize={{ base: '18px', sm: '24px' }}
+            color={'grey.10'}
+          >
+            피움만의 비대면 대출과 함께 해요
+          </Text>
+          <Text
+            fontSize="32px"
+            fontStyle="normal"
+            fontWeight="400"
+            lineHeight="140%"
+            letterSpacing="-0.32px"
+            display={{ base: 'none', md: 'block' }}
+          >
+            피움만의 비대면 대출과 함께 해요
+          </Text>
+        </VStack>
+        {/* <Box mb={{ base: '32px', md: '36px' }}>
           <Text textStyle={'pre-heading-1'}>
             쉽고 빠른{' '}
             <Box as={'span'} color={'primary.4'}>
@@ -81,7 +126,7 @@ const Section1 = () => {
             </Box>
             를 시작해보세요
           </Text>
-        </Box>
+        </Box> */}
         <SimpleGrid
           display={{ base: 'none', sm: 'grid' }}
           columns={3}

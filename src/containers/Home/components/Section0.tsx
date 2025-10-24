@@ -1,7 +1,10 @@
 import { useRouter } from 'next/router'
 
-import { Button, Container, Flex, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Container, Flex, Text, VStack } from '@chakra-ui/react'
 
+import CommonSelect from '@/components/CommonSelect'
+import InputForm from '@/components/InputForm'
+import { LOAN_PURPOSE_OPTIONS } from '@/constants/loan'
 import { MY_IMAGES } from '@/generated/path/images'
 import { ROUTES } from '@/generated/path/routes'
 
@@ -9,6 +12,25 @@ const Section0 = () => {
   const router = useRouter()
   return (
     <>
+      {/* <Container>
+        <InputForm label="대출 용도">
+          <Flex w={'100%'} gap={'8px'} flexDir={{ base: 'column', sm: 'row' }}>
+            <VStack
+              w={{ base: '100%', sm: '50%', md: '50%' }}
+              alignItems={'flex-start'}
+            >
+              <Box w={'100%'}>
+                <CommonSelect
+                  placeholder="선택"
+                  options={LOAN_PURPOSE_OPTIONS}
+                  variant="outline"
+                  data-field="purpose"
+                />
+              </Box>
+            </VStack>
+          </Flex>
+        </InputForm>
+      </Container> */}
       <Flex
         w={'100%'}
         bgImage={{

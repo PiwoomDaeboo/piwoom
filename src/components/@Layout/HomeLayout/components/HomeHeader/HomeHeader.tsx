@@ -336,15 +336,13 @@ const HomeHeader = ({
               </Button>
             }
 
-            <Button onClick={handleLoanApply} variant={'black-primary'}>
-              <Text textStyle={'pre-body-7'} color={'grey.0'}>
-                대출 신청
-              </Text>
+            <Button onClick={handleLoanApply} variant={'outline-primary'}>
+              <Text textStyle={'pre-body-7'}>대출 신청</Text>
             </Button>
           </HStack>
           <HStack display={{ base: 'flex', md: 'none' }}>
             <Button
-              variant={'black-primary'}
+              variant={'outline-primary'}
               onClick={() => {
                 isDrawerOpen && onDrawerClose
                 handleLoanApply()

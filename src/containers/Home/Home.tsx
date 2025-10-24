@@ -12,7 +12,7 @@ import Section6 from './components/Section6'
 function Home() {
   return (
     <>
-      <Section0 />
+      {/* <Section0 /> */}
       <Box
         w={'100%'}
         background={'linear-gradient(180deg, #FFF 0%, #F1F7FF 100%)'}
