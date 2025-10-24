@@ -297,7 +297,8 @@ function WetaxModal({
                   key={type}
                   direction={'column'}
                   align={'center'}
-                  p={'16px'}
+                  py={'6px'}
+                  gap={'6px'}
                   borderRadius={'10px'}
                   cursor={'pointer'}
                   bg={selectedAuth === type ? 'primary.1' : 'transparent'}
@@ -314,7 +315,10 @@ function WetaxModal({
                   }}
                   onClick={() => handleAuthSelect(type)}
                 >
-                  <Icon boxSize={'80px'} />
+                  <Icon borderRadius={'10px'} boxSize={'40px'} />
+                  <Text textStyle={'pre-caption-2'} color={'grey.10'}>
+                    {label}
+                  </Text>
                 </Flex>
               ))}
             </SimpleGrid>
@@ -612,7 +616,7 @@ const SubmittingProcess = ({
             ''
           : currentStatus === 'FAILED' ?
             '다시 시도해 주세요.'
-          : '조금만 기다려주세요!\n최대 3분 가량 소요될 수 있습니다'}
+          : '조금만 기다려주세요!\n최대 3분 가량 소요될 수 있습니다.'}
         </Text>
       </VStack>
 
