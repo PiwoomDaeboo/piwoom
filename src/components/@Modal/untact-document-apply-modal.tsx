@@ -396,7 +396,8 @@ function UntactDocumentApplyModal({
                   align={'center'}
                   borderRadius={'10px'}
                   cursor={'pointer'}
-                  py={'4px'}
+                  py={'6px'}
+                  gap={'6px'}
                   bg={selectedAuth === type ? 'primary.2' : 'transparent'}
                   border={
                     selectedAuth === type ? '1px solid' : (
@@ -411,10 +412,10 @@ function UntactDocumentApplyModal({
                   }}
                   onClick={() => handleAuthSelect(type)}
                 >
-                  <Icon
-                    boxSize={type === 'PASS' ? '77px' : '80px'}
-                    mt={type === 'PASS' ? '1px' : '0px'}
-                  />
+                  <Icon borderRadius={'10px'} boxSize={'40px'} />
+                  <Text textStyle={'pre-caption-2'} color={'grey.10'}>
+                    {label}
+                  </Text>
                 </Flex>
               ))}
             </SimpleGrid>
