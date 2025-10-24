@@ -261,7 +261,8 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                     다음 갚을 금액
                   </Text>
                   <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                    {item?.contract?.remainingAmount?.toLocaleString() || 0}원
+                    {item?.contract?.nextScheduleAmount?.toLocaleString() || 0}
+                    원
                   </Text>
                 </HStack>
               </Flex>
