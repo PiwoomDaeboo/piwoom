@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
+import { useRouter } from 'next/router'
+
 import {
   Box,
   Button,
@@ -11,6 +13,8 @@ import {
 } from '@chakra-ui/react'
 
 import ModalBasis from '@/components/@Modal/ModalBasis'
+import { REPAYMENT_TYPE } from '@/constants/loan'
+import { useLoanRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
 
 interface MyLoanTermsModalProps {
   isOpen: boolean
@@ -131,7 +135,7 @@ function MyLoanTermsModal({
   const getBodyContent = () => {
     switch (termsNumber) {
       case 1:
-        return <LoanTermsTable />
+        return <LoanTermsTable isOpen={isOpen} termsNumber={termsNumber} />
       case 2:
         return <LoanStandardTerms />
       case 3:
@@ -185,7 +189,22 @@ function MyLoanTermsModal({
 
 export default MyLoanTermsModal
 
-const LoanTermsTable = () => {
+const LoanTermsTable = ({
+  isOpen,
+  termsNumber,
+}: {
+  isOpen: boolean
+  termsNumber: number
+}) => {
+  const router = useRouter()
+  const { data: loanData } = useLoanRetrieveQuery({
+    variables: {
+      id: Number(router.query.userId),
+    },
+    options: {
+      enabled: !!router.query.userId && !!isOpen && termsNumber === 1,
+    },
+  })
   return (
     <>
       <Flex
@@ -206,7 +225,7 @@ const LoanTermsTable = () => {
         </Box>
         <Box w={'70%'} p={'12px'}>
           <Text textStyle={'pre-body-68'} color={'grey.10'}>
-            000000000
+            {loanData?.no}
           </Text>
         </Box>
       </Flex>
@@ -217,8 +236,6 @@ const LoanTermsTable = () => {
 
         //   overflow={'hidden'}
       >
-        {/* 계약 번호 */}
-
         {/* 대부금액 */}
         <Flex borderBottom={'1px solid'} borderColor={'border.basic.1'}>
           <Box
@@ -238,7 +255,7 @@ const LoanTermsTable = () => {
           </Box>
           <Box w={'70%'} p={'12px'}>
             <Text textStyle={'pre-body-68'} color={'grey.10'}>
-              금 일억원정(100,000,000)
+              {loanData?.loanAmount?.toLocaleString()}
             </Text>
           </Box>
         </Flex>
@@ -325,7 +342,7 @@ const LoanTermsTable = () => {
                       textStyle={'pre-body-68'}
                       color={'grey.10'}
                     >
-                      0.0%
+                      {loanData?.contract?.interestRate || 0}%
                     </Text>
                   </Box>
                 </Flex>
@@ -410,7 +427,7 @@ const LoanTermsTable = () => {
                       textStyle={'pre-body-68'}
                       color={'grey.10'}
                     >
-                      0.0%
+                      {loanData?.contract?.overdueInterestRate || 0}%
                     </Text>
                   </Box>
                 </Flex>
@@ -471,7 +488,7 @@ const LoanTermsTable = () => {
           </Box>
           <Box w={'70%'} p={'12px'}>
             <Text textStyle={'pre-body-68'} color={'grey.10'}>
-              2025년 00월 00일
+              {loanData?.contract?.loanDate || '-'}
             </Text>
           </Box>
         </Flex>
@@ -491,7 +508,7 @@ const LoanTermsTable = () => {
           </Box>
           <Box w={'70%'} p={'12px'}>
             <Text textStyle={'pre-body-68'} color={'grey.9'}>
-              2025년 00월 00일
+              {loanData?.contract?.maturityDate || '-'}
             </Text>
           </Box>
         </Flex>
@@ -516,7 +533,7 @@ const LoanTermsTable = () => {
           </Box>
           <Box w={'70%'} p={'12px'}>
             <Text textStyle={'pre-body-68'} color={'grey.10'}>
-              000
+              {loanData?.contract?.isJointGuarantee ? '있음' : '없음'}
             </Text>
           </Box>
         </Flex>
@@ -541,7 +558,9 @@ const LoanTermsTable = () => {
           </Box>
           <Box w={'70%'} p={'12px'}>
             <Text textStyle={'pre-body-68'} color={'grey.10'}>
-              농협은행 301-0336-5678-01 (피움대부 주식회사)
+              {loanData?.contract?.repaymentAccountName}{' '}
+              {loanData?.contract?.repaymentAccountNumber} (
+              {loanData?.contract?.repaymentAccountHolder})
             </Text>
           </Box>
         </Flex>
@@ -567,11 +586,16 @@ const LoanTermsTable = () => {
               </Text>
               <Text textStyle={'pre-body-68'} color={'grey.10'}>
                 2. 채무자는 약정 이자(원리금균등분할상환 방식의 경우 원리금)를
-                매월 00일에 납부하며, 해당일이 없는 경우 그 달 말일에 납부한다.
+                매월 {loanData?.contract?.interestPaymentDate || '-'}일에
+                납부하며, 해당일이 없는 경우 그 달 말일에 납부한다.
               </Text>
               <Text textStyle={'pre-body-68'} color={'grey.10'}>
-                3. 대출원금은 0000방법에 의해 상환하며, 대출금의 상환 및 이자의
-                지급은 비용, 이자, 원금순으로 충당한다.
+                3. 대출원금은{' '}
+                {REPAYMENT_TYPE.find(
+                  (type) => type.value === loanData?.contract?.repaymentType,
+                )?.label || '-'}
+                방법에 의해 상환하며, 대출금의 상환 및 이자의 지급은 비용, 이자,
+                원금순으로 충당한다.
               </Text>
             </VStack>
           </Box>
@@ -598,7 +622,8 @@ const LoanTermsTable = () => {
           <Box w={'70%'} p={'12px'}>
             <VStack spacing={'4px'} align={'stretch'}>
               <Text textStyle={'pre-body-68'} color={'grey.10'}>
-                1. 계약 체결 후 3년이내 조기상환 시 3%의 중도상환 수수료가
+                1. 계약 체결 후 3년이내 조기상환 시{' '}
+                {loanData?.contract?.prepaymentRate || 0}%의 중도상환 수수료가
                 발생합니다.
               </Text>
               <Text textStyle={'pre-body-68'} color={'grey.10'}>
@@ -659,7 +684,7 @@ const LoanTermsTable = () => {
           </Box>
           <Box w={'70%'} p={'12px'}>
             <Text textStyle={'pre-body-68'} color={'grey.10'}>
-              {/* 빈 셀 */}
+              {loanData?.contract?.specialTerms || '-'}
             </Text>
           </Box>
         </Flex>

@@ -21,8 +21,9 @@ const EkycPage: NextPage = () => {
 
             html,
             body {
-              height: 100%;
-              overflow: hidden;
+              height: 100vh;
+              overflow: scroll;
+
             }
 
             #__next {

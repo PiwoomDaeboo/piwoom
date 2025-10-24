@@ -310,7 +310,7 @@ const HomeHeader = ({
                       onClick={handleMyLoanStatus}
                     >
                       <Text textStyle={'pre-body-6'} color={'grey.8'}>
-                        나의 대출 조회
+                        대출 현황 조회
                       </Text>
                     </Flex>
                     <Flex

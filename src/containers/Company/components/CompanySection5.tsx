@@ -40,7 +40,10 @@ const CompanySection5 = () => {
                 CEO
               </Text>
 
-              <AspectRatio minW={'285px'} ratio={285 / 380}>
+              <AspectRatio
+                minW={{ base: '210px', sm: '285px' }}
+                ratio={285 / 380}
+              >
                 <ImageAsNext
                   src={MY_IMAGES.CEO.src}
                   alt={MY_IMAGES.CEO.alt}

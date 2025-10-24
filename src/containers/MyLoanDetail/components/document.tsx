@@ -48,12 +48,7 @@ export default function Document() {
   const [uploadedFileName, setUploadedFileName] = useState<string>('')
   const [isDocumentSubmissionCompleted, setIsDocumentSubmissionCompleted] =
     useState(false)
-  const [userInfo, setUserInfo] = useState<{
-    name?: string
-    phone?: string
-    birth?: string
-    gender_code?: string
-  } | null>(null)
+
   const toast = useToast()
   const { popup_status: safeKey, reset } = useLocalStorage()
   const {
