@@ -336,10 +336,7 @@ const MyLoanStep3 = () => {
                 <Checkbox
                   isChecked={agreements[item.key as keyof typeof agreements]}
                   sx={CHECKBOX_STYLES}
-                  onChange={(e) => {
-                    e.stopPropagation()
-                    handleIndividualAgreement(item.key, e.target.checked)
-                  }}
+                  isReadOnly
                 />
                 <Text textStyle={'pre-body-5'} color={'grey.10'}>
                   {item.label}
