@@ -128,7 +128,7 @@ export default function AdditionalFileUpload({
             type="file"
             ref={fileInputRef}
             onChange={handleFileSelect}
-            accept="image/*"
+            accept="*/*"
             multiple
             display="none"
           />
