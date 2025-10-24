@@ -22,7 +22,7 @@ const EkycPage: NextPage = () => {
             html,
             body {
               height: 100vh;
-              overflow: scroll;
+              overflow-y: scroll;
 
             }
 
