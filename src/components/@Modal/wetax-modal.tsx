@@ -612,7 +612,7 @@ const SubmittingProcess = ({
             ''
           : currentStatus === 'FAILED' ?
             '다시 시도해 주세요.'
-          : '조금만 기다려주세요!\n최대 3분 가량 소요될 수 있습니다'}
+          : '조금만 기다려주세요!\n최대 3분 가량 소요될 수 있습니다.'}
         </Text>
       </VStack>
 

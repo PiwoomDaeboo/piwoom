@@ -720,9 +720,9 @@ const SubmittingProcess = ({
       case 'HEALTH_INSURANCE_PAYMENT_CONFIRMATION_2':
         return '건강보험료 납부확인서(작년) 발급 중입니다.'
       case 'SUCCESS':
-        return '모든 서류가 성공적으로 제출되었습니다'
+        return '모든 서류 제출을 완료하였습니다.'
       case 'FAILED':
-        return '서류 제출 중 오류가 발생했습니다'
+        return '서류 제출 중 오류가 발생했습니다.'
       default:
         return '서류를 불러오는 중입니다.'
     }
@@ -767,7 +767,7 @@ const SubmittingProcess = ({
             ''
           : currentStatus === 'FAILED' ?
             '다시 시도해 주세요.'
-          : '조금만 기다려주세요!\n최대 3분 가량 소요될 수 있습니다'}
+          : '조금만 기다려주세요!\n최대 3분 가량 소요될 수 있습니다.'}
         </Text>
       </VStack>
 

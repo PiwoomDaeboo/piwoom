@@ -172,7 +172,10 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                 </Badge>
                 <Text>
                   {isStatusReviewAndRejected(item.status) ?
-                    item.status === 'UNDER_REVIEW' ?
+                    (
+                      item.status === 'UNDER_REVIEW' ||
+                      item.status === 'REJECTED'
+                    ) ?
                       '신청번호'
                     : '계약번호'
                   : '계약번호'}
@@ -214,7 +217,10 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                     대출 신청액
                   </Text>
                   <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                    {item?.contract?.amount?.toLocaleString() || 0}원
+                    {item?.contract?.amount?.toLocaleString() ||
+                      item?.loanAmount?.toLocaleString() ||
+                      0}
+                    원
                   </Text>
                 </HStack>
                 <HStack justifyContent={'space-between'}>
