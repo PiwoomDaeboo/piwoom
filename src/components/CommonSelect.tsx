@@ -54,6 +54,7 @@ export const CommonSelect: SelectComponent = ({
           ...provided,
           bg: 'transparent',
           color: 'content.1',
+
           _hover: {
             bg: 'primary.1',
             color: '',
@@ -91,40 +92,24 @@ export const CommonSelect: SelectComponent = ({
           ...provided,
           maxHeight: '200px',
           overflowY: 'scroll !important',
-          css: {
-            '&::-webkit-scrollbar': {
-              width: '6px',
-              display: 'block !important',
-            },
-            '&::-webkit-scrollbar-track': {
-              background: 'transparent',
-              display: 'block !important',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              background: '#E2E8F0',
-              borderRadius: '3px',
-              display: 'block !important',
-              minHeight: '20px',
-            },
-            '&::-webkit-scrollbar-thumb:hover': {
-              background: '#CBD5E0',
-            },
-            // 모바일에서 스크롤바 강제 표시
-            '&::-webkit-scrollbar:vertical': {
-              width: '6px',
-              display: 'block !important',
-            },
-            '&::-webkit-scrollbar:horizontal': {
-              height: '6px',
-              display: 'block !important',
-            },
-            // Firefox용 스크롤바 스타일
-            scrollbarWidth: 'thin',
-            scrollbarColor: '#E2E8F0 transparent',
+          '::-webkit-scrollbar': {
+            width: '4px',
+            height: '0px',
+          },
+          '::-webkit-scrollbar-track': {
+            background: '#f1f1f1',
+          },
+          '::-webkit-scrollbar-thumb': {
+            background: '#888',
+          },
+          '::-webkit-scrollbar-thumb:hover': {
+            background: '#555',
           },
         }),
       }}
-      menuPortalTarget={document.body}
+      menuPortalTarget={
+        typeof document !== 'undefined' ? document.body : undefined
+      }
       styles={{
         menuPortal: (provided) => ({ ...provided, zIndex: 9999 }),
       }}
