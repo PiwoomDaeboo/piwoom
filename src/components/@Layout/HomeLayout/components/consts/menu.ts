@@ -16,7 +16,7 @@ export const MENU_ITEMS = [
     hasSubmenu: true,
     submenuItems: [
       { label: '전자계약 작성하기', href: '/my-loan' },
-      { label: '나의 대출 조회', href: '/my-loan-status' },
+      { label: '대출 현황 조회', href: '/my-loan-status' },
     ],
   },
   {

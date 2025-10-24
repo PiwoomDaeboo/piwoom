@@ -21,7 +21,7 @@ import { useLocalStorage } from '@/stores/local/state'
 
 const MyLoanStep1 = () => {
   const router = useRouter()
-  const { set } = useLocalStorage()
+  const { set, token: accessToken } = useLocalStorage()
   const toast = useToast()
   const { mutateAsync: userLoginCreate } = useUserLoginCreateMutation({
     options: {
@@ -97,6 +97,12 @@ const MyLoanStep1 = () => {
       )
     }
   }, [router.query])
+
+  useEffect(() => {
+    if (accessToken) {
+      router.push('/my-loan?step=2')
+    }
+  }, [accessToken])
 
   return (
     <Container>

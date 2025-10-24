@@ -87,12 +87,7 @@ const ApplyLoanStep4 = () => {
     setError,
     formState: { errors },
   } = useFormContext()
-  const [userInfo, setUserInfo] = useState<{
-    name?: string
-    phone?: string
-    birth?: string
-    gender_code?: string
-  } | null>(null)
+
   const watchAll = watch()
   console.log('watchAll', watchAll)
   const loanAmount = useWatch({ control, name: 'loanAmount' })

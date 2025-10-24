@@ -111,7 +111,8 @@ const Ekyc = () => {
         id="kyc_iframe"
         style={{
           width: '100%',
-          height: '100%',
+          height: '100vh',
+          overflowY: 'scroll',
           border: 'none',
           margin: 0,
           padding: 0,

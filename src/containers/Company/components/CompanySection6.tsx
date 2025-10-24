@@ -23,19 +23,23 @@ const CompanySection6 = () => {
           md: MY_IMAGES.AWS_INTRODUCTION_PC.src,
         }}
         bgSize={'cover'}
-        pt={{ base: '64px', md: '80px' }}
-        pb={{ base: '80px', md: '60px' }}
+        pt={{ base: '96px', md: '80px' }}
+        pb={{ base: '28px', md: '60px' }}
       >
         <Container>
-          <Flex w={'100%'} justifyContent={'flex-end'} alignItems={'flex-end'}>
-            <VStack alignItems={'flex-start'} w={'40%'}>
+          <Flex
+            w={'100%'}
+            justifyContent={{ base: 'center', sm: 'flex-end' }}
+            alignItems={'flex-end'}
+          >
+            <VStack alignItems={'flex-start'} w={{ base: '100%', sm: '50%' }}>
               <Text textStyle={'pre-body-6'} color={'grey.10'}>
                 본 웹사이트는 AWS(Amazon Web Services) 인프라를 기반으로
                 안정적으로 운영되고 있습니다.
                 <br />
-                <br /> 모든 서비스는 개인정보보호법과 관련 법령을 준수하며, SSL
-                암호화 통신과 안전한 데이터 관리 절차를 통해 고객님의 정보를
-                철저히 보호합니다.
+                <br /> 모든 서비스는 개인정보보호법과 관련 법령을 준수하며,
+                <br /> SSL 암호화 통신과 안전한 데이터 관리 절차를 통해 고객님의
+                정보를 철저히 보호합니다.
               </Text>
             </VStack>
           </Flex>
