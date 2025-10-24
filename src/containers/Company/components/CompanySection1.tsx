@@ -35,7 +35,7 @@ const initMarquee = (marqueeElement: HTMLElement) => {
   // 반응형에 따른 애니메이션 시간 계산
   const getDuration = () => {
     const width = window.innerWidth
-    if (width < 480) return 5 // base: 5초
+    if (width < 480) return 20 // base: 5초
     if (width < 768) return 20 // sm: 20초
     return 30 // md 이상: 30초
   }

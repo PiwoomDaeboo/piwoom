@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react'
+import { Box, Button } from '@chakra-ui/react'
 
 import Terms from '../Terms'
 import Section0 from './components/Section0'

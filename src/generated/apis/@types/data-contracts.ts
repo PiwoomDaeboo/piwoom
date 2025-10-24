@@ -795,6 +795,11 @@ export interface LoanContractType {
   isCollateralProvided: boolean
   /** 연대보증여부 */
   isJointGuarantee: boolean
+  /**
+   * 연대보증자 이름
+   * @maxLength 100
+   */
+  guarantorName?: string
   /** 특약사항 */
   specialTerms?: string
   /**
@@ -811,6 +816,12 @@ export interface LoanContractType {
   readonly repaymentAccountNumber: string
   /** 예금주 */
   readonly repaymentAccountHolder: string
+  /**
+   * 신용정보 조회비용
+   * @min 0
+   * @max 2147483647
+   */
+  creditInquiryFee: number
   /**
    * 대출 잔액
    * @format int64
@@ -885,6 +896,11 @@ export interface LoanContractRequestType {
   isCollateralProvided: boolean
   /** 연대보증여부 */
   isJointGuarantee: boolean
+  /**
+   * 연대보증자 이름
+   * @maxLength 100
+   */
+  guarantorName?: string
   /** 특약사항 */
   specialTerms?: string
   /**
@@ -895,6 +911,12 @@ export interface LoanContractRequestType {
   prepaymentRate: string
   /** 상환금 입금 계좌 */
   repaymentAccount: number
+  /**
+   * 신용정보 조회비용
+   * @min 0
+   * @max 2147483647
+   */
+  creditInquiryFee: number
   /**
    * 대출 잔액
    * @format int64
@@ -2045,6 +2067,7 @@ export interface PresignedRequestType {
    * * `loan.Loan.health_insurance_payment_confirmation_2` - 건강보험 납부확인서 2
    * * `loan.Loan.identity_card` - 신분증
    * * `loan.File.path` - 위치
+   * * `loan.Report.path` - 위치
    * * `gov.GovLog.file` - 파일
    */
   fieldChoice: PresignedRequestFieldChoiceEnumType
@@ -3804,6 +3827,7 @@ export const PatchedLoanRequestResidenceTypeEnumTypeMap = {
  * `loan.Loan.health_insurance_payment_confirmation_2` - 건강보험 납부확인서 2
  * `loan.Loan.identity_card` - 신분증
  * `loan.File.path` - 위치
+ * `loan.Report.path` - 위치
  * `gov.GovLog.file` - 파일
  */
 export type PresignedRequestFieldChoiceEnumType =
@@ -3818,6 +3842,7 @@ export const PresignedRequestFieldChoiceEnumTypeMap = {
   'loan.Loan.identity_card': '신분증',
   'loan.Loan.income_certificate': '소득금액증명원',
   'loan.Loan.resident_registration_copy': '주민등록등본',
+  'loan.Report.path': '위치',
   'notice.File.path': '위치',
 } as const
 
