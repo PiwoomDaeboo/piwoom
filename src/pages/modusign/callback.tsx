@@ -15,7 +15,7 @@ function ModusignCallback() {
 
     if (is_sign) {
       set('popup_status', is_sign)
-
+      router.replace('/my-loan?step=4')
       setTimeout(() => {
         window.close()
       }, 500)
