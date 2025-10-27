@@ -16,6 +16,7 @@ import {
 import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
 import {
   BluecheckIcon,
+  InfoFillIcon,
   InfoIcon,
   Loan1Icon,
   LoancompletepersonIcon,
@@ -130,31 +131,58 @@ function ApplyLoanComplete() {
               </Button>
               {!settingData?.isWetax && (
                 <Flex
+                  mt={'16px'}
                   p={'12px 14px'}
                   borderRadius={'12px'}
                   justifyContent={'center'}
                   alignItems={'flex-start'}
                   flexDir={'column'}
                   maxW={'262px'}
-                  gap={'10px'}
                   bg={'rgba(255, 255, 255, 0.70)'}
                 >
-                  <HStack>
-                    <WarningCircleIcon boxSize={'24px'} />
+                  <HStack gap={'0px'} mb={'10px'}>
+                    <InfoFillIcon boxSize={'24px'} />
                     <Text textStyle={'pre-caption-1'} color={'grey.9'}>
                       유의사항
                     </Text>
                   </HStack>
-                  <Text
-                    wordBreak={'keep-all'}
-                    textStyle={'pre-caption-2'}
-                    color={'grey.8'}
-                  >
-                    서버 점검 등의 사유로 인해 세금 납부 내역 제출 기능을
-                    제공하지 않을 수 있습니다.
-                    <br /> 추후 [대출 현황 조회] 페이지에서 세금 납부 내역을
-                    제출 부탁드립니다.
-                  </Text>
+                  <VStack px={'16px'} gap={'16px'} alignItems={'flex-start'}>
+                    <Text
+                      as={'li'}
+                      wordBreak={'keep-all'}
+                      textStyle={'pre-caption-2'}
+                      color={'grey.8'}
+                    >
+                      서버 점검 등의 사유로 인해 세금 납부 내역 제출 기능을
+                      제공하지 않을 수 있습니다.
+                      <br /> 추후 [대출 현황 조회] 페이지에서 세금 납부 내역을
+                      제출 부탁드립니다.
+                    </Text>
+
+                    <VStack alignItems={'flex-start'}>
+                      <Text
+                        as={'li'}
+                        wordBreak={'keep-all'}
+                        textStyle={'pre-caption-2'}
+                        color={'grey.8'}
+                      >
+                        위택스 휴면회원일 경우, 먼저 휴면해제를 완료하셔야 세금
+                        납부 내역 제출이 가능합니다. 아래 링크를 통해 휴면해제를
+                        진행하신 뒤 세금 납부 내역을 제출해주세요!
+                      </Text>
+                      <Button
+                        variant={'text-primary'}
+                        onClick={() =>
+                          window.open(
+                            'https://www.wetax.go.kr/loginMbr.do',
+                            '_blank',
+                          )
+                        }
+                      >
+                        위택스로 이동
+                      </Button>
+                    </VStack>
+                  </VStack>
                 </Flex>
               )}
             </VStack>

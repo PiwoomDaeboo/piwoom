@@ -262,7 +262,7 @@ const LoanTermsTable = ({
           </Box>
           <Box w={'70%'} p={'12px'}>
             <Text textStyle={'pre-body-68'} color={'grey.10'}>
-              {loanData?.loanAmount?.toLocaleString()}원
+              {loanData?.contract?.amount?.toLocaleString()}원
             </Text>
           </Box>
         </Flex>
@@ -593,7 +593,7 @@ const LoanTermsTable = ({
               </Text>
               <Text textStyle={'pre-body-68'} color={'grey.10'}>
                 2. 채무자는 약정 이자(원리금균등분할상환 방식의 경우 원리금)를
-                매월 {loanData?.contract?.interestPaymentDate || '-'}일에
+                매월 {loanData?.contract?.interestPaymentDate || 0}일에
                 납부하며, 해당일이 없는 경우 그 달 말일에 납부한다.
               </Text>
               <Text textStyle={'pre-body-68'} color={'grey.10'}>

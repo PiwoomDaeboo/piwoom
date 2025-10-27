@@ -74,12 +74,7 @@ export default function Document() {
       options: {
         onSuccess: () => {
           reset('popup_status')
-          // toast({
-          //   title: '서류 제출 완료',
-          //   description: '서류 제출이 완료되었습니다.',
-          //   status: 'success',
-          //   duration: 5000,
-          // })
+
           toast({
             title: '서류 제출 완료',
             description: '모든 서류가 성공적으로 제출되었습니다.',
