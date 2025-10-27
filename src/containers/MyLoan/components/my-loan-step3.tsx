@@ -477,7 +477,9 @@ const MyLoanStep3 = () => {
             onClick={() =>
               createContractSignature({
                 id: Number(userId),
-                data: { ekycData },
+                data: {
+                  ekycId: ekycData?.review_result?.id || '',
+                },
               })
             }
           >
