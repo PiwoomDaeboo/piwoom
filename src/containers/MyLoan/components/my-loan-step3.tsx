@@ -243,7 +243,8 @@ const MyLoanStep3 = () => {
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
                 {REPAYMENT_TYPE.find(
-                  (type) => type.value === userLoanData?.repaymentType,
+                  (type) =>
+                    type.value === userLoanData?.contract?.repaymentType,
                 )?.label || '-'}
               </Text>
             </VStack>
