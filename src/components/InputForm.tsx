@@ -7,6 +7,7 @@ import {
   Text,
   Tooltip,
   VStack,
+  useBreakpointValue,
 } from '@chakra-ui/react'
 
 import { WarningCircleIcon } from '@/generated/icons/MyIcons'
@@ -63,12 +64,15 @@ const InputForm = ({
             openDelay={300}
             closeDelay={100}
             hasArrow
-            placement="right"
+            placement={'right'}
             bg="#1B1C1DCC"
             textStyle={'pre-body-68'}
             color="grey.0"
             p={'4px 8px'}
-            maxW="300px"
+            maxW={{ base: '180px', sm: '300px' }}
+            isDisabled={false}
+            shouldWrapChildren={true}
+            closeOnClick={false}
           >
             <Box cursor="pointer" display="inline-flex" alignItems="center">
               <WarningCircleIcon boxSize={'15px'} />

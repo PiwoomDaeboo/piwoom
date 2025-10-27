@@ -129,24 +129,25 @@ function ApplyLoanComplete() {
               >
                 세금 납부 내역 제출
               </Button>
-              {!settingData?.isWetax && (
-                <Flex
-                  mt={'16px'}
-                  p={'12px 14px'}
-                  borderRadius={'12px'}
-                  justifyContent={'center'}
-                  alignItems={'flex-start'}
-                  flexDir={'column'}
-                  maxW={'262px'}
-                  bg={'rgba(255, 255, 255, 0.70)'}
-                >
-                  <HStack gap={'0px'} mb={'10px'}>
-                    <InfoFillIcon boxSize={'24px'} />
-                    <Text textStyle={'pre-caption-1'} color={'grey.9'}>
-                      유의사항
-                    </Text>
-                  </HStack>
-                  <VStack px={'16px'} gap={'16px'} alignItems={'flex-start'}>
+
+              <Flex
+                mt={'16px'}
+                p={'12px 14px'}
+                borderRadius={'12px'}
+                justifyContent={'center'}
+                alignItems={'flex-start'}
+                flexDir={'column'}
+                maxW={'262px'}
+                bg={'rgba(255, 255, 255, 0.70)'}
+              >
+                <HStack gap={'0px'} mb={'10px'}>
+                  <InfoFillIcon boxSize={'24px'} />
+                  <Text textStyle={'pre-caption-1'} color={'grey.9'}>
+                    유의사항
+                  </Text>
+                </HStack>
+                <VStack px={'16px'} gap={'16px'} alignItems={'flex-start'}>
+                  {!settingData?.isWetax && (
                     <Text
                       as={'li'}
                       wordBreak={'keep-all'}
@@ -158,7 +159,8 @@ function ApplyLoanComplete() {
                       <br /> 추후 [대출 현황 조회] 페이지에서 세금 납부 내역을
                       제출 부탁드립니다.
                     </Text>
-
+                  )}
+                  {settingData?.isWetax && (
                     <VStack alignItems={'flex-start'}>
                       <Text
                         as={'li'}
@@ -182,9 +184,9 @@ function ApplyLoanComplete() {
                         위택스로 이동
                       </Button>
                     </VStack>
-                  </VStack>
-                </Flex>
-              )}
+                  )}
+                </VStack>
+              </Flex>
             </VStack>
           </Box>
         </Flex>
