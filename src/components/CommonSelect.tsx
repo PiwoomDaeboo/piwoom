@@ -65,42 +65,6 @@ export const CommonSelect: SelectComponent = ({
               bg: 'primary.3',
             },
           },
-          // 스크롤바 스타일
-          overflowY: 'scroll',
-          WebkitOverflowScrolling: 'touch',
-          scrollbarWidth: 'auto',
-          scrollbarColor: '#666 #e0e0e0',
-          '&::-webkit-scrollbar': {
-            width: '14px',
-            display: 'block',
-            WebkitAppearance: 'none',
-          },
-          '&::-webkit-scrollbar-track': {
-            background: '#e0e0e0',
-            borderRadius: '7px',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            background: '#666',
-            borderRadius: '7px',
-            border: '2px solid rgba(255, 255, 255, 0.3)',
-            minHeight: '50px',
-          },
-          '&::-webkit-scrollbar-thumb:hover': {
-            background: '#444',
-          },
-          '&::-webkit-scrollbar-thumb:active': {
-            background: '#222',
-          },
-          '@media (max-width: 768px)': {
-            '&::-webkit-scrollbar': {
-              width: '16px',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              background: '#555',
-              minHeight: '60px',
-              border: '3px solid rgba(255, 255, 255, 0.4)',
-            },
-          },
         }),
         groupHeading: (provided) => ({
           ...provided,
@@ -127,43 +91,6 @@ export const CommonSelect: SelectComponent = ({
           ...provided,
           maxHeight: '200px',
           overflowY: 'scroll',
-          WebkitOverflowScrolling: 'touch',
-          // Firefox 스크롤바 스타일
-          scrollbarWidth: 'auto',
-          scrollbarColor: '#666 #e0e0e0',
-          // Webkit 스크롤바 스타일
-          '&::-webkit-scrollbar': {
-            width: '14px',
-            display: 'block',
-            WebkitAppearance: 'none',
-          },
-          '&::-webkit-scrollbar-track': {
-            background: '#e0e0e0',
-            borderRadius: '7px',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            background: '#666',
-            borderRadius: '7px',
-            border: '2px solid rgba(255, 255, 255, 0.3)',
-            minHeight: '50px',
-          },
-          '&::-webkit-scrollbar-thumb:hover': {
-            background: '#444',
-          },
-          '&::-webkit-scrollbar-thumb:active': {
-            background: '#222',
-          },
-          // 모바일 전용 - 더 큰 스크롤바
-          '@media (max-width: 768px)': {
-            '&::-webkit-scrollbar': {
-              width: '16px',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              background: '#555',
-              minHeight: '60px',
-              border: '3px solid rgba(255, 255, 255, 0.4)',
-            },
-          },
         }),
       }}
       menuPortalTarget={

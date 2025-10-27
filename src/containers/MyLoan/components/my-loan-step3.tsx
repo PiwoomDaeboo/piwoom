@@ -284,7 +284,7 @@ const MyLoanStep3 = () => {
                 대출 갚는 날
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                매월 {userLoanData?.interestPaymentDate || '-'}일
+                매월 {userLoanData?.contract?.interestPaymentDate || '-'}일
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -336,10 +336,7 @@ const MyLoanStep3 = () => {
                 <Checkbox
                   isChecked={agreements[item.key as keyof typeof agreements]}
                   sx={CHECKBOX_STYLES}
-                  onChange={(e) => {
-                    e.stopPropagation()
-                    handleIndividualAgreement(item.key, e.target.checked)
-                  }}
+                  isReadOnly
                 />
                 <Text textStyle={'pre-body-5'} color={'grey.10'}>
                   {item.label}
@@ -358,9 +355,9 @@ const MyLoanStep3 = () => {
               준비해주세요.
             </Text>
             <Button
-              variant={'outline-secondary'}
+              variant={'outline-primary'}
               textStyle={'pre-body-5'}
-              color={'grey.8'}
+              // color={'grey.8'}
               w={'209px'}
               isDisabled={!!ekycData || !settingData?.isUseb}
               onClick={() => {
@@ -473,7 +470,8 @@ const MyLoanStep3 = () => {
               !isAgree ||
               !agreements.privacy ||
               !agreements.collection ||
-              !agreements.all
+              !agreements.all ||
+              (settingData?.isUseb && !ekycData)
             }
             onClick={() =>
               createContractSignature({
@@ -481,7 +479,6 @@ const MyLoanStep3 = () => {
                 data: { ekycData },
               })
             }
-            // onClick={() => router.push('/my-loan?step=4')}
           >
             전자서명 진행
           </Button>

@@ -284,13 +284,7 @@ function UntactDocumentApplyModal({
       setSelectedDistrict('')
       setSelectedAuth(null)
       setSelectedPassType('')
-      toast({
-        title: '서류 제출 완료',
-        description: '모든 서류가 성공적으로 제출되었습니다.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      })
+
       // 서류제출 완료 콜백 호출
       if (onComplete) {
         onComplete()

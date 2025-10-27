@@ -69,7 +69,7 @@ const ApplyLoanStep2 = () => {
       storeId: ENV.PORTONE_STORE_ID || '',
       identityVerificationId: crypto.randomUUID(),
       channelKey: ENV.PORTONE_CHANNEL_KEY || '',
-      redirectUrl: `${window.location.origin}/apply-loan?step=2`,
+      redirectUrl: `${window.location.origin}/apply-loan?step=2&type=${router.query.type}`,
     })
     if (response?.code !== undefined) {
       return alert(response?.message)

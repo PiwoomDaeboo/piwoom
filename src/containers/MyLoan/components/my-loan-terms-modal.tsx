@@ -61,7 +61,6 @@ function MyLoanTermsModal({
 
   useEffect(() => {
     if (isOpen && (termsNumber === 1 || termsNumber === 2)) {
-      // termsNumber가 1인 경우에만 스크롤 이벤트 추가
       let retryCount = 0
       const maxRetries = 10
 
@@ -70,7 +69,7 @@ function MyLoanTermsModal({
         if (container) {
           console.log('Adding scroll listener to container:', container)
           container.addEventListener('scroll', handleScroll)
-          // 초기 상태 확인
+
           handleScroll()
           return true
         } else {
@@ -98,7 +97,6 @@ function MyLoanTermsModal({
     }
   }, [isOpen, termsNumber, handleScroll])
 
-  // 모달이 열릴 때마다 스크롤 상태 초기화
   useEffect(() => {
     if (isOpen) {
       console.log('Modal opened, termsNumber:', termsNumber)
@@ -109,7 +107,6 @@ function MyLoanTermsModal({
     }
   }, [isOpen, termsNumber])
 
-  // 모달이 닫힐 때 모든 이벤트 리스너 정리
   useEffect(() => {
     if (!isOpen) {
       const container = scrollContainerRef.current
@@ -210,23 +207,32 @@ const LoanTermsTable = ({
     <>
       <Flex
         borderBottom={'1px solid'}
+        borderTop={'1px solid'}
+        borderRight={'1px solid'}
         borderColor={'border.basic.1'}
         mb={'12px'}
       >
         <Box
-          w={'30%'}
+          w={'120px'}
           p={'12px'}
           bg={'background.basic.2'}
           borderRight={'1px solid'}
+          borderLeft={'1px solid'}
           borderColor={'border.basic.1'}
         >
           <Text textStyle={'pre-body-68'} color={'grey.10'} fontWeight={'500'}>
             계약 번호
           </Text>
         </Box>
-        <Box w={'70%'} p={'12px'}>
+        <Box
+          w={'70%'}
+          p={'12px'}
+          // borderTop={'1px solid'}
+          // borderBottom={'1px solid'}
+          // borderColor={'border.basic.1'}
+        >
           <Text textStyle={'pre-body-68'} color={'grey.10'}>
-            {loanData?.no}
+            {loanData?.no || '-'}
           </Text>
         </Box>
       </Flex>
@@ -256,7 +262,7 @@ const LoanTermsTable = ({
           </Box>
           <Box w={'70%'} p={'12px'}>
             <Text textStyle={'pre-body-68'} color={'grey.10'}>
-              {loanData?.loanAmount?.toLocaleString()}
+              {loanData?.contract?.amount?.toLocaleString()}원
             </Text>
           </Box>
         </Flex>
@@ -587,7 +593,7 @@ const LoanTermsTable = ({
               </Text>
               <Text textStyle={'pre-body-68'} color={'grey.10'}>
                 2. 채무자는 약정 이자(원리금균등분할상환 방식의 경우 원리금)를
-                매월 {loanData?.contract?.interestPaymentDate || '-'}일에
+                매월 {loanData?.contract?.interestPaymentDate || 0}일에
                 납부하며, 해당일이 없는 경우 그 달 말일에 납부한다.
               </Text>
               <Text textStyle={'pre-body-68'} color={'grey.10'}>

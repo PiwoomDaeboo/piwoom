@@ -89,8 +89,7 @@ export default function Detail() {
               whiteSpace={'pre-line'}
               alignSelf={'flex-end'}
             >
-              {loanRetrieveData?.contract?.amount?.toLocaleString() ||
-                loanRetrieveData?.loanAmount?.toLocaleString() ||
+              {loanRetrieveData?.contract?.remainingAmount?.toLocaleString() ||
                 0}
               원
             </Text>
