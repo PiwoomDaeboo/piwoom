@@ -1553,12 +1553,11 @@ export interface LoanSignType {
 
 export interface LoanSignErrorMessageType {
   nonField?: string[]
-  ekycData?: string[]
+  ekycId?: string[]
 }
 
 export interface LoanSignRequestType {
-  /** eKYC */
-  ekycData?: any
+  ekycId?: number
 }
 
 export interface LoanUserType {
