@@ -273,6 +273,42 @@ export default function Document() {
                   세금 납부 내역이 제출되었어요.
                 </Text>
               )}
+              {settingData?.isWetax && (
+                <VStack
+                  w={'100%'}
+                  alignItems={'flex-start'}
+                  p={'16px 20px'}
+                  borderRadius={'20px'}
+                  border={'1px solid'}
+                  borderColor={'border.basic.1'}
+                  gap={'24px'}
+                >
+                  <HStack w={'100%'}>
+                    <InfoFillIcon boxSize={'24px'} />
+                    <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                      유의사항
+                    </Text>
+                  </HStack>
+                  <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                    위택스 휴면회원일 경우, 먼저 휴면해제를 완료하셔야 세금 납부
+                    내역 제출이 가능합니다.
+                    <br /> 아래 링크를 통해 휴면해제를 진행하신 뒤 세금 납부
+                    내역을 제출해주세요!{' '}
+                  </Text>
+                  <Button
+                    variant={'text-primary'}
+                    onClick={() =>
+                      window.open(
+                        'https://www.wetax.go.kr/loginMbr.do',
+                        '_blank',
+                      )
+                    }
+                  >
+                    위택스로 이동
+                  </Button>
+                </VStack>
+              )}
+
               {!settingData?.isWetax && (
                 <VStack w={'100%'} spacing={'12px'}>
                   <VStack
