@@ -272,7 +272,13 @@ function UntactDocumentApplyModal({
       })
 
       setTimeout(() => {
-        trigger()
+        trigger([
+          'incomeCertificate',
+          'residentRegistrationCopy',
+          'healthInsuranceEligibilityConfirmation',
+          'healthInsurancePaymentConfirmation',
+          'healthInsurancePaymentConfirmation2',
+        ]) // 비대면 서류제출 관련 필드만 validation
       }, 100)
     }
 
