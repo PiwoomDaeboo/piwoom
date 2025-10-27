@@ -128,7 +128,7 @@ const HomeHeaderDrawer = ({
                 </Link>
                 <HStack gap={'10px'}>
                   <Button
-                    w={'83px'}
+                    minW={'100px'}
                     variant={'outline-primary'}
                     onClick={handleLoanApply}
                   >

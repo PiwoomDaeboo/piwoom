@@ -213,7 +213,8 @@ const LoanTermsTable = ({
         mb={'12px'}
       >
         <Box
-          w={'120px'}
+          minW={'100px'}
+          maxW={'100px'}
           p={'12px'}
           bg={'background.basic.2'}
           borderRight={'1px solid'}
@@ -246,7 +247,8 @@ const LoanTermsTable = ({
         {/* 대부금액 */}
         <Flex borderBottom={'1px solid'} borderColor={'border.basic.1'}>
           <Box
-            w={'120px'}
+            minW={'100px'}
+            maxW={'100px'}
             p={'12px'}
             bg={'background.basic.2'}
             borderRight={'1px solid'}
@@ -297,7 +299,8 @@ const LoanTermsTable = ({
               <Flex w={'100%'}>
                 <Flex w={'100%'} justifyContent={'space-between'}>
                   <Box
-                    minW={'120px'}
+                    minW={'100px'}
+                    maxW={'100px'}
                     bg={'background.basic.2'}
                     borderRight={'1px solid'}
                     borderColor={'border.basic.1'}
@@ -328,7 +331,8 @@ const LoanTermsTable = ({
                 </Flex>
                 <Flex w={'100%'}>
                   <Box
-                    minW={'120px'}
+                    minW={'100px'}
+                    maxW={'100px'}
                     borderRight={'1px solid'}
                     bg={'background.basic.2'}
                     borderColor={'border.basic.1'}
@@ -382,7 +386,8 @@ const LoanTermsTable = ({
               <Flex w={'100%'}>
                 <Flex w={'100%'} justifyContent={'space-between'}>
                   <Box
-                    minW={'120px'}
+                    minW={'100px'}
+                    maxW={'100px'}
                     bg={'background.basic.2'}
                     borderRight={'1px solid'}
                     borderColor={'border.basic.1'}
@@ -413,7 +418,8 @@ const LoanTermsTable = ({
                 </Flex>
                 <Flex w={'100%'}>
                   <Box
-                    minW={'120px'}
+                    minW={'100px'}
+                    maxW={'100px'}
                     borderRight={'1px solid'}
                     bg={'background.basic.2'}
                     borderColor={'border.basic.1'}
@@ -446,7 +452,8 @@ const LoanTermsTable = ({
         {/* 이자계산방법 */}
         <Flex borderBottom={'1px solid'} borderColor={'border.basic.1'}>
           <Box
-            w={'120px'}
+            minW={'100px'}
+            maxW={'100px'}
             p={'12px'}
             bg={'background.basic.2'}
             borderRight={'1px solid'}
@@ -478,7 +485,8 @@ const LoanTermsTable = ({
         {/* 계약일자 */}
         <Flex borderBottom={'1px solid'} borderColor={'border.basic.1'}>
           <Box
-            w={'120px'}
+            minW={'100px'}
+            maxW={'100px'}
             p={'12px'}
             bg={'background.basic.2'}
             borderRight={'1px solid'}
@@ -503,7 +511,8 @@ const LoanTermsTable = ({
         {/* 대부기간 만료일 */}
         <Flex borderBottom={'1px solid'} borderColor={'border.basic.1'}>
           <Box
-            w={'120px'}
+            minW={'100px'}
+            maxW={'100px'}
             p={'12px'}
             bg={'background.basic.2'}
             borderRight={'1px solid'}
@@ -523,7 +532,8 @@ const LoanTermsTable = ({
         {/* 연대보증 계약여부 */}
         <Flex borderBottom={'1px solid'} borderColor={'border.basic.1'}>
           <Box
-            w={'120px'}
+            minW={'100px'}
+            maxW={'100px'}
             p={'12px'}
             bg={'background.basic.2'}
             borderRight={'1px solid'}
@@ -548,7 +558,8 @@ const LoanTermsTable = ({
         {/* 은행계좌번호 */}
         <Flex borderBottom={'1px solid'} borderColor={'border.basic.1'}>
           <Box
-            w={'120px'}
+            minW={'100px'}
+            maxW={'100px'}
             p={'12px'}
             bg={'background.basic.2'}
             borderRight={'1px solid'}
@@ -575,7 +586,8 @@ const LoanTermsTable = ({
         {/* 변제방법 */}
         <Flex borderBottom={'1px solid'} borderColor={'border.basic.1'}>
           <Box
-            w={'120px'}
+            minW={'100px'}
+            maxW={'100px'}
             p={'12px'}
             bg={'background.basic.2'}
             borderRight={'1px solid'}
@@ -611,7 +623,8 @@ const LoanTermsTable = ({
         {/* 조기상환조건 */}
         <Flex borderBottom={'1px solid'} borderColor={'border.basic.1'}>
           <Box
-            w={'120px'}
+            minW={'100px'}
+            maxW={'100px'}
             p={'12px'}
             bg={'background.basic.2'}
             borderRight={'1px solid'}
@@ -648,14 +661,30 @@ const LoanTermsTable = ({
         {/* 부대비용의 내용 및 금액 */}
         <Flex borderBottom={'1px solid'} borderColor={'border.basic.1'}>
           <Box
-            w={'120px'}
-            p={'12px'}
+            minW={'100px'}
+            maxW={'100px'}
+            p={'12px 12px 12px 12px'}
             bg={'background.basic.2'}
             borderRight={'1px solid'}
             borderColor={'border.basic.1'}
           >
-            <Text textStyle={'pre-body-68'} color={'grey.9'}>
+            <Text
+              display={{ base: 'none', sm: 'block' }}
+              wordBreak={'keep-all'}
+              textStyle={'pre-body-68'}
+              color={'grey.9'}
+            >
               부대비용의 내용 및 금액
+            </Text>
+            <Text
+              display={{ base: 'block', sm: 'none' }}
+              wordBreak={'keep-all'}
+              textStyle={'pre-body-68'}
+              color={'grey.9'}
+            >
+              부대비용의
+              <br />
+              내용 및 금액
             </Text>
           </Box>
           <Box w={'70%'} p={'12px'}>
@@ -680,7 +709,8 @@ const LoanTermsTable = ({
         {/* 특약사항 */}
         <Flex>
           <Box
-            w={'120px'}
+            minW={'100px'}
+            maxW={'100px'}
             p={'12px'}
             bg={'background.basic.2'}
             borderRight={'1px solid'}

@@ -70,7 +70,7 @@ const FAQItem = ({
         textStyle="pre-body-6"
         color="grey.8"
       >
-        <Text noOfLines={2}>{item.answer.slice(0, 74)}</Text>
+        <Text noOfLines={2}>{item.answer.slice(0, 74)} ...</Text>
       </Box>
     </Box>
   </Flex>

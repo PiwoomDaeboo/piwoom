@@ -391,6 +391,7 @@ const ApplyLoanStep4 = () => {
     setIsDocumentSubmissionCompleted(true)
     setValue('untactDocumentSubmission', true)
     clearErrors('untactDocumentSubmission')
+    clearErrors()
   }
 
   useEffect(() => {
@@ -1413,12 +1414,6 @@ const ApplyLoanStep4 = () => {
             >
               정부24 회원가입
             </Button>
-            <Text textStyle={'pre-body-6'} color={'grey.8'}>
-              서버 점검 등 사유로 인해 비대면 서류 제출을 진행하지 않을 수
-              있습니다.
-              <br />
-              추후 대출 현황 조회에서 서류를 업데이트 부탁드립니다.
-            </Text>
           </VStack>
         )}
 

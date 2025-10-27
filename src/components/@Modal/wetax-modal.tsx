@@ -287,7 +287,7 @@ function WetaxModal({
             <SimpleGrid
               p={'20px'}
               columns={4}
-              spacing={'26px'}
+              spacing={{ base: '0px', sm: '26px' }}
               bg={'grey.1'}
               w={'100%'}
               borderRadius={'10px'}
@@ -301,14 +301,14 @@ function WetaxModal({
                   gap={'6px'}
                   borderRadius={'10px'}
                   cursor={'pointer'}
-                  bg={selectedAuth === type ? 'primary.1' : 'transparent'}
+                  bg={selectedAuth === type ? 'primary.2' : 'transparent'}
                   border={
-                    selectedAuth === type ? '2px solid' : (
-                      '2px solid transparent'
+                    selectedAuth === type ? '1px solid' : (
+                      '1px solid transparent'
                     )
                   }
                   borderColor={
-                    selectedAuth === type ? 'primary.3' : 'transparent'
+                    selectedAuth === type ? 'primary.2' : 'transparent'
                   }
                   _hover={{
                     bg: selectedAuth === type ? 'primary.1' : 'grey.2',

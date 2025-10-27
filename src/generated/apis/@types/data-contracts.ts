@@ -778,7 +778,7 @@ export interface LoanContractType {
    * 대출만기일자
    * @format date
    */
-  maturityDate: string
+  maturityDate?: string | null
   /**
    * 대출 갚는 날
    * * `1` - 1일
@@ -879,7 +879,7 @@ export interface LoanContractRequestType {
    * 대출만기일자
    * @format date
    */
-  maturityDate: string
+  maturityDate?: string | null
   /**
    * 대출 갚는 날
    * * `1` - 1일
@@ -927,6 +927,8 @@ export interface LoanContractRequestType {
 }
 
 export interface LoanContractUrlType {
+  /** 파일명 */
+  name: string
   /**
    * 계약서 URL
    * @format uri
@@ -2067,6 +2069,8 @@ export interface PresignedRequestType {
    * * `loan.Loan.health_insurance_payment_confirmation_2` - 건강보험 납부확인서 2
    * * `loan.Loan.identity_card` - 신분증
    * * `loan.File.path` - 위치
+   * * `loan.Contract.ekyc_id_card` - eKYC 신분증 이미지
+   * * `loan.Contract.ekyc_selfie` - eKYC 안면 이미지
    * * `loan.Report.path` - 위치
    * * `gov.GovLog.file` - 파일
    */
@@ -3827,6 +3831,8 @@ export const PatchedLoanRequestResidenceTypeEnumTypeMap = {
  * `loan.Loan.health_insurance_payment_confirmation_2` - 건강보험 납부확인서 2
  * `loan.Loan.identity_card` - 신분증
  * `loan.File.path` - 위치
+ * `loan.Contract.ekyc_id_card` - eKYC 신분증 이미지
+ * `loan.Contract.ekyc_selfie` - eKYC 안면 이미지
  * `loan.Report.path` - 위치
  * `gov.GovLog.file` - 파일
  */
@@ -3834,6 +3840,8 @@ export type PresignedRequestFieldChoiceEnumType =
   keyof typeof PresignedRequestFieldChoiceEnumTypeMap
 export const PresignedRequestFieldChoiceEnumTypeMap = {
   'gov.GovLog.file': '파일',
+  'loan.Contract.ekyc_id_card': 'eKYC 신분증 이미지',
+  'loan.Contract.ekyc_selfie': 'eKYC 안면 이미지',
   'loan.File.path': '위치',
   'loan.Loan.health_insurance_eligibility_confirmation':
     '건강보험 자격득실확인서',

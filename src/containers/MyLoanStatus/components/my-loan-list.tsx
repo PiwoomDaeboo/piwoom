@@ -75,7 +75,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
           const blob = await response.blob()
 
           // 서버에서 제공한 파일명 추출
-          let filename = `피움대부_계약서_${contractDownloadId}.pdf` // 기본값
+          let filename = `${contractDownloadData.name}.pdf` // 기본값
 
           // Content-Disposition 헤더에서 파일명 추출
           const contentDisposition = response.headers.get('Content-Disposition')
@@ -89,7 +89,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
           }
 
           // URL에서 파일명 추출 (Content-Disposition이 없는 경우)
-          if (filename === `피움대부_계약서_${contractDownloadId}.pdf`) {
+          if (filename === `${contractDownloadData.name}.pdf`) {
             const urlPath = new URL(contractDownloadData.url).pathname
             const urlFilename = urlPath.split('/').pop()
             if (urlFilename && urlFilename.includes('.')) {

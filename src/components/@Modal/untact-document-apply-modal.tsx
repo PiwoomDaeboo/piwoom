@@ -542,6 +542,7 @@ function UntactDocumentApplyModal({
           )}
           {loadingProcess === 2 && (
             <Button
+              type={'button'}
               variant={'solid-primary'}
               w={'100%'}
               onClick={handleClose}
