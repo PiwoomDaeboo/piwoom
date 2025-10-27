@@ -167,6 +167,8 @@ const HomeHeader = ({
       right={0}
       zIndex={1000}
       bg={'white'}
+      borderBottom={'1px solid'}
+      borderBottomColor={'grey.2'}
       transform={isHeaderVisible ? 'translateY(0)' : 'translateY(-100%)'}
       transition={'transform 0.3s ease-in-out'}
       {...props}
