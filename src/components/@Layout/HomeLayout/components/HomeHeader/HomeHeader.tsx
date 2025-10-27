@@ -228,6 +228,7 @@ const HomeHeader = ({
           justifyContent={'space-between'}
           py={{ base: '8px', md: '20px' }}
           // p={{ base: '8px 24px 8px 40px', md: '20px' }}
+
           h={{ base: '64px', md: '80px' }}
         >
           <Link variant={'unstyled'} href={ROUTES.MAIN}>
@@ -336,13 +337,18 @@ const HomeHeader = ({
               </Button>
             }
 
-            <Button onClick={handleLoanApply} variant={'outline-primary'}>
+            <Button
+              minW={'100px'}
+              onClick={handleLoanApply}
+              variant={'outline-primary'}
+            >
               <Text textStyle={'pre-body-7'}>대출 신청</Text>
             </Button>
           </HStack>
           <HStack display={{ base: 'flex', md: 'none' }}>
             <Button
               variant={'outline-primary'}
+              minW={'100px'}
               onClick={() => {
                 isDrawerOpen && onDrawerClose
                 handleLoanApply()

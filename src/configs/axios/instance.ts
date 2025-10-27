@@ -15,8 +15,8 @@ import { retryRequestManager } from './retry-request-manager'
 const isDev = ENV.NODE_ENV === 'development'
 
 const instance = axios.create({
-  baseURL: ENV.API_BASE_URL || 'http://localhost:5001',
-  timeout: 29000,
+  baseURL: ENV.API_BASE_URL,
+  timeout: 600000,
   headers: {
     'Content-Type': 'application/json',
   },

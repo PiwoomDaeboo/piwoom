@@ -295,7 +295,7 @@ export default function Document() {
                       제공하지 않을 수 있습니다.
                       <br />
                       추후 [대출 현황 조회] 페이지에서 세금 납부 내역을 제출
-                      부탁드립니다
+                      부탁드립니다.
                     </Text>
                   </VStack>
                 </VStack>
@@ -349,13 +349,6 @@ export default function Document() {
                     >
                       정부24 회원가입
                     </Button>
-                    <Text textStyle={'pre-body-6'} color={'grey.8'}>
-                      서버 점검 등의 사유로 인해 비대면 서류 제출 기능을
-                      제공하지 않을 수 있습니다.
-                      <br />
-                      추후 [대출 현황 조회] 페이지에서 비대면 서류 제출을 진행
-                      부탁드립니다.
-                    </Text>
                   </VStack>
                 )}
               </InputForm>

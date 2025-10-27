@@ -109,7 +109,10 @@ const MyLoanStep2 = () => {
                   <Button
                     onClick={() => {
                       setUserId(item?.id)
-                      setAddress(item?.baseAddress + ' ' + item?.detailAddress)
+                      setAddress(
+                        item?.rrcAddress ||
+                          item?.baseAddress + ' ' + item?.detailAddress,
+                      )
                       onOpen()
                     }}
                     variant={'solid-primary'}
