@@ -391,7 +391,7 @@ const ApplyLoanStep4 = () => {
     setIsDocumentSubmissionCompleted(true)
     setValue('untactDocumentSubmission', true)
     clearErrors('untactDocumentSubmission')
-    clearErrors()
+    // clearErrors()
   }
 
   useEffect(() => {
