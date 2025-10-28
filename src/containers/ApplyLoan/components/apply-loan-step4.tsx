@@ -46,6 +46,7 @@ import {
   XIcon,
 } from '@/generated/icons/MyIcons'
 import { useLocalStorage } from '@/stores/local/state'
+import { extractErrorMessage } from '@/utils/error-handler'
 
 import AddressModal from '../../../components/@Modal/address-modal'
 import DocumentAgreeModal from '../../../components/@Modal/document-agree-modal'
@@ -201,7 +202,25 @@ const ApplyLoanStep4 = () => {
           router.replace('/apply-loan-complete?loanId=' + data.id)
         },
         onError: (error: any) => {
-          console.error('loanCreateMutation', error)
+          toast({
+            render: () => (
+              <Box
+                borderRadius={'10px'}
+                color="white"
+                p={'12px'}
+                bg="rgba(27, 28, 29, 0.80)"
+              >
+                <HStack spacing={'24px'} alignItems={'center'}>
+                  <XCircleFillIcon boxSize={'24px'} />
+                  <Text textStyle={'pre-body-68'} color={'grey.0'}>
+                    {extractErrorMessage(error)}
+                  </Text>
+                </HStack>
+              </Box>
+            ),
+            duration: 5000,
+            isClosable: true,
+          })
         },
       },
     })
@@ -234,90 +253,89 @@ const ApplyLoanStep4 = () => {
     })
   }
 
-  const onStep4Error = (errors: any) => {
-    console.log('Step4 폼 에러:', errors)
-    // 에러 필드 우선순위 정의 (폼에서 위에서 아래 순서)
-    const errorFieldPriority = [
-      'loanAmount',
-      'repaymentType',
-      'interestPaymentDate',
-      'loanPeriod',
-      'bank',
-      'accountNumber',
-      'accountHolder',
-      'jobType',
-      'companyName',
-      'companyBusinessNumber',
-      'companyAddress',
-      'companyDetailAddress',
-      'employmentType',
-      'hireYear',
-      'hireMonth',
-      'baseAddress',
-      'detailAddress',
-      'housingType',
-      'residenceType',
-      'assetBaseAddress',
-      'assetDetailAddress',
-      'untactDocumentSubmission',
-    ]
+  // const onStep4Error = (errors: any) => {
+  //   console.log('Step4 폼 에러:', errors)
+  //   // 에러 필드 우선순위 정의 (폼에서 위에서 아래 순서)
+  //   const errorFieldPriority = [
+  //     'loanAmount',
+  //     'repaymentType',
+  //     'interestPaymentDate',
+  //     'loanPeriod',
+  //     'bank',
+  //     'accountNumber',
+  //     'accountHolder',
+  //     'jobType',
+  //     'companyName',
+  //     'companyBusinessNumber',
+  //     'companyAddress',
+  //     'companyDetailAddress',
+  //     'employmentType',
+  //     'hireYear',
+  //     'hireMonth',
+  //     'baseAddress',
+  //     'detailAddress',
+  //     'housingType',
+  //     'residenceType',
+  //     'assetBaseAddress',
+  //     'assetDetailAddress',
+  //     'untactDocumentSubmission',
+  //   ]
 
-    // 우선순위에 따라 첫 번째 에러 필드 찾기
-    const firstErrorField = errorFieldPriority.find((field) => errors[field])
+  //   // 우선순위에 따라 첫 번째 에러 필드 찾기
+  //   const firstErrorField = errorFieldPriority.find((field) => errors[field])
 
-    if (firstErrorField) {
-      // 먼저 페이지 최상단으로 즉시 이동
-      window.scrollTo(0, 0)
-      document.documentElement.scrollTop = 0
-      document.body.scrollTop = 0
+  //   if (firstErrorField) {
+  //     // 먼저 페이지 최상단으로 즉시 이동
+  //     window.scrollTo(0, 0)
+  //     document.documentElement.scrollTop = 0
+  //     document.body.scrollTop = 0
 
-      // 그 다음 에러 요소 찾기
-      const errorElement =
-        document.querySelector(`[name="${firstErrorField}"]`) ||
-        document.querySelector(`[data-field="${firstErrorField}"]`)
+  //     // 그 다음 에러 요소 찾기
+  //     const errorElement =
+  //       document.querySelector(`[name="${firstErrorField}"]`) ||
+  //       document.querySelector(`[data-field="${firstErrorField}"]`)
 
-      if (errorElement) {
-        // 약간의 지연 후 에러 요소로 스크롤
-        setTimeout(() => {
-          errorElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-            inline: 'nearest',
-          })
+  //     if (errorElement) {
+  //       // 약간의 지연 후 에러 요소로 스크롤
+  //       setTimeout(() => {
+  //         errorElement.scrollIntoView({
+  //           behavior: 'smooth',
+  //           block: 'start',
+  //           inline: 'nearest',
+  //         })
 
-          // 포커스도 함께
-          if (errorElement instanceof HTMLElement) {
-            errorElement.focus()
-          }
-        }, 100)
-      }
-    } else {
-      // 에러 필드를 찾지 못한 경우 최상단으로만 이동
-      window.scrollTo(0, 0)
-      document.documentElement.scrollTop = 0
-      document.body.scrollTop = 0
-    }
-    alert(errors)
-    toast({
-      render: () => (
-        <Box
-          borderRadius={'10px'}
-          color="white"
-          p={'12px'}
-          bg="rgba(27, 28, 29, 0.80)"
-        >
-          <HStack spacing={'24px'} alignItems={'center'}>
-            <XCircleFillIcon boxSize={'24px'} />
-            <Text textStyle={'pre-body-68'} color={'grey.0'}>
-              필수 항목을 입력해주세요.
-            </Text>
-          </HStack>
-        </Box>
-      ),
-      duration: 5000,
-      isClosable: true,
-    })
-  }
+  //         // 포커스도 함께
+  //         if (errorElement instanceof HTMLElement) {
+  //           errorElement.focus()
+  //         }
+  //       }, 100)
+  //     }
+  //   } else {
+  //     window.scrollTo(0, 0)
+  //     document.documentElement.scrollTop = 0
+  //     document.body.scrollTop = 0
+  //   }
+
+  //   toast({
+  //     render: () => (
+  //       <Box
+  //         borderRadius={'10px'}
+  //         color="white"
+  //         p={'12px'}
+  //         bg="rgba(27, 28, 29, 0.80)"
+  //       >
+  //         <HStack spacing={'24px'} alignItems={'center'}>
+  //           <XCircleFillIcon boxSize={'24px'} />
+  //           <Text textStyle={'pre-body-68'} color={'grey.0'}>
+  //             필수 항목을 입력해주세요
+  //           </Text>
+  //         </HStack>
+  //       </Box>
+  //     ),
+  //     duration: 5000,
+  //     isClosable: true,
+  //   })
+  // }
 
   const { data: userData } = useUserRetrieveQuery({
     variables: {
@@ -325,7 +343,7 @@ const ApplyLoanStep4 = () => {
     },
   })
   // 대출신청 버튼 클릭 핸들러 (handleSubmit 사용)
-  const handleSubmitClick = handleSubmit(onStep4Submit, onStep4Error)
+  const handleSubmitClick = handleSubmit(onStep4Submit)
 
   const handleCompanySelect = (company: Company) => {
     clearErrors(['companyName', 'companyBusinessNumber'])
