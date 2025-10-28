@@ -3,10 +3,7 @@ import React from 'react'
 import { NextSeo } from 'next-seo'
 
 import HomeLayout from '@/components/@Layout/HomeLayout'
-import Loan from '@/containers/Loan'
-import MyLoan from '@/containers/MyLoan'
 import MyLoanStatus from '@/containers/MyLoanStatus'
-import Policy from '@/containers/Policy'
 
 function MyLoanStatusPage() {
   return (

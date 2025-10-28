@@ -550,7 +550,9 @@ const LoanTermsTable = ({
           </Box>
           <Box w={'70%'} p={'12px'}>
             <Text textStyle={'pre-body-68'} color={'grey.10'}>
-              보증 있음 ({loanData?.contract?.guarantorName || '-'})
+              {loanData?.contract?.guarantorName ?
+                '보증 있음 (' + loanData?.contract?.guarantorName + ')'
+              : '해당 없음'}
             </Text>
           </Box>
         </Flex>

@@ -3,8 +3,7 @@ import React from 'react'
 import { NextSeo } from 'next-seo'
 
 import HomeLayout from '@/components/@Layout/HomeLayout'
-import MyLoan from '@/containers/MyLoan'
-import MyLoanAuthentication from '@/containers/MyLoanStatus/components/my-loan-authentication'
+import MyLoanAuthentication from '@/containers/MyLoanAuthentication'
 
 function MyLoanAuthPage() {
   return (

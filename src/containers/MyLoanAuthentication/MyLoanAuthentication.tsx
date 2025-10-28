@@ -12,16 +12,17 @@ import {
 } from '@chakra-ui/react'
 import PortOne from '@portone/browser-sdk/v2'
 
+import { ENV } from '@/configs/env'
 import { useUserLoginCreateMutation } from '@/generated/apis/User/User.query'
 import { SecurityIcon } from '@/generated/icons/MyIcons'
 import { useLocalStorage } from '@/stores/local/state'
 import { handleErrorToast } from '@/utils/error-handler'
 
 function MyLoanAuthentication() {
-  const { set } = useLocalStorage()
+  const { set, token } = useLocalStorage()
   const router = useRouter()
   const toast = useToast()
-
+  console.log('token', token)
   const { mutateAsync: userLoginCreate } = useUserLoginCreateMutation({
     options: {
       onSuccess: (data) => {
@@ -39,6 +40,7 @@ function MyLoanAuthentication() {
         // 토큰 저장 후 즉시 확인
         setTimeout(() => {
           const savedToken = useLocalStorage.getState().token
+          console.log('저장된 토큰 확인:', savedToken)
 
           if (savedToken?.access_token) {
             console.log('토큰 저장 성공, 페이지 이동')
@@ -70,21 +72,32 @@ function MyLoanAuthentication() {
     },
   })
   const handleAuthentication = async () => {
-    const response = await PortOne.requestIdentityVerification({
-      storeId: 'store-5fcf48f2-05d3-43e2-9abe-c09b3f461e2d',
-      identityVerificationId: crypto.randomUUID(),
-      channelKey: 'channel-key-1e7295f0-e634-4e2b-9da5-2402b97e7a63',
-      redirectUrl: `${window.location.origin}/my-loan-status?tab=0&page=1`,
-    })
-    if (response?.code !== undefined) {
-      return alert(response?.message)
-    }
+    try {
+      const response = await PortOne.requestIdentityVerification({
+        storeId: ENV.PORTONE_STORE_ID || '',
+        identityVerificationId: crypto.randomUUID(),
+        channelKey: ENV.PORTONE_CHANNEL_KEY || '',
+        redirectUrl: `${window.location.origin}/my-loan-auth`,
+      })
 
-    userLoginCreate({
-      data: {
-        identityVerificationId: response?.identityVerificationId || '',
-      },
-    })
+      // PortOne 인증 실패 체크
+      if (response?.code !== undefined) {
+        return alert(response.message)
+      }
+
+      // 인증 성공 시에만 userLoginCreate 실행
+      if (response?.identityVerificationId) {
+        userLoginCreate({
+          data: {
+            identityVerificationId: response.identityVerificationId,
+          },
+        })
+      } else {
+        console.error('identityVerificationId가 없습니다:', response)
+      }
+    } catch (error) {
+      console.error('PortOne 인증 중 오류:', error)
+    }
   }
   useEffect(() => {
     const {
@@ -125,7 +138,7 @@ function MyLoanAuthentication() {
         { shallow: true },
       )
     }
-  }, [router.query])
+  }, [router.query, userLoginCreate])
 
   return (
     <>
