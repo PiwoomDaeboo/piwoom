@@ -23,20 +23,18 @@ import { LoanListParamsStatusInEnumType } from '@/generated/apis/@types/data-con
 import { useLoanListQuery } from '@/generated/apis/Loan/Loan.query'
 import { useLocalStorage } from '@/stores/local/state'
 
-import MyLoanAuthentication from './components/my-loan-authentication'
 import MyLoanList from './components/my-loan-list'
 
 function MyLoanStatus() {
   const router = useRouter()
   const postsPerPage = 9
-  const { token: accessToken } = useLocalStorage()
-
+  const { token } = useLocalStorage()
   // 디버깅을 위한 토큰 상태 로그
   useEffect(() => {
-    if (!accessToken?.access_token) {
+    if (!token?.access_token) {
       router.replace('/my-loan-auth')
     }
-  }, [accessToken, router])
+  }, [token, router])
 
   const selectedTab = useMemo(() => {
     const tabQuery = router.query.tab
@@ -81,7 +79,7 @@ function MyLoanStatus() {
       },
     },
     options: {
-      enabled: !!accessToken,
+      enabled: !!token?.access_token,
     },
   })
   const totalPages = Math.ceil((loanList?.count || 0) / postsPerPage)
@@ -144,8 +142,6 @@ function MyLoanStatus() {
         </Container>
       </Flex>
       <Container py={'64px'}>
-        {/* {!accessToken?.access_token && <MyLoanAuthentication />} */}
-
         <>
           <Tabs index={selectedTab} onChange={handleTabChange}>
             <TabList>
