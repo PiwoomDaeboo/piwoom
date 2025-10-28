@@ -150,7 +150,7 @@ const HomeHeaderDrawer = ({
           <Container px={'0px'} h={'100%'}>
             <Flex
               flexDir="column"
-              justifyContent={'space-between'}
+              // justifyContent={'space-between'}
               // alignItems="stretch"
               h={'100%'}
               pb={'16px'}
@@ -261,23 +261,28 @@ const HomeHeaderDrawer = ({
                   )
                 })}
               </VStack>
-              {/* {isLoggedIn && ( */}
-              <Flex alignItems={'center'} gap={'12px'} onClick={handleLogout}>
+              {isLoggedIn && (
                 <Flex
-                  w={'40px'}
-                  h={'40px'}
-                  bg={'grey.2'}
-                  borderRadius={'full'}
-                  justifyContent={'center'}
+                  mt={'70%'}
                   alignItems={'center'}
+                  gap={'12px'}
+                  onClick={handleLogout}
                 >
-                  <SignoutIcon boxSize={'24px'} />
+                  <Flex
+                    w={'40px'}
+                    h={'40px'}
+                    bg={'grey.2'}
+                    borderRadius={'full'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                  >
+                    <SignoutIcon boxSize={'24px'} />
+                  </Flex>
+                  <Text textStyle={'pre-body-3'} color={'grey.8'}>
+                    로그아웃
+                  </Text>
                 </Flex>
-                <Text textStyle={'pre-body-3'} color={'grey.8'}>
-                  로그아웃
-                </Text>
-              </Flex>
-              {/* )} */}
+              )}
             </Flex>
           </Container>
         }
