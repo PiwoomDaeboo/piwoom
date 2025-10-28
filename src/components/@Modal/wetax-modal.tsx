@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import { useRouter } from 'next/router'
+
 import {
   Box,
   Button,
@@ -77,6 +79,7 @@ function WetaxModal({
 }: WetaxModalProps) {
   const formContext = useFormContext()
   const setValue = shouldSetFormValue ? formContext?.setValue : null
+
   const [selectedAuth, setSelectedAuth] = useState<string | null>(null)
   const [selectedPassType, setSelectedPassType] = useState<string>('')
   const [loadingProcess, setLoadingProcess] = useState<number>(0)
@@ -181,7 +184,15 @@ function WetaxModal({
   const { mutate: documentSubmitMutation, isPending: isDocumentSubmitLoading } =
     useLoanPartialUpdateMutation({
       options: {
-        onSuccess: () => {},
+        onSuccess: () => {
+          toast({
+            title: '세금 납부 내역 제출 완료',
+            description: '모든 세금 납부 내역이 성공적으로 제출되었습니다.',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          })
+        },
         onError: (error) => {},
       },
     })
@@ -213,23 +224,13 @@ function WetaxModal({
     if (data.status === 'SUCCESS') {
       console.log('[Wetax API] SUCCESS detected, stopping polling')
       setShouldPoll(false)
-      if (shouldSetFormValue) {
-        setValue?.('localTaxSet', data.dataSet as any)
-      } else {
-        documentSubmitMutation({
-          id: Number(loanId),
-          data: {
-            localTaxSet: data.dataSet as any,
-          },
-        })
-      }
+      setValue?.('localTaxSet', data.dataSet as any)
 
-      toast({
-        title: '세금 납부 내역 제출 완료',
-        description: '모든 세금 납부 내역이 성공적으로 제출되었습니다.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
+      documentSubmitMutation({
+        id: Number(loanId),
+        data: {
+          localTaxSet: data.dataSet as any,
+        },
       })
     } else if (data.status === 'FAILED') {
       console.log('[Wetax API] FAILED detected, stopping polling')
