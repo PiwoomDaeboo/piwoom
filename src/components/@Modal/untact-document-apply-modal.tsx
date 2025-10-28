@@ -243,7 +243,11 @@ function UntactDocumentApplyModal({
             })
             break
           case 'RESIDENT_REGISTRATION_COPY':
-            setValue('residentRegistrationCopy', logItem.address, {
+            setValue('rrcAddress', logItem.address, {
+              shouldValidate: true,
+              shouldDirty: true,
+            })
+            setValue('residentRegistrationCopy', logItem.file, {
               shouldValidate: true,
               shouldDirty: true,
             })
