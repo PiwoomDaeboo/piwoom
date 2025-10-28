@@ -3,24 +3,14 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import {
-  AspectRatio,
   Box,
   Button,
   Center,
-  Checkbox,
-  Container,
   Flex,
   HStack,
   Input,
-  InputGroup,
-  InputRightElement,
-  SimpleGrid,
-  Spinner,
   Text,
-  Textarea,
   VStack,
-  useDisclosure,
-  useToast,
 } from '@chakra-ui/react'
 
 import { useFormContext } from 'react-hook-form'

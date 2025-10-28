@@ -48,7 +48,7 @@ const ApplyLoanStep2 = () => {
           },
         })
         setValue('email', userData?.email || '')
-
+        router.replace(`/apply-loan?step=2&type=${router.query.type}`)
         setIsPhoneCertification(true)
       },
       // onError: (error: any) => {
@@ -69,7 +69,7 @@ const ApplyLoanStep2 = () => {
       storeId: ENV.PORTONE_STORE_ID || '',
       identityVerificationId: crypto.randomUUID(),
       channelKey: ENV.PORTONE_CHANNEL_KEY || '',
-      redirectUrl: `${window.location.origin}/apply-loan?step=2&type=${router.query.type}`,
+      redirectUrl: `${window.location.origin}/apply-loan?type=${router.query.type}`,
     })
     if (response?.code !== undefined) {
       return alert(response?.message)
@@ -103,42 +103,47 @@ const ApplyLoanStep2 = () => {
       enabled: !!accessToken,
     },
   })
-
   useEffect(() => {
-    const {
-      identityVerificationId,
-      identityVerificationTxId,
-      transactionType,
-    } = router.query
-
-    if (
-      identityVerificationId &&
-      identityVerificationTxId &&
-      transactionType === 'IDENTITY_VERIFICATION'
-    ) {
-      // identity verification 완료 처리
-      userLoginCreate({
-        data: {
-          identityVerificationId: identityVerificationId as string,
-        },
-      })
-
-      const {
-        identityVerificationId: _,
-        identityVerificationTxId: __,
-        transactionType: ___,
-        ...cleanQuery
-      } = router.query
-      router.replace(
-        {
-          pathname: router.pathname,
-          query: cleanQuery,
-        },
-        undefined,
-        { shallow: true },
-      )
+    if (accessToken) {
+      setIsPhoneCertification(true)
+      setValue('email', userData?.email || '')
     }
-  }, [router.query])
+  }, [accessToken])
+
+  // useEffect(() => {
+  //   const {
+  //     identityVerificationId,
+  //     identityVerificationTxId,
+  //     transactionType,
+  //   } = router.query
+
+  //   if (
+  //     identityVerificationId &&
+  //     identityVerificationTxId &&
+  //     transactionType === 'IDENTITY_VERIFICATION'
+  //   ) {
+  //     userLoginCreate({
+  //       data: {
+  //         identityVerificationId: identityVerificationId as string,
+  //       },
+  //     })
+
+  //     const {
+  //       identityVerificationId: _,
+  //       identityVerificationTxId: __,
+  //       transactionType: ___,
+  //       ...cleanQuery
+  //     } = router.query
+  //     router.replace(
+  //       {
+  //         pathname: router.pathname,
+  //         query: cleanQuery,
+  //       },
+  //       undefined,
+  //       { shallow: true },
+  //     )
+  //   }
+  // }, [router.query])
 
   return (
     <Container>
