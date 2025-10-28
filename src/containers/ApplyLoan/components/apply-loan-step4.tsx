@@ -236,7 +236,67 @@ const ApplyLoanStep4 = () => {
 
   const onStep4Error = (errors: any) => {
     console.log('Step4 폼 에러:', errors)
+    // 에러 필드 우선순위 정의 (폼에서 위에서 아래 순서)
+    const errorFieldPriority = [
+      'loanAmount',
+      'repaymentType',
+      'interestPaymentDate',
+      'loanPeriod',
+      'bank',
+      'accountNumber',
+      'accountHolder',
+      'jobType',
+      'companyName',
+      'companyBusinessNumber',
+      'companyAddress',
+      'companyDetailAddress',
+      'employmentType',
+      'hireYear',
+      'hireMonth',
+      'baseAddress',
+      'detailAddress',
+      'housingType',
+      'residenceType',
+      'assetBaseAddress',
+      'assetDetailAddress',
+      'untactDocumentSubmission',
+    ]
 
+    // 우선순위에 따라 첫 번째 에러 필드 찾기
+    const firstErrorField = errorFieldPriority.find((field) => errors[field])
+
+    if (firstErrorField) {
+      // 먼저 페이지 최상단으로 즉시 이동
+      window.scrollTo(0, 0)
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+
+      // 그 다음 에러 요소 찾기
+      const errorElement =
+        document.querySelector(`[name="${firstErrorField}"]`) ||
+        document.querySelector(`[data-field="${firstErrorField}"]`)
+
+      if (errorElement) {
+        // 약간의 지연 후 에러 요소로 스크롤
+        setTimeout(() => {
+          errorElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest',
+          })
+
+          // 포커스도 함께
+          if (errorElement instanceof HTMLElement) {
+            errorElement.focus()
+          }
+        }, 100)
+      }
+    } else {
+      // 에러 필드를 찾지 못한 경우 최상단으로만 이동
+      window.scrollTo(0, 0)
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+    }
     toast({
       render: () => (
         <Box
@@ -256,21 +316,6 @@ const ApplyLoanStep4 = () => {
       duration: 5000,
       isClosable: true,
     })
-
-    const firstErrorField = Object.keys(errors)[0]
-    const errorElement =
-      document.querySelector(`[name="${firstErrorField}"]`) ||
-      document.querySelector(`[data-field="${firstErrorField}"]`)
-
-    if (errorElement) {
-      errorElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      })
-      if (errorElement instanceof HTMLElement) {
-        errorElement.focus()
-      }
-    }
   }
 
   const { data: userData } = useUserRetrieveQuery({
@@ -290,12 +335,9 @@ const ApplyLoanStep4 = () => {
     })
     setValue('companyAddress', company.baseAddress, { shouldValidate: false })
 
-    // 검색 결과가 있는 경우와 없는 경우를 구분
     if (company.baseAddress) {
-      // 검색 결과로 선택된 경우 (주소가 있는 경우)
       setIsCompanyAddressFromSearch(true)
     } else {
-      // 검색 결과가 없어서 임의의 주소를 사용하는 경우
       setIsCompanyAddressFromSearch(false)
     }
 

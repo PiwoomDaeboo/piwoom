@@ -153,50 +153,69 @@ const ApplyLoanStep3 = () => {
 
   const onStep3Error = (errors: any) => {
     console.log('Step3 폼 에러:', errors)
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
+    // // safeKey 에러가 있으면 특별한 메시지 표시
+    // if (errors?.safeKey) {
+    //   toast({
+    //     render: () => (
+    //       <Box
+    //         borderRadius={'10px'}
+    //         color="white"
+    //         p={'12px'}
+    //         bg="rgba(27, 28, 29, 0.80)"
+    //       >
+    //         <HStack spacing={'24px'} alignItems={'center'}>
+    //           <XCircleFillIcon boxSize={'24px'} />
+    //           <Text textStyle={'pre-body-68'} color={'grey.0'}>
+    //             신용정보 제출이 필요합니다.
+    //           </Text>
+    //         </HStack>
+    //       </Box>
+    //     ),
+    //     duration: 5000,
+    //     isClosable: true,
+    //   })
+    // } else {
+    //   toast({
+    //     render: () => (
+    //       <Box
+    //         borderRadius={'10px'}
+    //         color="white"
+    //         p={'12px'}
+    //         bg="rgba(27, 28, 29, 0.80)"
+    //       >
+    //         <HStack spacing={'24px'} alignItems={'center'}>
+    //           <XCircleFillIcon boxSize={'24px'} />
+    //           <Text textStyle={'pre-body-68'} color={'grey.0'}>
+    //             필수 항목을 입력해주세요.
+    //           </Text>
+    //         </HStack>
+    //       </Box>
+    //     ),
+    //     duration: 5000,
+    //     isClosable: true,
+    //   })
+    // }
+    const errorFieldPriority = [
+      'purpose',
+      'purposeDetail',
+      'totalAsset',
+      'annualIncome',
+      'monthlyIncome',
+      'monthlyFixedExpense',
+      'debtScale',
+      'repaymentMethod',
+      'repaymentDetail',
+      'creditScore',
+      'safeKey',
+      'purposeAndRepaymentPlan',
+    ]
 
-    // safeKey 에러가 있으면 특별한 메시지 표시
-    if (errors?.safeKey) {
-      toast({
-        render: () => (
-          <Box
-            borderRadius={'10px'}
-            color="white"
-            p={'12px'}
-            bg="rgba(27, 28, 29, 0.80)"
-          >
-            <HStack spacing={'24px'} alignItems={'center'}>
-              <XCircleFillIcon boxSize={'24px'} />
-              <Text textStyle={'pre-body-68'} color={'grey.0'}>
-                신용정보 제출이 필요합니다.
-              </Text>
-            </HStack>
-          </Box>
-        ),
-        duration: 5000,
-        isClosable: true,
-      })
-    } else {
-      toast({
-        render: () => (
-          <Box
-            borderRadius={'10px'}
-            color="white"
-            p={'12px'}
-            bg="rgba(27, 28, 29, 0.80)"
-          >
-            <HStack spacing={'24px'} alignItems={'center'}>
-              <XCircleFillIcon boxSize={'24px'} />
-              <Text textStyle={'pre-body-68'} color={'grey.0'}>
-                필수 항목을 입력해주세요.
-              </Text>
-            </HStack>
-          </Box>
-        ),
-        duration: 5000,
-        isClosable: true,
-      })
-    }
-    const firstErrorField = Object.keys(errors)[0]
+    // 우선순위에 따라 첫 번째 에러 필드 찾기
+    const firstErrorField = errorFieldPriority.find((field) => errors[field])
     const errorElement =
       document.querySelector(`[name="${firstErrorField}"]`) ||
       document.querySelector(`[data-field="${firstErrorField}"]`)
@@ -204,7 +223,7 @@ const ApplyLoanStep3 = () => {
     if (errorElement) {
       errorElement.scrollIntoView({
         behavior: 'smooth',
-        block: 'center',
+        block: 'start',
       })
       if (errorElement instanceof HTMLElement) {
         errorElement.focus()
@@ -243,18 +262,21 @@ const ApplyLoanStep3 = () => {
     const safeKeyValid = await trigger('safeKey')
     const isValid = await validateStep3Fields()
 
-    if (!safeKeyWatchValue || !safeKeyValid) {
-      setError('safeKey', {
-        type: 'required',
-        message: '신용정보 제출이 필요합니다.',
-      })
-      return
-    }
-
     if (isValid && safeKeyValid) {
       const formData = watch()
       onStep3Submit(formData)
     } else {
+      if (!safeKeyWatchValue || !safeKeyValid) {
+        setError('safeKey', {
+          type: 'required',
+          message: '신용정보 제출이 필요합니다.',
+        })
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        })
+        return
+      }
       onStep3Error(errors)
     }
   }
