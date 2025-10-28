@@ -297,7 +297,7 @@ const ApplyLoanStep4 = () => {
       document.documentElement.scrollTop = 0
       document.body.scrollTop = 0
     }
-    alert({ errors })
+    alert(errors)
     toast({
       render: () => (
         <Box

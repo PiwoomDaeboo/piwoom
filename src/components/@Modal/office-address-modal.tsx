@@ -23,6 +23,7 @@ import InputForm from '@/components/InputForm'
 import { Pagination } from '@/components/pagination'
 import { useCompanyListQuery } from '@/generated/apis/Company/Company.query'
 import { MagnifyingGlassIcon } from '@/generated/icons/MyIcons'
+import { useDebounce } from '@/hooks/useDebounce'
 
 interface Company {
   no: string | null
@@ -51,6 +52,14 @@ function OfficeAddressModal({
   const postsPerPage = 5
   const [searchError, setSearchError] = useState('')
 
+  // 500ms 디바운스 적용
+  const debouncedName = useDebounce(name, 500)
+
+  // 검색어가 변경될 때 페이지를 1로 리셋
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [debouncedName])
+
   // 검색 실행 함수
   const handleSearch = () => {
     if (!name.trim()) {
@@ -73,7 +82,7 @@ function OfficeAddressModal({
   const handleConfirm = () => {
     onSelectCompany?.({
       no: null,
-      name: name,
+      name: debouncedName,
       businessNo: null,
       baseAddress: null,
       detailAddress: null,
@@ -84,6 +93,11 @@ function OfficeAddressModal({
   }
 
   const handleClose = () => {
+    // 모달이 닫힐 때 상태 초기화
+    setName('')
+    setNo('')
+    setSearchError('')
+    setCurrentPage(1)
     onClose()
   }
 
@@ -113,14 +127,14 @@ function OfficeAddressModal({
     useCompanyListQuery({
       variables: {
         query: {
-          name: searchType === 'name' ? name : '',
-          no: searchType === 'no' ? name : '',
+          name: searchType === 'name' ? debouncedName : '',
+          no: searchType === 'no' ? debouncedName : '',
           limit: postsPerPage,
           offset: (currentPage - 1) * postsPerPage,
         },
       },
       options: {
-        enabled: !!isOpen && !!name.trim(),
+        enabled: !!isOpen && !!debouncedName.trim(),
       },
     })
   const totalPages = Math.ceil((companyList?.count || 0) / postsPerPage)
@@ -209,24 +223,29 @@ function OfficeAddressModal({
                 <Spinner />
               </Center>
             )}
-            {companyList?.results?.length === 0 && !isCompanyListLoading && (
-              <Center h={'100%'} bg={'background.basic.2'}>
-                <VStack>
-                  <Text
-                    textAlign={'center'}
-                    textStyle={'pre-heading-4'}
-                    color={'grey.4'}
-                  >
-                    검색 결과가 없습니다.
-                    <br />
-                    입력하신 {name}을 회사명으로 사용하시겠어요?
-                  </Text>
-                  <Button variant={'outline-secondary'} onClick={handleConfirm}>
-                    사용하기
-                  </Button>
-                </VStack>
-              </Center>
-            )}
+            {companyList?.results?.length === 0 &&
+              !isCompanyListLoading &&
+              debouncedName.trim() && (
+                <Center h={'100%'} bg={'background.basic.2'}>
+                  <VStack>
+                    <Text
+                      textAlign={'center'}
+                      textStyle={'pre-heading-4'}
+                      color={'grey.4'}
+                    >
+                      검색 결과가 없습니다.
+                      <br />
+                      입력하신 {debouncedName}을 회사명으로 사용하시겠어요?
+                    </Text>
+                    <Button
+                      variant={'outline-secondary'}
+                      onClick={handleConfirm}
+                    >
+                      사용하기
+                    </Button>
+                  </VStack>
+                </Center>
+              )}
             {companyList?.results?.map((company, index) => (
               <Flex
                 w={'100%'}
