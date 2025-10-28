@@ -259,7 +259,7 @@ const HomeHeaderDrawer = ({
                   )
                 })}
               </VStack>
-              {token && (
+              {token?.access_token && (
                 <Flex alignItems={'center'} gap={'12px'} onClick={handleLogout}>
                   <Flex
                     w={'40px'}
