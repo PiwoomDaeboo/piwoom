@@ -27,7 +27,14 @@ const sliderData = [
     subtitle: '급할수록 조심! 급할수록 안전한 금융을\n 선택하세요.',
     contact: '1332',
     bgColor: '#F6E6EA',
-    icon: <Slider1Icon boxSize={{ base: '100px', md: '240px' }} />,
+    icon: (
+      <Slider1Icon
+        mb={{ base: '20px', sm: '0px' }}
+        ml={{ base: '50px', sm: '0px' }}
+        boxSize={{ base: '150px', md: '240px' }}
+        h={{ base: '90px', sm: 'auto' }}
+      />
+    ),
     link: 'https://www.youtube.com/watch?v=qwYIff48Bzw',
   },
   {
@@ -37,7 +44,13 @@ const sliderData = [
     contact: '',
     bgColor: '#E4E2FF',
     textColor: 'grey.800',
-    icon: <Slider2Icon boxSize={{ base: '100px', md: '240px' }} />,
+    icon: (
+      <Slider2Icon
+        boxSize={{ base: '150px', md: '240px' }}
+        h={{ base: '100px', sm: 'auto' }}
+      />
+    ),
+
     link: 'https://www.youtube.com/watch?v=msPbJBlbJxY',
   },
   {
@@ -47,7 +60,7 @@ const sliderData = [
     contact: '',
     bgColor: '#F9F2E2',
     textColor: 'grey.800',
-    icon: <Slider3Icon boxSize={{ base: '100px', md: '240px' }} />,
+    icon: <Slider3Icon boxSize={{ base: '150px', md: '240px' }} />,
     link: 'https://www.youtube.com/watch?v=JSu3um1awPw',
   },
 ]
@@ -58,7 +71,7 @@ const SliderItem = ({ item, onOpen }: { item: any; onOpen: () => void }) => (
     h={{ base: '260px', md: '200px' }}
     bg={item.bgColor}
     borderRadius="20px"
-    p="32px"
+    p={{ base: '30px 0px 30px 30px', sm: '32px' }}
     position="relative"
     onClick={(e) => {
       e.preventDefault()
@@ -116,6 +129,7 @@ const SliderItem = ({ item, onOpen }: { item: any; onOpen: () => void }) => (
         display="flex"
         alignItems="center"
         w={{ base: '100%', sm: 'auto' }}
+        // h={{ base: 'auto', md: 'auto' }}
         justifyContent={{ base: 'flex-end', sm: 'center' }}
         flexShrink={0}
         ml={{ base: '0', md: '16px' }}
