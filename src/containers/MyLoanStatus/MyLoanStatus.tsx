@@ -31,6 +31,16 @@ function MyLoanStatus() {
   const postsPerPage = 9
   const { token: accessToken } = useLocalStorage()
 
+  // 디버깅을 위한 토큰 상태 로그
+  useEffect(() => {
+    console.log('MyLoanStatus - 현재 토큰 상태:', accessToken)
+    console.log('MyLoanStatus - 토큰 존재 여부:', !!accessToken)
+    console.log(
+      'MyLoanStatus - access_token 존재 여부:',
+      !!accessToken?.access_token,
+    )
+  }, [accessToken])
+
   const selectedTab = useMemo(() => {
     const tabQuery = router.query.tab
     if (typeof tabQuery === 'string') {
@@ -137,9 +147,9 @@ function MyLoanStatus() {
         </Container>
       </Flex>
       <Container py={'64px'}>
-        {!accessToken && <MyLoanAuthentication />}
+        {!accessToken?.access_token && <MyLoanAuthentication />}
 
-        {accessToken && (
+        {accessToken?.access_token && (
           <>
             <Tabs index={selectedTab} onChange={handleTabChange}>
               <TabList>

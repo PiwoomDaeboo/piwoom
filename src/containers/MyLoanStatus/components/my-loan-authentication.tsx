@@ -26,13 +26,37 @@ function MyLoanAuthentication() {
   const { mutateAsync: userLoginCreate } = useUserLoginCreateMutation({
     options: {
       onSuccess: (data) => {
+        console.log('인증 성공 데이터:', data)
+        const tokenData = {
+          access_token: data.accessToken,
+          refresh_token: data.refreshToken,
+        }
+        console.log('저장할 토큰 데이터:', tokenData)
+
         set({
-          token: {
-            access_token: data.accessToken,
-            refresh_token: data.refreshToken,
-          },
+          token: tokenData,
         })
-        router.push(`/my-loan-status`)
+
+        // 토큰 저장 후 즉시 확인
+        setTimeout(() => {
+          const savedToken = useLocalStorage.getState().token
+          console.log('저장된 토큰 확인:', savedToken)
+
+          // 모바일에서 localStorage 동기화 문제 해결을 위해 강제로 상태 업데이트
+          if (savedToken?.access_token) {
+            console.log('토큰 저장 성공, 페이지 이동')
+            router.replace(`/my-loan-status`)
+          } else {
+            console.error('토큰 저장 실패, 재시도')
+            // 토큰 저장이 실패한 경우 재시도
+            set({
+              token: tokenData,
+            })
+            setTimeout(() => {
+              router.replace(`/my-loan-status`)
+            }, 200)
+          }
+        }, 100)
       },
       onError: (error: any) => {
         if (error?.response?.data?.status === 400) {
@@ -77,6 +101,12 @@ function MyLoanAuthentication() {
       identityVerificationTxId &&
       transactionType === 'IDENTITY_VERIFICATION'
     ) {
+      console.log('URL 파라미터로 인증 처리 시작:', {
+        identityVerificationId,
+        identityVerificationTxId,
+        transactionType,
+      })
+
       userLoginCreate({
         data: {
           identityVerificationId: identityVerificationId as string,
