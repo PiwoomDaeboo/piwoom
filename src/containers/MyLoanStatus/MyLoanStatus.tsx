@@ -33,13 +33,10 @@ function MyLoanStatus() {
 
   // 디버깅을 위한 토큰 상태 로그
   useEffect(() => {
-    console.log('MyLoanStatus - 현재 토큰 상태:', accessToken)
-    console.log('MyLoanStatus - 토큰 존재 여부:', !!accessToken)
-    console.log(
-      'MyLoanStatus - access_token 존재 여부:',
-      !!accessToken?.access_token,
-    )
-  }, [accessToken])
+    if (!accessToken?.access_token) {
+      router.replace('/my-loan-auth')
+    }
+  }, [accessToken, router])
 
   const selectedTab = useMemo(() => {
     const tabQuery = router.query.tab
@@ -147,74 +144,72 @@ function MyLoanStatus() {
         </Container>
       </Flex>
       <Container py={'64px'}>
-        {!accessToken?.access_token && <MyLoanAuthentication />}
+        {/* {!accessToken?.access_token && <MyLoanAuthentication />} */}
 
-        {accessToken?.access_token && (
-          <>
-            <Tabs index={selectedTab} onChange={handleTabChange}>
-              <TabList>
-                <Tab>
-                  <Text
-                    textStyle={'pre-body-3'}
-                    color={selectedTab === 0 ? 'grey.10' : 'grey.7'}
-                  >
-                    진행중
-                  </Text>
-                </Tab>
-                <Tab>
-                  <Text
-                    textStyle={'pre-body-3'}
-                    color={selectedTab === 1 ? 'grey.10' : 'grey.7'}
-                  >
-                    상환완료
-                  </Text>
-                </Tab>
-                <Tab>
-                  <Text
-                    textStyle={'pre-body-3'}
-                    color={selectedTab === 2 ? 'grey.10' : 'grey.7'}
-                  >
-                    대출거절
-                  </Text>
-                </Tab>
-              </TabList>
+        <>
+          <Tabs index={selectedTab} onChange={handleTabChange}>
+            <TabList>
+              <Tab>
+                <Text
+                  textStyle={'pre-body-3'}
+                  color={selectedTab === 0 ? 'grey.10' : 'grey.7'}
+                >
+                  진행중
+                </Text>
+              </Tab>
+              <Tab>
+                <Text
+                  textStyle={'pre-body-3'}
+                  color={selectedTab === 1 ? 'grey.10' : 'grey.7'}
+                >
+                  상환완료
+                </Text>
+              </Tab>
+              <Tab>
+                <Text
+                  textStyle={'pre-body-3'}
+                  color={selectedTab === 2 ? 'grey.10' : 'grey.7'}
+                >
+                  대출거절
+                </Text>
+              </Tab>
+            </TabList>
 
-              <TabPanels p={'0px'}>
-                <TabPanel p={'36px 0px 48px 0px'}>
-                  {loanList?.results && loanList.results.length > 0 ?
-                    <MyLoanList loanList={loanList.results} />
-                  : <NonData variant="loan" />}
-                </TabPanel>
-                <TabPanel>
-                  {loanList?.results && loanList.results.length > 0 ?
-                    <MyLoanList loanList={loanList.results} />
-                  : <NonData variant="loan" />}
-                </TabPanel>
-                <TabPanel>
-                  {loanList?.results && loanList.results.length > 0 ?
-                    <MyLoanList loanList={loanList.results} />
-                  : <NonData variant="loan" />}
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-            {totalPages > 0 && (
-              <Flex
-                w={'100%'}
-                justifyContent={'center'}
-                h={'fit-content'}
-                mt={'48px'}
-              >
-                <Flex justifyContent={'center'}>
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                  />
-                </Flex>
+            <TabPanels p={'0px'}>
+              <TabPanel p={'36px 0px 48px 0px'}>
+                {loanList?.results && loanList.results.length > 0 ?
+                  <MyLoanList loanList={loanList.results} />
+                : <NonData variant="loan" />}
+              </TabPanel>
+              <TabPanel>
+                {loanList?.results && loanList.results.length > 0 ?
+                  <MyLoanList loanList={loanList.results} />
+                : <NonData variant="loan" />}
+              </TabPanel>
+              <TabPanel>
+                {loanList?.results && loanList.results.length > 0 ?
+                  <MyLoanList loanList={loanList.results} />
+                : <NonData variant="loan" />}
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+          {totalPages > 0 && (
+            <Flex
+              w={'100%'}
+              justifyContent={'center'}
+              h={'fit-content'}
+              mt={'48px'}
+            >
+              <Flex justifyContent={'center'}>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
               </Flex>
-            )}
-          </>
-        )}
+            </Flex>
+          )}
+        </>
       </Container>
     </>
   )

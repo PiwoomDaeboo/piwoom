@@ -1,0 +1,20 @@
+import React from 'react'
+
+import { NextSeo } from 'next-seo'
+
+import HomeLayout from '@/components/@Layout/HomeLayout'
+import MyLoan from '@/containers/MyLoan'
+import MyLoanAuthentication from '@/containers/MyLoanStatus/components/my-loan-authentication'
+
+function MyLoanAuthPage() {
+  return (
+    <>
+      {/* output: 똑똑한개발자 | 메인 */}
+      {/* titleTemplate는 /configs/seo/config.ts에서 변경 가능합니다. */}
+      <NextSeo title="대출 현황 조회" />
+      <HomeLayout content={<MyLoanAuthentication />} />
+    </>
+  )
+}
+
+export default MyLoanAuthPage
