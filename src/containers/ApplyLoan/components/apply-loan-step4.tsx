@@ -309,7 +309,7 @@ const ApplyLoanStep4 = () => {
           <HStack spacing={'24px'} alignItems={'center'}>
             <XCircleFillIcon boxSize={'24px'} />
             <Text textStyle={'pre-body-68'} color={'grey.0'}>
-              필수 항목을 입력해주세요.
+              필수 항목을 입력해주세요. {JSON.stringify(errors)}
             </Text>
           </HStack>
         </Box>
