@@ -12,6 +12,7 @@ import {
   Text,
   VStack,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 
 import { useFormContext } from 'react-hook-form'
@@ -92,6 +93,7 @@ const CONFIRMATION_ITEMS = [
 ]
 const ApplyLoanStep1 = () => {
   const router = useRouter()
+  const toast = useToast()
   const [agreements, setAgreements] = useState({
     all: false,
     consentToAccessPersonalContent: false,
@@ -221,14 +223,14 @@ const ApplyLoanStep1 = () => {
         router.replace(`/apply-loan?step=2&type=${router.query.type}`)
         // setIsPhoneCertification(true)
       },
-      // onError: (error: any) => {
-      //   // router.push(`/my-loan-status`)
-      //   toast({
-      //     title: error?.response?.data?.nonField[0],
-      //     status: 'error',
-      //     duration: 5000,
-      //   })
-      // },
+      onError: (error: any) => {
+        // router.push(`/my-loan-status`)
+        toast({
+          title: error?.response?.data?.nonField[0],
+          status: 'error',
+          duration: 5000,
+        })
+      },
     },
   })
 
