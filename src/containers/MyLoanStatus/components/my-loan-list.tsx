@@ -217,10 +217,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                     대출 신청액
                   </Text>
                   <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                    {item?.loanAmount?.toLocaleString() ||
-                      item?.contract?.amount?.toLocaleString() ||
-                      0}
-                    원
+                    {item?.loanAmount?.toLocaleString() || 0}원
                   </Text>
                 </HStack>
                 <HStack justifyContent={'space-between'}>

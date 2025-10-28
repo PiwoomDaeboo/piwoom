@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -14,9 +14,16 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 
+import { useFormContext } from 'react-hook-form'
+
 import LoanTermsModal from '@/components/@Modal/LoanTermsModal'
 import ModalBasis from '@/components/@Modal/ModalBasis'
+import {
+  useUserLoginCreateMutation,
+  useUserRetrieveQuery,
+} from '@/generated/apis/User/User.query'
 import { CaretRightIcon } from '@/generated/icons/MyIcons'
+import { useLocalStorage } from '@/stores/local/state'
 
 const CHECKBOX_STYLES = {
   '.chakra-checkbox__control': {
@@ -190,6 +197,76 @@ const ApplyLoanStep1 = () => {
     // 4. 모두 통과하면 다음 페이지로
     router.push('/apply-loan?step=2&type=' + router.query.type)
   }
+
+  const { set, token: accessToken } = useLocalStorage()
+  const { setValue } = useFormContext()
+  const { data: userData } = useUserRetrieveQuery({
+    variables: {
+      id: 'me',
+    },
+    options: {
+      enabled: !!accessToken,
+    },
+  })
+  const { mutateAsync: userLoginCreate } = useUserLoginCreateMutation({
+    options: {
+      onSuccess: (data) => {
+        set({
+          token: {
+            access_token: data.accessToken,
+            refresh_token: data.refreshToken,
+          },
+        })
+        setValue('email', userData?.email || '')
+        router.replace(`/apply-loan?step=2&type=${router.query.type}`)
+        // setIsPhoneCertification(true)
+      },
+      // onError: (error: any) => {
+      //   // router.push(`/my-loan-status`)
+      //   toast({
+      //     title: error?.response?.data?.nonField[0],
+      //     status: 'error',
+      //     duration: 5000,
+      //   })
+      // },
+    },
+  })
+
+  useEffect(() => {
+    const {
+      identityVerificationId,
+      identityVerificationTxId,
+      transactionType,
+    } = router.query
+
+    if (
+      identityVerificationId &&
+      identityVerificationTxId &&
+      transactionType === 'IDENTITY_VERIFICATION'
+    ) {
+      userLoginCreate({
+        data: {
+          identityVerificationId: identityVerificationId as string,
+        },
+      })
+
+      const {
+        identityVerificationId: _,
+        identityVerificationTxId: __,
+        transactionType: ___,
+        ...cleanQuery
+      } = router.query
+      router.replace(
+        {
+          pathname: router.pathname,
+          query: cleanQuery,
+        },
+        undefined,
+        { shallow: true },
+      )
+    }
+  }, [router.query])
+
   return (
     <Container>
       <Flex py={{ base: '40px', sm: '48px', md: '84px' }} flexDir={'column'}>

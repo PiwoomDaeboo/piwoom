@@ -24,12 +24,7 @@ import {
 import DrawerBasis from '@/components/@Drawer/DrawerBasis'
 import LoanImpossibleModal from '@/components/@Modal/loan-impossible-modal'
 import ImageAsNext from '@/components/ImageAsNext'
-import {
-  CaretDownIcon,
-  HeaderlogoIcon,
-  MenuIcon,
-  SignoutIcon,
-} from '@/generated/icons/MyIcons'
+import { CaretDownIcon, MenuIcon, SignoutIcon } from '@/generated/icons/MyIcons'
 import { MY_IMAGES } from '@/generated/path/images'
 import { ROUTES } from '@/generated/path/routes'
 import { useLocalStorage } from '@/stores/local/state'
@@ -49,14 +44,14 @@ const HomeHeaderDrawer = ({
   ...props
 }: HomeHeaderDrawerProps) => {
   const router = useRouter()
-  const { token } = useLocalStorage()
+  const { token, reset } = useLocalStorage()
   const {
     isOpen: isLoanImpossibleModalOpen,
     onOpen: onLoanImpossibleModalOpen,
     onClose: onLoanImpossibleModalClose,
   } = useDisclosure()
   const handleLogout = useCallback(() => {
-    useLocalStorage.getState().reset('token')
+    reset('token')
     router.replace(ROUTES.MAIN)
     onClose()
   }, [])
@@ -165,7 +160,6 @@ const HomeHeaderDrawer = ({
                 mb={'32px'}
               >
                 {MENU_ITEMS.map((item) => {
-                  // submenuItems가 없는 경우 바로 링크로 이동
                   if (!item.submenuItems || item.submenuItems.length === 0) {
                     return (
                       <Box
