@@ -274,7 +274,7 @@ const HomeHeader = ({
             ))}
           </HStack>
           <HStack gap={'10px'} display={{ base: 'none', md: 'flex' }}>
-            {token ?
+            {token?.access_token ?
               <Flex
                 ref={menuRef}
                 w={'48px'}

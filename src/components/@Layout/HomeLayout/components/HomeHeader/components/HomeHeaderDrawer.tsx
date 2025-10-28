@@ -50,6 +50,8 @@ const HomeHeaderDrawer = ({
     onOpen: onLoanImpossibleModalOpen,
     onClose: onLoanImpossibleModalClose,
   } = useDisclosure()
+  const isLoggedIn = token?.access_token && token.access_token.length > 0
+
   const handleLogout = useCallback(() => {
     reset('token')
     router.replace(ROUTES.MAIN)
@@ -259,7 +261,7 @@ const HomeHeaderDrawer = ({
                   )
                 })}
               </VStack>
-              {token?.access_token && (
+              {isLoggedIn && (
                 <Flex alignItems={'center'} gap={'12px'} onClick={handleLogout}>
                   <Flex
                     w={'40px'}
