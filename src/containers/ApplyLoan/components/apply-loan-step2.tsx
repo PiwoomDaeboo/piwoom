@@ -47,7 +47,10 @@ const ApplyLoanStep2 = () => {
             refresh_token: data.refreshToken,
           },
         })
-        setValue('email', userData?.email || '')
+        // 사용자가 이미 입력한 이메일이 있으면 덮어쓰지 않음
+        if (!emailValue && userData?.email) {
+          setValue('email', userData.email)
+        }
         router.replace(`/apply-loan?step=2&type=${router.query.type}`)
         setIsPhoneCertification(true)
       },
@@ -106,9 +109,12 @@ const ApplyLoanStep2 = () => {
   useEffect(() => {
     if (accessToken) {
       setIsPhoneCertification(true)
-      setValue('email', userData?.email || '')
+      // 토큰이 로드될 때만 userData의 이메일로 초기화 (사용자가 이미 입력한 경우는 덮어쓰지 않음)
+      if (!emailValue && userData?.email) {
+        setValue('email', userData.email)
+      }
     }
-  }, [accessToken])
+  }, [accessToken, userData?.email, setValue])
 
   // useEffect(() => {
   //   const {
@@ -234,6 +240,10 @@ const ApplyLoanStep2 = () => {
             w={'160px'}
             isDisabled={!isPhoneCertification || !!errors.email || !emailValue}
             onClick={() => {
+              // 이메일 값이 있으면 폼에 저장
+              if (emailValue) {
+                setValue('email', emailValue)
+              }
               setValue('kind', typeConvert(router.query.type as string))
               reset('popup_status')
               router.replace('/apply-loan?step=3&type=' + router.query.type)
