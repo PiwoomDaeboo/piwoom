@@ -186,6 +186,7 @@ export default function Document() {
     <FormProvider {...methods}>
       <Flex flexDir={'column'} w={'100%'}>
         <WetaxModal
+          loanId={Number(id)}
           isOpen={wetaxModalOpen}
           onClose={onWetaxModalClose}
           shouldSetFormValue={true}
@@ -263,7 +264,7 @@ export default function Document() {
                 variant={'outline-primary'}
                 textStyle={'pre-body-5'}
                 w={'209px'}
-                isDisabled={!settingData?.isWetax}
+                isDisabled={!settingData?.isWetax || !!localTaxSetWatchValue}
                 onClick={onWetaxModalOpen}
               >
                 세금 납부 내역 제출
