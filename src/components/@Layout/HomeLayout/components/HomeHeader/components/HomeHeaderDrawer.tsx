@@ -261,23 +261,23 @@ const HomeHeaderDrawer = ({
                   )
                 })}
               </VStack>
-              {isLoggedIn && (
-                <Flex alignItems={'center'} gap={'12px'} onClick={handleLogout}>
-                  <Flex
-                    w={'40px'}
-                    h={'40px'}
-                    bg={'grey.2'}
-                    borderRadius={'full'}
-                    justifyContent={'center'}
-                    alignItems={'center'}
-                  >
-                    <SignoutIcon boxSize={'24px'} />
-                  </Flex>
-                  <Text textStyle={'pre-body-3'} color={'grey.8'}>
-                    로그아웃
-                  </Text>
+              {/* {isLoggedIn && ( */}
+              <Flex alignItems={'center'} gap={'12px'} onClick={handleLogout}>
+                <Flex
+                  w={'40px'}
+                  h={'40px'}
+                  bg={'grey.2'}
+                  borderRadius={'full'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                >
+                  <SignoutIcon boxSize={'24px'} />
                 </Flex>
-              )}
+                <Text textStyle={'pre-body-3'} color={'grey.8'}>
+                  로그아웃
+                </Text>
+              </Flex>
+              {/* )} */}
             </Flex>
           </Container>
         }
