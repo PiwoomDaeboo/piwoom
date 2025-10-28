@@ -32,6 +32,13 @@ export const useLocalStorage = create(
     ),
     {
       name: '@piwoom',
+      // 모바일 환경에서 localStorage 동기화 개선
+      partialize: (state) => ({ token: state.token }),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          console.log('localStorage 재수화 완료:', state.token)
+        }
+      },
     },
   ),
 )
