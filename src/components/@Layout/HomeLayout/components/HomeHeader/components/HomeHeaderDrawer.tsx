@@ -150,10 +150,9 @@ const HomeHeaderDrawer = ({
           <Container px={'0px'} h={'100%'}>
             <Flex
               flexDir="column"
-              // justifyContent={'space-between'}
-              // alignItems="stretch"
               h={'100%'}
               pb={'16px'}
+              justifyContent={'flex-start'}
             >
               <VStack
                 alignItems={'flex-start'}
@@ -263,7 +262,7 @@ const HomeHeaderDrawer = ({
               </VStack>
               {isLoggedIn && (
                 <Flex
-                  mt={'70%'}
+                  mt={'auto'}
                   alignItems={'center'}
                   gap={'12px'}
                   onClick={handleLogout}
