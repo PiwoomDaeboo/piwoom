@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+import { useToast } from '@chakra-ui/react'
+
 import { useUsebAccessTokenCreateMutation } from '@/generated/apis/Useb/Useb.query'
 import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 
@@ -18,6 +20,7 @@ const Ekyc = () => {
       },
     },
   })
+  const toast = useToast()
 
   useEffect(() => {
     if (!userData) return
@@ -59,6 +62,12 @@ const Ekyc = () => {
             }, 500)
           } else if (json.result === 'failed') {
             window.opener.postMessage(json, '*')
+            toast({
+              title: '신분증 인증 실패',
+              description: json.review_result.message,
+              status: 'error',
+              duration: 5000,
+            })
             setTimeout(() => {
               window.close()
             }, 500)
