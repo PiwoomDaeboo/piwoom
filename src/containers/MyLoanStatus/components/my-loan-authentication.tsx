@@ -14,7 +14,6 @@ import PortOne from '@portone/browser-sdk/v2'
 
 import { useUserLoginCreateMutation } from '@/generated/apis/User/User.query'
 import { SecurityIcon } from '@/generated/icons/MyIcons'
-import { useAuth } from '@/hooks/useAuth'
 import { useLocalStorage } from '@/stores/local/state'
 import { handleErrorToast } from '@/utils/error-handler'
 
@@ -40,12 +39,10 @@ function MyLoanAuthentication() {
         // 토큰 저장 후 즉시 확인
         setTimeout(() => {
           const savedToken = useLocalStorage.getState().token
-          console.log('저장된 토큰 확인:', savedToken)
 
-          // 모바일에서 localStorage 동기화 문제 해결을 위해 강제로 상태 업데이트
           if (savedToken?.access_token) {
             console.log('토큰 저장 성공, 페이지 이동')
-            router.replace(`/my-loan-status`)
+            router.replace(`/my-loan-status?tab=0&page=1`)
           } else {
             console.error('토큰 저장 실패, 재시도')
             // 토큰 저장이 실패한 경우 재시도
@@ -53,7 +50,7 @@ function MyLoanAuthentication() {
               token: tokenData,
             })
             setTimeout(() => {
-              router.replace(`/my-loan-status`)
+              router.replace(`/my-loan-status?tab=0&page=1`)
             }, 200)
           }
         }, 100)
@@ -77,7 +74,7 @@ function MyLoanAuthentication() {
       storeId: 'store-5fcf48f2-05d3-43e2-9abe-c09b3f461e2d',
       identityVerificationId: crypto.randomUUID(),
       channelKey: 'channel-key-1e7295f0-e634-4e2b-9da5-2402b97e7a63',
-      redirectUrl: `${window.location.origin}/my-loan-status`,
+      redirectUrl: `${window.location.origin}/my-loan-status?tab=0&page=1`,
     })
     if (response?.code !== undefined) {
       return alert(response?.message)
