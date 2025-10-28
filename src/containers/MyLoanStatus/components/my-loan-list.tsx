@@ -217,8 +217,8 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                     대출 신청액
                   </Text>
                   <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                    {item?.contract?.amount?.toLocaleString() ||
-                      item?.loanAmount?.toLocaleString() ||
+                    {item?.loanAmount?.toLocaleString() ||
+                      item?.contract?.amount?.toLocaleString() ||
                       0}
                     원
                   </Text>
@@ -228,12 +228,10 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
                     대출 신청일
                   </Text>
                   <Text textStyle={'pre-body-5'} color={'grey.10'}>
-                    {item?.contract?.loanDate ||
-                      formatDate({
-                        date: new Date(item.createdAt),
-                        format: 'YYYY-MM-DD',
-                      }) ||
-                      '-'}
+                    {formatDate({
+                      date: new Date(item.createdAt),
+                      format: 'YYYY-MM-DD',
+                    }) || '-'}
                   </Text>
                 </HStack>
               </Flex>
