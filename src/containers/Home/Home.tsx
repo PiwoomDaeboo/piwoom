@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { Box, Button } from '@chakra-ui/react'
 
 import Terms from '../Terms'
@@ -10,6 +12,18 @@ import Section5 from './components/Section5'
 import Section6 from './components/Section6'
 
 function Home() {
+  useEffect(() => {
+    const userAgent = navigator.userAgent.toLowerCase()
+    const isKakaoInApp = userAgent.includes('kakaotalk')
+
+    // 카카오톡 인앱 브라우저일 경우에만 실행
+    if (isKakaoInApp) {
+      const targetUrl = 'https://piwoom.com/'
+      window.location.replace(
+        `kakaotalk://web/openExternal?url=${encodeURIComponent(targetUrl)}`,
+      )
+    }
+  }, [])
   return (
     <>
       {/* <Section0 /> */}
