@@ -68,11 +68,7 @@ const MyLoanStep3 = () => {
     privacy: false,
     collection: false,
   })
-  const { data: userData } = useUserRetrieveQuery({
-    variables: {
-      id: 'me',
-    },
-  })
+
   const { data: settingData } = useSettingRetrieveQuery({
     variables: {
       id: 'me',
@@ -202,11 +198,19 @@ const MyLoanStep3 = () => {
     }
   }, [])
   useEffect(() => {
-    if (popup_status) {
+    // if (popup_status) {
+    //   router.replace('/my-loan?step=4&id=' + userId)
+    // }
+    const handleStorageChange = (e: StorageEvent) => {
       router.replace('/my-loan?step=4&id=' + userId)
-      reset('popup_status')
     }
-  }, [router.query])
+
+    window.addEventListener('storage', handleStorageChange)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+    }
+  }, [router.query, popup_status])
 
   return (
     <Container>

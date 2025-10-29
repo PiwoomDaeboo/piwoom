@@ -8,14 +8,12 @@ import { useLocalStorage } from '@/stores/local/state'
 function ModusignCallback() {
   const router = useRouter()
   const is_sign = router.query.is_sign as string | undefined
-  console.log('is_sign', is_sign)
   const { set } = useLocalStorage()
   useEffect(() => {
     if (!router.isReady) return
 
     if (is_sign) {
       set('popup_status', is_sign)
-      router.replace('/my-loan?step=4')
       setTimeout(() => {
         window.close()
       }, 500)
