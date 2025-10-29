@@ -14,6 +14,12 @@ function ModusignCallback() {
 
     if (is_sign) {
       set('popup_status', new Date().toISOString())
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(
+        new CustomEvent('popupStatusChanged', {
+          detail: { popup_status: new Date().toISOString() },
+        }),
+      )
       setTimeout(() => {
         window.close()
       }, 500)

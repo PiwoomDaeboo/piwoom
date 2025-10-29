@@ -198,19 +198,40 @@ const MyLoanStep3 = () => {
     }
   }, [])
   useEffect(() => {
-    // if (popup_status) {
-    //   router.replace('/my-loan?step=4&id=' + userId)
-    // }
-    const handleStorageChange = (e: StorageEvent) => {
+    // Check if popup_status is already set
+    if (popup_status) {
+      router.replace('/my-loan?step=4&id=' + userId)
+      return
+    }
+
+    const handlePopupStatusChange = (e: CustomEvent) => {
       router.replace('/my-loan?step=4&id=' + userId)
     }
 
+    // Also listen for storage events as fallback
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === '@piwoom' && e.newValue) {
+        const data = JSON.parse(e.newValue)
+        if (data.state?.popup_status) {
+          router.replace('/my-loan?step=4&id=' + userId)
+        }
+      }
+    }
+
+    window.addEventListener(
+      'popupStatusChanged',
+      handlePopupStatusChange as EventListener,
+    )
     window.addEventListener('storage', handleStorageChange)
 
     return () => {
+      window.removeEventListener(
+        'popupStatusChanged',
+        handlePopupStatusChange as EventListener,
+      )
       window.removeEventListener('storage', handleStorageChange)
     }
-  }, [router.query, popup_status])
+  }, [router.query, popup_status, userId])
 
   return (
     <Container>
