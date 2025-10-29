@@ -1205,6 +1205,11 @@ const ApplyLoanStep4 = () => {
               data-field="detailAddress"
             />
           </VStack>
+          {errors?.baseAddress && (
+            <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+              {errors?.baseAddress?.message as string}
+            </Text>
+          )}
           {errors?.detailAddress && (
             <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
               {errors?.detailAddress?.message as string}
