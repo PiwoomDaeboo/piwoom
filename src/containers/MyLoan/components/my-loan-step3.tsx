@@ -175,19 +175,19 @@ const MyLoanStep3 = () => {
     const handleStorageChange = (e: MessageEvent) => {
       if (
         e.data.result === 'success' &&
-        (e.data.review_result.result_type === 1 ||
-          e.data.review_result.result_type === 5)
+        e.data.review_result.result_type === 1
       ) {
         console.log(e)
         setEkycData(e.data)
+      } else if (e.data.review_result.result_type === 5) {
+        toast({
+          title: '신분증 인증 실패',
+          description: e.data.review_result.message,
+          status: 'error',
+          duration: 5000,
+        })
       } else {
         return
-        // toast({
-        //   title: '신분증 인증 실패',
-        //   description: '신분증 인증에 실패했습니다.',
-        //   status: 'error',
-        //   duration: 3000,
-        // })
       }
     }
 
