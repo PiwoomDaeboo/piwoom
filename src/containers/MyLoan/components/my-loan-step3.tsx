@@ -101,7 +101,10 @@ const MyLoanStep3 = () => {
     }
     onTermsClose()
   }
-  const { mutate: createContractSignature } = useLoanSignCreateMutation({
+  const {
+    mutate: createContractSignature,
+    isPending: isCreateContractSignaturePending,
+  } = useLoanSignCreateMutation({
     options: {
       onSuccess: (data) => {
         const url = data?.signUrl
@@ -500,6 +503,7 @@ const MyLoanStep3 = () => {
           <Button
             variant={'solid-primary'}
             w={'160px'}
+            isLoading={isCreateContractSignaturePending}
             isDisabled={
               !isAgree ||
               !agreements.privacy ||

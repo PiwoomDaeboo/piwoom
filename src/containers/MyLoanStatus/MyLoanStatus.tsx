@@ -29,7 +29,7 @@ function MyLoanStatus() {
   const router = useRouter()
   const postsPerPage = 9
   const { token } = useLocalStorage()
-  // 디버깅을 위한 토큰 상태 로그
+
   useEffect(() => {
     if (!token?.access_token && router.isReady) {
       router.replace('/my-loan-auth')
