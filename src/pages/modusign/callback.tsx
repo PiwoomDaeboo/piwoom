@@ -13,7 +13,7 @@ function ModusignCallback() {
     if (!router.isReady) return
 
     if (is_sign) {
-      set('popup_status', is_sign)
+      set('popup_status', new Date().toISOString())
       setTimeout(() => {
         window.close()
       }, 500)
