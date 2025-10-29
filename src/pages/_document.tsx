@@ -40,6 +40,10 @@ class MyDocument extends Document {
           {/* {GASetter()}
           {KakaoSetter()}
           {FacebookSetter()} */}
+          <meta
+            name="naver-site-verification"
+            content="641a150a6356bf241dbde16bb9dde41acaea8200"
+          />
         </Head>
         <body>
           <ColorModeScript initialColorMode={config.initialColorMode} />
