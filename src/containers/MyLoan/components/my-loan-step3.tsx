@@ -29,6 +29,7 @@ import { useSettingRetrieveQuery } from '@/generated/apis/Setting/Setting.query'
 import { useUsebAccessTokenCreateMutation } from '@/generated/apis/Useb/Useb.query'
 import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
 import { CaretRightIcon, InfoFillIcon } from '@/generated/icons/MyIcons'
+import { useLocalStorage } from '@/stores/local/state'
 
 import {
   AGREEMENT_ITEMS,
@@ -57,6 +58,7 @@ const MyLoanStep3 = () => {
     onClose: onTermsClose,
   } = useDisclosure()
   const toast = useToast()
+  const { popup_status, reset } = useLocalStorage()
   const [usebAccessToken, setUsebAccessToken] = useState('')
   const [isAgree, setIsAgree] = useState(false)
   const [termsNumber, setTermsNumber] = useState(1)
@@ -199,6 +201,12 @@ const MyLoanStep3 = () => {
       window.removeEventListener('message', handleStorageChange)
     }
   }, [])
+  useEffect(() => {
+    if (popup_status) {
+      router.replace('/my-loan?step=4&id=' + userId)
+      reset('popup_status')
+    }
+  }, [router.query])
 
   return (
     <Container>

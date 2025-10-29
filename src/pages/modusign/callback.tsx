@@ -29,7 +29,7 @@ function ModusignCallback() {
     <>
       {/* output: 똑똑한개발자 | 메인 */}
       {/* titleTemplate는 /configs/seo/config.ts에서 변경 가능합니다. */}
-      <div>서명정보 제출 중...</div>
+      <div>서명정보 제출 중..</div>
     </>
   )
 }
