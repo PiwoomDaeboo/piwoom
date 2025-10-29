@@ -255,64 +255,42 @@ const ApplyLoanStep4 = () => {
 
   const onStep4Error = (errors: any) => {
     console.log('Step4 폼 에러:', errors)
-    // 에러 필드 우선순위 정의 (폼에서 위에서 아래 순서)
-    const errorFieldPriority = [
-      'loanAmount',
-      'repaymentType',
-      'interestPaymentDate',
-      'loanPeriod',
-      'bank',
-      'accountNumber',
-      'accountHolder',
-      'jobType',
-      'companyName',
-      'companyBusinessNumber',
-      'companyAddress',
-      'companyDetailAddress',
-      'employmentType',
-      'hireYear',
-      'hireMonth',
-      'baseAddress',
-      'detailAddress', //     'housingType',
-      'residenceType',
-      'assetBaseAddress',
-      'assetDetailAddress',
-      'untactDocumentSubmission',
-    ]
 
-    // 우선순위에 따라 첫 번째 에러 필드 찾기
-    const firstErrorField = errorFieldPriority.find((field) => errors[field])
+    // 에러가 있는 모든 필드 중 화면 상단에 가장 가까운 요소를 계산해서 스크롤
+    const errorKeys = Object.keys(errors || {})
+    let topmost = Number.POSITIVE_INFINITY
+    let topmostElement: HTMLElement | null = null
 
-    if (firstErrorField) {
-      // 먼저 페이지 최상단으로 즉시 이동
-      window.scrollTo(0, 0)
-      document.documentElement.scrollTop = 0
-      document.body.scrollTop = 0
+    for (const key of errorKeys) {
+      const candidate =
+        (document.querySelector(`[name="${key}"]`) as HTMLElement | null) ||
+        (document.querySelector(`[data-field="${key}"]`) as HTMLElement | null)
 
-      // 그 다음 에러 요소 찾기
-      const errorElement =
-        document.querySelector(`[name="${firstErrorField}"]`) ||
-        document.querySelector(`[data-field="${firstErrorField}"]`)
-
-      if (errorElement) {
-        // 약간의 지연 후 에러 요소로 스크롤
-        setTimeout(() => {
-          errorElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-            inline: 'nearest',
-          })
-
-          // 포커스도 함께
-          if (errorElement instanceof HTMLElement) {
-            errorElement.focus()
-          }
-        }, 100)
+      if (candidate) {
+        const rect = candidate.getBoundingClientRect()
+        const absoluteTop = rect.top + window.scrollY
+        if (absoluteTop < topmost) {
+          topmost = absoluteTop
+          topmostElement = candidate
+        }
       }
+    }
+
+    // 여유 오프셋 (고정 헤더 등을 고려)
+    const offset = 80
+
+    if (topmostElement) {
+      window.scrollTo({
+        top: Math.max(topmost - offset, 0),
+        behavior: 'smooth',
+      })
+      // 포커스도 함께 이동
+      setTimeout(() => {
+        topmostElement && topmostElement.focus && topmostElement.focus()
+      }, 150)
     } else {
-      window.scrollTo(0, 0)
-      document.documentElement.scrollTop = 0
-      document.body.scrollTop = 0
+      // 폴백: 맨 위로 이동
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
     toast({
@@ -342,7 +320,7 @@ const ApplyLoanStep4 = () => {
     },
   })
   // 대출신청 버튼 클릭 핸들러 (handleSubmit 사용)
-  const handleSubmitClick = handleSubmit(onStep4Submit)
+  const handleSubmitClick = handleSubmit(onStep4Submit, onStep4Error)
 
   const handleCompanySelect = (company: Company) => {
     clearErrors(['companyName', 'companyBusinessNumber'])
@@ -953,6 +931,7 @@ const ApplyLoanStep4 = () => {
             isLoading={isAccountVerifyMutationLoading}
             isDisabled={isAccountVerifyMutationLoading || isBankAccountVerified}
             w={'209px'}
+            data-field="accountHolder"
             onClick={handleOwnerNameSearch}
           >
             {isBankAccountVerified ? '예금주 실명조회 완료' : '예금주 실명조회'}

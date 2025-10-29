@@ -153,10 +153,10 @@ const ApplyLoanStep3 = () => {
 
   const onStep3Error = (errors: any) => {
     console.log('Step3 폼 에러:', errors)
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    })
+    // window.scrollTo({
+    //   top: 0,
+    //   behavior: 'smooth',
+    // })
     // // safeKey 에러가 있으면 특별한 메시지 표시
     // if (errors?.safeKey) {
     //   toast({
@@ -199,35 +199,41 @@ const ApplyLoanStep3 = () => {
     //     isClosable: true,
     //   })
     // }
-    const errorFieldPriority = [
-      'purpose',
-      'purposeDetail',
-      'totalAsset',
-      'annualIncome',
-      'monthlyIncome',
-      'monthlyFixedExpense',
-      'debtScale',
-      'repaymentMethod',
-      'repaymentDetail',
-      'creditScore',
-      'safeKey',
-      'purposeAndRepaymentPlan',
-    ]
 
-    // 우선순위에 따라 첫 번째 에러 필드 찾기
-    const firstErrorField = errorFieldPriority.find((field) => errors[field])
-    const errorElement =
-      document.querySelector(`[name="${firstErrorField}"]`) ||
-      document.querySelector(`[data-field="${firstErrorField}"]`)
+    const errorKeys = Object.keys(errors || {})
+    let topmost = Number.POSITIVE_INFINITY
+    let topmostElement: HTMLElement | null = null
 
-    if (errorElement) {
-      errorElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      })
-      if (errorElement instanceof HTMLElement) {
-        errorElement.focus()
+    for (const key of errorKeys) {
+      const candidate =
+        (document.querySelector(`[name="${key}"]`) as HTMLElement | null) ||
+        (document.querySelector(`[data-field="${key}"]`) as HTMLElement | null)
+
+      if (candidate) {
+        const rect = candidate.getBoundingClientRect()
+        const absoluteTop = rect.top + window.scrollY
+        if (absoluteTop < topmost) {
+          topmost = absoluteTop
+          topmostElement = candidate
+        }
       }
+    }
+
+    // 여유 오프셋 (고정 헤더 등을 고려)
+    const offset = 80
+
+    if (topmostElement) {
+      window.scrollTo({
+        top: Math.max(topmost - offset, 0),
+        behavior: 'smooth',
+      })
+      // 포커스도 함께 이동
+      setTimeout(() => {
+        topmostElement && topmostElement.focus && topmostElement.focus()
+      }, 150)
+    } else {
+      // 폴백: 맨 위로 이동
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
@@ -271,13 +277,13 @@ const ApplyLoanStep3 = () => {
           type: 'required',
           message: '신용정보 제출이 필요합니다.',
         })
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth',
-        })
+        onStep3Error(errors)
+        // window.scrollTo({
+        //   top: 0,
+        //   behavior: 'smooth',
+        // })
         return
       }
-      onStep3Error(errors)
     }
   }
 
@@ -417,6 +423,7 @@ const ApplyLoanStep3 = () => {
                   : 'outline-secondary'
                 }
                 textStyle={'pre-body-5'}
+                data-field="totalAsset"
                 bg={totalAsset === option.value ? 'primary.1' : 'grey.0'}
                 color={totalAsset === option.value ? 'primary.3' : 'grey.8'}
                 w={'100%'}
@@ -539,6 +546,7 @@ const ApplyLoanStep3 = () => {
                 textStyle={'pre-body-5'}
                 color={debtScale === option.value ? 'primary.3' : 'grey.8'}
                 w={'100%'}
+                data-field="debtScale"
                 onClick={() => handleButtonSelect('debtScale', option.value)}
               >
                 {option.label}
@@ -618,6 +626,7 @@ const ApplyLoanStep3 = () => {
               </Box>
               <Button
                 variant={'text-primary'}
+                data-field="creditScore"
                 onClick={() => {
                   window.open('https://campaign.naver.com/credit/', '_blank')
                 }}
@@ -645,6 +654,7 @@ const ApplyLoanStep3 = () => {
             color={'grey.8'}
             onClick={handleApplyCreditInfoSubmit}
             w={'209px'}
+            data-field="safeKey"
             isDisabled={!!safeKeyWatchValue}
           >
             {safeKeyWatchValue ? '제출 완료' : '제출'}
