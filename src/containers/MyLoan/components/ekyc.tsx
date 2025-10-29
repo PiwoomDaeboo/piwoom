@@ -57,10 +57,13 @@ const Ekyc = () => {
           if (json.result === 'success') {
             console.log(window.opener, json)
             window.opener.postMessage(json, '*')
-            if (json?.review_result.result_type === 5) {
+            if (
+              json?.review_result?.result_type &&
+              json?.review_result?.result_type === 5
+            ) {
               toast({
                 title: '신분증 인증 실패',
-                description: json.review_result.message,
+                description: '심사가 필요합니다. 관리자에게 문의해주세요.',
                 status: 'error',
                 duration: 5000,
               })
