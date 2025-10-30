@@ -414,9 +414,7 @@ const ApplyLoanStep4 = () => {
     accountVerifyMutation({
       data: {
         bank: bankWatchValue,
-        // || bankWatchValue,
         number: accountNumberWatchValue,
-        // || accountNumberWatchValue,
         birth: userData?.birth?.slice(2) || '',
       },
     })

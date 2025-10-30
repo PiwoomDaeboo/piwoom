@@ -28,7 +28,7 @@ interface AddressModalProps {
 }
 
 function AddressModal({ isOpen, onClose, type }: AddressModalProps) {
-  const { setValue, getValues } = useFormContext()
+  const { setValue, getValues, clearErrors } = useFormContext()
 
   const handleConfirm = () => {}
 
@@ -52,7 +52,7 @@ function AddressModal({ isOpen, onClose, type }: AddressModalProps) {
 
     if (type === 'normal') {
       setValue('baseAddress', baseAddress)
-
+      clearErrors('baseAddress')
       // const currentDetailAddress = getValues('detailAddress')
       // if (!currentDetailAddress && buildingInfo) {
       //   setValue('detailAddress', buildingInfo)

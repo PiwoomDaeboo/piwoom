@@ -36,6 +36,7 @@ export default function IdCardUpload() {
   const {
     register,
     formState: { errors },
+    setError,
     setValue,
     clearErrors,
   } = useFormContext()
@@ -205,7 +206,14 @@ export default function IdCardUpload() {
               <Box
                 p={0}
                 cursor={'pointer'}
-                onClick={() => setUploadedFileName('')}
+                onClick={() => {
+                  setUploadedFileName('')
+                  setUploadedFileUrl(null) // 추가
+                  setValue('identityCard', null)
+                  setError('identityCard', {
+                    message: '필수 항목 입니다.',
+                  })
+                }}
               >
                 <XIcon boxSize={'16px'} />
               </Box>
