@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 
 import { Box, Button } from '@chakra-ui/react'
 
+import MyLoanTermsModal from '../MyLoan/components/my-loan-terms-modal'
 import Terms from '../Terms'
 import Section0 from './components/Section0'
 import Section1 from './components/Section1'

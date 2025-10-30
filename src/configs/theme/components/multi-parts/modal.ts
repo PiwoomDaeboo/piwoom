@@ -58,8 +58,8 @@ const sizes = {
     dialog: {
       borderRadius: '0px',
       maxW: '100vw',
-      // maxH: '100%',
-      h: '100%',
+      // maxH: '100vh',
+      // h: '100vh',
       bg: 'white',
       m: 0,
     },
