@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -24,6 +24,7 @@ import {
 } from '@/constants/loan'
 import { useLoanListQuery } from '@/generated/apis/Loan/Loan.query'
 import { useUserRetrieveQuery } from '@/generated/apis/User/User.query'
+import { useLocalStorage } from '@/stores/local/state'
 
 import CustomerInfoModal from './customer-info-modal'
 
@@ -48,7 +49,12 @@ const MyLoanStep2 = () => {
       id: 'me',
     },
   })
-  console.log('userData', userData)
+  const { popup_status, reset } = useLocalStorage()
+  useEffect(() => {
+    if (popup_status) {
+      reset('popup_status')
+    }
+  }, [popup_status])
 
   return (
     <Container>

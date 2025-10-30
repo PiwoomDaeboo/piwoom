@@ -182,7 +182,7 @@ const MyLoanStep3 = () => {
       ) {
         console.log(e)
         setEkycData(e.data)
-      } else if (e.data.review_result.result_type === 5) {
+      } else if (e.data?.review_result?.result_type === 5) {
         toast({
           title: '신분증 인증 실패',
           description: e.data.review_result.message,
