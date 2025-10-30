@@ -22,7 +22,7 @@ function ModusignCallback() {
       )
       setTimeout(() => {
         window.close()
-      }, 500)
+      }, 1000)
     } else {
       window.alert('서명정보 제출 실패')
       window.close()

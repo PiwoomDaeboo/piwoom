@@ -68,9 +68,9 @@ const Ekyc = () => {
                 duration: 5000,
               })
             }
-            setTimeout(() => {
-              window.close()
-            }, 500)
+            // setTimeout(() => {
+            //   window.close()
+            // }, 1000)
           } else if (json.result === 'failed') {
             window.opener.postMessage(json, '*')
             toast({
@@ -81,7 +81,7 @@ const Ekyc = () => {
             })
             setTimeout(() => {
               window.close()
-            }, 500)
+            }, 1000)
           } else if (json.result === 'complete') {
             window.close()
           } else if (json.result === 'close') {
