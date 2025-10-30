@@ -240,7 +240,6 @@ const ApplyLoanStep2 = () => {
             w={'160px'}
             isDisabled={!isPhoneCertification || !!errors.email || !emailValue}
             onClick={() => {
-              // 이메일 값이 있으면 폼에 저장
               if (emailValue) {
                 setValue('email', emailValue)
               }

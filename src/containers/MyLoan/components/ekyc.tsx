@@ -61,12 +61,7 @@ const Ekyc = () => {
               json?.review_result?.result_type &&
               json?.review_result?.result_type === 5
             ) {
-              toast({
-                title: '신분증 인증 실패',
-                description: '심사가 필요합니다. 관리자에게 문의해주세요.',
-                status: 'error',
-                duration: 5000,
-              })
+              window.alert('심사가 필요합니다. 관리자에게 문의해주세요.')
             }
             // setTimeout(() => {
             //   window.close()
@@ -75,13 +70,13 @@ const Ekyc = () => {
             window.opener.postMessage(json, '*')
             toast({
               title: '신분증 인증 실패',
-              description: json.review_result.message,
+              description: '신분증 인증에 실패했습니다. 다시 시도해주세요.',
               status: 'error',
               duration: 5000,
             })
-            setTimeout(() => {
-              window.close()
-            }, 1000)
+            // setTimeout(() => {
+            //   window.close()
+            // }, 1000)
           } else if (json.result === 'complete') {
             window.close()
           } else if (json.result === 'close') {
