@@ -189,8 +189,8 @@ export default function Document() {
     documentSubmitMutation({
       id: Number(id),
       data: {
-        safeKey: safeKeyWatchValue,
         ...data,
+        safeKey: safeKey,
       },
     })
   })
