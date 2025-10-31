@@ -37,6 +37,7 @@ import {
 import { FolderIcon, InfoFillIcon } from '@/generated/icons/MyIcons'
 import { MY_IMAGES } from '@/generated/path/images'
 import { useLocalStorage } from '@/stores/local/state'
+import { extractErrorMessage } from '@/utils/error-handler'
 
 export default function Document() {
   const router = useRouter()
@@ -85,7 +86,13 @@ export default function Document() {
           router.replace('/my-loan-status')
         },
         onError: (error) => {
-          console.error('error', error)
+          toast({
+            title: '서류 제출 실패',
+            description: extractErrorMessage(error),
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          })
         },
       },
     })
