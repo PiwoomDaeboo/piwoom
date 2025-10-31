@@ -162,22 +162,35 @@ export default function Document() {
     )
   }
 
-  useEffect(() => {
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'popup_status') {
-        console.log(e)
+  // useEffect(() => {
+  //   window.addEventListener('storage', (e) => {
+  //     if (e.key === 'popup_status' && e.newValue) {
+  //       console.log('Storage changed:', e.newValue)
+  //       setValue('safeKey', e.newValue)
+  //     }
+  //   })
+  // }, [setValue])
 
-        setValue('safeKey', safeKey)
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'popup_status' && e.newValue) {
+        console.log('Storage changed:', e.newValue)
+        setValue('safeKey', e.newValue)
       }
-    })
+    }
+    window.addEventListener('storage', handleStorageChange)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+    }
   }, [setValue])
 
   const onSubmit = handleSubmit((data: any) => {
     documentSubmitMutation({
       id: Number(id),
       data: {
-        ...data,
         safeKey: safeKeyWatchValue,
+        ...data,
       },
     })
   })
