@@ -323,7 +323,9 @@ const ApplyLoanStep4 = () => {
   const handleSubmitClick = handleSubmit(onStep4Submit, onStep4Error)
 
   const handleCompanySelect = (company: Company) => {
-    clearErrors(['companyName', 'companyBusinessNumber'])
+    clearErrors('companyAddress')
+    clearErrors('companyDetailAddress')
+    clearErrors('companyBusinessNumber')
 
     setValue('companyName', company.name, { shouldValidate: false })
     setValue('companyBusinessNumber', company.businessNo, {
