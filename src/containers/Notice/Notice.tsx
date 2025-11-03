@@ -30,17 +30,18 @@ function Notice() {
   const currentPage = Number(page)
   const postsPerPage = 5
 
-  const { data: pinnedNoticeList } = useNoticeListQuery({
-    variables: {
-      query: {
-        q: String(search_keyword),
-        is_pinned: true,
-        limit: postsPerPage,
-        offset: (currentPage - 1) * postsPerPage,
+  const { data: pinnedNoticeList, isLoading: isPinnedLoading } =
+    useNoticeListQuery({
+      variables: {
+        query: {
+          q: String(search_keyword),
+          is_pinned: true,
+          limit: postsPerPage,
+          offset: (currentPage - 1) * postsPerPage,
+        },
       },
-    },
-  })
-  const { data: noticeList } = useNoticeListQuery({
+    })
+  const { data: noticeList, isLoading: isNoticeLoading } = useNoticeListQuery({
     variables: {
       query: {
         q: String(search_keyword),
@@ -143,41 +144,46 @@ function Notice() {
             </InputGroup>
           </Flex>
           <Box w={'100%'} minH={'400px'}>
-            {noticeList?.results?.length === 0 && <NonData variant="search" />}
-            {noticeList?.results?.length !== 0 &&
-              pinnedNoticeList?.results?.map((item, index) => (
-                <Flex
-                  key={item.id}
-                  borderTop={'1px solid'}
-                  borderColor={'grey.2'}
-                  px={{ base: '0px', sm: '28px', md: '40px' }}
-                  py={{ base: '27px', sm: '30px' }}
-                  w={'100%'}
-                  justifyContent={'space-between'}
-                  _hover={{ bg: 'grey.1' }}
-                  cursor={'pointer'}
-                  onClick={() => router.push(`/notice/${item.id}`)}
-                >
-                  <HStack gap={'32px'}>
-                    <Badge bg="primary.4" color={'white'}>
-                      공지사항
-                    </Badge>
-                    <Text
-                      textStyle={item.title ? 'pre-body-3' : 'pre-body-4'}
-                      color={'grey.10'}
-                    >
-                      {item.title}
-                    </Text>
-                  </HStack>
+            {pinnedNoticeList?.results?.map((item, index) => (
+              <Flex
+                key={item.id}
+                borderTop={'1px solid'}
+                borderColor={'grey.2'}
+                px={{ base: '0px', sm: '28px', md: '40px' }}
+                py={{ base: '27px', sm: '30px' }}
+                w={'100%'}
+                justifyContent={'space-between'}
+                _hover={{ bg: 'grey.1' }}
+                cursor={'pointer'}
+                onClick={() => router.push(`/notice/${item.id}`)}
+              >
+                <HStack gap={'32px'}>
+                  <Badge bg="primary.4" color={'white'}>
+                    공지사항
+                  </Badge>
                   <Text
-                    display={{ base: 'none', sm: 'block' }}
-                    textStyle={'pre-body-8'}
+                    textStyle={item.title ? 'pre-body-3' : 'pre-body-4'}
                     color={'grey.10'}
                   >
-                    {formatDate({ date: new Date(item.createdAt) })}
+                    {item.title}
                   </Text>
-                </Flex>
-              ))}
+                </HStack>
+                <Text
+                  display={{ base: 'none', sm: 'block' }}
+                  textStyle={'pre-body-8'}
+                  color={'grey.10'}
+                >
+                  {formatDate({ date: new Date(item.createdAt) })}
+                </Text>
+              </Flex>
+            ))}
+            {!isPinnedLoading &&
+              !isNoticeLoading &&
+              searchInput.length > 0 &&
+              (pinnedNoticeList?.results?.length || 0) === 0 &&
+              (noticeList?.results?.length || 0) === 0 && (
+                <NonData variant="search" />
+              )}
             {noticeList?.results?.map((item, index) => (
               <Flex
                 key={item.id}
