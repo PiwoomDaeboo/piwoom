@@ -265,25 +265,20 @@ const ApplyLoanStep3 = () => {
   }
 
   const handleNextClick = async () => {
-    const safeKeyValid = await trigger('safeKey')
     const isValid = await validateStep3Fields()
-
-    if (isValid && safeKeyValid) {
+    if (!safeKeyWatchValue) {
+      setError('safeKey', {
+        type: 'required',
+        message: '신용정보 제출이 필요합니다.',
+      })
+      onStep3Error(errors)
+      return
+    }
+    if (isValid) {
       const formData = watch()
       onStep3Submit(formData)
     } else {
-      if (!safeKeyWatchValue || !safeKeyValid) {
-        setError('safeKey', {
-          type: 'required',
-          message: '신용정보 제출이 필요합니다.',
-        })
-        onStep3Error(errors)
-        // window.scrollTo({
-        //   top: 0,
-        //   behavior: 'smooth',
-        // })
-        return
-      }
+      onStep3Error(errors)
     }
   }
 
