@@ -31,29 +31,6 @@ class MyDocument extends Document {
     }
   }
 
-  googleTagManagerHeadScript() {
-    return {
-      __html: `
-    <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-WQBJW8DZ');</script>
-<!-- End Google Tag Manager -->`,
-    }
-  }
-
-  googleTagManagerBodyScript() {
-    return {
-      __html: `
-      <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WQBJW8DZ"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->`,
-    }
-  }
-
   inappBrowserBypass() {
     return {
       __html: `
@@ -121,7 +98,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return (
       <Html>
         <Head>
-          <script dangerouslySetInnerHTML={this.googleTagManagerHeadScript()} />
           <script dangerouslySetInnerHTML={this.redirectIEtoEdge()} />
           <script dangerouslySetInnerHTML={this.inappBrowserBypass()} />
           {/* 분석도구가 필요한 경우 주석 해제 후 사용해주세요. src/utils/analytics/analytics.ts 설정 필요 */}
@@ -134,7 +110,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           />
         </Head>
         <body>
-          <script dangerouslySetInnerHTML={this.googleTagManagerBodyScript()} />
           <ColorModeScript initialColorMode={config.initialColorMode} />
           <Main />
           <NextScript />
