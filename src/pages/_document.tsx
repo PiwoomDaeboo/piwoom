@@ -121,9 +121,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return (
       <Html>
         <Head>
+          <script dangerouslySetInnerHTML={this.googleTagManagerHeadScript()} />
           <script dangerouslySetInnerHTML={this.redirectIEtoEdge()} />
           <script dangerouslySetInnerHTML={this.inappBrowserBypass()} />
-          <script dangerouslySetInnerHTML={this.googleTagManagerHeadScript()} />
           {/* 분석도구가 필요한 경우 주석 해제 후 사용해주세요. src/utils/analytics/analytics.ts 설정 필요 */}
           {/* {GASetter()}
           {KakaoSetter()}
