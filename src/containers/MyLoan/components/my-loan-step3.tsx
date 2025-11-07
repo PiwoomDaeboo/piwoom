@@ -176,27 +176,53 @@ const MyLoanStep3 = () => {
 
   useEffect(() => {
     const handleStorageChange = (e: MessageEvent) => {
+      // e.data가 없거나 예상한 형태가 아니면 무시
+      if (!e.data || typeof e.data !== 'object') {
+        return
+      }
+
+      // result가 없는 메시지는 무시 (다른 소스에서 온 메시지일 수 있음)
+      if (!e.data.result) {
+        return
+      }
+
+      console.log(e)
+
+      // 성공 케이스: result === 'success' && result_type === 1
       if (
         e.data.result === 'success' &&
-        e.data.review_result.result_type === 1
+        e.data.review_result?.result_type === 1
       ) {
         console.log(e)
         setEkycData(e.data)
-      } else if (e.data?.review_result?.result_type === 5) {
+        return
+      }
+
+      // 실패 케이스 1: result === 'success'이지만 result_type이 1이 아님
+      if (
+        e.data.result === 'success' &&
+        e.data.review_result?.result_type !== undefined &&
+        e.data.review_result.result_type !== 1
+      ) {
         toast({
           title: '신분증 인증 실패',
-          description: e.data.review_result.message,
+          description: '신분증 인증에 실패했습니다. 다시 시도해주세요',
           status: 'error',
           duration: 5000,
+          id: 'ekyc-failure-result-type', // 같은 toast가 중복 표시되지 않도록
         })
-      } else if (e.data.result === 'failed') {
+        return
+      }
+
+      // 실패 케이스 2: result === 'failed'
+      if (e.data.result === 'failed') {
         toast({
           title: '신분증 인증 실패',
           description: '신분증 인증에 실패했습니다. 다시 시도해주세요.',
           status: 'error',
           duration: 5000,
+          id: 'ekyc-failure-failed', // 같은 toast가 중복 표시되지 않도록
         })
-      } else {
         return
       }
     }
@@ -206,7 +232,42 @@ const MyLoanStep3 = () => {
     return () => {
       window.removeEventListener('message', handleStorageChange)
     }
-  }, [])
+  }, [toast]) // toast를 의존성 배열에 추가
+
+  // useEffect(() => {
+  //   const handleStorageChange = (e: MessageEvent) => {
+  //     console.log(e)
+  //     if (
+  //       e.data.result === 'success' &&
+  //       e.data.review_result.result_type === 1
+  //     ) {
+  //       console.log(e)
+  //       setEkycData(e.data)
+  //     } else if (e.data?.review_result?.result_type !== 1) {
+  //       toast({
+  //         title: '신분증 인증 실패',
+  //         description: '신분증 인증에 실패했습니다. 다시 시도해주세요',
+  //         status: 'error',
+  //         duration: 5000,
+  //       })
+  //     } else if (e.data.result === 'failed') {
+  //       toast({
+  //         title: '신분증 인증 실패',
+  //         description: '신분증 인증에 실패했습니다. 다시 시도해주세요.',
+  //         status: 'error',
+  //         duration: 5000,
+  //       })
+  //     } else {
+  //       return
+  //     }
+  //   }
+
+  //   window.addEventListener('message', handleStorageChange)
+
+  //   return () => {
+  //     window.removeEventListener('message', handleStorageChange)
+  //   }
+  // }, [])
   useEffect(() => {
     // Check if popup_status is already set
     if (popup_status) {
