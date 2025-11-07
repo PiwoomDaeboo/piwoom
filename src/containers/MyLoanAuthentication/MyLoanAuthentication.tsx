@@ -59,11 +59,11 @@ function MyLoanAuthentication() {
       },
       onError: (error: any) => {
         if (error?.response?.data?.status === 400) {
-          toast(
-            handleErrorToast(error, {
-              title: '로그인 실패',
-            }),
-          )
+          toast({
+            title: error?.response?.data?.nonField[0],
+            status: 'error',
+            duration: 5000,
+          })
         } else {
           console.error('userLoginCreate', error)
         }

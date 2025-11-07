@@ -54,14 +54,13 @@ const ApplyLoanStep2 = () => {
         router.replace(`/apply-loan?step=2&type=${router.query.type}`)
         setIsPhoneCertification(true)
       },
-      // onError: (error: any) => {
-      //   // router.push(`/my-loan-status`)
-      //   toast({
-      //     title: error?.response?.data?.nonField[0],
-      //     status: 'error',
-      //     duration: 5000,
-      //   })
-      // },
+      onError: (error: any) => {
+        toast({
+          title: error?.response?.data?.nonField[0],
+          status: 'error',
+          duration: 5000,
+        })
+      },
     },
   })
 
