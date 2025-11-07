@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react'
 import * as PortOne from '@portone/browser-sdk/v2'
 
-import { useFormContext, useWatch } from 'react-hook-form'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
 
 import { ENV } from '@/configs/env'
 import {
@@ -109,12 +109,11 @@ const ApplyLoanStep2 = () => {
   useEffect(() => {
     if (accessToken) {
       setIsPhoneCertification(true)
-      // 토큰이 로드될 때만 userData의 이메일로 초기화 (사용자가 이미 입력한 경우는 덮어쓰지 않음)
       if (!emailValue && userData?.email) {
         setValue('email', userData.email)
       }
     }
-  }, [accessToken, userData?.email, setValue])
+  }, [accessToken, userData?.email, setValue, emailValue])
 
   // useEffect(() => {
   //   const {
@@ -218,7 +217,17 @@ const ApplyLoanStep2 = () => {
                   •
                 </Text>
               </Text>
-              <Input {...register('email')} placeholder="이메일" />
+              <Controller
+                name="email"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    placeholder="이메일"
+                    value={field.value || ''}
+                  />
+                )}
+              />
               {errors.email && (
                 <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
                   {errors.email.message as string}

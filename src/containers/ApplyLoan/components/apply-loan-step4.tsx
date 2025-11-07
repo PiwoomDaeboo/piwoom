@@ -434,6 +434,7 @@ const ApplyLoanStep4 = () => {
   useEffect(() => {
     if (!settingData?.isGov) {
       setValue('untactDocumentSubmission', true)
+      clearErrors('untactDocumentSubmission')
     }
   }, [settingData?.isGov])
 

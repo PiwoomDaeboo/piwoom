@@ -141,7 +141,6 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
           'untact-document-required',
           '비대면 서류제출을 완료해주세요.',
           function (value) {
-            // 정부24 기능이 활성화된 경우에만 필수
             return value === true
           },
         ),
