@@ -43,8 +43,9 @@ export const useSelectButtonGroup = ({
                 bg={isSelected ? 'primary.1' : 'grey.0'}
                 key={option.value}
                 isDisabled={
-                  jobTypeWatchValue === 'HOUSEWIFE' ||
-                  jobTypeWatchValue === 'UNEMPLOYED'
+                  name !== 'repaymentType' &&
+                  (jobTypeWatchValue === 'HOUSEWIFE' ||
+                    jobTypeWatchValue === 'UNEMPLOYED')
                 }
                 onClick={() => {
                   if (variant === 'single') {
