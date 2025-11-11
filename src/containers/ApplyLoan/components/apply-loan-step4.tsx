@@ -536,33 +536,32 @@ const ApplyLoanStep4 = () => {
         </Text>
 
         <InputForm label="대출신청 금액">
-          <>
-            <Controller
-              name="loanAmount"
-              control={control}
-              render={({ field }) => (
-                <InputGroup>
-                  <Input
-                    placeholder="0"
-                    type="text"
-                    textAlign="right"
-                    pr="50px"
-                    value={formatNumberWithCommas(field.value)}
-                    onChange={(e) => {
-                      const numericValue = parseNumberFromFormatted(
-                        e.target.value,
-                      )
-                      field.onChange(numericValue)
-                    }}
-                    data-field="loanAmount"
-                  />
-                  <InputRightElement>
-                    <Text>만원</Text>
-                  </InputRightElement>
-                </InputGroup>
-              )}
-            />
-            <Flex gap={'8px'} flexWrap={'wrap'}>
+          <Controller
+            name="loanAmount"
+            control={control}
+            render={({ field }) => (
+              <InputGroup>
+                <Input
+                  placeholder="0"
+                  type="text"
+                  textAlign="right"
+                  pr="50px"
+                  value={formatNumberWithCommas(field.value)}
+                  onChange={(e) => {
+                    const numericValue = parseNumberFromFormatted(
+                      e.target.value,
+                    )
+                    field.onChange(numericValue)
+                  }}
+                  data-field="loanAmount"
+                />
+                <InputRightElement>
+                  <Text>만원</Text>
+                </InputRightElement>
+              </InputGroup>
+            )}
+          />
+          {/* <Flex gap={'8px'} flexWrap={'wrap'}>
               <Button
                 bg={loanAmount === 300 ? 'primary.1' : 'grey.0'}
                 variant={
@@ -628,8 +627,7 @@ const ApplyLoanStep4 = () => {
               >
                 <Text textStyle={'pre-caption-1'}>1500</Text>
               </Button>
-            </Flex>
-          </>
+            </Flex> */}
           {errors?.loanAmount && (
             <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
               {errors?.loanAmount?.message as string}
@@ -674,7 +672,7 @@ const ApplyLoanStep4 = () => {
             </Text>
           )}
         </InputForm>
-        {router.query.type === 'salary' ?
+        {router.query.type === 'salary' && (
           <InputForm label="대출기간">
             <VStack alignItems={'flex-start'} spacing={'8px'} w={'100%'}>
               <InputGroup>
@@ -703,80 +701,6 @@ const ApplyLoanStep4 = () => {
               <Text textStyle={'pre-caption-2'} color={'grey.6'}>
                 최대 6개월까지 입력 가능해요
               </Text>
-              <Flex gap={'8px'} flexWrap={'wrap'}>
-                <Button
-                  bg={loanPeriod === 1 ? 'primary.1' : 'grey.0'}
-                  variant={
-                    loanPeriod === 1 ? 'outline-primary' : 'outline-secondary'
-                  }
-                  onClick={() => {
-                    clearErrors('loanPeriod')
-                    handleLoanPeriodSelect('1개월')
-                  }}
-                >
-                  <Text textStyle={'pre-caption-1'}>1개월</Text>
-                </Button>
-                <Button
-                  bg={loanPeriod === 2 ? 'primary.1' : 'grey.0'}
-                  variant={
-                    loanPeriod === 2 ? 'outline-primary' : 'outline-secondary'
-                  }
-                  onClick={() => {
-                    clearErrors('loanPeriod')
-                    handleLoanPeriodSelect('2개월')
-                  }}
-                >
-                  <Text textStyle={'pre-caption-1'}>2개월</Text>
-                </Button>
-                <Button
-                  bg={loanPeriod === 3 ? 'primary.1' : 'grey.0'}
-                  variant={
-                    loanPeriod === 3 ? 'outline-primary' : 'outline-secondary'
-                  }
-                  onClick={() => {
-                    clearErrors('loanPeriod')
-                    handleLoanPeriodSelect('3개월')
-                  }}
-                >
-                  <Text textStyle={'pre-caption-1'}>3개월</Text>
-                </Button>
-                <Button
-                  bg={loanPeriod === 4 ? 'primary.1' : 'grey.0'}
-                  variant={
-                    loanPeriod === 4 ? 'outline-primary' : 'outline-secondary'
-                  }
-                  onClick={() => {
-                    clearErrors('loanPeriod')
-                    handleLoanPeriodSelect('4개월')
-                  }}
-                >
-                  <Text textStyle={'pre-caption-1'}>4개월</Text>
-                </Button>
-                <Button
-                  bg={loanPeriod === 5 ? 'primary.1' : 'grey.0'}
-                  variant={
-                    loanPeriod === 5 ? 'outline-primary' : 'outline-secondary'
-                  }
-                  onClick={() => {
-                    clearErrors('loanPeriod')
-                    handleLoanPeriodSelect('5개월')
-                  }}
-                >
-                  <Text textStyle={'pre-caption-1'}>5개월</Text>
-                </Button>
-                <Button
-                  bg={loanPeriod === 6 ? 'primary.1' : 'grey.0'}
-                  variant={
-                    loanPeriod === 6 ? 'outline-primary' : 'outline-secondary'
-                  }
-                  onClick={() => {
-                    clearErrors('loanPeriod')
-                    handleLoanPeriodSelect('6개월')
-                  }}
-                >
-                  <Text textStyle={'pre-caption-1'}>6개월</Text>
-                </Button>
-              </Flex>
             </VStack>
             {errors?.loanPeriod && (
               <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
@@ -784,7 +708,46 @@ const ApplyLoanStep4 = () => {
               </Text>
             )}
           </InputForm>
-        : <InputForm label="대출기간">
+        )}
+        {router.query.type === 'credit' && (
+          <InputForm label="대출기간">
+            <VStack alignItems={'flex-start'} spacing={'8px'} w={'100%'}>
+              <InputGroup>
+                <Input
+                  placeholder="0"
+                  type="number"
+                  min={0}
+                  max={36}
+                  onKeyDown={(evt) =>
+                    ['e', 'E', '+', '-', '.'].includes(evt.key) &&
+                    evt.preventDefault()
+                  }
+                  onPaste={handlePaste}
+                  textAlign="right"
+                  pr="50px"
+                  {...register('loanPeriod', {
+                    valueAsNumber: true,
+                    onChange: handleLoanPeriodChange,
+                  })}
+                  data-field="loanPeriod"
+                />
+                <InputRightElement>
+                  <Text>개월</Text>
+                </InputRightElement>
+              </InputGroup>
+              <Text textStyle={'pre-caption-2'} color={'grey.6'}>
+                최대 36개월까지 입력 가능해요
+              </Text>
+            </VStack>
+            {errors?.loanPeriod && (
+              <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
+                {errors?.loanPeriod?.message as string}
+              </Text>
+            )}
+          </InputForm>
+        )}
+        {router.query.type === 'mortgage' && (
+          <InputForm label="대출기간">
             <VStack alignItems={'flex-start'} spacing={'8px'} w={'100%'}>
               <InputGroup>
                 <Input
@@ -812,57 +775,6 @@ const ApplyLoanStep4 = () => {
               <Text textStyle={'pre-caption-2'} color={'grey.6'}>
                 최대 60개월까지 입력 가능해요
               </Text>
-              <Flex gap={'8px'} flexWrap={'wrap'}>
-                <Button
-                  textStyle={'pre-body-5'}
-                  bg={loanPeriod === 6 ? 'primary.1' : 'grey.0'}
-                  variant={
-                    loanPeriod === 6 ? 'outline-primary' : 'outline-secondary'
-                  }
-                  onClick={() => {
-                    clearErrors('loanPeriod')
-                    handleLoanPeriodSelect('6개월')
-                  }}
-                >
-                  <Text textStyle={'pre-caption-1'}>6개월</Text>
-                </Button>
-                <Button
-                  bg={loanPeriod === 12 ? 'primary.1' : 'grey.0'}
-                  variant={
-                    loanPeriod === 12 ? 'outline-primary' : 'outline-secondary'
-                  }
-                  onClick={() => {
-                    clearErrors('loanPeriod')
-                    handleLoanPeriodSelect('12개월')
-                  }}
-                >
-                  <Text textStyle={'pre-caption-1'}>12개월</Text>
-                </Button>
-                <Button
-                  bg={loanPeriod === 24 ? 'primary.1' : 'grey.0'}
-                  variant={
-                    loanPeriod === 24 ? 'outline-primary' : 'outline-secondary'
-                  }
-                  onClick={() => {
-                    clearErrors('loanPeriod')
-                    handleLoanPeriodSelect('24개월')
-                  }}
-                >
-                  <Text textStyle={'pre-caption-1'}>24개월</Text>
-                </Button>
-                <Button
-                  bg={loanPeriod === 36 ? 'primary.1' : 'grey.0'}
-                  variant={
-                    loanPeriod === 36 ? 'outline-primary' : 'outline-secondary'
-                  }
-                  onClick={() => {
-                    clearErrors('loanPeriod')
-                    handleLoanPeriodSelect('36개월')
-                  }}
-                >
-                  <Text textStyle={'pre-caption-1'}>36개월</Text>
-                </Button>
-              </Flex>
             </VStack>
             {errors?.loanPeriod && (
               <Text textStyle={'pre-caption-2'} color={'accent.red2'}>
@@ -870,7 +782,7 @@ const ApplyLoanStep4 = () => {
               </Text>
             )}
           </InputForm>
-        }
+        )}
         <Flex gap={'8px'}>
           <InputForm label="입금은행">
             <Box w={'100%'}>

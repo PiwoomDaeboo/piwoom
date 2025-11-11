@@ -232,44 +232,9 @@ const MyLoanStep3 = () => {
     return () => {
       window.removeEventListener('message', handleStorageChange)
     }
-  }, [toast]) // toast를 의존성 배열에 추가
+  }, [toast])
 
-  // useEffect(() => {
-  //   const handleStorageChange = (e: MessageEvent) => {
-  //     console.log(e)
-  //     if (
-  //       e.data.result === 'success' &&
-  //       e.data.review_result.result_type === 1
-  //     ) {
-  //       console.log(e)
-  //       setEkycData(e.data)
-  //     } else if (e.data?.review_result?.result_type !== 1) {
-  //       toast({
-  //         title: '신분증 인증 실패',
-  //         description: '신분증 인증에 실패했습니다. 다시 시도해주세요',
-  //         status: 'error',
-  //         duration: 5000,
-  //       })
-  //     } else if (e.data.result === 'failed') {
-  //       toast({
-  //         title: '신분증 인증 실패',
-  //         description: '신분증 인증에 실패했습니다. 다시 시도해주세요.',
-  //         status: 'error',
-  //         duration: 5000,
-  //       })
-  //     } else {
-  //       return
-  //     }
-  //   }
-
-  //   window.addEventListener('message', handleStorageChange)
-
-  //   return () => {
-  //     window.removeEventListener('message', handleStorageChange)
-  //   }
-  // }, [])
   useEffect(() => {
-    // Check if popup_status is already set
     if (popup_status) {
       router.replace('/my-loan?step=4&id=' + userId)
       return
@@ -279,7 +244,6 @@ const MyLoanStep3 = () => {
       router.replace('/my-loan?step=4&id=' + userId)
     }
 
-    // Also listen for storage events as fallback
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === '@piwoom' && e.newValue) {
         const data = JSON.parse(e.newValue)
@@ -312,8 +276,6 @@ const MyLoanStep3 = () => {
         onConfirm={handleTermsConfirm}
         termsNumber={termsNumber}
       />
-
-      {/* <AuthAlertModal isOpen={isAuthAlertOpen} onClose={onAuthAlertClose} /> */}
 
       <Flex
         pt={{ base: '40px', sm: '48px', md: '80px' }}

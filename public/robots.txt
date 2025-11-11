@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://piwoom.com/sitemap.xml
+Sitemap: https://www.piwoom.com/sitemap.xml
