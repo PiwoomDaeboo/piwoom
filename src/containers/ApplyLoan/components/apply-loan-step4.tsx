@@ -435,13 +435,25 @@ const ApplyLoanStep4 = () => {
       jobTypeWatchValue === 'HOUSEWIFE' ||
       jobTypeWatchValue === 'UNEMPLOYED'
     ) {
+      // 에러 클리어
       clearErrors('companyName')
       clearErrors('companyBusinessNumber')
+      clearErrors('companyDetailAddress')
+      clearErrors('companyAddress')
       clearErrors('employmentType')
       clearErrors('hireYear')
       clearErrors('hireMonth')
+
+      // 값도 초기화 (선택사항이지만 UX 개선)
+      setValue('companyName', '')
+      setValue('companyAddress', '')
+      setValue('companyDetailAddress', '')
+      setValue('companyBusinessNumber', '')
+      setValue('employmentType', '')
+      setValue('hireYear', undefined)
+      setValue('hireMonth', undefined)
     }
-  }, [jobTypeWatchValue])
+  }, [jobTypeWatchValue, clearErrors, setValue])
 
   return (
     <Container>

@@ -130,7 +130,12 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
         .string()
         .nullable()
         .optional(),
-      employmentType: yup.string().required('필수 항목 입니다.'),
+      // employmentType: yup.string().required('필수 항목 입니다.'),
+      employmentType: yup.string().when('jobType', {
+        is: (value: string) => value !== 'HOUSEWIFE' && value !== 'UNEMPLOYED',
+        then: (schema) => schema.required('필수 항목 입니다.'),
+        otherwise: (schema) => schema.nullable().optional(),
+      }),
       healthInsurancePaymentConfirmation: yup.string().nullable().optional(),
       healthInsurancePaymentConfirmation2: yup.string().nullable().optional(),
       identityCard: yup.string().required('필수 항목 입니다.'),
@@ -154,8 +159,27 @@ export const useApplyLoanForm = (options?: UseFormProps<LoanRequestType>) => {
         otherwise: (schema) => schema.optional(),
       }),
       electronicDocumentConsent: yup.boolean().optional(),
-      companyName: yup.string().max(100).required('필수 항목 입니다.'),
-      companyAddress: yup.string().nullable().required('필수 항목 입니다.'),
+      // companyName: yup.string().max(100).required('필수 항목 입니다.'),
+      // companyAddress: yup.string().nullable().required('필수 항목 입니다.'),
+      companyName: yup
+        .string()
+        .max(100)
+        .when('jobType', {
+          is: (value: string) =>
+            value !== 'HOUSEWIFE' && value !== 'UNEMPLOYED',
+          then: (schema) => schema.required('필수 항목 입니다.'),
+          otherwise: (schema) => schema.nullable().optional(),
+        }),
+      companyAddress: yup
+        .string()
+        .nullable()
+        .when('jobType', {
+          is: (value: string) =>
+            value !== 'HOUSEWIFE' && value !== 'UNEMPLOYED',
+          then: (schema) => schema.required('필수 항목 입니다.'),
+          otherwise: (schema) => schema.nullable().optional(),
+        }),
+
       // companyDetailAddress: yup
       //   .string()
       //   .nullable()
