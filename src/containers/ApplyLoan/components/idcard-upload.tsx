@@ -79,6 +79,9 @@ export default function IdCardUpload() {
       setPreviewUrl(newPreviewUrl)
 
       handleUploadIdCard(file)
+      if (idCardInputRef.current) {
+        idCardInputRef.current.value = ''
+      }
     }
   }
 
@@ -213,6 +216,9 @@ export default function IdCardUpload() {
                   setError('identityCard', {
                     message: '필수 항목 입니다.',
                   })
+                  if (idCardInputRef.current) {
+                    idCardInputRef.current.value = ''
+                  }
                 }}
               >
                 <XIcon boxSize={'16px'} />

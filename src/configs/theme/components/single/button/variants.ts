@@ -36,10 +36,10 @@ const defineVariant = ({
         ...disabled.otherStyle,
       },
     },
-    _active: {
-      ...active,
-      ...active.otherStyle,
-    },
+    // _active: {
+    //   ...active,
+    //   ...active.otherStyle,
+    // },
     _disabled: {
       ...disabled,
       ...disabled.otherStyle,
