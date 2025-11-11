@@ -262,7 +262,7 @@ const HomeHeaderDrawer = ({
               </VStack>
               {isLoggedIn && (
                 <Flex
-                  mt={'auto'}
+                  // mt={'auto'}
                   alignItems={'center'}
                   gap={'12px'}
                   onClick={handleLogout}
