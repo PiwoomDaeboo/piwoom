@@ -63,6 +63,9 @@ const sizes = {
       bg: 'white',
       m: 0,
     },
+    body: {
+      h: '100%',
+    },
     dialogContainer: {
       px: '0px',
       py: '0px',

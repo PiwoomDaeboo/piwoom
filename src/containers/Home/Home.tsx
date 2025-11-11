@@ -27,6 +27,7 @@ function Home() {
   }, [])
   return (
     <>
+      <MyLoanTermsModal isOpen={true} onClose={() => {}} termsNumber={1} />
       {/* <Section0 /> */}
       <Box
         w={'100%'}
