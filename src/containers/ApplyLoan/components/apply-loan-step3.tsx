@@ -53,8 +53,6 @@ const ApplyLoanStep3 = () => {
   } = useFormContext()
   const router = useRouter()
   const toast = useToast()
-  console.log('errors', errors)
-  console.log('watch', watch())
 
   const totalAsset = useWatch({ control, name: 'totalAsset' })
   const annualIncome = useWatch({ control, name: 'annualIncome' })
@@ -142,8 +140,6 @@ const ApplyLoanStep3 = () => {
 
   // Step3 성공 시 실행될 함수
   const onStep3Submit = (data: any) => {
-    console.log('Step3 폼 데이터:', data)
-
     if (!checkLoanEligibility()) {
       return
     }
@@ -152,7 +148,6 @@ const ApplyLoanStep3 = () => {
   }
 
   const onStep3Error = (errors: any) => {
-    console.log('Step3 폼 에러:', errors)
     // window.scrollTo({
     //   top: 0,
     //   behavior: 'smooth',

@@ -10,7 +10,7 @@ function MyLoanAuthPage() {
     <>
       {/* output: 똑똑한개발자 | 메인 */}
       {/* titleTemplate는 /configs/seo/config.ts에서 변경 가능합니다. */}
-      <NextSeo title="대출 현황 조회" />
+      <NextSeo title="대출 현황 조회" noindex={true} nofollow={true} />
       <HomeLayout content={<MyLoanAuthentication />} />
     </>
   )

@@ -10,6 +10,7 @@ const EkycPage: NextPage = () => {
   return (
     <>
       <Head>
+        <meta name="robots" content="noindex, nofollow" />
         <style
           dangerouslySetInnerHTML={{
             __html: `

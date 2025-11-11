@@ -16,7 +16,6 @@ const Ekyc = () => {
     options: {
       onSuccess: (data) => {
         setUsebAccessToken(data.accessToken)
-        console.log('usebAccessToken', data)
       },
     },
   })
@@ -52,10 +51,8 @@ const Ekyc = () => {
         try {
           decodedData = decodeURIComponent(atob(e.data))
           const json = JSON.parse(decodedData)
-          console.log('Direct JSON parse result:', json)
-          console.log(window.opener, json)
+
           if (json.result === 'success') {
-            console.log(window.opener, json)
             window.opener.postMessage(json, '*')
             if (
               json?.review_result?.result_type &&

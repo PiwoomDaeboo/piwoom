@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 
 import { NextSeo } from 'next-seo'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 
 import { useLocalStorage } from '@/stores/local/state'
@@ -31,6 +32,9 @@ function ModusignCallback() {
 
   return (
     <>
+      <Head>
+        <meta name="robots" content="noindex, nofollow" />{' '}
+      </Head>
       {/* output: 똑똑한개발자 | 메인 */}
       {/* titleTemplate는 /configs/seo/config.ts에서 변경 가능합니다. */}
       <div>서명정보 제출 중..</div>

@@ -174,7 +174,6 @@ export default function Document() {
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'popup_status' && e.newValue) {
-        console.log('Storage changed:', e.newValue)
         setValue('safeKey', e.newValue)
       }
     }

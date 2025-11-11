@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 
 import { NextSeo } from 'next-seo'
+import Head from 'next/head'
 import { useSearchParams } from 'next/navigation'
 
 import HomeLayout from '@/components/@Layout/HomeLayout'
@@ -26,6 +27,9 @@ function NiceCallback() {
 
   return (
     <>
+      <Head>
+        <meta name="robots" content="noindex, nofollow" />
+      </Head>
       {/* output: 똑똑한개발자 | 메인 */}
       {/* titleTemplate는 /configs/seo/config.ts에서 변경 가능합니다. */}
       <div>

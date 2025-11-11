@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+import Head from 'next/head'
+
 import LinkCallback from '@/containers/Social/components/LinkCallback'
 import PopupCallback from '@/containers/Social/components/PopupCallback'
 
@@ -11,7 +13,16 @@ function SocialCallback() {
     }
   }, [isPopup])
 
-  return isPopup ? <PopupCallback /> : <LinkCallback />
+  return (
+    <>
+      <Head>
+        <meta name="robots" content="noindex, nofollow" />
+      </Head>
+      {isPopup ?
+        <PopupCallback />
+      : <LinkCallback />}
+    </>
+  )
 }
 
 export default SocialCallback

@@ -287,7 +287,6 @@ function UntactDocumentApplyModal({
     }
 
     if (data.status === 'SUCCESS') {
-      console.log('[Real API] SUCCESS detected, stopping polling')
       setShouldPoll(false)
       // 시군구 선택 상태 초기화
       setSelectedCity('')
@@ -300,7 +299,6 @@ function UntactDocumentApplyModal({
         onComplete()
       }
     } else if (data.status === 'FAILED') {
-      console.log('[Real API] FAILED detected, stopping polling')
       setShouldPoll(false)
       toast({
         title: '서류 제출 실패',

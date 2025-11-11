@@ -9,7 +9,7 @@ function AuthPage() {
     <>
       {/* output: 똑똑한개발자 | auth */}
       {/* titleTemplate는 /configs/seo/config.ts에서 변경 가능합니다. */}
-      <NextSeo title="auth" />
+      <NextSeo title="auth" noindex={true} nofollow={true} />
       <HomeLayout content={<Auth />} />
     </>
   )

@@ -136,7 +136,6 @@ const MyLoanStep3 = () => {
     options: {
       onSuccess: (data) => {
         setUsebAccessToken(data.accessToken)
-        console.log('usebAccessToken', data)
       },
     },
   })

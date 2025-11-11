@@ -90,7 +90,6 @@ const ApplyLoanStep4 = () => {
   } = useFormContext()
 
   const watchAll = watch()
-  console.log('watchAll', watchAll)
   const loanAmount = useWatch({ control, name: 'loanAmount' })
   const loanPeriod = useWatch({ control, name: 'loanPeriod' })
   const residenceType = useWatch({ control, name: 'residenceType' })
@@ -152,7 +151,6 @@ const ApplyLoanStep4 = () => {
       id: 'me',
     },
   })
-  console.log(employmentTypeWatchValue)
   const {
     mutate: accountVerifyMutation,
     isPending: isAccountVerifyMutationLoading,
@@ -161,7 +159,6 @@ const ApplyLoanStep4 = () => {
       onSuccess: (data) => {
         // setValue('accountHolderSsn', true)
         clearErrors('accountHolder')
-        console.log('ownerNameSearch', data)
         setIsBankAccountVerified(true)
         setValue('accountHolder', data?.holder)
       },
@@ -191,13 +188,10 @@ const ApplyLoanStep4 = () => {
     options: REPAYMENT_TYPE,
   })
 
-  console.log('errors', errors)
-
   const { mutate: loanCreateMutation, isPending: isLoanCreateMutationPending } =
     useLoanCreateMutation({
       options: {
         onSuccess: (data: any) => {
-          console.log('loanCreateMutation', data)
           reset('popup_status')
           router.replace('/apply-loan-complete?loanId=' + data.id)
         },
@@ -254,8 +248,6 @@ const ApplyLoanStep4 = () => {
   }
 
   const onStep4Error = (errors: any) => {
-    console.log('Step4 폼 에러:', errors)
-
     // 에러가 있는 모든 필드 중 화면 상단에 가장 가까운 요소를 계산해서 스크롤
     const errorKeys = Object.keys(errors || {})
     let topmost = Number.POSITIVE_INFINITY
@@ -386,8 +378,8 @@ const ApplyLoanStep4 = () => {
     const value = parseInt(e.target.value) || 0
 
     const clampedValue =
-      router.query.type === 'salary' ?
-        Math.min(Math.max(value, 0), 6)
+      router.query.type === 'salary' ? Math.min(Math.max(value, 0), 6)
+      : router.query.type === 'credit' ? Math.min(Math.max(value, 0), 30)
       : Math.min(Math.max(value, 0), 60)
 
     if (value !== clampedValue) {

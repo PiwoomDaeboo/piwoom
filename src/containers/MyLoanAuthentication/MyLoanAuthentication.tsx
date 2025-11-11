@@ -22,16 +22,14 @@ function MyLoanAuthentication() {
   const { set, token } = useLocalStorage()
   const router = useRouter()
   const toast = useToast()
-  console.log('token', token)
+
   const { mutateAsync: userLoginCreate } = useUserLoginCreateMutation({
     options: {
       onSuccess: (data) => {
-        console.log('인증 성공 데이터:', data)
         const tokenData = {
           access_token: data.accessToken,
           refresh_token: data.refreshToken,
         }
-        console.log('저장할 토큰 데이터:', tokenData)
 
         set({
           token: tokenData,
@@ -40,10 +38,8 @@ function MyLoanAuthentication() {
         // 토큰 저장 후 즉시 확인
         setTimeout(() => {
           const savedToken = useLocalStorage.getState().token
-          console.log('저장된 토큰 확인:', savedToken)
 
           if (savedToken?.access_token) {
-            console.log('토큰 저장 성공, 페이지 이동')
             router.replace(`/my-loan-status?tab=0&page=1`)
           } else {
             console.error('토큰 저장 실패, 재시도')
@@ -111,12 +107,6 @@ function MyLoanAuthentication() {
       identityVerificationTxId &&
       transactionType === 'IDENTITY_VERIFICATION'
     ) {
-      console.log('URL 파라미터로 인증 처리 시작:', {
-        identityVerificationId,
-        identityVerificationTxId,
-        transactionType,
-      })
-
       userLoginCreate({
         data: {
           identityVerificationId: identityVerificationId as string,

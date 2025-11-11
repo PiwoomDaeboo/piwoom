@@ -40,7 +40,6 @@ export default function Schedule() {
       enabled: !!router.query.id && !isLoading,
     },
   })
-  console.log(loanRetrieveData)
 
   const repaymentType = loanRetrieveData?.contract?.repaymentType
   if (isLoading) {

@@ -39,10 +39,6 @@ export default function AdditionalDocumentModal({
     useUploadFileToS3Mutation({
       options: {
         onSuccess: (data) => {
-          console.log('파일 업로드 성공:', data)
-          console.log('S3 URL:', data.url)
-          console.log('파일 경로:', data.path)
-          console.log('필드 정보:', data.fields)
           setUploadedFileUrl(`${data.url}/${data?.fields?.key}`)
         },
         onError: (error) => {

@@ -8,7 +8,7 @@ function LoginPage() {
     <>
       {/* output: 똑똑한개발자 | login */}
       {/* titleTemplate는 /configs/seo/config.ts에서 변경 가능합니다. */}
-      <NextSeo title="login" />
+      <NextSeo title="login" noindex={true} nofollow={true} />
       <Login />
     </>
   )

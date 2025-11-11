@@ -49,12 +49,7 @@ function MyLoanTermsModal({
     if (container) {
       const { scrollTop, scrollHeight, clientHeight } = container
       const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10 // 10px 여유
-      console.log('Scroll debug:', {
-        scrollTop,
-        scrollHeight,
-        clientHeight,
-        isAtBottom,
-      })
+
       setIsScrolledToBottom(isAtBottom)
     }
   }, [])
@@ -67,16 +62,13 @@ function MyLoanTermsModal({
       const tryAddScrollListener = () => {
         const container = scrollContainerRef.current
         if (container) {
-          console.log('Adding scroll listener to container:', container)
           container.addEventListener('scroll', handleScroll)
 
           handleScroll()
           return true
         } else {
           retryCount++
-          console.log(
-            `Container not found, retrying... (${retryCount}/${maxRetries})`,
-          )
+
           if (retryCount < maxRetries) {
             setTimeout(tryAddScrollListener, 100)
           }
@@ -90,7 +82,6 @@ function MyLoanTermsModal({
         clearTimeout(timer)
         const container = scrollContainerRef.current
         if (container) {
-          console.log('Removing scroll listener from container:', container)
           container.removeEventListener('scroll', handleScroll)
         }
       }
@@ -99,10 +90,8 @@ function MyLoanTermsModal({
 
   useEffect(() => {
     if (isOpen) {
-      console.log('Modal opened, termsNumber:', termsNumber)
       setIsScrolledToBottom(termsNumber !== 1) // termsNumber가 1이 아닌 경우는 항상 true
     } else {
-      console.log('Modal closed, resetting scroll state')
       setIsScrolledToBottom(false)
     }
   }, [isOpen, termsNumber])

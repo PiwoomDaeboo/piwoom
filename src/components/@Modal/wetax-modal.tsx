@@ -104,7 +104,6 @@ function WetaxModal({
       options: {
         onSuccess: (data) => {
           setLoadingProcess(2)
-          console.log(data)
         },
         onError: (error: any) => {
           toast({
@@ -120,7 +119,6 @@ function WetaxModal({
   const { mutate: loginWetax, isPending } = useWetaxLoginCreateMutation({
     options: {
       onSuccess: (data: any) => {
-        console.log(data)
         setLoadingProcess(1)
         setWetaxData(data)
       },
@@ -222,7 +220,6 @@ function WetaxModal({
     setCompletedDocuments(completedCount)
 
     if (data.status === 'SUCCESS') {
-      console.log('[Wetax API] SUCCESS detected, stopping polling')
       setShouldPoll(false)
       setValue?.('localTaxSet', data.dataSet as any)
 
@@ -233,7 +230,6 @@ function WetaxModal({
         },
       })
     } else if (data.status === 'FAILED') {
-      console.log('[Wetax API] FAILED detected, stopping polling')
       setShouldPoll(false)
       toast({
         title: '세금 납부 내역 제출 실패',
