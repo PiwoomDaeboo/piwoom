@@ -520,6 +520,29 @@ const MyLoanStep3 = () => {
               네, 충분히 이해했어요
             </Text>
           </HStack>
+          <VStack
+            display={{ base: 'flex', sm: 'none' }}
+            alignItems={'flex-start'}
+            p={'16px 20px'}
+            borderRadius={'20px'}
+            border={'1px solid'}
+            borderColor={'border.basic.1'}
+            gap={'12px'}
+          >
+            <HStack>
+              <InfoFillIcon boxSize={'24px'} />
+              <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                유의사항
+              </Text>
+            </HStack>
+            <Text textStyle={'pre-body-6'} color={'grey.8'}>
+              아이폰 Safari 앱 사용 시 전자서명 팝업이 차단될 수 있습니다. 아래
+              버튼을 눌러도 팝업이 뜨지 않을 경우
+              <br />
+              <strong>[설정 → 앱 → Safari → 팝업 차단]</strong>을 해제하신 후
+              다시 시도해주세요.
+            </Text>
+          </VStack>
         </VStack>
 
         <Flex
