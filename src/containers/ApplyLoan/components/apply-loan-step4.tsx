@@ -379,7 +379,7 @@ const ApplyLoanStep4 = () => {
 
     const clampedValue =
       router.query.type === 'salary' ? Math.min(Math.max(value, 0), 6)
-      : router.query.type === 'credit' ? Math.min(Math.max(value, 0), 30)
+      : router.query.type === 'credit' ? Math.min(Math.max(value, 0), 36)
       : Math.min(Math.max(value, 0), 60)
 
     if (value !== clampedValue) {
