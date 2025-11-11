@@ -151,7 +151,7 @@ function MyLoanTermsModal({
           ref={scrollContainerRef}
           flexDir={'column'}
           gap={'12px'}
-          maxH={'450px'}
+          maxH={'80vh'}
           pr={'12px'}
           overflowY={'auto'}
         >

@@ -166,6 +166,22 @@ const MyLoanStep3 = () => {
       })
     }
   }
+  const [isIphoneOrSafari, setIsIphoneOrSafari] = useState(false)
+
+  useEffect(() => {
+    const userAgent = navigator.userAgent.toLowerCase()
+    const isIphone =
+      userAgent.includes('iphone') ||
+      userAgent.includes('ipad') ||
+      userAgent.includes('ipod')
+    const isSafari =
+      userAgent.includes('safari') &&
+      !userAgent.includes('chrome') &&
+      !userAgent.includes('crios') &&
+      !userAgent.includes('fxios')
+    console.log(userAgent)
+    setIsIphoneOrSafari(isIphone || isSafari)
+  }, [])
 
   useEffect(() => {
     if (usebAccessToken) {
@@ -175,19 +191,16 @@ const MyLoanStep3 = () => {
 
   useEffect(() => {
     const handleStorageChange = (e: MessageEvent) => {
-      // e.data가 없거나 예상한 형태가 아니면 무시
       if (!e.data || typeof e.data !== 'object') {
         return
       }
 
-      // result가 없는 메시지는 무시 (다른 소스에서 온 메시지일 수 있음)
       if (!e.data.result) {
         return
       }
 
       console.log(e)
 
-      // 성공 케이스: result === 'success' && result_type === 1
       if (
         e.data.result === 'success' &&
         e.data.review_result?.result_type === 1
@@ -520,29 +533,31 @@ const MyLoanStep3 = () => {
               네, 충분히 이해했어요
             </Text>
           </HStack>
-          <VStack
-            display={{ base: 'flex', sm: 'none' }}
-            alignItems={'flex-start'}
-            p={'16px 20px'}
-            borderRadius={'20px'}
-            border={'1px solid'}
-            borderColor={'border.basic.1'}
-            gap={'12px'}
-          >
-            <HStack>
-              <InfoFillIcon boxSize={'24px'} />
-              <Text textStyle={'pre-body-7'} color={'grey.9'}>
-                유의사항
+          {isIphoneOrSafari && (
+            <VStack
+              display={{ base: 'flex', sm: 'none' }}
+              alignItems={'flex-start'}
+              p={'16px 20px'}
+              borderRadius={'20px'}
+              border={'1px solid'}
+              borderColor={'border.basic.1'}
+              gap={'12px'}
+            >
+              <HStack>
+                <InfoFillIcon boxSize={'24px'} />
+                <Text textStyle={'pre-body-7'} color={'grey.9'}>
+                  유의사항
+                </Text>
+              </HStack>
+              <Text textStyle={'pre-body-6'} color={'grey.8'}>
+                아이폰 Safari 앱 사용 시 전자서명 팝업이 차단될 수 있습니다.
+                아래 버튼을 눌러도 팝업이 뜨지 않을 경우
+                <br />
+                <strong>[설정 → 앱 → Safari → 팝업 차단]</strong>을 해제하신 후
+                다시 시도해주세요.
               </Text>
-            </HStack>
-            <Text textStyle={'pre-body-6'} color={'grey.8'}>
-              아이폰 Safari 앱 사용 시 전자서명 팝업이 차단될 수 있습니다. 아래
-              버튼을 눌러도 팝업이 뜨지 않을 경우
-              <br />
-              <strong>[설정 → 앱 → Safari → 팝업 차단]</strong>을 해제하신 후
-              다시 시도해주세요.
-            </Text>
-          </VStack>
+            </VStack>
+          )}
         </VStack>
 
         <Flex
