@@ -51,7 +51,7 @@ function PrepaymentApplicationComplete() {
               justifyContent={'space-between'}
             >
               <Text textStyle={'pre-body-4'} color={'grey.10'}>
-                입급은행
+                입금은행
               </Text>
               <Text textStyle={'pre-body-3'} color={'grey.10'}>
                 {loanData?.contract?.repaymentAccountName || '-'}

@@ -104,6 +104,7 @@ function MyLoanStatus() {
       undefined,
       { shallow: true },
     )
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   useEffect(() => {

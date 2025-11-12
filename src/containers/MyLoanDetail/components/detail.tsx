@@ -322,12 +322,19 @@ export default function Detail() {
             <Text flexShrink={0} textStyle={'pre-body-4'} color={'grey.10'}>
               특약사항
             </Text>
-            <VStack alignItems={'flex-end'} maxW={{ base: '60%', sm: '70%' }}>
+
+            <VStack
+              alignItems={'flex-end'}
+              maxW={{ base: '60%', sm: '70%' }}
+              w={'100%'}
+            >
               <Text
                 textStyle={'pre-body-3'}
                 color={'grey.10'}
                 textAlign={'right'}
-                whiteSpace={'pre-line'}
+                wordBreak={'break-word'}
+                whiteSpace={'pre-wrap'}
+                w={'100%'}
                 alignSelf={'flex-end'}
               >
                 {(() => {
