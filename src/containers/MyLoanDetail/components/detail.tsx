@@ -329,7 +329,7 @@ export default function Detail() {
               w={'100%'}
             >
               <Text
-                textStyle={'pre-body-3'}
+                textStyle={'pre-body-4'}
                 color={'grey.10'}
                 textAlign={'right'}
                 wordBreak={'break-word'}
