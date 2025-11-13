@@ -169,7 +169,12 @@ function MyLoanDetail() {
                   variant={'text-secondary'}
                   onClick={() => handleDetailMenuChange(button.value)}
                 >
-                  {button.title}
+                  <Text
+                    textStyle={'pre-body-3'}
+                    color={isDetailMenu === button.value ? 'grey.10' : 'grey.7'}
+                  >
+                    {button.title}
+                  </Text>
                 </Button>
               ))}
             </Flex>
