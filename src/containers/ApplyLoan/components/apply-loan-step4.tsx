@@ -237,6 +237,7 @@ const ApplyLoanStep4 = () => {
       purposeAndRepaymentPlan: getValues('purposeAndRepaymentPlan') || '-',
       companyDetailAddress:
         isCompanyAddressFromSearch ? getValues('companyDetailAddress') : '',
+      companyBusinessNumber: getValues('companyBusinessNumber') || '-',
       assetBaseAddress: getValues('assetBaseAddress') || '-',
       assetDetailAddress: getValues('assetDetailAddress') || '-',
       assetPostcode: getValues('assetPostcode') || '-',
