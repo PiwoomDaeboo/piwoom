@@ -121,7 +121,7 @@ function PrepaymentApplicationComplete() {
         >
           <Text textStyle={'pre-body-6'} color={'grey.9'} textAlign={'center'}>
             피움대부 주식회사의 계좌로 중도상환 금액을 입금 부탁드립니다.
-            <br /> 입금 확인이 끝난 이후, [나의 대출 조회 – 대출 정보 조회]
+            <br /> 입금 확인이 끝난 이후, [나의 대출 조회 – 대출 현황 조회]
             페이지를 통해 대출금 잔액이 바뀐 걸 확인하실 수 있습니다.
           </Text>
         </Flex>

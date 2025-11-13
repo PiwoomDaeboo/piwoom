@@ -149,6 +149,17 @@ function MyLoanDetail() {
                 return true
               }).map((button, index) => (
                 <Button
+                  bg={
+                    isDetailMenu === button.value ? '#1B1C1D0D' : 'transparent'
+                  }
+                  _hover={{
+                    bg:
+                      isDetailMenu === button.value ?
+                        '#1B1C1D0D'
+                      : 'transparent',
+                    color: isDetailMenu === button.value ? 'grey.10' : 'grey.7',
+                  }}
+                  color={isDetailMenu === button.value ? 'grey.10' : 'grey.7'}
                   transition={'all 0.2s ease-in-out'}
                   key={index}
                   w={{ base: 'fit-content', md: '260px' }}

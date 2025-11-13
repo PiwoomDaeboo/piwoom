@@ -235,7 +235,7 @@ export default function MyLoanList({ loanList }: MyLoanListProps) {
             : <Flex flexDirection={'column'} w={'100%'} gap={'6px'} mt={'20px'}>
                 <HStack justifyContent={'space-between'}>
                   <Text textStyle={'pre-body-6'} color={'grey.10'}>
-                    대출 금액
+                    대출 잔액
                   </Text>
                   <Text textStyle={'pre-body-5'} color={'grey.10'}>
                     {item?.contract?.remainingAmount?.toLocaleString() || 0}원

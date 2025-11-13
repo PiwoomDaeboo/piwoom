@@ -230,29 +230,64 @@ function Loan() {
                 },
               }}
             >
-              {BUTTON_DATA.map((buttonText, index) => (
-                <Button
-                  transition={'all 0.2s ease-in-out'}
-                  key={index}
-                  w={{ base: 'fit-content', md: '260px' }}
-                  minW={{ base: '120px', md: '260px' }}
-                  flexShrink={0}
-                  isActive={!showProcedure && activeButtonIndex === index}
-                  variant={'text-secondary'}
-                  onClick={() => handleButtonClick(index)}
-                >
-                  {buttonText}
-                </Button>
-              ))}
+              {BUTTON_DATA.map((buttonText, index) => {
+                const queryType = router.query.type as string
+                const isSelected =
+                  (queryType === 'salary' && index === 0) ||
+                  (queryType === 'credit' && index === 1) ||
+                  (queryType === 'mortgage' && index === 2)
+
+                return (
+                  <Button
+                    transition={'all 0.2s ease-in-out'}
+                    key={index}
+                    w={{ base: 'fit-content', md: '260px' }}
+                    minW={{ base: '120px', md: '260px' }}
+                    flexShrink={0}
+                    isActive={!showProcedure && activeButtonIndex === index}
+                    variant={'text-secondary'}
+                    bg={isSelected ? '#1B1C1D0D' : 'transparent'}
+                    _hover={{
+                      bg: isSelected ? '#1B1C1D0D' : 'transparent',
+                    }}
+                    onClick={() => handleButtonClick(index)}
+                  >
+                    <Text
+                      textStyle={'pre-body-3'}
+                      color={isSelected ? 'grey.10' : 'grey.7'}
+                    >
+                      {buttonText}
+                    </Text>
+                  </Button>
+                )
+              })}
               <Button
                 w={{ base: 'fit-content', md: '260px' }}
                 minW={{ base: '120px', md: '260px' }}
                 flexShrink={0}
                 isActive={showProcedure}
                 variant={'text-secondary'}
+                bg={
+                  router.query.type === 'procedure' ?
+                    '#1B1C1D0D'
+                  : 'transparent'
+                }
+                _hover={{
+                  bg:
+                    router.query.type === 'procedure' ?
+                      '#1B1C1D0D'
+                    : 'transparent',
+                }}
                 onClick={handleProcedureClick}
               >
-                대출 절차 안내
+                <Text
+                  textStyle={'pre-body-3'}
+                  color={
+                    router.query.type === 'procedure' ? 'grey.10' : 'grey.7'
+                  }
+                >
+                  대출 절차 안내
+                </Text>
               </Button>
             </Flex>
           </Flex>

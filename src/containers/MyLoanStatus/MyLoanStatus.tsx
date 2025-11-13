@@ -178,12 +178,12 @@ function MyLoanStatus() {
                   <MyLoanList loanList={loanList.results} />
                 : <NonData variant="loan" />}
               </TabPanel>
-              <TabPanel>
+              <TabPanel p={'36px 0px 48px 0px'}>
                 {loanList?.results && loanList.results.length > 0 ?
                   <MyLoanList loanList={loanList.results} />
                 : <NonData variant="loan" />}
               </TabPanel>
-              <TabPanel>
+              <TabPanel p={'36px 0px 48px 0px'}>
                 {loanList?.results && loanList.results.length > 0 ?
                   <MyLoanList loanList={loanList.results} />
                 : <NonData variant="loan" />}

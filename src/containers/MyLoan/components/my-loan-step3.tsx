@@ -17,6 +17,8 @@ import {
   useToast,
 } from '@chakra-ui/react'
 
+import dayjs from 'dayjs'
+
 import AuthAlertModal from '@/components/@Modal/auth-alert-modal'
 import ImageAsNext from '@/components/ImageAsNext'
 import InputForm from '@/components/InputForm'
@@ -347,7 +349,11 @@ const MyLoanStep3 = () => {
                 대출일자
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                {userLoanData?.contract?.loanDate || '-'}
+                {userLoanData?.contract?.loanDate ?
+                  dayjs(userLoanData?.contract?.loanDate).format(
+                    'YYYY년 M월 D일',
+                  )
+                : '-'}
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
@@ -355,7 +361,11 @@ const MyLoanStep3 = () => {
                 대출만기일자
               </Text>
               <Text textStyle={'pre-body-6'} color={'grey.9'}>
-                {userLoanData?.contract?.maturityDate || '-'}
+                {userLoanData?.contract?.loanDate ?
+                  dayjs(userLoanData.contract.maturityDate).format(
+                    'YYYY년 M월 D일',
+                  )
+                : '-'}
               </Text>
             </VStack>
             <VStack spacing={'15px'} alignItems={'flex-start'}>
