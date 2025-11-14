@@ -12,6 +12,8 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
+import dayjs from 'dayjs'
+
 import ModalBasis from '@/components/@Modal/ModalBasis'
 import { REPAYMENT_TYPE } from '@/constants/loan'
 import { useLoanRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
@@ -492,7 +494,9 @@ const LoanTermsTable = ({
           </Box>
           <Box w={'70%'} p={'12px'}>
             <Text textStyle={'pre-body-68'} color={'grey.10'}>
-              {loanData?.contract?.loanDate || '-'}
+              {loanData?.contract?.loanDate ?
+                dayjs(loanData?.contract?.loanDate).format('YYYY년 M월 D일')
+              : '-'}
             </Text>
           </Box>
         </Flex>
@@ -513,7 +517,9 @@ const LoanTermsTable = ({
           </Box>
           <Box w={'70%'} p={'12px'}>
             <Text textStyle={'pre-body-68'} color={'grey.9'}>
-              {loanData?.contract?.maturityDate || '-'}
+              {loanData?.contract?.maturityDate ?
+                dayjs(loanData?.contract?.maturityDate).format('YYYY년 M월 D일')
+              : '-'}
             </Text>
           </Box>
         </Flex>
