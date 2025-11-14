@@ -19,7 +19,7 @@ function MyLoan() {
   const [isLoading, setIsLoading] = useState(false)
   const { token: accessToken } = useLocalStorage()
   const router = useRouter()
-  const { isIdle, setIsIdle } = useIdleTimer({ timeout: 10 * 60 * 1000 }) // 5분 테스트
+  const { isIdle, setIsIdle } = useIdleTimer({ timeout: 10 * 60 * 1000 })
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { step } = router.query
   useEffect(() => {

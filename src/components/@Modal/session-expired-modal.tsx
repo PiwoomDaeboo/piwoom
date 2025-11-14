@@ -5,6 +5,7 @@ import { Text } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 
 import ModalBasis from '@/components/@Modal/ModalBasis'
+import { useLocalStorage } from '@/stores/local/state'
 
 interface SessionExpiredModalProps {
   isOpen: boolean
@@ -51,6 +52,7 @@ export default function SessionExpiredModal({
             onClick={() => {
               router.push(routePath)
               setIsIdle(false)
+              useLocalStorage.getState().reset('token')
               onClose()
             }}
           >
