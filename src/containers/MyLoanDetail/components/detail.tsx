@@ -2,6 +2,8 @@ import { useRouter } from 'next/router'
 
 import { Badge, Button, Flex, HStack, Text, VStack } from '@chakra-ui/react'
 
+import dayjs from 'dayjs'
+
 import { LOAN_STATUS, REPAYMENT_TYPE } from '@/constants/loan'
 import { useLoanRetrieveQuery } from '@/generated/apis/Loan/Loan.query'
 import { CaretLeftIcon } from '@/generated/icons/MyIcons'
@@ -167,7 +169,11 @@ export default function Detail() {
               whiteSpace={'pre-line'}
               alignSelf={'flex-end'}
             >
-              {loanRetrieveData?.contract?.loanDate || '-'}
+              {loanRetrieveData?.contract?.loanDate ?
+                dayjs(loanRetrieveData?.contract?.loanDate).format(
+                  'YYYY년 M월 D일',
+                )
+              : '-'}
             </Text>
           </HStack>
           <HStack
@@ -186,7 +192,11 @@ export default function Detail() {
               whiteSpace={'pre-line'}
               alignSelf={'flex-end'}
             >
-              {loanRetrieveData?.contract?.maturityDate || '-'}
+              {loanRetrieveData?.contract?.maturityDate ?
+                dayjs(loanRetrieveData?.contract?.maturityDate).format(
+                  'YYYY년 M월 D일',
+                )
+              : '-'}
             </Text>
           </HStack>
           <HStack
